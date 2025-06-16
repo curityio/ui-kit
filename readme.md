@@ -1,6 +1,6 @@
 # UI Kit
 
-Customize the public facing styles and template to fit your needs.
+Customize the public facing styles and templates to fit your needs.
 
 🚩 Work In Progress
 
