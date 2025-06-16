@@ -24,10 +24,10 @@ npm start:all
 
 To start projects indivudually, run:
 
-- `npm start:ussp` to build the Self Service Portal
-- `npm start:login` to build the Login Web App,
-- `npm start:templates` - to build the template-system",
-- `npm start:styles` - to build the styles",
+- `npm start:ussp` to start the Self Service Portal
+- `npm start:login` to start the Login Web App,
+- `npm start:templates` - to start the template-system",
+- `npm start:styles` - to start the styles",
 
 ## Build
 
