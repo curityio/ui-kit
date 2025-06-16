@@ -26,8 +26,8 @@ To start projects indivudually, run:
 
 - `npm start:ussp` to start the Self Service Portal
 - `npm start:login` to start the Login Web App,
-- `npm start:templates` - to start the template-system",
-- `npm start:styles` - to start the styles",
+- `npm start:templates` - to start the Template System
+- `npm start:styles` - to start the Styles
 
 ## Build
 
@@ -41,9 +41,9 @@ To build projects indivudually, run:
 
 - `npm run build:ussp` to build the Self Service Portal
 - `npm run build:login` to build the Login Web App,
-- `npm run build:templates` - to build the template-system",
-- `npm run build:messages` - to build the messages",
-- `npm run build:styles` - to build the styles",
+- `npm run build:templates` - to build the Template System
+- `npm run build:messages` - to build Messages
+- `npm run build:styles` - to build the Styles
 
 
 ## Deploy
