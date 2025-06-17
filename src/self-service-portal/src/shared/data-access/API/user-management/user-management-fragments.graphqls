@@ -1,0 +1,117 @@
+fragment MULTI_VALUED_VALUE_FIELDS on StringMultiValuedValue {
+  value
+  primary
+  type
+}
+
+fragment USER_ACCOUNTS_LIST_FIELDS on Account {
+  id
+  userName
+  name {
+    givenName
+    familyName
+  }
+  displayName
+  nickName
+  title
+  locale
+  timeZone
+  active
+  emails {
+    ...MULTI_VALUED_VALUE_FIELDS
+  }
+  phoneNumbers {
+    ...MULTI_VALUED_VALUE_FIELDS
+  }
+  addresses {
+    streetAddress
+    locality
+    region
+    postalCode
+    country
+    primary
+    type
+  }
+  groups {
+    ...MULTI_VALUED_VALUE_FIELDS
+  }
+  entitlements {
+    ...MULTI_VALUED_VALUE_FIELDS
+  }
+  roles {
+    ...MULTI_VALUED_VALUE_FIELDS
+  }
+  meta {
+    created
+    lastModified
+    resourceType
+  }
+}
+
+fragment DEVICE_FIELDS on Device {
+  deviceId
+  deviceType
+  expiresAt
+  alias
+  category {
+    name
+  }
+  meta {
+    created
+    lastModified
+    resourceType
+    timeZoneId
+  }
+}
+
+fragment CLIENT_FIELDS on DynamicallyRegisteredClient {
+  authenticated_user
+  client_id
+  client_id_issued_at
+  client_name
+  grant_types
+  redirect_uris
+  response_types
+  scope
+  software_id
+  status
+  subject_type
+  token_endpoint_auth_methods
+}
+
+fragment USER_ACCOUNT_FIELDS on Account {
+  ...USER_ACCOUNTS_LIST_FIELDS
+  devices {
+    ...DEVICE_FIELDS
+  }
+  linkedAccounts {
+    value
+    domain
+    created
+  }
+  mfaOptIn {
+    registeredFactors {
+      factors {
+        acr
+        expectedUserName
+        changedAt
+        description
+        type
+      }
+    }
+    preferences {
+      optOutAt
+    }
+    recoveryCodeBatch {
+      batchId
+      codes {
+        consumed
+        consumedAt
+      }
+      createdAt
+    }
+  }
+  dynamicClients {
+    ...CLIENT_FIELDS
+  }
+}

@@ -1,0 +1,90 @@
+query getAccountByUserName($userName: String!) {
+  accountByUserName(userName: $userName) {
+    ...USER_ACCOUNT_FIELDS
+  }
+}
+
+query getAccounts(
+  $activeAccountsOnly: Boolean
+  $first: Int
+  $after: String
+  $sorting: Sorting = { sortBy: created, sortOrder: DESCENDING }
+  $filtering: Filtering
+) {
+  accounts(
+    activeAccountsOnly: $activeAccountsOnly
+    first: $first
+    after: $after
+    sorting: $sorting
+    filtering: $filtering
+  ) {
+    edges {
+      node {
+        ...USER_ACCOUNTS_LIST_FIELDS
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    totalCount
+  }
+}
+
+query getAccountsWithoutSorting($activeAccountsOnly: Boolean, $first: Int, $after: String, $filtering: Filtering) {
+  accounts(activeAccountsOnly: $activeAccountsOnly, first: $first, after: $after, filtering: $filtering) {
+    edges {
+      node {
+        ...USER_ACCOUNT_FIELDS
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    totalCount
+  }
+}
+
+query getAccountById($accountId: String!) {
+  accountById(accountId: $accountId) {
+    ...USER_ACCOUNT_FIELDS
+  }
+}
+
+query getAccountByPhoneNumber($phoneNumber: String!) {
+  accountByPhoneNumber(phoneNumber: $phoneNumber) {
+    ...USER_ACCOUNT_FIELDS
+  }
+}
+
+query getCredentialPolicy {
+  credentialPolicy {
+    credentialUpdateRules {
+      __typename
+      message
+      detailedMessage
+      ... on MinimumLowerCasePasswordRule {
+        minimum
+      }
+      ... on MinimumUpperCasePasswordRule {
+        minimum
+      }
+      ... on MinimumDigitsPasswordRule {
+        minimum
+      }
+      ... on MinimumSpecialPasswordRule {
+        minimum
+      }
+      ... on MinimumUniquePasswordRule {
+        minimum
+      }
+      ... on MinimumLengthPasswordRule {
+        minimum
+      }
+      ... on MaximumSequencePasswordRule {
+        maximum
+      }
+    }
+  }
+}

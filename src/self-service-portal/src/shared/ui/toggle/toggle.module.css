@@ -1,0 +1,52 @@
+.toggle-switch {
+	--slider-bg: #ccc;
+	--slider-checked-bg: var(--color-success);
+	--slider-focus-shadow: #2196f3;
+	--knob-bg: white;
+	--knob-size: 16px;
+	--knob-offset: 4px;
+
+	display: inline-block;
+	height: 24px;
+	position: relative;
+	width: 50px;
+}
+
+.toggle-switch input {
+	display: none;
+}
+
+.toggle-slider {
+	background-color: var(--slider-bg);
+	inset: 0;
+	cursor: pointer;
+	position: absolute;
+	transition: all 0.4s;
+	transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+	border-radius: 34px;
+}
+
+.toggle-slider::before {
+	background-color: var(--knob-bg);
+	bottom: var(--knob-offset);
+	content: '';
+	height: var(--knob-size);
+	left: var(--knob-offset);
+	position: absolute;
+	transition: all 0.4s;
+	transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+	width: var(--knob-size);
+	border-radius: 50%;
+}
+
+input:checked+.toggle-slider {
+	background-color: var(--slider-checked-bg);
+}
+
+input:focus+.toggle-slider {
+	box-shadow: var(--form-field-box-shadow-focus);
+}
+
+input:checked+.toggle-slider::before {
+	transform: translateX(26px);
+}

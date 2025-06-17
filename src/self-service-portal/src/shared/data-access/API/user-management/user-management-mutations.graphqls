@@ -1,0 +1,161 @@
+mutation addDeviceToAccountByAccountId($input: AddDeviceToAccountByAccountIdInput!) {
+  addDeviceToAccountByAccountId(input: $input) {
+    device {
+      ...DEVICE_FIELDS
+    }
+  }
+}
+
+mutation updateDeviceFromAccountByAccountId($input: UpdateDeviceFromAccountByAccountIdInput!) {
+  updateDeviceFromAccountByAccountId(input: $input) {
+    device {
+      ...DEVICE_FIELDS
+    }
+  }
+}
+
+mutation deleteOptInMfaFactorFromAccountByAccountId($input: DeleteOptInMfaFactorFromAccountByAccountIdInput!) {
+  deleteOptInMfaFactorFromAccountByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation resetOptInMfaStateByAccountId($input: ResetOptInMfaStateByAccountIdInput!) {
+  resetOptInMfaStateByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation updateAccountById($input: UpdateAccountByIdInput!) {
+  updateAccountById(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation createAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation deleteAccountById($input: DeleteAccountByIdInput!) {
+  deleteAccountById(input: $input) {
+    deleted
+  }
+}
+
+mutation deleteDeviceFromAccountByAccountId($input: DeleteDeviceFromAccountByAccountIdInput!) {
+  deleteDeviceFromAccountByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation updateAccountById($input: UpdateAccountByIdInput!) {
+  updateAccountById(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation deleteLinkFromAccountByAccountId($input: DeleteLinkFromAccountByAccountIdInput!) {
+  deleteLinkFromAccountByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation startVerifyTotpDevice($input: StartVerifyTotpDeviceInput!) {
+  startVerifyTotpDevice(input: $input) {
+    transactionId
+    deviceId
+    issuer
+    key
+    digits
+    interval
+    algorithm
+    skew
+    delayWindow
+    deviceType
+    deviceExpiresIn
+    qrLink
+  }
+}
+
+mutation completeVerifyTotpDevice($input: CompleteVerifyTotpDeviceInput!) {
+  completeVerifyTotpDevice(input: $input) {
+    result
+  }
+}
+
+mutation startVerifyEmailAddress($input: StartVerifyEmailAddressInput!) {
+  startVerifyEmailAddress(input: $input) {
+    result
+  }
+}
+
+mutation completeVerifyEmailAddress($input: CompleteVerifyEmailAddressInput!) {
+  completeVerifyEmailAddress(input: $input) {
+    result
+  }
+}
+
+mutation deleteEmailAddress($input: DeleteEmailAddressInput!) {
+  deleteEmailAddress(input: $input) {
+    result
+  }
+}
+
+mutation updatePrimaryEmailAddress($input: UpdatePrimaryEmailAddressInput!) {
+  updatePrimaryEmailAddress(input: $input) {
+    result
+  }
+}
+
+mutation startVerifyPhoneNumber($input: StartVerifyPhoneNumberInput!) {
+  startVerifyPhoneNumber(input: $input) {
+    result
+  }
+}
+
+mutation completeVerifyPhoneNumber($input: CompleteVerifyPhoneNumberInput!) {
+  completeVerifyPhoneNumber(input: $input) {
+    result
+  }
+}
+
+mutation deletePhoneNumber($input: DeletePhoneNumberInput!) {
+  deletePhoneNumber(input: $input) {
+    result
+  }
+}
+
+mutation updatePrimaryPhoneNumber($input: UpdatePrimaryPhoneNumberInput!) {
+  updatePrimaryPhoneNumber(input: $input) {
+    result
+  }
+}
+
+mutation validatePasswordAndUpdateAccountById($input: ValidatePasswordAndUpdateAccountByIdInput!) {
+  validatePasswordAndUpdateAccountById(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation startVerifyPasskey($input: StartVerifyPasskeyInput!) {
+  startVerifyPasskey(input: $input) {
+    transactionId
+    credentialOptionsJson
+  }
+}
+
+mutation completeVerifyPasskey($input: CompleteVerifyPasskeyInput!) {
+  completeVerifyPasskey(input: $input) {
+    result
+  }
+}

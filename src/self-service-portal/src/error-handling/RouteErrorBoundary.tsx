@@ -1,0 +1,54 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
+import { usePageTitle } from '@/shared/utils/useRouteTitle';
+import { Alert } from '@/shared/ui/Alert';
+import { Button } from '@/shared/ui';
+import { Spinner } from '@/shared/ui/Spinner';
+
+export const RouteErrorBoundary = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  const valueChangesThatResetErrorBoundary = [location.pathname];
+
+  return (
+    <ErrorBoundary FallbackComponent={RouteErrorBoundaryFallback} resetKeys={valueChangesThatResetErrorBoundary}>
+      {children}
+    </ErrorBoundary>
+  );
+};
+
+const RouteErrorBoundaryFallback = ({ resetErrorBoundary }: FallbackProps) => {
+  const { t } = useTranslation();
+  const pageTitle = usePageTitle();
+  const [isResettingErrorBoundary, setIsResettingErrorBoundary] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isResettingErrorBoundary) {
+      timer = setTimeout(() => {
+        resetErrorBoundary();
+        setIsResettingErrorBoundary(false);
+      }, 2000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [isResettingErrorBoundary, resetErrorBoundary]);
+
+  return (
+    <div className="flex flex-column justify-center flex-center h100 p4">
+      {isResettingErrorBoundary ? (
+        <Spinner width={48} height={48} />
+      ) : (
+        <Alert kind="danger" errorMessage={`${t('Failed to load')} ${pageTitle} ${t('page')}`} classes="mt2">
+          <Button
+            onClick={() => setIsResettingErrorBoundary(true)}
+            title={t('Reload')}
+            className="button-small button-primary-outline mt2"
+          />
+        </Alert>
+      )}
+    </div>
+  );
+};

@@ -1,0 +1,40 @@
+.table {
+	--border-color: #dedede;
+	--border-radius: 8px;
+
+	width: 100%;
+	max-width: 100%;
+	overflow: auto;
+	margin-top: 0;
+	margin-bottom: 16px;
+	border-spacing: 0;
+	border-collapse: inherit;
+	border-radius: var(--border-radius);
+	border: 1px solid var(--border-color)
+}
+
+.table-scroller {
+	overflow-x: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+
+@media (width >=84em) {
+	.table-scroller {
+		overflow-x: unset;
+	}
+}
+
+.table-scroller .table {
+	table-layout: unset;
+	width: max-content;
+	max-width: unset;
+
+}
+
+@media (width >=84em) {
+	.table-scroller .table {
+		width: 100%;
+		table-layout: fixed;
+		width: 100%;
+	}
+}

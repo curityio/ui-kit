@@ -1,0 +1,50 @@
+.dialog {
+  --reveal-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+  width: 95%;
+  position: fixed;
+  inset: 0 0 0 0;
+  margin: auto;
+  min-height: 360px;
+  background-color: white;
+  z-index: 4;
+  border-radius: var(--form-field-border-radius);
+  max-width: 800px;
+  height: fit-content;
+  animation: dialog-enter 0.2s var(--reveal-animation-timing-function) forwards;
+  display: flex;
+  flex-direction: column;
+}
+
+:global([data-reach-dialog-overlay]) {
+  background-color: hsla(0, 0%, 0%, 0.33);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 10;
+}
+
+.dialog main {
+  height: calc(100% - calc(var(--space-2)));
+  flex: 1 1 auto;
+}
+
+.dialog-footer {
+  border-bottom-right-radius: var(--form-field-border-radius);
+  border-bottom-left-radius: var(--form-field-border-radius);
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
