@@ -11,7 +11,7 @@
 
 import { SignInButton } from '@/auth/feature/SignInButton';
 import classes from './login.module.css';
-import selfServicePortalIntroImg from '/src/images/self-service-portal-intro.svg';
+import selfServicePortalIntroImg from '@curity-internal/assets/images/self-service-portal-intro.svg';
 import curityLogoLandscapeImg from '/src/images/curity-logo-landscape.svg';
 
 interface LoginProps {

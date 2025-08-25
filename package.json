@@ -5,7 +5,8 @@
 	"author": "Curity AB",
 	"private": true,
   "workspaces": [
-    "src/*"
+    "src/assets",
+    "src/self-service-portal"
   ],
   "scripts": {
     "start:ussp": "npm run start --workspace=self-service-portal",
