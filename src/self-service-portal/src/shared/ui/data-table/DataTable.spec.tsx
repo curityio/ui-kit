@@ -2,9 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { DataTable } from './DataTable';
 import { Column } from '@/shared/ui/data-table/typings';
-import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG } from '@/ui-config/ui-config.ts';
-import { expectAsyncElementNotToBeFound } from '@/shared/utils/test';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
+import { expectAsyncElementNotToBeFound, mockUseCurrentRouteResources } from '@/shared/utils/test';
 
 interface TestElement {
   email: string;
@@ -26,23 +26,40 @@ describe('DataTable Component', () => {
     vi.mock('react-i18next', () => ({
       useTranslation: () => ({
         t: (key: string) => {
-          if (key === 'Search') {
-            return 'Search'; // Return a specific string for the "Search" label
+          if (key === 'search') {
+            return 'Search';
           }
 
-          if (key === 'No {{title}} Available') {
+          if (key === 'no-title-available') {
             return 'No Email addresses Available';
           }
 
-          if (key === 'Looks like you don’t have any {{title}} yet.') {
+          if (key === 'empty-state-list') {
             return 'Looks like you don’t have any Email addresses yet.';
           }
 
-          if (key === 'Add a new {{createButtonLabel}} to get started.') {
+          if (key === 'add-new') {
             return 'Add a new Email to get started.';
           }
-
-          return key; // Default behavior for other keys
+          if (key === 'account.email.title') {
+            return 'Email addresses';
+          }
+          if (key === 'account.email') {
+            return 'Email';
+          }
+          if (key === 'created') {
+            return 'Created';
+          }
+          if (key === 'actions') {
+            return 'Actions';
+          }
+          if (key === 'delete-item') {
+            return 'delete item';
+          }
+          if (key === 'new') {
+            return 'New';
+          }
+          return key;
         },
         i18n: { language: 'en' },
         ready: true,
@@ -52,6 +69,10 @@ describe('DataTable Component', () => {
         init: () => {}, // Mock init function
       },
     }));
+  });
+
+  beforeEach(() => {
+    mockUseCurrentRouteResources();
   });
 
   describe('Rendering', () => {
@@ -125,7 +146,7 @@ describe('DataTable Component', () => {
 
         const searchInput = await screen.findByRole('searchbox');
         fireEvent.change(searchInput, { target: { value: 'test@example.com' } });
-        const searchMessage = await screen.findByText('Adjust your search and try again.');
+        const searchMessage = await screen.findByTestId('data-table-cell-empty-state');
 
         expect(searchMessage).toBeInTheDocument();
       });

@@ -56,8 +56,8 @@ export const Dialog = ({
     }
   };
 
-  actionButtonText = actionButtonText || t('Confirm');
-  cancelButtonText = cancelButtonText || t('Cancel');
+  actionButtonText = actionButtonText || t('confirm');
+  cancelButtonText = cancelButtonText || t('cancel');
 
   const handleActionButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (actionButtonCallback) {

@@ -9,73 +9,132 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconFacilitiesEmail, IconFacilitiesSms, IconGeneralArrowForward, IconGeneralLocation } from '@icons';
-import { Section } from '@shared/ui/Section.tsx';
+import { IconFacilitiesEmail, IconFacilitiesSms, IconGeneralLocation } from '@icons';
+import { Section } from '@/shared/ui/section/Section';
 import { Account } from '@/shared/data-access/API';
-import { List, ListCell, ListRow } from '@/shared/ui';
-import { Link } from 'react-router';
+import { List } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
+import { EmailVerificationDialog } from '@/pages/security/email/EmailVerificationDialog';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { useQuery } from '@apollo/client';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { Spinner } from '@/shared/ui/Spinner';
+import { useState } from 'react';
+import { PhoneNumberVerificationDialog } from '@/pages/security/phone/PhoneNumberVerificationDialog';
+import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
+import { ContactItem } from './ContactItem';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 interface ContactInfoProps {
   account: Account;
 }
 
 export const ContactInfo = ({ account }: ContactInfoProps) => {
+  const { session } = useAuth();
   const { t } = useTranslation();
-  const contactListConfig = [
-    {
-      title: t('Email'),
-      collection: 'emails' as const,
-      link: '/security/email',
-      className: 'flex flex-center flex-gap-1 flex-30',
-      icon: <IconFacilitiesEmail width={32} height={32} />,
-    },
-    {
-      title: t('Phone number'),
-      collection: 'phoneNumbers' as const,
-      link: '/security/phone',
-      className: 'flex flex-center flex-gap-1 flex-30',
-      icon: <IconFacilitiesSms width={32} height={32} />,
-    },
-    {
-      title: t('Address'),
-      collection: 'addresses' as const,
-      link: '/account/address',
-      className: 'flex flex-center flex-gap-1 flex-30',
-      icon: <IconGeneralLocation width={32} height={32} />,
-    },
-  ];
+  const [showEmailDialog, setShowEmailDialog] = useState<boolean>(false);
+  const [showPhoneDialog, setShowPhoneDialog] = useState<boolean>(false);
+  const [isReplacingPhoneNumber, setIsReplacingPhoneNumber] = useState<boolean>(false);
+
+  const {
+    data: getAccountByUserNameData,
+    refetch: refetchAccount,
+    loading,
+  } = useQuery(GRAPHQL_API.USER_MANAGEMENT.QUERIES.getAccountByUserName, {
+    variables: { userName: session?.idTokenClaims?.sub },
+  });
+
+  const accountData = getAccountByUserNameData?.accountByUserName;
+  const accountId = accountData?.id;
+  const emailToShow = getPrimaryOrFirstDevice(account?.emails?.filter(email => !!email));
+  const phoneToShow = getPrimaryOrFirstDevice(account?.phoneNumbers?.filter(phone => !!phone));
+
+  if (!accountId || loading) {
+    return <Spinner width={48} height={48} mode="fullscreen" />;
+  }
+
+  const handlePhoneChange = () => {
+    if (phoneToShow) {
+      setIsReplacingPhoneNumber(true);
+    }
+
+    setShowPhoneDialog(true);
+  };
+
+  const handleEmailDialogClose = () => {
+    refetchAccount();
+    setShowEmailDialog(false);
+  };
+
+  const handlePhoneDialogClose = () => {
+    if (phoneToShow) {
+      setIsReplacingPhoneNumber(false);
+    }
+
+    refetchAccount();
+    setShowPhoneDialog(false);
+  };
 
   return (
-    <Section title={t('Contact information')}>
-      <List className="sm-flex flex-column flex-gap-3">
-        {contactListConfig.map((config, index) => (
-          <ListRow key={index}>
-            <ListCell className={config.className}>
-              {config.icon}
-              <label>{config.title}</label>
-            </ListCell>
-            <ListCell className="flex-70 flex flex-start flex-gap-1 justify-between">
-              {getAccountElements(config.collection, account, t)}
-
-              <Link to={config.link} className="button button-small button-transparent">
-                <IconGeneralArrowForward width={24} height={24} />
-              </Link>
-            </ListCell>
-          </ListRow>
-        ))}
-      </List>
-    </Section>
+    <>
+      <Section title={t('account.contact-information')} data-testid="contact-info-section">
+        <List className="sm-flex flex-column flex-gap-3">
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_EMAIL]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.READ]}
+          >
+            <ContactItem
+              title={t('account.email')}
+              icon={<IconFacilitiesEmail width={32} height={32} />}
+              collection="emails"
+              account={account}
+              onVerify={() => setShowEmailDialog(true)}
+            />
+          </UiConfigIf>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_PHONE_NUMBER]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.READ]}
+          >
+            <ContactItem
+              title={t('account.phone.title')}
+              icon={<IconFacilitiesSms width={32} height={32} />}
+              collection="phoneNumbers"
+              account={account}
+              onChange={handlePhoneChange}
+              onVerify={() => setShowPhoneDialog(true)}
+            />
+          </UiConfigIf>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.READ]}
+          >
+            <ContactItem
+              title={t('account.address')}
+              icon={<IconGeneralLocation width={32} height={32} />}
+              collection="addresses"
+              account={account}
+              link="/account/address"
+            />
+          </UiConfigIf>
+        </List>
+      </Section>
+      {showEmailDialog && (
+        <EmailVerificationDialog
+          accountId={accountId}
+          emailForOtpVerification={emailToShow?.value}
+          setEmailAsPrimaryAfterVerification={!emailToShow?.primary}
+          onClose={handleEmailDialogClose}
+        />
+      )}
+      {showPhoneDialog && (
+        <PhoneNumberVerificationDialog
+          accountId={accountId}
+          phoneNumberForOtpVerification={isReplacingPhoneNumber ? null : phoneToShow?.value}
+          setPhoneNumberAsPrimaryAfterVerification={isReplacingPhoneNumber ? true : !phoneToShow?.primary}
+          onClose={handlePhoneDialogClose}
+        />
+      )}
+    </>
   );
-};
-
-const getAccountElements = (collection: 'emails' | 'addresses' | 'phoneNumbers', account: Account, t: TFunction) => {
-  return account?.[collection]?.map((element, index) => (
-    <div className="flex flex-gap-1" key={index}>
-      {'value' in element! && <span>{element.value}</span>}
-      {'streetAddress' in element! && <span>{element.streetAddress}</span>}
-      {element?.primary && <span className="pill pill-grey">{t('Primary')}</span>}
-    </div>
-  ));
 };

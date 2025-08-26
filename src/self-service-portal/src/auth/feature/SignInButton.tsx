@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 import { useState } from 'react';
-import { useAuth } from '../data-access/AuthProvider.tsx';
+import { useAuth } from '../data-access/AuthProvider';
 import { useTranslation } from 'react-i18next';
 
 export const SignInButton = () => {
@@ -25,13 +25,14 @@ export const SignInButton = () => {
   return (
     <button
       aria-busy={isClicked ? 'true' : 'false'}
-      aria-label={isClicked ? t('Loading') : t('Sign In')}
+      aria-label={isClicked ? t('loading') : t('sign-in')}
       onClick={handleClick}
       className={`button button-fullwidth button-primary button-loading button-medium w100 ${
         isClicked && 'button-loading-active'
       }`}
+      data-testid="sign-in"
     >
-      <span aria-label={isClicked ? t('Loading') : t('Sign In')}>{t('Sign In')}</span>
+      <span aria-label={isClicked ? t('loading') : t('sign-in')}>{t('sign-in')}</span>
     </button>
   );
 };

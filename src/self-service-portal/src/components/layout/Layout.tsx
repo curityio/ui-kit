@@ -10,8 +10,9 @@
  */
 
 import { Header } from '@/shared/ui/header/Header';
-import { Sidebar } from './Sidebar';
-import { useState } from 'react';
+import { Sidebar } from './sidebar/Sidebar';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -23,6 +24,14 @@ export const Layout = ({ children }: LayoutProps) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  }, [location]);
 
   return (
     <>

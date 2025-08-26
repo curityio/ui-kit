@@ -9,13 +9,14 @@ export const FeatureNotAvailable = () => {
   return (
     <div className="flex flex-center justify-center flex-column py4" data-testid="feature-not-available">
       <PageHeader
-        title={t('Feature Not Available')}
-        description={t('The configuration for this app does not include the feature you are trying to access.')}
+        title={t('feature-not-available')}
+        description={t('feature-missing')}
         icon={<IconGeneralEyeHide width={128} height={128} />}
+        data-testid="feature-not-available-page-header"
       />
       <Link to="/" className="button button-medium button-primary">
         <IconGeneralArrowBack width={24} height={24} />
-        {t('Go home')}
+        {t('go-home')}
       </Link>
     </div>
   );

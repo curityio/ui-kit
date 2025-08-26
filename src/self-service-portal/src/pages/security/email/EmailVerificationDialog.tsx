@@ -24,61 +24,74 @@ import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API
 
 type Props = {
   accountId: string;
-  emailForOtpVerification?: string | null;
   onClose: () => void;
-  onEmailListChange: () => void;
+  emailForOtpVerification?: string | null;
+  setEmailAsPrimaryAfterVerification?: boolean;
+  onEmailListChange?: () => void;
 };
 export const EmailVerificationDialog = ({
   accountId,
-  emailForOtpVerification = '',
   onClose,
+  emailForOtpVerification = '',
+  setEmailAsPrimaryAfterVerification,
   onEmailListChange,
 }: Props) => {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState(emailForOtpVerification ?? '');
+  const [emailVerificationState, setEmailVerificationState] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [touched, setTouched] = useState(false);
   const [forceEmailStep, setForceEmailStep] = useState(false);
+  const [otpDigits, setOtpDigits] = useState('');
   const [
-    startVerifyEmailAddress,
+    startVerifyEmailAddressByAccountId,
     {
       data: verificationStartData,
       loading: verificationStartLoading,
       error: verificationStartError,
       reset: restVerificationStartError,
     },
-  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyEmailAddress);
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyEmailAddressByAccountId);
   const [
-    completeVerifyEmailAddress,
+    completeVerifyEmailAddressByAccountId,
     {
       data: verificationCompleteData,
       loading: verificationCompleteLoading,
       error: verificationCompleteError,
       reset: restVerificationCompleteError,
     },
-  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyEmailAddress);
-  const [otpDigits, setOtpDigits] = useState('');
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyEmailAddressByAccountId);
+  const [updatePrimaryEmailAddressByAccountId] = useMutation(
+    USER_MANAGEMENT_API.MUTATIONS.updatePrimaryEmailAddressByAccountId
+  );
+  const hasTriggeredStartVerification = useRef(false);
 
   const isStartVerificationLoading = verificationStartLoading;
   const isCompleteVerificationLoading = verificationCompleteLoading;
   const isDialogLoading = isStartVerificationLoading || isCompleteVerificationLoading;
-  const isDialogEmailStep = forceEmailStep || !verificationStartData;
+  const isDialogEmailStep = !emailForOtpVerification && (forceEmailStep || !verificationStartData);
   const isDialogEmailVerificationStep = !forceEmailStep && !!verificationStartData && !verificationCompleteData;
   const isDialogEmailVerificationSuccessStep = !!verificationCompleteData;
 
   useEffect(() => {
-    if (emailForOtpVerification) {
-      startVerifyEmailAddress({
+    if (emailForOtpVerification && !hasTriggeredStartVerification.current) {
+      hasTriggeredStartVerification.current = true;
+      startVerifyEmailAddressByAccountId({
         variables: {
           input: {
             accountId,
             emailAddress: emailForOtpVerification,
           },
         },
-      });
+      })
+        .then(response => {
+          const state = response?.data?.startVerifyEmailAddressByAccountId?.state;
+          if (state) setEmailVerificationState(state);
+        })
+        .catch(() => console.error(GRAPHQL_API_ERROR_MESSAGES.startVerifyEmailAddressByAccountId));
     }
-  }, [accountId, emailForOtpVerification, startVerifyEmailAddress]);
+  }, [accountId, emailForOtpVerification, startVerifyEmailAddressByAccountId]);
 
   useEffect(() => {
     if (isDialogEmailStep) {
@@ -88,24 +101,24 @@ export const EmailVerificationDialog = ({
 
   const dialogConfig = {
     email: {
-      title: t('New Email Address'),
-      actionText: t('Send Verification Code'),
-      cancelText: t('Cancel'),
+      subtitle: t('account.email.verify'),
+      actionText: t('account.send-code'),
+      cancelText: t('cancel'),
     },
     otp: {
-      title: t('Check your inbox'),
-      actionText: t('Verify Code'),
-      cancelText: t('Add a Different Email'),
+      subtitle: t('account.email.check-inbox'),
+      actionText: t('account.verify-code'),
+      cancelText: '',
     },
     loading: {
-      title: t('Processing'),
-      actionText: t('Verify Code'),
-      cancelText: t('Cancel'),
+      subtitle: t('account.processing'),
+      actionText: t('account.verify-code'),
+      cancelText: '',
     },
     success: {
-      title: t('Email Address Verified'),
-      actionText: t('Done'),
-      cancelText: t('Close'),
+      subtitle: t('account.email.verified'),
+      actionText: t('done'),
+      cancelText: '',
     },
   } as const;
 
@@ -117,7 +130,7 @@ export const EmailVerificationDialog = ({
     return 'email';
   };
 
-  const getDialogTitle = () => dialogConfig[getDialogStepKey()].title;
+  const getDialogSubTitle = () => dialogConfig[getDialogStepKey()].subtitle;
   const getActionButtonText = () => dialogConfig[getDialogStepKey()].actionText;
   const getCancelButtonText = () => dialogConfig[getDialogStepKey()].cancelText;
 
@@ -149,28 +162,46 @@ export const EmailVerificationDialog = ({
 
   const submitEmailAddress = async () => {
     setForceEmailStep(false);
-    await startVerifyEmailAddress({
+    await startVerifyEmailAddressByAccountId({
       variables: {
         input: {
           accountId,
           emailAddress: email,
         },
       },
-    });
-    onEmailListChange();
+    })
+      .then(response => {
+        const state = response?.data?.startVerifyEmailAddressByAccountId?.state;
+        if (state) setEmailVerificationState(state);
+      })
+      .catch(() => console.error(GRAPHQL_API_ERROR_MESSAGES.startVerifyEmailAddressByAccountId));
+    onEmailListChange?.();
   };
 
   const verifyOtpCode = async () => {
     const code = otpDigits;
-    await completeVerifyEmailAddress({
+    await completeVerifyEmailAddressByAccountId({
       variables: {
         input: {
           accountId,
           otp: code,
+          state: emailVerificationState,
         },
       },
-    });
-    onEmailListChange();
+    }).catch(() => console.error(GRAPHQL_API_ERROR_MESSAGES.completeVerifyEmailAddressByAccountId));
+
+    if (emailForOtpVerification && setEmailAsPrimaryAfterVerification) {
+      await updatePrimaryEmailAddressByAccountId({
+        variables: {
+          input: {
+            accountId,
+            newPrimaryEmailAddress: emailForOtpVerification,
+          },
+        },
+      });
+    }
+
+    onEmailListChange?.();
   };
 
   const resetDialog = () => {
@@ -208,10 +239,10 @@ export const EmailVerificationDialog = ({
   return (
     <Dialog
       isOpen={true}
-      title={t('New Email Address')}
-      subTitle={getDialogTitle()}
+      title={t('account.email.verification')}
+      subTitle={getDialogSubTitle()}
       showActionButton
-      showCancelButton
+      showCancelButton={isDialogEmailStep}
       closeDialogOnActionButtonClick={false}
       closeDialogOnCancelButtonClick={false}
       isActionButtonDisabled={isActionButtonDisabled()}
@@ -223,10 +254,10 @@ export const EmailVerificationDialog = ({
     >
       {isDialogEmailStep && (
         <>
-          <p>{t("We'll send a verification code to this email address")}</p>
+          <p>{t('account.email.info')}</p>
           <div className="left-align">
             <label htmlFor="newemail" className="label inline-flex flex-center flex-gap-1">
-              {t('Email address')}
+              {t('account.email.email-address')}
               {isEmailValid && (
                 <IconGeneralCheckmarkCircled width={24} height={24} style={{ color: 'var(--color-success)' }} />
               )}
@@ -249,14 +280,14 @@ export const EmailVerificationDialog = ({
               <Alert
                 kind="danger"
                 classes="mt2"
-                errorMessage={t('Please enter a valid email address')}
+                errorMessage={t('account.email.invalid')}
                 data-testid="email-validation-error"
               />
             )}
             {verificationStartError && (
               <Alert
                 kind="danger"
-                errorMessage={t(GRAPHQL_API_ERROR_MESSAGES.startVerifyEmailAddress)}
+                errorMessage={t(GRAPHQL_API_ERROR_MESSAGES.startVerifyEmailAddressByAccountId)}
                 classes="mt2"
                 data-testid="email-start-verification-error"
               />
@@ -268,7 +299,7 @@ export const EmailVerificationDialog = ({
       {isDialogLoading && (
         <div className="flex flex-column flex-center flex-gap-2">
           <Spinner width={48} height={48} />
-          <div> {isStartVerificationLoading ? t('Sending verification code...') : t('Verifying code...')}</div>
+          <div> {isStartVerificationLoading ? t('account.sending-code') : t('account.verifying-code')}</div>
         </div>
       )}
 
@@ -276,14 +307,12 @@ export const EmailVerificationDialog = ({
         <>
           <div className="flex flex-column flex-center mb0">
             <p className="mt0 mb3" data-testid="otp-description">
-              {verificationCompleteError
-                ? t(GRAPHQL_API_ERROR_MESSAGES.completeVerifyEmailAddress)
-                : t(
-                    'We emailed you a 6-digit code sent to your email. Enter the code below to verify your email address.'
-                  )}
+              {t('account.email.code-sent')}
             </p>
             <OtpInput
-              errorMessage={verificationCompleteError && GRAPHQL_API_ERROR_MESSAGES.completeVerifyEmailAddress}
+              errorMessage={
+                verificationCompleteError && GRAPHQL_API_ERROR_MESSAGES.completeVerifyEmailAddressByAccountId
+              }
               onChange={setOtpDigits}
             />
           </div>
@@ -294,7 +323,7 @@ export const EmailVerificationDialog = ({
         <div className="p3 flex flex-column flex-center">
           <SuccessCheckmark />
           <p className="mb0" data-testid="email-verification-success-message">
-            {t('Your new email address has been successfully verified')}
+            {t('account.email.verified-success')}
           </p>
         </div>
       )}

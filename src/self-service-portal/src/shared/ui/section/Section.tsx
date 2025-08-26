@@ -16,10 +16,10 @@ interface SectionProps extends HTMLAttributes<HTMLFieldSetElement> {
   className?: string;
 }
 
-export const Section = ({ title, className, children }: SectionProps) => {
+export const Section = ({ title, className, children, ...props }: SectionProps) => {
   className = `mt2 mb2 p3 ${className || ''}`;
   return (
-    <fieldset className={className || ''}>
+    <fieldset className={className || ''} {...props}>
       {title && <legend>{title}</legend>}
       {children}
     </fieldset>

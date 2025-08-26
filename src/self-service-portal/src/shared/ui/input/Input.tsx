@@ -10,6 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputClassName?: string;
   labelClassName?: string;
   ref?: Ref<HTMLInputElement>;
+  disablePasswordManager?: boolean;
 }
 
 export const Input = ({
@@ -22,6 +23,7 @@ export const Input = ({
   labelClassName = '',
   type = 'text',
   ref,
+  disablePasswordManager = true,
   ...props
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -32,7 +34,7 @@ export const Input = ({
   return (
     <div className={`${className}`} data-testid="input-container">
       {label && (
-        <label htmlFor={props.id} className={`input-label ${labelClassName} ${isFocused ? 'focused' : ''}`}>
+        <label htmlFor={props.id} className={`nowrap ${labelClassName} ${isFocused ? 'focused' : ''}`}>
           {label}
         </label>
       )}
@@ -46,7 +48,7 @@ export const Input = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         {...props}
-        {...DISABLE_PASSWORD_ATTRIBUTES}
+        {...(disablePasswordManager ? DISABLE_PASSWORD_ATTRIBUTES : {})}
       />
 
       {tooltip && !error && <small className="input-tooltip">{tooltip}</small>}

@@ -31,11 +31,13 @@
 ### Identity Server Setup
 
 - Start the server with default debug configuration.
-- Upload the following configuration files, found in the server repository: 
+- Upload the following configuration files, found in the server repository:
+
   - `test/integration-tests/src/test/resources/test-config/apps/self-service-portal-app-standalone.xml`
   - `test/integration-tests/src/test/resources/test-config/apps/self-service-portal-features.xml`
 
   This can be done in two ways:
+
   1. NPM script: `npm run setup-idsvr`
   2. Using the Admin UI, via the Changes / Upload menu item.
 
@@ -77,7 +79,7 @@ This app is supported in 'en', 'sv', 'pt' and, 'pt-PT' languages but is the back
 ```tsx
 const { t } = useTranslation();
 
-return <span>{t('Sign In')}</span>;
+return <span>{t('sign-in')}</span>;
 ```
 
 ### GraphQL
@@ -155,7 +157,7 @@ For example, in the `UiConfig` above:
 
 ##### UiConfigIfRoute
 
-The [UiConfigIfRoute](/src/ui-config/feature/UiConfigIfRoute.tsx) component allows accessing a route only if the `UiConfig` allows the `read` operation (`UI_CONFIG_OPERATIONS.READ`) for all the resources associated to that route.
+The [UiConfigIfRoute](/src/ui-config/feature/UiConfigIfRoute.tsx) component allows accessing a route only if the `UiConfig` allows the `read` operation (`UI_CONFIG_OPERATIONS.READ`) for some (`allowAccessWithPartialResourcePermissions:true` (default)) or all (`allowAccessWithPartialResourcePermissions: false`) the resources associated to that route.
 
 ```tsx
 {
@@ -175,7 +177,7 @@ Explanation:
 - The `USSP_ROUTE_PATHS.ACCOUNT` route is linked to the `name` and `address` resources (`UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME`, `UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS`).
 - Since the `UiConfig` allows the `read` operation for both resources, users can access this route.
 
-If the `read` operation is not permitted for any of the specified resources, `UiConfigIfRoute` redirects users to the [FeatureNotAvailable](/src/shared/ui/FeatureNotAvailable.tsx) component.
+When a required operation is not permitted for some/all of the specified resources, `UiConfigIfRoute` redirects users to the [FeatureNotAvailable](/src/shared/ui/FeatureNotAvailable.tsx) component.
 
 ##### UiConfigIf
 
@@ -207,7 +209,7 @@ The [UiConfigIf](/src/ui-config/feature/UiConfigIf.tsx) component conditionally 
 
 Explanation:
 
-- The `UiConfigIf` component ensures that elements are only rendered if all specified resources permit all specified operations.
+- The `UiConfigIf` component ensures that elements are only rendered if some (`displayWithPartialResourcePermissions:true` (default)) or all (`displayWithPartialResourcePermissions: false`) specified resources permit some or all specified operations.
 - Given the previous `Example Configuration`:
   - The First Name input would be hidden (since `UI_CONFIG_OPERATIONS.UPDATE` is not granted for `name`).
   - The Street input would be visible (since `UI_CONFIG_OPERATIONS.UPDATE` is granted for `address`).

@@ -7,7 +7,8 @@
   --header-height: 48px;
   --form-label-font-size: 1rem;
   --color-text: #737373;
-
+  --color-link: black;
+  --color-link-hover: black;
   --page-background-color: #f3f5f7;
 
   --self-service-portal-login-sidebar-image-display: flex;
@@ -15,6 +16,8 @@
   --self-service-portal-login-sidebar-background-color: var(--color-primary-dark);
   --self-service-portal-sidebar-background-color: white;
   --self-service-portal-main-background-color: white;
+  --login-logo-max-width: 200px;
+  --login-logo-max-height: 40px;
 }
 
 @font-face {
@@ -61,13 +64,18 @@ body {
   min-height: 100dvh;
 }
 
-#root>div:has(#svgTitle) {
+#root > div:has(#svgTitle) {
   height: 100dvh;
 }
 
-#root>.spinner-container {
+#root > .spinner-container {
   top: calc(50% - var(--spinnerCircleSize) / 2);
   left: calc(50% - var(--spinnerCircleSize) / 2);
+}
+
+.alert {
+  width: clamp(100%, 5vw + 90px, 30em);
+  min-width: unset;
 }
 
 input,
@@ -117,12 +125,15 @@ textarea {
   padding: var(--form-field-padding);
 }
 
-
 svg {
   max-width: 100%;
 }
 
 /* OTP INPUT */
+.vi__container {
+  gap: var(--space-2);
+}
+
 .vi:focus-visible {
   outline: none;
   box-shadow: none;
@@ -158,7 +169,6 @@ svg {
 }
 
 @keyframes caret-blink {
-
   0%,
   100% {
     opacity: 1;
@@ -177,4 +187,33 @@ svg {
       display: none;
     }
   }
+}
+
+/* Recovery Codes Print styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  [data-testid='mfa-recovery-codes'] h2,
+  [data-testid='mfa-recovery-codes'] p,
+  [data-testid='mfa-recovery-codes-list'],
+  [data-testid='mfa-recovery-codes-list'] * {
+    visibility: visible;
+  }
+
+  [data-testid='mfa-recovery-codes'] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+[data-testid='profile-details-section'] input,
+[data-testid='profile-details-section'] p {
+  width: clamp(110px, 5vw + 90px, 260px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { UiConfigProvider } from '@/ui-config/data-access/UiConfigProvider';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { expectAsyncElementNotToBeFound } from '@/shared/utils/test';
-import * as utils from '@/ui-config/utils/ui-config-if-utils.tsx';
+import * as utils from '@/ui-config/utils/ui-config-if-utils';
 import { mockUiConfigProvider } from '../../utils/test';
 
 describe('EditableContent', () => {

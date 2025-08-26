@@ -6,4 +6,8 @@ interface WindowBootstrapUiConfig {
   appBasePath: string;
   bffBaseUrl: string;
   metadataPath: string;
+  theme: {
+    logoImage: string;
+    loginImage: string;
+  }
 }

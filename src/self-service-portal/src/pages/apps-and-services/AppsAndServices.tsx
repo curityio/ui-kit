@@ -11,7 +11,7 @@
 
 import { IconAuthenticatorDefault, IconGeneralArrowForward, IconUserDataSources } from '@icons';
 import { List, ListCell, ListRow, PageHeader } from '../../shared/ui';
-import { Section } from '@/shared/ui/Section';
+import { Section } from '@/shared/ui/section/Section';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Link } from 'react-router';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
@@ -36,7 +36,7 @@ export const AppsAndServices = () => {
 
   const appList = (appList: AuthorizedOAuthClient[]) => {
     return (
-      <List>
+      <List data-testid="apps-and-services-list">
         {appList?.map((item, index) => (
           <Link to={item.id} key={index}>
             <ListRow className="flex flex-center justify-between flex-gap-2 w100 button-transparent p2">
@@ -51,7 +51,7 @@ export const AppsAndServices = () => {
               </ListCell>
               <ListCell>{item?.description}</ListCell>
               <ListCell>
-                {t('View details')}
+                {t('view-details')}
                 <IconGeneralArrowForward width={24} height={24} />
               </ListCell>
             </ListRow>
@@ -64,21 +64,20 @@ export const AppsAndServices = () => {
   return (
     <>
       <PageHeader
-        title={t('Apps and Services')}
-        description={t(
-          'Key privacy options that help you choose what data is stored in your account, what information you share with others and more'
-        )}
-        icon={<IconUserDataSources width={128} height={128} />}
+        title={t('apps-and-services.title')}
+        description={t('apps-and-services.description')}
+        icon={<IconUserDataSources width={128} height={128} data-testid="page-header-icon" />}
+        data-testid="apps-and-services-page-header"
       />
 
-      <Section title={t('Apps and Services')}>
+      <Section title={t('apps-and-services.title')}>
         <>
-          <h2>{t('Apps and Services')}</h2>
-          <p>{t('Your shared data with these third-party apps and services')}</p>
+          <h2>{t('apps-and-services.title')}</h2>
+          <p>{t('apps-and-services.shared-data')}</p>
           <div className="flex flex-gap-2 flex-center flex-wrap justify-between py2">
             <div>
               <SearchField
-                title={t('Apps and Services')}
+                title={t('apps-and-services.title')}
                 length={appList?.length ?? 0}
                 onSearch={setAppIdSearch}
                 autoFocus
@@ -90,7 +89,7 @@ export const AppsAndServices = () => {
         {appResultsFiltered?.length ? (
           appList(appResultsFiltered)
         ) : (
-          <EmptyState heading={t('No apps or services found')} />
+          <EmptyState heading={t('apps-and-services.not-found')} />
         )}
       </Section>
     </>

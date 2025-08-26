@@ -8,6 +8,7 @@
  *
  * For further information, please contact Curity AB.
  */
+import { Link } from 'react-router';
 import curityLogoLandscapeImg from '/src/images/curity-logo-landscape.svg';
 
 import { useTranslation } from 'react-i18next';
@@ -28,13 +29,12 @@ export const NoMatch = () => {
               className="w-9 block mb4"
               data-testid="no-match-curity-logo"
             />
-            <h1 data-testid="no-match-title">{t('404 Page Not Found')}</h1>
-            <p data-testid="no-match-description">{t('Sorry, the page you’re looking for doesn’t exist')}.</p>
+            <h1 data-testid="no-match-title">{t('page-not-found-404')}</h1>
+            <p data-testid="no-match-description">{t('page-not-found-message')}.</p>
             <p>
-              <a href="/" data-testid="no-match-home-link">
-                {t('Return to Home')}
-              </a>{' '}
-              {t('or try searching for what you need')}.
+              <Link to="/" data-testid="no-match-home-link">
+                {t('return-to-home')}
+              </Link>
             </p>
           </div>
         </div>

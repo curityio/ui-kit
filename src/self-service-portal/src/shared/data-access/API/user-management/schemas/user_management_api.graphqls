@@ -141,6 +141,16 @@ directive @Size(
   message: String = "graphql.validation.Size.message"
 ) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
 
+directive @ContainerNotEmpty(
+  message: String = "graphql.validation.ContainerNotEmpty.message"
+) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @ContainerSize(
+  min: Int = 0
+  max: Int = 2147483647
+  message: String = "graphql.validation.ContainerSize.message"
+) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
 schema {
   query: Query
   mutation: Mutation
@@ -198,7 +208,7 @@ type Query {
     """
     Username.
     """
-    userName: String!
+    userName: String! @Size(min: 1, max: 128)
   ): Account
 
   """
@@ -208,7 +218,7 @@ type Query {
     """
     Account ID.
     """
-    accountId: String!
+    accountId: String! @Size(min: 1, max: 128)
   ): Account
 
   """
@@ -218,7 +228,7 @@ type Query {
     """
     Email.
     """
-    email: String!
+    email: String! @Size(min: 1, max: 512)
   ): Account
 
   """
@@ -228,7 +238,7 @@ type Query {
     """
     Phone number.
     """
-    phoneNumber: String!
+    phoneNumber: String! @Size(min: 1, max: 64)
   ): Account
 
   """
@@ -264,7 +274,7 @@ type Query {
     """
     Username.
     """
-    userName: String!
+    userName: String! @Size(min: 1, max: 128)
   ): CredentialPolicyRulesState
 
   """
@@ -274,7 +284,7 @@ type Query {
     """
     The user name owning the bucket.
     """
-    userName: String!
+    userName: String! @Size(min: 1, max: 128)
     """
     The purposes of the buckets to retrieve.
     """
@@ -364,6 +374,18 @@ type Mutation {
   ): DeleteOptInMfaFactorFromAccountByAccountIdPayload
 
   """
+  Adds one factor to opt-in MFA, by account ID.
+
+  This mutation requires an opt-in MFA action to be configured in the User Management profile.
+  """
+  addOptInMfaFactorToAccountByAccountId(
+    """
+    Input to the `addOptInMfaFactorToAccountByAccountId` mutation.
+    """
+    input: AddOptInMfaFactorToAccountByAccountIdInput!
+  ): AddOptInMfaFactorToAccountByAccountIdPayload
+
+  """
   Reset the MFA state, by account ID. Delete all configured factors if any, or reset opt-out.
   """
   resetOptInMfaStateByAccountId(
@@ -372,6 +394,66 @@ type Mutation {
     """
     input: ResetOptInMfaStateByAccountIdInput!
   ): ResetOptInMfaStateByAccountIdPayload
+
+  """
+  Opt-outs of opt-in MFA, given the account ID.
+
+  This mutation requires an opt-in MFA action to be configured in the User Management profile.
+  """
+  optOutFromOptInMfaByAccountId(
+    """
+    Input to the `optOutFromOptInMfaByAccountId` mutation.
+    """
+    input: OptOutFromOptInMfaByAccountIdInput
+  ): OptOutFromOptInMfaByAccountIdPayload
+
+  """
+  Starts the setup of opt-in MFA on an account
+
+  This mutation requires an opt-in MFA action to be configured in the User Management profile.
+  """
+  startOptInMfaSetupByAccountId(
+    """
+    Input data.
+    """
+    input: StartOptInMfaSetupByAccountIdInput!
+  ): StartOptInMfaSetupByAccountIdPayload
+
+  """
+  Completes the setup of opt-in MFA on an account.
+
+  This mutation requires an opt-in MFA action to be configured in the User Management profile.
+  """
+  completeOptInMfaSetupByAccountId(
+    """
+    Input data.
+    """
+    input: CompleteOptInMfaSetupByAccountIdInput!
+  ): CompleteOptInMfaSetupByAccountIdPayload
+
+  """
+  Starts the reset of the opt-in MFA recovery codes.
+
+  This mutation requires an opt-in MFA action to be configured in the User Management profile.
+  """
+  startOptInMfaResetRecoveryCodesByAccountId(
+    """
+    Input data.
+    """
+    input: StartOptInMfaResetRecoveryCodesByAccountIdInput!
+  ): StartOptInMfaResetRecoveryCodesByAccountIdPayload
+
+  """
+  Completes the reset of the opt-in MFA recovery codes.
+
+  This mutation requires an opt-in MFA action to be configured in the User Management profile.
+  """
+  completeOptInMfaResetRecoveryCodesByAccountId(
+    """
+    Input data.
+    """
+    input: CompleteOptInMfaResetRecoveryCodesByAccountIdInput!
+  ): CompleteOptInMfaResetRecoveryCodesByAccountIdPayload
 
   """
   Adds a device to an account, by account ID.
@@ -417,43 +499,43 @@ type Mutation {
   Starts the flow to register a new email address, by requesting a One Time Password to be sent to the
   email address to be registered.
   """
-  startVerifyEmailAddress(
+  startVerifyEmailAddressByAccountId(
     """
-    Input to the `startVerifyEmailAddress` mutation
+    Input to the `startVerifyEmailAddressByAccountId` mutation
     """
-    input: StartVerifyEmailAddressInput!
-  ): StartVerifyEmailAddressPayload
+    input: StartVerifyEmailAddressByAccountIdInput!
+  ): StartVerifyEmailAddressByAccountIdPayload
 
   """
   Completes the flow to register a new email address, by providing the One Time Password that was sent as part of the
-  startVerifyEmailAddress mutation
+  startVerifyEmailAddressByAccountId mutation
   """
-  completeVerifyEmailAddress(
+  completeVerifyEmailAddressByAccountId(
     """
-    Input to the `CompleteVerifyEmailAddress` mutation
+    Input to the `CompleteVerifyEmailAddressByAccountId` mutation
     """
-    input: CompleteVerifyEmailAddressInput!
-  ): CompleteVerifyEmailAddressPayload
+    input: CompleteVerifyEmailAddressByAccountIdInput!
+  ): CompleteVerifyEmailAddressByAccountIdPayload
 
   """
   Update an account to set an already registered and verified email address as primary email address.
   """
-  updatePrimaryEmailAddress(
+  updatePrimaryEmailAddressByAccountId(
     """
-    Input to the `UpdatePrimaryEmailAddress` mutation
+    Input to the `UpdatePrimaryEmailAddressByAccountId` mutation
     """
-    input: UpdatePrimaryEmailAddressInput!
-  ): UpdatePrimaryEmailAddressPayload
+    input: UpdatePrimaryEmailAddressByAccountIdInput!
+  ): UpdatePrimaryEmailAddressByAccountIdPayload
 
   """
   Update an account by deleting an email address. The primary email address can not be deleted.
   """
-  deleteEmailAddress(
+  deleteEmailAddressByAccountId(
     """
-    Input to the `DeleteEmailAddress` mutation
+    Input to the `deleteEmailAddressByAccountId` mutation
     """
-    input: DeleteEmailAddressInput!
-  ): DeleteEmailAddressPayload
+    input: DeleteEmailAddressByAccountIdInput!
+  ): DeleteEmailAddressByAccountIdPayload
 
   """
   Starts the flow to register a new TOTP device, by requesting a secret to be used with the new device.
@@ -461,67 +543,67 @@ type Mutation {
   This operation requires a TOTP authenticator configured in the associated user management
   profile, otherwise it will fail.
   """
-  startVerifyTotpDevice(
+  startVerifyTotpDeviceByAccountId(
     """
-    Input to the `startVerifyTotpDevice` mutation
+    Input to the `startVerifyTotpDeviceByAccountId` mutation
     """
-    input: StartVerifyTotpDeviceInput!
-  ): StartVerifyTotpDevicePayload
+    input: StartVerifyTotpDeviceByAccountIdInput!
+  ): StartVerifyTotpDeviceByAccountIdPayload
 
   """
   Completes the flow to register a new TOTP device, by providing the response to the challenge (secret)
-  that was sent in the startVerifyTotpDevice operation.
+  that was sent in the `startVerifyTotpDeviceByAccountId operation.
   This operation requires a TOTP authenticator configured in the associated user management
   profile, otherwise it will fail.
   """
-  completeVerifyTotpDevice(
+  completeVerifyTotpDeviceByAccountId(
     """
-    Input to the `completeVerifyTotpDevice` mutation
+    Input to the `completeVerifyTotpDeviceByAccountId` mutation
     """
-    input: CompleteVerifyTotpDeviceInput!
-  ): CompleteVerifyTotpDevicePayload
+    input: CompleteVerifyTotpDeviceByAccountIdInput!
+  ): CompleteVerifyTotpDeviceByAccountIdPayload
 
   """
   Starts the flow to register a new phone number, by requesting a One Time Password to be sent to the
   phone number to be registered.
   """
-  startVerifyPhoneNumber(
+  startVerifyPhoneNumberByAccountId(
     """
     Input data.
     """
-    input: StartVerifyPhoneNumberInput!
-  ): StartVerifyPhoneNumberPayload
+    input: StartVerifyPhoneNumberByAccountIdInput!
+  ): StartVerifyPhoneNumberByAccountIdPayload
 
   """
   Completes the flow to register a new phone number, by providing the One Time Password that was sent as part of the
-  startVerifyPhoneNumber mutation
+  startVerifyPhoneNumberByAccountId mutation
   """
-  completeVerifyPhoneNumber(
+  completeVerifyPhoneNumberByAccountId(
     """
     Input data.
     """
-    input: CompleteVerifyPhoneNumberInput!
-  ): CompleteVerifyPhoneNumberPayload
+    input: CompleteVerifyPhoneNumberByAccountIdInput!
+  ): CompleteVerifyPhoneNumberByAccountIdPayload
 
   """
   Update an account to set an already registered and verified phone number as the primary phone number.
   """
-  updatePrimaryPhoneNumber(
+  updatePrimaryPhoneNumberByAccountId(
     """
     Input data.
     """
-    input: UpdatePrimaryPhoneNumberInput!
-  ): UpdatePrimaryPhoneNumberPayload
+    input: UpdatePrimaryPhoneNumberByAccountIdInput!
+  ): UpdatePrimaryPhoneNumberByAccountIdPayload
 
   """
   Update an account by deleting a phone number. The primary phone number can not be deleted.
   """
-  deletePhoneNumber(
+  deletePhoneNumberByAccountId(
     """
     Input data.
     """
-    input: DeletePhoneNumberInput!
-  ): DeletePhoneNumberPayload
+    input: DeletePhoneNumberByAccountIdInput!
+  ): DeletePhoneNumberByAccountIdPayload
 
   """
   Sends a password reset email to the provided user's primary email address.
@@ -529,62 +611,62 @@ type Mutation {
   associated user management profile to process the password reset, otherwise
   it will fail.
   """
-  sendPasswordResetEmail(
+  sendPasswordResetEmail( # no ByNnnn suffix because it allows multiple criteria
     """
     Input data.
     """
-    input: PasswordResetInput!
-  ): PasswordResetPayload
+    input: SendPasswordResetInput!
+  ): SendPasswordResetPayload
 
   """
   Initializes an account activation for the provided user. This operation requires an HTML
   Form authenticator configured in the associated user management profile, otherwise it will fail.
   """
-  initializeAccountActivation(
+  initializeAccountActivation( # no ByNnnn suffix because it allows multiple criteria
     """
     Input data.
     """
-    input: AccountActivationInput!
-  ): AccountActivationPayload
+    input: InitializeAccountActivationInput!
+  ): InitializeAccountActivationPayload
 
   """
   Starts the flow to register a new Passkey, by requesting a credential options object.
   This operation requires a Passkeys authenticator configured in the associated user management
   profile, otherwise it will fail.
   """
-  startVerifyPasskey(
+  startVerifyPasskeyByAccountId(
     """
     Input data.
     """
-    input: StartVerifyPasskeyInput!
-  ): StartVerifyPasskeyPayload
+    input: StartVerifyPasskeyByAccountIdInput!
+  ): StartVerifyPasskeyByAccountIdPayload
 
   """
   Completes the flow to register a new Passkey.
   This operation requires a Passkeys authenticator configured in the associated user management
   profile, otherwise it will fail.
   """
-  completeVerifyPasskey(
+  completeVerifyPasskeyByAccountId(
     """
     Input data.
     """
-    input: CompleteVerifyPasskeyInput!
-  ): CompleteVerifyPasskeyPayload
+    input: CompleteVerifyPasskeyByAccountIdInput!
+  ): CompleteVerifyPasskeyByAccountIdPayload
 }
 
 """
 Input to the 'sendPasswordResetEmail' mutation.
 One of the accountId, username or email fields must be provided.
 """
-input PasswordResetInput {
+input SendPasswordResetInput {
   """
   The accountId of the user whom should a password reset email be sent.
   """
-  accountId: String @Size(min: 1, max: 64)
+  accountId: String @Size(min: 1, max: 128)
   """
   The username of the user whom should a password reset email be sent.
   """
-  username: String @Size(min: 1, max: 64)
+  userName: String @Size(min: 1, max: 128)
   """
   The email of the user whom should a password reset email be sent.
   """
@@ -599,7 +681,7 @@ input PasswordResetInput {
 """
 Result of the 'initializeAccountActivation' mutation.
 """
-type AccountActivationPayload {
+type InitializeAccountActivationPayload {
   """
   True if the account activation email was sent.
   """
@@ -610,15 +692,15 @@ type AccountActivationPayload {
 Input to the 'initializeAccountActivation' mutation.
 One of the accountId, username or email fields must be provided.
 """
-input AccountActivationInput {
+input InitializeAccountActivationInput {
   """
   The accountId of the user whom account should be activated.
   """
-  accountId: String @Size(min: 1, max: 64)
+  accountId: String @Size(min: 1, max: 128)
   """
   The username of the user whom account should be activated.
   """
-  username: String @Size(min: 1, max: 64)
+  userName: String @Size(min: 1, max: 128)
   """
   The email of the user whom account should be activated.
   """
@@ -633,7 +715,7 @@ input AccountActivationInput {
 """
 Result of the 'sendPasswordResetEmail' mutation.
 """
-type PasswordResetPayload {
+type SendPasswordResetPayload {
   """
   True if the password reset email was sent.
   """
@@ -798,7 +880,7 @@ input UpdateAccountByIdInput {
   """
   The ID of the account to update.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 64)
   """
   The fields to update.
   """
@@ -813,11 +895,11 @@ input ValidatePasswordAndUpdateAccountByIdInput {
   """
   The ID of the account to update.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 64)
   """
   The current password of the account to update.
   """
-  currentPassword: String!
+  currentPassword: String! @Size(min: 1, max: 512)
   """
   The fields to update.
   """
@@ -834,15 +916,15 @@ input AccountUpdateFields {
   """
   Password.
   """
-  password: String
+  password: String @Size(min: 1, max: 512)
   """
   External ID.
   """
-  externalId: String
+  externalId: String @Size(min: 1, max: 128)
   """
   Username.
   """
-  userName: String
+  userName: String @Size(min: 1, max: 128)
   """
   Name.
   """
@@ -850,35 +932,35 @@ input AccountUpdateFields {
   """
   Display name.
   """
-  displayName: String
+  displayName: String @Size(min: 1, max: 64)
   """
   Nickname.
   """
-  nickName: String
+  nickName: String @Size(min: 1, max: 64)
   """
   Title.
   """
-  title: String
+  title: String @Size(min: 1, max: 64)
   """
   Preferred language.
   """
-  preferredLanguage: String
+  preferredLanguage: String @Size(min: 1, max: 16)
   """
   User type.
   """
-  userType: String
+  userType: String @Size(min: 1, max: 64)
   """
   Profile's URL.
   """
-  profileUrl: String
+  profileUrl: String @Size(min: 1, max: 512)
   """
   Locale.
   """
-  locale: String
+  locale: String @Size(min: 1, max: 16)
   """
   Time zone.
   """
-  timeZone: String
+  timeZone: String @Size(min: 1, max: 16)
   """
   Active account indicator.
   """
@@ -886,45 +968,45 @@ input AccountUpdateFields {
   """
   Email addresses.
   """
-  emails: [StringMultiValuedValueInput]
+  emails: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 32)
   """
   Phone numbers.
   """
-  phoneNumbers: [StringMultiValuedValueInput]
+  phoneNumbers: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 32)
   """
   Instant messaging services.
   """
-  ims: [StringMultiValuedValueInput]
+  ims: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 32)
   """
   Photos.
   """
-  photos: [StringMultiValuedValueInput]
+  photos: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 32)
   """
   Addresses.
   """
-  addresses: [AddressInput]
+  addresses: [AddressInput] @ContainerSize(min: 0, max: 32)
   """
   Groups.
   """
-  groups: [StringMultiValuedValueInput]
+  groups: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 128)
   """
   Entitlements.
   """
-  entitlements: [StringMultiValuedValueInput]
+  entitlements: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 128)
   """
   Roles.
   """
-  roles: [StringMultiValuedValueInput]
+  roles: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 128)
   """
   X. 509 certificates.
   """
-  x509Certificates: [StringMultiValuedValueInput]
+  x509Certificates: [StringMultiValuedValueInput] @ContainerSize(min: 0, max: 32)
 
   # Not defined as AccountAttributes field
   """
   Website.
   """
-  website: String
+  website: String @Size(min: 1, max: 512)
 }
 """
 Definition of the fields to update:
@@ -936,27 +1018,27 @@ input NameUpdateFields {
   """
   Given name.
   """
-  givenName: String
+  givenName: String @Size(min: 0, max: 512)
   """
   Middle name.
   """
-  middleName: String
+  middleName: String @Size(min: 0, max: 512)
   """
   Family name.
   """
-  familyName: String
+  familyName: String @Size(min: 0, max: 512)
   """
   Honorific prefix.
   """
-  honorificPrefix: String
+  honorificPrefix: String @Size(min: 0, max: 512)
   """
   Honorific suffix.
   """
-  honorificSuffix: String
+  honorificSuffix: String @Size(min: 0, max: 512)
   """
   Formatted version of the name.
   """
-  formatted: String
+  formatted: String @Size(min: 0, max: 1024)
 }
 
 """
@@ -987,7 +1069,7 @@ input DeleteAccountByIdInput {
   """
   The ID of the account to delete.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
 }
 
 """
@@ -1012,7 +1094,7 @@ input DeleteLinkFromAccountByAccountIdInput {
   """
   The ID of the account from where to remove the linked account.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
   """
   The specification of the linked account to remove.
   """
@@ -1051,11 +1133,11 @@ input DeleteDeviceFromAccountByAccountIdInput {
   """
   The ID of the account from where the device should be removed.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
   """
   The ID of the device to remove.
   """
-  deviceId: String!
+  deviceId: String! @Size(min: 1, max: 128)
 }
 
 """
@@ -1076,11 +1158,11 @@ input DeleteOptInMfaFactorFromAccountByAccountIdInput {
   """
   The ID of the account from where the factor should be removed.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
   """
   The ACR of the factor to remove.
   """
-  acr: String!
+  acr: String! @Size(min: 1, max: 512)
 }
 
 """
@@ -1093,6 +1175,31 @@ type DeleteOptInMfaFactorFromAccountByAccountIdPayload {
   deleted: Boolean!
 }
 
+### mutation addOptInMfaFactorFromAccountByAccountId
+"""
+Input to the `addOptInMfaFactorToAccountByAccountId` mutation.
+"""
+input AddOptInMfaFactorToAccountByAccountIdInput {
+  """
+  The ID of the account to where the factor should be added.
+  """
+  accountId: String! @Size(min: 1, max: 128)
+  """
+  The ACR of the factor to add.
+  """
+  acr: String! @Size(min: 1, max: 512)
+}
+
+"""
+Result of the `addOptInMfaFactorToAccountByAccountId ` mutation.
+"""
+type AddOptInMfaFactorToAccountByAccountIdPayload {
+  """
+  `true` if the factor was successfully added.
+  """
+  added: Boolean!
+}
+
 ### mutation resetOptInMfaStateByAccountId types
 
 """
@@ -1102,7 +1209,7 @@ input ResetOptInMfaStateByAccountIdInput {
   """
   The ID of the account from where the factor should be removed.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
 }
 
 """
@@ -1115,6 +1222,26 @@ type ResetOptInMfaStateByAccountIdPayload {
   deleted: Boolean!
 }
 
+"""
+Input to the `optOutFromOptInMfaByAccountId` mutation.
+"""
+input OptOutFromOptInMfaByAccountIdInput {
+  """
+  The ID of the account where the MFA opt-out is being done.
+  """
+  accountId: String! @Size(min: 1, max: 128)
+}
+
+"""
+Result of the `optOutFromOptInMfaByAccountId` mutation.
+"""
+type OptOutFromOptInMfaByAccountIdPayload {
+  """
+  `true` if opt-out of MFA was successfully done.
+  """
+  optedOut: Boolean!
+}
+
 ### mutation addDeviceToAccountByAccountId types
 """
 Input to the `AddDeviceToAccountByAccountId` mutation.
@@ -1123,7 +1250,7 @@ input AddDeviceToAccountByAccountIdInput {
   """
   Account ID.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
   """
   Device fields to add device to an account.
   """
@@ -1182,7 +1309,7 @@ input UpdateDeviceFromAccountByAccountIdInput {
   """
   Account ID.
   """
-  accountId: String!
+  accountId: String! @Size(min: 1, max: 128)
   """
   Device ID.
   """
@@ -1244,7 +1371,7 @@ input DeleteBucketByUserNameInput {
   """
   The user name owning the bucket.
   """
-  userName: String!
+  userName: String! @Size(min: 0, max: 128)
   """
   The purpose of the bucket.
   """
@@ -1262,9 +1389,9 @@ type DeleteBucketByUserNamePayload {
 }
 
 """
-Input to the `startVerifyEmailAddress` mutation.
+Input to the `startVerifyEmailAddressByAccountId` mutation.
 """
-input StartVerifyEmailAddressInput {
+input StartVerifyEmailAddressByAccountIdInput {
   """
   The accountId for which to register a new email address
   """
@@ -1276,34 +1403,46 @@ input StartVerifyEmailAddressInput {
 }
 
 """
-Result of the `startVerifyEmailAddress` mutation.
+Result of the `startVerifyEmailAddressByAccountId` mutation.
 """
-type StartVerifyEmailAddressPayload {
+type StartVerifyEmailAddressByAccountIdPayload {
   """
-  The result of the `startVerifyEmailAddress` mutation. When result is true, an OTP is sent to the email address
+  The result of the `startVerifyEmailAddressByAccountId` mutation. When result is true, an OTP is sent to the email address
   by the server, otherwise the email address was not accepted for verification.
   """
   result: Boolean!
+
+  """
+  The state that needs to be included in the `completeVerifyEmailAddressByAccountId` mutation.
+  This state binds the Start request to the Complete request, and will only be valid for a limited time.
+  """
+  state: String
 }
 
 """
-Input to the `completeVerifyEmailAddress` mutation.
+Input to the `completeVerifyEmailAddressByAccountId` mutation.
 """
-input CompleteVerifyEmailAddressInput {
+input CompleteVerifyEmailAddressByAccountIdInput {
   """
   The accountId for which to check the One Time Password.
   """
   accountId: String! @Size(min: 1, max: 128)
+
   """
-  The One Time Password that was sent to the email address as requested in the `startVerifyEmailAddress` mutation.
+  The `state` as provided in the response of the `startVerifyEmailAddressByAccountId` mutation.
+  """
+  state: String! @Size(min: 1, max: 128)
+
+  """
+  The One Time Password that was sent to the email address as requested in the `startVerifyEmailAddressByAccountId` mutation.
   """
   otp: String! @Size(min: 1, max: 16)
 }
 
 """
-Result of the `completeVerifyEmailAddress` mutation.
+Result of the `completeVerifyEmailAddressByAccountId` mutation.
 """
-type CompleteVerifyEmailAddressPayload {
+type CompleteVerifyEmailAddressByAccountIdPayload {
   """
   The result of the `CompleteVerifyEmailAddress` mutation. If the returned result is true, the email address
   was accepted and registered with the account.
@@ -1312,9 +1451,9 @@ type CompleteVerifyEmailAddressPayload {
 }
 
 """
-Input to the `UpdatePrimaryEmailAddress` mutation.
+Input to the `updatePrimaryEmailAddressByAccountId` mutation.
 """
-input UpdatePrimaryEmailAddressInput {
+input UpdatePrimaryEmailAddressByAccountIdInput {
   """
   The accountId for which to update the primary email address.
   """
@@ -1326,9 +1465,9 @@ input UpdatePrimaryEmailAddressInput {
 }
 
 """
-Result of the `UpdatePrimaryEmailAddress` mutation.
+Result of the `updatePrimaryEmailAddressByAccountId` mutation.
 """
-type UpdatePrimaryEmailAddressPayload {
+type UpdatePrimaryEmailAddressByAccountIdPayload {
   """
   Returns true when the new primary email address is set.
   When the provided email address already was primary, this operation also returns true.
@@ -1337,9 +1476,9 @@ type UpdatePrimaryEmailAddressPayload {
 }
 
 """
-Input to the `DeleteEmailAddress` mutation.
+Input to the `deleteEmailAddressByAccountId` mutation.
 """
-input DeleteEmailAddressInput {
+input DeleteEmailAddressByAccountIdInput {
   """
   The accountId for which to delete the email address.
   """
@@ -1351,9 +1490,9 @@ input DeleteEmailAddressInput {
 }
 
 """
-Result of the `DeleteEmailAddress` mutation.
+Result of the `deleteEmailAddressByAccountId` mutation.
 """
-type DeleteEmailAddressPayload {
+type DeleteEmailAddressByAccountIdPayload {
   """
   Returns true when the email address was deleted.
   When the email address did not exist or could not be deleted, false is returned.
@@ -1364,7 +1503,7 @@ type DeleteEmailAddressPayload {
 """
 Used when invoking the mutation to verify a new phone number.
 """
-input StartVerifyPhoneNumberInput {
+input StartVerifyPhoneNumberByAccountIdInput {
   """
   The accountId for which to register a new phone number
   """
@@ -1372,38 +1511,50 @@ input StartVerifyPhoneNumberInput {
   """
   The phone number to register
   """
-  phoneNumber: String! @Size(min: 3, max: 20)
+  phoneNumber: String! @Size(min: 3, max: 64)
 }
 
 """
-Result of the `startVerifyPhoneNumber` mutation.
+Result of the `startVerifyPhoneNumberByAccountId` mutation.
 """
-type StartVerifyPhoneNumberPayload {
+type StartVerifyPhoneNumberByAccountIdPayload {
   """
   When result is true, an OTP is sent to the provided phone number
   by the server, otherwise the phone number was not accepted for verification.
   """
   result: Boolean!
+
+  """
+  The state that needs to be included in the `completeVerifyPhoneNumberByAccountId` mutation.
+  This state binds the Start request to the Complete request, and will only be valid for a limited time.
+  """
+  state: String
 }
 
 """
 Used when invoking the mutation to complete the verification of a new phone number.
 """
-input CompleteVerifyPhoneNumberInput {
+input CompleteVerifyPhoneNumberByAccountIdInput {
   """
   The accountId for which to check the One Time Password.
   """
   accountId: String! @Size(min: 1, max: 128)
+
   """
-  The One Time Password that was sent to the phone number as requested in the `startVerifyPhoneNumber` mutation.
+  The `state` as provided in the response of the `startVerifyPhoneNumberByAccountId` mutation.
+  """
+  state: String! @Size(min: 1, max: 128)
+
+  """
+  The One Time Password that was sent to the phone number as requested in the `startVerifyPhoneNumberByAccountId` mutation.
   """
   otp: String! @Size(min: 1, max: 16)
 }
 
 """
-Result of the `completeVerifyPhoneNumber` mutation.
+Result of the `completeVerifyPhoneNumberByAccountId` mutation.
 """
-type CompleteVerifyPhoneNumberPayload {
+type CompleteVerifyPhoneNumberByAccountIdPayload {
   """
   If the returned result is true, the phone number was accepted and registered with the account.
   """
@@ -1413,7 +1564,7 @@ type CompleteVerifyPhoneNumberPayload {
 """
 Used when invoking the mutation to update the primary phone number.
 """
-input UpdatePrimaryPhoneNumberInput {
+input UpdatePrimaryPhoneNumberByAccountIdInput {
   """
   The accountId for which to update the primary phone number.
   """
@@ -1421,13 +1572,13 @@ input UpdatePrimaryPhoneNumberInput {
   """
   The already existing and verified phone number to set as the new primary phone number.
   """
-  newPrimaryPhoneNumber: String! @Size(min: 3, max: 20)
+  newPrimaryPhoneNumber: String! @Size(min: 3, max: 64)
 }
 
 """
-Result of the `updatePrimaryPhoneNumber` mutation.
+Result of the `updatePrimaryPhoneNumberByAccountId` mutation.
 """
-type UpdatePrimaryPhoneNumberPayload {
+type UpdatePrimaryPhoneNumberByAccountIdPayload {
   """
   Returns true when the new primary phone number is set.
   When the provided phone number already was primary, this operation also returns true.
@@ -1438,7 +1589,7 @@ type UpdatePrimaryPhoneNumberPayload {
 """
 Used when invoking the mutation to delete a phone number.
 """
-input DeletePhoneNumberInput {
+input DeletePhoneNumberByAccountIdInput {
   """
   The accountId for which to delete the phone number.
   """
@@ -1450,9 +1601,9 @@ input DeletePhoneNumberInput {
 }
 
 """
-Result of the `deletePhoneNumber` mutation.
+Result of the `deletePhoneNumberByAccountId` mutation.
 """
-type DeletePhoneNumberPayload {
+type DeletePhoneNumberByAccountIdPayload {
   """
   Returns true when the phone number was deleted.
   When the phone number did not exist or could not be deleted, false is returned.
@@ -1463,7 +1614,7 @@ type DeletePhoneNumberPayload {
 """
 Used when invoking the mutation to add a new Passkey.
 """
-input StartVerifyPasskeyInput {
+input StartVerifyPasskeyByAccountIdInput {
   """
   The accountId for which to register a credential.
   """
@@ -1476,15 +1627,15 @@ input StartVerifyPasskeyInput {
 }
 
 """
-Result of the `startVerifyPasskey` mutation.
+Result of the `startVerifyPasskeyByAccountId` mutation.
 """
-type StartVerifyPasskeyPayload {
+type StartVerifyPasskeyByAccountIdPayload {
   """
-  The ID of the registration transaction that needs to be included in the `completeVerifyPasskey` mutation.
-  This transaction binds the Start request to the Complete request, and will only be valid for a limited time
+  The state that needs to be included in the `completeVerifyPasskeyByAccountId` mutation.
+  This state binds the Start request to the Complete request, and will only be valid for a limited time
   (i.e. 300 seconds)
   """
-  transactionId: String!
+  state: String!
   """
   The Base64 URL encoded (no padding) credential options JSON object that is supposed to be passed to the WebAuthn API
   (after being decoded).
@@ -1495,25 +1646,25 @@ type StartVerifyPasskeyPayload {
 """
 Used when invoking the mutation to complete the verification of a new Passkey.
 """
-input CompleteVerifyPasskeyInput {
+input CompleteVerifyPasskeyByAccountIdInput {
   """
   The accountId for which to register the Passkey.
   """
   accountId: String! @Size(min: 1, max: 128)
   """
-  The transactionId as provided in the result of the `startVerifyPasskey` mutation.
+  The `state` as provided in the result of the `startVerifyPasskeyByAccountId` mutation.
   """
-  transactionId: String! @Size(min: 1, max: 128)
+  state: String! @Size(min: 1, max: 128)
   """
   The Base64 URL encoded credential response JSON as returned from the WebAuthn API.
   """
-  credentialResponseJson: String! @Size(min: 1, max: 2048)
+  credentialResponseJson: String! @Size(min: 1, max: 4000)
 }
 
 """
-Result of the `completeVerifyPasskey` mutation.
+Result of the `completeVerifyPasskeyByAccountId` mutation.
 """
-type CompleteVerifyPasskeyPayload {
+type CompleteVerifyPasskeyByAccountIdPayload {
   """
   If the returned result is true, the Passkey was accepted and registered with the account.
   """
@@ -1521,9 +1672,9 @@ type CompleteVerifyPasskeyPayload {
 }
 
 """
-Input to the `StartVerifyTotpDevice` mutation.
+Input to the `startVerifyTotpDeviceByAccountId` mutation.
 """
-input StartVerifyTotpDeviceInput {
+input StartVerifyTotpDeviceByAccountIdInput {
   """
   The accountId for which to register a new TOTP device
   """
@@ -1536,15 +1687,15 @@ input StartVerifyTotpDeviceInput {
 }
 
 """
-Result of the `StartVerifyTotpDevice` mutation.
+Result of the `startVerifyTotpDeviceByAccountId` mutation.
 """
-type StartVerifyTotpDevicePayload {
+type StartVerifyTotpDeviceByAccountIdPayload {
   """
-  The ID of the registration transaction that needs to be included in the `CompleteVerifyTotpDevice` mutation.
-  This transaction binds the Start request to the Complete request, and will only be valid for a limited time
+  The state that needs to be included in the `CompleteVerifyTotpDevice` mutation.
+  This state binds the Start request to the Complete request, and will only be valid for a limited time
   (i.e. 300 seconds)
   """
-  transactionId: String!
+  state: String!
 
   """
   The DeviceId that is to be registered.
@@ -1603,18 +1754,18 @@ type StartVerifyTotpDevicePayload {
 }
 
 """
-Input to the `CompleteVerifyTotpDevice` mutation.
+Input to the `completeVerifyTotpDeviceByAccountId` mutation.
 """
-input CompleteVerifyTotpDeviceInput {
+input CompleteVerifyTotpDeviceByAccountIdInput {
   """
   The accountId for which to register a new TOTP device
   """
   accountId: String! @Size(min: 1, max: 128)
 
   """
-  The transactionId as provided in the result of the `StartVerifyTotpDevice` mutation.
+  The `state` as provided in the result of the `startVerifyTotpDeviceByAccountId` mutation.
   """
-  transactionId: String! @Size(min: 1, max: 128)
+  state: String! @Size(min: 1, max: 128)
 
   """
   The TOTP code that the user's device has calculated with the settings that were provided in the result
@@ -1624,9 +1775,9 @@ input CompleteVerifyTotpDeviceInput {
 }
 
 """
-Result of the `CompleteVerifyTotpDevice` mutation.
+Result of the `completeVerifyTotpDeviceByAccountId` mutation.
 """
-type CompleteVerifyTotpDevicePayload {
+type CompleteVerifyTotpDeviceByAccountIdPayload {
   """
   The result of the adding the new TOTP device to the account.
   """
@@ -1913,6 +2064,11 @@ type Device {
   # this field is calculated (not defined as DeviceAttributes field)
   category: DeviceCategory
   """
+  Details about the device.
+  """
+  # this field is calculated (not defined as DeviceAttributes field)
+  details: DeviceDetails
+  """
   Owner.
   """
   owner: String
@@ -1925,6 +2081,51 @@ type Device {
   """
   meta: Meta
 }
+
+"""
+Category-specific details about a device.
+"""
+union DeviceDetails = TotpDeviceDetails | WebAuthnDeviceDetails
+
+"""
+Information about a TOTP device.
+"""
+type TotpDeviceDetails {
+  """
+  Whether this device can be used to authenticate with the TOTP authenticator configured in
+  the user management profile.
+  """
+  canUseWithTotpAuthenticator: Boolean
+}
+
+"""
+Information about a WebAuthnN device.
+"""
+type WebAuthnDeviceDetails {
+  """
+  The WebAuthn Authenticator where this WebAuthN device (credential) was created.
+  """
+  webAuthnAuthenticator: WebAuthnAuthenticator
+}
+
+"""
+Information about a WebAuthn Authenticator.
+"""
+type WebAuthnAuthenticator {
+  """
+  The name of the WebAuthn Authenticator.
+  """
+  name: String
+  """
+  The light version of the the WebAuthn Authenticator icon.
+  """
+  iconLightUri: String
+  """
+  The dark version of the the WebAuthn Authenticator icon.
+  """
+  iconDarkUri: String
+}
+
 """
 The device category.
 """
@@ -2027,6 +2228,135 @@ type RegisteredFactors {
   factors: [RegisteredFactor!]!
 }
 
+# OptIn MFA setup
+"""
+Input to the `startOptInMfaSetupByAccountId` mutation
+"""
+input StartOptInMfaSetupByAccountIdInput {
+  """
+  The ID of the account where to setup opt-in MFA
+  """
+  accountId: String! @Size(min: 1, max: 128)
+
+  """
+  The list of factors to register (must have at least one factor)
+  """
+  factors: [FactorRegisterInput!]! @ContainerNotEmpty @ContainerSize(min: 1, max: 32)
+}
+
+"""
+Information about the factor to register
+"""
+input FactorRegisterInput {
+  """
+  The ACR of the factor to register
+  """
+  acr: String! @Size(min: 1, max: 512)
+
+  # expectedUsername will always be the userName?
+}
+
+"""
+Response of the `startOptInMfaSetupByAccountId` mutation
+"""
+type StartOptInMfaSetupByAccountIdPayload {
+  """
+  Information about the factors that will be registered.
+  """
+  factors: [RegistrableFactor!]!
+  """
+  Information about the recovery codes, only present if recovery codes are enabled.
+  """
+  recoveryCodes: [OptInMfaRecoveryCode!]
+  """
+  Transaction state. This value needs to be provided to the `completeOptInMfaSetupByAccountId` mutation.
+  """
+  state: String!
+}
+
+"""
+Information about a recovery code
+"""
+type OptInMfaRecoveryCode {
+  """
+  The recovery code value
+  """
+  value: String!
+}
+
+"""
+Input to the `completeOptInMfaSetupByAccountId` mutation.
+"""
+input CompleteOptInMfaSetupByAccountIdInput {
+  """
+  The ID of the account where to setup opt-in MFA
+  """
+  accountId: String! @Size(min: 1, max: 128)
+  """
+  The state returned by the `startOptInMfaSetupByAccountId` mutation.
+  """
+  state: String! @Size(min: 1, max: 512)
+}
+
+"""
+Response of the `completeOptInMfaSetupByAccountId` mutation.
+"""
+type CompleteOptInMfaSetupByAccountIdPayload {
+  """
+  The account state after opt-in MFA setup
+  """
+  account: Account
+}
+
+"""
+Input to the `startOptInMfaResetRecoveryCodesByAccountId` mutation.
+"""
+input StartOptInMfaResetRecoveryCodesByAccountIdInput {
+  """
+  The ID of the account where to reset the recovery codes
+  """
+  accountId: String! @Size(min: 1, max: 128)
+}
+
+"""
+Input to the `completeOptInMfaResetRecoveryCodesByAccountId` mutation.
+"""
+input CompleteOptInMfaResetRecoveryCodesByAccountIdInput {
+  """
+  The ID of the account where to reset the recovery codes
+  """
+  accountId: String! @Size(min: 1, max: 128)
+
+  """
+  The state returned by the `startOptInMfaResetRecoveryCodesByAccountId` mutation.
+  """
+  state: String! @Size(min: 1, max: 512)
+}
+
+"""
+Response of the `startOptInMfaResetRecoveryCodesByAccountId` mutation.
+"""
+type StartOptInMfaResetRecoveryCodesByAccountIdPayload {
+  """
+  Information about the recovery codes.
+  """
+  recoveryCodes: [OptInMfaRecoveryCode!]!
+  """
+  Transaction state. This value needs to be provided to the `completeOptInMfaResetRecoveryCodesByAccountId` mutation.
+  """
+  state: String!
+}
+
+"""
+Response of the `completeOptInMfaResetRecoveryCodesByAccountId` mutation.
+"""
+type CompleteOptInMfaResetRecoveryCodesByAccountIdPayload {
+  """
+  The account state after opt-in MFA reset recovery codes
+  """
+  account: Account
+}
+
 """
 A registered factor for opt-in MFA.
 """
@@ -2079,6 +2409,10 @@ type RegistrableFactor {
   A string with the authentication factor type (e.g. "totp")
   """
   type: String
+  """
+  True if the user has devices associated to this factor and therefore can use the factor immediately
+  """
+  hasDevices: Boolean
 }
 
 """
@@ -2106,7 +2440,7 @@ input StringMultiValuedValueInput {
   """
   Elements value.
   """
-  value: String!
+  value: String! @Size(min: 1, max: 512)
   """
   Primary indicator.
   """
@@ -2114,11 +2448,11 @@ input StringMultiValuedValueInput {
   """
   Element type.
   """
-  type: String
+  type: String @Size(min: 1, max: 512)
   """
   Element representation for display purposes.
   """
-  display: String
+  display: String @Size(min: 1, max: 512)
 }
 
 """
@@ -2128,27 +2462,27 @@ input AddressInput {
   """
   Formatted version of the address.
   """
-  formatted: String
+  formatted: String @Size(min: 1, max: 2048)
   """
   Street address.
   """
-  streetAddress: String
+  streetAddress: String @Size(min: 1, max: 1025)
   """
   Locality.
   """
-  locality: String
+  locality: String @Size(min: 1, max: 1024)
   """
   Region.
   """
-  region: String
+  region: String @Size(min: 1, max: 1024)
   """
   Postal code.
   """
-  postalCode: String
+  postalCode: String @Size(min: 1, max: 128)
   """
   Country.
   """
-  country: String
+  country: String @Size(min: 1, max: 512)
   """
   Primary address indicator.
   """
@@ -2156,11 +2490,11 @@ input AddressInput {
   """
   Address type.
   """
-  type: String
+  type: String @Size(min: 1, max: 128)
   """
   Address representation for display purposes.
   """
-  display: String
+  display: String @Size(min: 1, max: 2048)
 }
 
 """

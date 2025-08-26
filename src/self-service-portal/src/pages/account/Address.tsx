@@ -21,13 +21,14 @@ import { Dialog } from '@/shared/ui/dialog/Dialog';
 import { Column } from '@/shared/ui/data-table/typings';
 import { Address as AddressType } from '@/shared/data-access/API/graphql-codegen-typings-queries-and-mutations/graphql';
 import { useTranslation } from 'react-i18next';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export const Address = () => {
   const { t } = useTranslation();
   const [addressSearch, setAddressSearch] = useState('');
   const initialFormData: AddressInput = {
     country: '',
-    formatted: '',
     locality: '',
     postalCode: '',
     primary: false,
@@ -44,8 +45,8 @@ export const Address = () => {
   const [showNewAddressDialog, setShowNewAddressDialog] = useState<boolean>(false);
 
   const columns: Column<Pick<AddressType, 'display' | 'primary'>>[] = [
-    { key: 'display', label: t('Address') },
-    { key: 'primary', label: t('Primary') },
+    { key: 'display', label: t('account.address') },
+    { key: 'primary', label: t('account.primary') },
   ];
   const addresses = data?.accountByUserName?.addresses || [];
   const addressesWithDisplay = addresses.map(address => ({
@@ -114,30 +115,34 @@ export const Address = () => {
   return (
     <>
       <PageHeader
-        title={t('Address')}
-        description={t(
-          'Easily manage your addresses. Add a new address, update details, or remove ones you no longer use.'
-        )}
+        title={t('account.address')}
+        description={t('account.address.description')}
         icon={<IconGeneralLocation width={128} height={128} />}
+        data-testid="address-page-header"
       />
 
       <DataTable
-        title={t('Addresses')}
+        title={t('account.addresses')}
         columns={columns}
         data={addressesFiltered?.map(address => ({
           display: address?.display,
           primary: address?.primary,
         }))}
-        createButtonLabel={t('address')}
+        createButtonLabel={t('account.address')}
         customActions={(row: AddressInput) => (
           <>
             {!row.primary && (
-              <Button
-                className="button button-tiny button-primary-outline"
-                title={t('Make primary')}
-                onClick={() => handleSetPrimaryAddress(row)}
-                data-testid="make-primary-button"
-              />
+              <UiConfigIf
+                resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
+                allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
+              >
+                <Button
+                  className="button button-tiny button-primary-outline"
+                  title={t('account.make-primary')}
+                  onClick={() => handleSetPrimaryAddress(row)}
+                  data-testid="make-primary-button"
+                />
+              </UiConfigIf>
             )}
           </>
         )}
@@ -145,17 +150,18 @@ export const Address = () => {
         onSearch={(query: string) => setAddressSearch(query)}
         onCreateNew={() => setShowNewAddressDialog(true)}
         showSearch={!!addresses.length}
+        uiConfigResources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
         data-testid="address-list"
       />
 
       {showNewAddressDialog && (
         <Dialog
           isOpen={true}
-          title={t('Address')}
+          title={t('account.address')}
           showActionButton={true}
           showCancelButton={true}
-          actionButtonText={t('Save')}
-          cancelButtonText={t('Cancel')}
+          actionButtonText={t('save')}
+          cancelButtonText={t('cancel')}
           isActionButtonDisabled={!hasValidFormData()}
           actionButtonCallback={handleCreateAddress}
           cancelButtonCallback={resetFormAndCloseDialog}
@@ -163,16 +169,24 @@ export const Address = () => {
           data-testid="new-address-dialog"
         >
           <form onSubmit={handleCreateAddress} data-testid="new-address-form">
-            <h2>{t('Add New Address')}</h2>
-            <p>{t('Enter the details for your new address.')}</p>
-            <div className="flex flex-column flex-gap-2 mt3">
+            <h2>{t('account.address.add-new-address')}</h2>
+            <p>{t('account.address.enter-details')}</p>
+            <div className="flex flex-column flex-gap-2 mt2">
               {[
-                { name: 'type', label: t('Type'), placeholder: t('For example "work" or "private"') },
-                { name: 'streetAddress', label: t('Street'), placeholder: t('123 Main St') },
-                { name: 'locality', label: t('Locality') },
-                { name: 'region', label: t('Region'), placeholder: t('State/Province') },
-                { name: 'country', label: t('Country') },
-                { name: 'postalCode', label: t('Postal Code'), placeholder: '12345' },
+                { name: 'type', label: t('type'), placeholder: t('account.address.type-placeholder') },
+                {
+                  name: 'streetAddress',
+                  label: t('account.street'),
+                  placeholder: t('account.address.street-placeholder'),
+                },
+                { name: 'locality', label: t('account.address.locality') },
+                {
+                  name: 'region',
+                  label: t('account.address.region'),
+                  placeholder: t('account.address.region.placeholder'),
+                },
+                { name: 'country', label: t('account.address.country') },
+                { name: 'postalCode', label: t('account.address.postal-code'), placeholder: '12345' },
               ].map(({ name, label, placeholder }, index) => (
                 <Input
                   key={name}
@@ -182,11 +196,12 @@ export const Address = () => {
                   type="text"
                   value={String(formData[name as keyof AddressInput])}
                   onChange={handleAddressFormInputChange}
-                  className="flex flex-center flex-gap-2"
-                  labelClassName="w-8 l left-align"
+                  className="flex flex-column flex-gap-0"
+                  labelClassName="flex-20 left-align"
                   inputClassName="flex-auto"
-                  autoFocus={index === 2}
+                  autoFocus={index === 0}
                   data-testid={`address-${name}-input`}
+                  disablePasswordManager={false}
                 />
               ))}
             </div>

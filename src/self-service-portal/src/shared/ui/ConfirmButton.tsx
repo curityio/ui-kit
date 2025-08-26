@@ -48,17 +48,17 @@ export const ConfirmButton = ({
   const defaultDialogConfig: DialogConfig = {
     isOpen,
     showHeader: true,
-    title: `${t('Confirm')} ${t('Action')}`,
+    title: `${t('confirm')} ${t('account.action')}`,
     showCloseButton: true,
     showFooter: true,
     showActionButton: true,
-    actionButtonText: t('Confirm'),
+    actionButtonText: t('confirm'),
     isActionButtonDisabled: false,
     actionButtonCallback: onConfirm,
     closeDialogOnActionButtonClick: true,
     showCancelButton: true,
-    cancelButtonText: t('Cancel'),
-    children: <h2 className="m0">{dialogMessage || t('Are you sure you want to proceed with this action?')}</h2>,
+    cancelButtonText: t('cancel'),
+    children: <h2 className="m0">{dialogMessage || t('confirm-proceed')}</h2>,
   };
   const dialogConfigResult = { ...defaultDialogConfig, ...dialogConfig };
   const closeCallback = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -8,7 +8,7 @@ import * as utils from '@/ui-config/utils/ui-config-if-utils';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { ROUTE_PATHS } from '@/routes';
 import { FeatureNotAvailable } from '@/shared/ui/FeatureNotAvailable';
-import { UI_CONFIG } from '@/ui-config/ui-config.ts';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
 import { mockUiConfigProvider } from '../../shared/utils/test';
 
 describe('UiConfigIfRoute', () => {
@@ -21,6 +21,60 @@ describe('UiConfigIfRoute', () => {
   });
 
   describe('Route Access', () => {
+    describe('allowedOperations', () => {
+      it('should allow configuring the route`s allowedOperations (prop)', async () => {
+        const testId = 'feature-not-available';
+
+        vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME,
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS,
+        ]);
+
+        vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue({
+          ...UI_CONFIG,
+          accessControlPolicy: {
+            resourceGroups: {
+              ...UI_CONFIG.accessControlPolicy.resourceGroups,
+              userManagement: {
+                ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement,
+                resources: {
+                  ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement?.resources,
+                  name: {
+                    operations: [UI_CONFIG_OPERATIONS.READ],
+                  },
+                  address: {
+                    operations: [UI_CONFIG_OPERATIONS.READ],
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const { findByTestId } = render(
+          <MemoryRouter initialEntries={['/test']}>
+            <UiConfigProvider>
+              <Routes>
+                <Route
+                  path="/test"
+                  element={
+                    <UiConfigIfRoute allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}>
+                      <div>Content</div>
+                    </UiConfigIfRoute>
+                  }
+                />
+                <Route path={ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
+              </Routes>
+            </UiConfigProvider>
+          </MemoryRouter>
+        );
+
+        const featureNotAvailable = await findByTestId(testId);
+
+        expect(featureNotAvailable).toBeVisible();
+      });
+    });
+
     describe('allowAccessWithPartialPermissions (Some route resources have UIConfig operation permissions (default behavior))', () => {
       it('should allow accessing the route when some route resources have UIConfig permissions', async () => {
         const testId = 'route-with-permissions';
@@ -62,17 +116,19 @@ describe('UiConfigIfRoute', () => {
 
         vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue({
           ...UI_CONFIG,
-          resourceGroups: {
-            ...UI_CONFIG.resourceGroups,
-            userManagement: {
-              ...UI_CONFIG.resourceGroups.userManagement,
-              resources: {
-                ...UI_CONFIG.resourceGroups.userManagement.resources,
-                name: {
-                  operations: [],
-                },
-                address: {
-                  operations: [],
+          accessControlPolicy: {
+            resourceGroups: {
+              ...UI_CONFIG.accessControlPolicy.resourceGroups,
+              userManagement: {
+                ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement,
+                resources: {
+                  ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement?.resources,
+                  name: {
+                    operations: [],
+                  },
+                  address: {
+                    operations: [],
+                  },
                 },
               },
             },
@@ -91,7 +147,7 @@ describe('UiConfigIfRoute', () => {
                     </UiConfigIfRoute>
                   }
                 />
-                <Route path={'test/' + ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
+                <Route path={ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
               </Routes>
             </UiConfigProvider>
           </MemoryRouter>
@@ -144,17 +200,19 @@ describe('UiConfigIfRoute', () => {
 
         vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue({
           ...UI_CONFIG,
-          resourceGroups: {
-            ...UI_CONFIG.resourceGroups,
-            userManagement: {
-              ...UI_CONFIG.resourceGroups.userManagement,
-              resources: {
-                ...UI_CONFIG.resourceGroups.userManagement.resources,
-                name: {
-                  operations: [],
-                },
-                address: {
-                  operations: [UI_CONFIG_OPERATIONS.READ, UI_CONFIG_OPERATIONS.UPDATE],
+          accessControlPolicy: {
+            resourceGroups: {
+              ...UI_CONFIG.accessControlPolicy.resourceGroups,
+              userManagement: {
+                ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement,
+                resources: {
+                  ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement?.resources,
+                  name: {
+                    operations: [],
+                  },
+                  address: {
+                    operations: [UI_CONFIG_OPERATIONS.READ, UI_CONFIG_OPERATIONS.UPDATE],
+                  },
                 },
               },
             },
@@ -173,7 +231,7 @@ describe('UiConfigIfRoute', () => {
                     </UiConfigIfRoute>
                   }
                 />
-                <Route path={'test/' + ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
+                <Route path={ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
               </Routes>
             </UiConfigProvider>
           </MemoryRouter>

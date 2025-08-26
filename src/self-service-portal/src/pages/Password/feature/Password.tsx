@@ -15,7 +15,7 @@ import { useAuth } from '@/auth/data-access/AuthProvider';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useTranslation } from 'react-i18next';
 import { IconCapabilityResourceOwnerPasswordCredentials } from '@icons';
-import { Section } from '@/shared/ui/Section';
+import { Section } from '@/shared/ui/section/Section';
 import { useState } from 'react';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { Alert } from '@/shared/ui/Alert';
@@ -23,9 +23,14 @@ import { PasswordPolicy } from '@/pages/Password/feature/PasswordPolicy';
 import { PasswordInput } from '@/pages/Password/ui/PasswordInput';
 import { Button } from '@/shared/ui/Button';
 import toast from 'react-hot-toast';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 interface PasswordUpdateBEValidationError extends GraphQLFormattedError {
-  extensions: { details: { message: string }[] };
+  extensions: {
+    message: string;
+    details: { message: string }[];
+  };
 }
 
 export const Password = () => {
@@ -49,7 +54,8 @@ export const Password = () => {
     error => error.extensions?.classification === 'credential-update-rejected'
   ) as PasswordUpdateBEValidationError;
   const passwordUpdateBackendValidationErrorMessage =
-    passwordUpdateBackendValidationError?.extensions?.details?.[0]?.message;
+    passwordUpdateBackendValidationError?.extensions?.details?.[0]?.message ||
+    passwordUpdateBackendValidationError?.extensions?.message;
   const passwordUpdateHasErrors = passwordUpdateConfirmationError || passwordUpdateBackendValidationError;
   const passwordUpdateIsValid =
     passwordUpdateValue?.length &&
@@ -81,79 +87,74 @@ export const Password = () => {
             },
           },
         },
-      })
-        .then(() => {
-          toast.success(t('Your password has been successfully updated!'), {
-            id: 'password-update-success',
-          });
-          resetPasswordUpdateForm();
-        })
-        // Here we need to handle the error to avoid Cypress test to fail when GraphQL errors
-        .catch();
+      }).then(() => {
+        toast.success(t('security.password.update-success'), {
+          id: 'password-update-success',
+        });
+        resetPasswordUpdateForm();
+      });
     }
   };
 
   return (
     <>
       <PageHeader
-        title={t('Password')}
-        description={t(
-          'Set a new password. Ensure it meets any required complexity and security policies, if applicable.'
-        )}
+        title={t('security.password.title')}
+        description={t('security.password.description')}
         icon={<IconCapabilityResourceOwnerPasswordCredentials width={128} height={128} />}
+        data-testid="password-page-header"
       />
-      <Section title={t('Set a new password')} className="mx-auto w-30">
-        <div className="flex flex-column flex-gap-2">
-          {passwordUpdateBackendValidationError && (
-            <Alert kind="danger" errorMessage={passwordUpdateBackendValidationErrorMessage} classes="w100" />
-          )}
-          <form>
-            <input
-              id="username"
-              type="email"
-              value={userName}
-              autoComplete="username"
-              disabled
-              style={{ display: 'none' }}
+      <UiConfigIf
+        resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_PASSWORD]}
+        allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
+      >
+        <Section title={t('security.password.set-new-password')} className="mx-auto mw-30">
+          <div className="flex flex-column flex-gap-2">
+            {passwordUpdateBackendValidationError && (
+              <Alert kind="danger" errorMessage={passwordUpdateBackendValidationErrorMessage} classes="w100" />
+            )}
+            <form>
+              <input id="username" type="email" value={userName} autoComplete="username" disabled className="hide" />
+              <PasswordInput
+                label={t('security.password.new-password')}
+                id="passwordUpdate"
+                className={passwordUpdateValidationClassName}
+                value={passwordUpdateValue}
+                onChange={e => setPasswordUpdateValue(e.target.value)}
+                autoComplete="new-password"
+                data-testid="password-update-input"
+                autoFocus
+              >
+                {passwordUpdateConfirmationError && errorElement(t('security.password.passwords-must-match'))}
+              </PasswordInput>
+              <PasswordInput
+                label={t('security.password.confirm-new-password')}
+                id="passwordUpdateConfirmation"
+                className={passwordUpdateValidationClassName}
+                value={passwordUpdateConfirmationValue}
+                onChange={e => setPasswordUpdateConfirmationValue(e.target.value)}
+                autoComplete="new-password"
+                data-testid="password-update-confirmation-input"
+              >
+                {passwordUpdateConfirmationError && errorElement(t('security.password.passwords-must-match'))}
+              </PasswordInput>
+            </form>
+            <PasswordPolicy
+              passwordValue={passwordUpdateValue}
+              onPasswordValidation={isValid => setPasswordPassesFrontendValidation(isValid)}
             />
-            <PasswordInput
-              label={t('New password')}
-              id="passwordUpdate"
-              className={passwordUpdateValidationClassName}
-              value={passwordUpdateValue}
-              onChange={e => setPasswordUpdateValue(e.target.value)}
-              autoComplete="new-password"
-              data-testid="password-update-input"
-            >
-              {passwordUpdateConfirmationError && errorElement(t('Passwords must match'))}
-            </PasswordInput>
-            <PasswordInput
-              label={t('Confirm new password')}
-              id="passwordUpdateConfirmation"
-              className={passwordUpdateValidationClassName}
-              value={passwordUpdateConfirmationValue}
-              onChange={e => setPasswordUpdateConfirmationValue(e.target.value)}
-              autoComplete="new-password"
-              data-testid="password-update-confirmation-input"
-            >
-              {passwordUpdateConfirmationError && errorElement(t('Passwords must match'))}
-            </PasswordInput>
-          </form>
-          <PasswordPolicy
-            passwordValue={passwordUpdateValue}
-            onPasswordValidation={isValid => setPasswordPassesFrontendValidation(isValid)}
-          />
-        </div>
-        <div className="flex flex-center justify-end flex-gap-2 mt2">
-          <Button
-            title={t('Set new password')}
-            onClick={() => updatePassword(account?.id, passwordUpdateValue)}
-            disabled={disableUpdatePasswordButton}
-            className="button-small button-primary"
-            data-testid="password-update-button"
-          />
-        </div>
-      </Section>
+          </div>
+          <div className="flex flex-center justify-end flex-gap-2 mt2">
+            <Button
+              title={t('security.password.set-new-password')}
+              onClick={() => updatePassword(account?.id, passwordUpdateValue)}
+              disabled={disableUpdatePasswordButton}
+              className="button-small button-primary"
+              data-testid="password-update-button"
+            />
+          </div>
+        </Section>
+      </UiConfigIf>
     </>
   );
 };

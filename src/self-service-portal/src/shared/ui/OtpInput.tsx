@@ -29,7 +29,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({ errorMessage, onChange, ...p
       <VerificationInput
         inputProps={{ ...DISABLE_PASSWORD_ATTRIBUTES, inputMode: 'numeric' }}
         onChange={handleChange}
-        length={6}
+        length={length || 6}
         autoFocus
         placeholder=""
         validChars="0-9"

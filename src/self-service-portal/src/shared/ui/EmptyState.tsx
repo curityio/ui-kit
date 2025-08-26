@@ -24,9 +24,9 @@ export const EmptyState = ({ text, heading, action, callToAction }: EmptyStatePr
   const { t } = useTranslation();
 
   return (
-    <section className="center" role="region" aria-labelledby="empty-state-heading">
+    <section className="center" role="region" aria-labelledby="empty-state-heading" data-testid="empty-state">
       <div className="center">
-        <EmptyStateIcon width="300" height="300" ariaLabel={t('Empty state icon')} />
+        <EmptyStateIcon width="300" height="300" ariaLabel={t('empty-state-icon')} />
       </div>
       <h2 id="empty-state-heading" className="mt0">
         {heading}

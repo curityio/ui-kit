@@ -14,28 +14,29 @@ import QRCode from 'react-qr-code';
 interface NewTotpDeviceDialogProps {
   isOpen: boolean;
   accountId?: string;
-  onClosed: () => void;
+  onClose: () => void;
 }
 
-export const NewTotpDeviceDialog = ({ isOpen, accountId, onClosed }: NewTotpDeviceDialogProps) => {
+export const NewTotpDeviceDialog = ({ isOpen, accountId, onClose }: NewTotpDeviceDialogProps) => {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [totpAlias, setTotpAlias] = useState('');
   const [showNewTotpDeviceDialog, setShowNewTotpDeviceDialog] = useState<boolean>(false);
   const [
-    startVerifyTotpDevice,
+    startVerifyTotpDeviceByAccountId,
     { data: verificationStartData, loading: verificationStartLoading, error: verificationStartError },
-  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyTotpDevice);
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyTotpDeviceByAccountId);
   const [
-    completeVerifyTotpDevice,
+    completeVerifyTotpDeviceByAccountId,
     { data: verificationCompleteData, loading: verificationCompleteLoading, error: verificationCompleteError },
-  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyTotpDevice);
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyTotpDeviceByAccountId);
 
   const isDialogLoading = verificationStartLoading || verificationCompleteLoading;
   const isDialogDeviceDetailsStep = !verificationStartData;
   const isDialogDeviceVerificationStep = !!verificationStartData && !verificationCompleteData;
   const isDialogDeviceRegistrationSuccessStep = !!verificationCompleteData;
-  const dialogActionButtonText = isDialogDeviceDetailsStep ? t('Create and verify') : t('Done');
+  const dialogActionButtonText = isDialogDeviceDetailsStep ? t('create-and-verify') : t('done');
+  const digits = verificationStartData?.startVerifyTotpDeviceByAccountId?.digits;
 
   useEffect(() => {
     if (isOpen) {
@@ -46,9 +47,9 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClosed }: NewTotpDevi
     }
   }, [isOpen]);
 
-  const handleStartVerifyTotpDevice = () => {
+  const handleStartVerifyTotpDeviceByAccountId = () => {
     if (accountId && totpAlias) {
-      startVerifyTotpDevice({
+      startVerifyTotpDeviceByAccountId({
         variables: {
           input: {
             accountId,
@@ -58,16 +59,16 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClosed }: NewTotpDevi
       });
     }
   };
-  const handleCompleteVerifyTotpDevice = (code: string) => {
-    const transactionId = verificationStartData?.startVerifyTotpDevice?.transactionId;
+  const handleCompleteVerifyTotpDeviceByAccountId = (code: string) => {
+    const state = verificationStartData?.startVerifyTotpDeviceByAccountId?.state;
 
-    if (accountId && transactionId && code) {
-      completeVerifyTotpDevice({
+    if (accountId && state && code) {
+      completeVerifyTotpDeviceByAccountId({
         variables: {
           input: {
             accountId,
             totp: code,
-            transactionId: transactionId,
+            state,
           },
         },
       });
@@ -75,30 +76,39 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClosed }: NewTotpDevi
   };
   const handleDialogNextStep = () => {
     if (isDialogDeviceDetailsStep) {
-      handleStartVerifyTotpDevice();
+      handleStartVerifyTotpDeviceByAccountId();
     } else if (isDialogDeviceRegistrationSuccessStep) {
-      onClosed();
+      onClose();
     }
+  };
+
+  const getStartVerificationErrorMessage = (): string => {
+    const graphQLError = verificationStartError?.graphQLErrors?.[0];
+    const isLocalizedValidationError = graphQLError?.extensions?.classification === 'localized-validation-error';
+    return isLocalizedValidationError
+      ? graphQLError?.message ?? ''
+      : t(GRAPHQL_API_ERROR_MESSAGES.startVerifyTotpDeviceByAccountId);
   };
 
   return (
     showNewTotpDeviceDialog && (
       <Dialog
         isOpen={true}
-        title={t('New OTP Authenticator')}
+        title={t('security.otp-authenticators.creation')}
+        subTitle={t('security.otp-authenticators.new-otp')}
         showActionButton={isDialogDeviceDetailsStep || isDialogDeviceRegistrationSuccessStep}
         actionButtonText={dialogActionButtonText}
         actionButtonCallback={handleDialogNextStep}
-        showCancelButton={true}
-        cancelButtonText={t('Cancel')}
-        cancelButtonCallback={onClosed}
-        closeCallback={onClosed}
+        showCancelButton={!isDialogDeviceRegistrationSuccessStep}
+        cancelButtonText={t('cancel')}
+        cancelButtonCallback={onClose}
+        closeCallback={onClose}
         closeDialogOnActionButtonClick={false}
       >
         {isDialogLoading && (
           <div className="flex flex-center flex-column justify-center">
-            <h1>{t('Verifying Code')}</h1>
-            <p className="m0">{t('Please wait')}...</p>
+            <h1>{t('verifying-code')}</h1>
+            <p className="m0">{t('please-wait')}...</p>
             <Spinner width={48} height={48} />
           </div>
         )}
@@ -107,18 +117,18 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClosed }: NewTotpDevi
           <>
             <Input
               ref={inputRef}
-              label={t('Alias')}
+              label={t('alias')}
               value={totpAlias}
               onChange={event => setTotpAlias(event.target.value)}
               autoFocus
               className="flex flex-column flex-start"
               inputClassName="w100"
-              data-testid="device-input"
+              data-testid="mfa-new-totp-device-alias-input"
             />
             {verificationStartError && (
               <Alert
                 kind="danger"
-                errorMessage={t(GRAPHQL_API_ERROR_MESSAGES.startVerifyTotpDevice)}
+                errorMessage={getStartVerificationErrorMessage()}
                 classes="mt2"
                 data-testid="totp-device-start-verification-error"
               />
@@ -128,29 +138,26 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClosed }: NewTotpDevi
 
         {isDialogDeviceVerificationStep && (
           <div className="flex flex-column flex-center mb0">
-            <h2 className="mt0">{t('Scan and Verify Your Code')}</h2>
-            <p className="mt0 mb3">
-              {t(
-                'Scan the QR code with your device and enter the 6-digit code sent to you to complete verification. This ensures a secure and seamless experience.'
-              )}
-            </p>
-            {verificationStartData?.startVerifyTotpDevice?.qrLink && (
-              <QRCode value={verificationStartData.startVerifyTotpDevice.qrLink} className="mb3" />
+            <h3 className="mt0">{t('security.otp-authenticators.scan-and-verify')}</h3>
+            <p className="mt0 mb3">{t('security.otp-authenticators.scan-and-enter', { digits })}</p>
+            {verificationStartData?.startVerifyTotpDeviceByAccountId?.qrLink && (
+              <QRCode value={verificationStartData.startVerifyTotpDeviceByAccountId.qrLink} className="mb3" />
             )}
             <OtpInput
-              errorMessage={verificationCompleteError && GRAPHQL_API_ERROR_MESSAGES.completeVerifyTotpDevice}
-              onComplete={handleCompleteVerifyTotpDevice}
+              length={digits}
+              errorMessage={verificationCompleteError && GRAPHQL_API_ERROR_MESSAGES.completeVerifyTotpDeviceByAccountId}
+              onComplete={handleCompleteVerifyTotpDeviceByAccountId}
             />
           </div>
         )}
 
         {isDialogDeviceRegistrationSuccessStep && (
           <>
-            <h2 className="mt0">{t('Your device has been registered successfully')}</h2>
+            <h3 className="mt0">{t('OTP Authenticator verified')}</h3>
             <div className="p3 flex flex-column flex-center">
               <SuccessCheckmark />
               <p className="mb0" data-testid="device-verification-success-message">
-                {t('Your new authenticator has been successfully verified')}
+                {t('Your new OTP Authenticator has been successfully verified')}
               </p>
             </div>
           </>

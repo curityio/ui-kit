@@ -38,7 +38,7 @@ export const PasswordPolicy = ({ passwordValue, onPasswordValidation }: Password
 
   return passwordRules?.length ? (
     <div className={`${styles['password-policy']} left-align p3 mb2 mt2 br-8`}>
-      <h4 className="mt0">{t('Password requirements')}</h4>
+      <h4 className="mt0">{t('security.password.requirements')}</h4>
       <ul className="list-reset m0 flex flex-gap-1 flex-column">
         {passwordRules.map(validationRule => {
           const ruleType = validationRule.__typename;

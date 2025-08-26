@@ -20,6 +20,7 @@ import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { NewTotpDeviceDialog } from '@/pages/security/NewTotpDeviceDialog';
 import { useState } from 'react';
+import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export const Totp = () => {
   const { t } = useTranslation();
@@ -37,14 +38,18 @@ export const Totp = () => {
   );
 
   const columns: Column<Device>[] = [
-    { key: 'deviceId', label: t('Device ID') },
-    { key: 'alias', label: t('Alias') },
-    { key: 'deviceType', label: t('Type') },
+    { key: 'deviceId', label: t('security.otp-authenticators.device-id') },
+    { key: 'alias', label: t('alias') },
+    { key: 'deviceType', label: t('type') },
   ];
   const accountId = accountResponse?.accountByUserName?.id;
   const otpDevices = accountResponse?.accountByUserName?.devices
     ?.filter(device => device !== null)
     ?.filter(device => device?.category?.name === DEVICE_TYPES.TOTP)
+    ?.filter(
+      device =>
+        device?.details && 'canUseWithTotpAuthenticator' in device.details && device.details.canUseWithTotpAuthenticator
+    )
     ?.filter(device =>
       `${device.alias}${device.deviceId}${device.deviceType}`.toLocaleLowerCase().includes(search.toLocaleLowerCase())
     );
@@ -65,28 +70,28 @@ export const Totp = () => {
   return (
     <>
       <PageHeader
-        title={t('OTP Authenticators')}
-        description={t(
-          'TOTP is suitable as a second factor during authentication, and usually less suitable as a standalone single factor, as it relies on the device only, which may not be protected by any passwords or pin codes'
-        )}
+        title={t('security.otp-authenticators.title')}
+        description={t('security.otp-authenticators.description')}
         icon={<IconAuthenticatorTotp width={128} height={128} data-testid="page-header-icon" />}
+        data-testid="totp-page-header"
       />
 
       <DataTable
-        title={t('OTP Authenticators')}
+        title={t('security.otp-authenticators.title')}
         columns={columns}
         data={otpDevices}
-        createButtonLabel={t('authenticator')}
+        createButtonLabel={t('security.otp-authenticators.authenticator')}
         onRowDelete={deleteDeviceFromAccount}
         onSearch={(query: string) => setSearch(query)}
         onCreateNew={() => setIsNewTotpDeviceDialogOpen(true)}
+        uiConfigResources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_TOTP]}
       />
 
       {isNewTotpDeviceDialogOpen && (
         <NewTotpDeviceDialog
           isOpen={isNewTotpDeviceDialogOpen}
           accountId={accountId}
-          onClosed={() => {
+          onClose={() => {
             setIsNewTotpDeviceDialogOpen(false);
             refetchAccount();
           }}

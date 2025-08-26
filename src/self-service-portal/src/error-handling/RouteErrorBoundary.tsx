@@ -18,10 +18,12 @@ export const RouteErrorBoundary = ({ children }: { children: React.ReactNode }) 
   );
 };
 
-const RouteErrorBoundaryFallback = ({ resetErrorBoundary }: FallbackProps) => {
+const RouteErrorBoundaryFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const { t } = useTranslation();
   const pageTitle = usePageTitle();
   const [isResettingErrorBoundary, setIsResettingErrorBoundary] = useState(false);
+  const isAppBootstrappingError = error?.message?.includes('Error bootstrapping');
+  const errorMessage = isAppBootstrappingError ? error?.message : `${t('Failed to load')} ${pageTitle} ${t('page')}`;
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -41,11 +43,11 @@ const RouteErrorBoundaryFallback = ({ resetErrorBoundary }: FallbackProps) => {
       {isResettingErrorBoundary ? (
         <Spinner width={48} height={48} />
       ) : (
-        <Alert kind="danger" errorMessage={`${t('Failed to load')} ${pageTitle} ${t('page')}`} classes="mt2">
+        <Alert kind="danger" errorMessage={errorMessage}>
           <Button
             onClick={() => setIsResettingErrorBoundary(true)}
-            title={t('Reload')}
-            className="button-small button-primary-outline mt2"
+            title={t('reload')}
+            className="button-small button-primary-outline ml2"
           />
         </Alert>
       )}

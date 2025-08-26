@@ -15,7 +15,5 @@ import { useTranslation } from 'react-i18next';
 export const LoginPage = () => {
   const { t } = useTranslation();
 
-  return (
-    <Login title={t('Welcome to the User Self Service Portal!')} description={t('Sign in to Manage your account')} />
-  );
+  return <Login title={t('welcome-message')} description={t('sign-in-message')} />;
 };

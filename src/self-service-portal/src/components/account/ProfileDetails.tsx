@@ -9,75 +9,81 @@
  * For further information, please contact Curity AB.
  */
 
-import { Section } from '@/shared/ui/Section.tsx';
-import { Account, AccountUpdateFields } from '@/shared/data-access/API';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { Section } from '@/shared/ui/section/Section';
+import { AccountUpdateFields } from '@/shared/data-access/API';
+import { ChangeEvent } from 'react';
 import { Input } from '@/shared/ui/input/Input';
-import { EditableContent } from '@shared/ui/EditableContent/EditableContent.tsx';
+import { EditableContent } from '@shared/ui/EditableContent/EditableContent';
 import { useTranslation } from 'react-i18next';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 interface ProfileProps {
-  account: Account;
   onChange: (accountUpdate: AccountUpdateFields) => void;
+  givenName: string;
+  familyName: string;
+  onGivenNameChange: (value: string) => void;
+  onFamilyNameChange: (value: string) => void;
 }
 
-export const ProfileDetails = ({ account, onChange }: ProfileProps) => {
+export const ProfileDetails = ({
+  onChange,
+  givenName,
+  familyName,
+  onGivenNameChange,
+  onFamilyNameChange,
+}: ProfileProps) => {
   const { t } = useTranslation();
-  const [givenName, setGivenName] = useState('');
-  const [familyName, setFamilyName] = useState('');
-
-  useEffect(() => {
-    setGivenName(account?.name?.givenName || '');
-    setFamilyName(account?.name?.familyName || '');
-  }, [account]);
 
   const handleGivenName = (event: ChangeEvent<HTMLInputElement>) => {
     const givenNameUpdate = event.target.value;
 
-    setGivenName(givenNameUpdate);
+    onGivenNameChange(givenNameUpdate);
   };
   const handleFamilyName = (event: ChangeEvent<HTMLInputElement>) => {
     const familyNameUpdate = event.target.value;
 
-    setFamilyName(familyNameUpdate);
+    onFamilyNameChange(familyNameUpdate);
   };
 
   return (
-    <Section title={t('Profile details')}>
-      <div className="flex">
-        <div className="flex-60">
-          <div className="flex flex-column flex-gap-2">
+    <Section title={t('account.profile-details')} data-testid="profile-details-section">
+      <div className="sm-flex">
+        <div className="w100">
+          <div className="flex flex-column flex-gap-3">
             <EditableContent
-              onCancel={originalValue => setGivenName(originalValue)}
+              onCancel={onGivenNameChange}
               onSave={givenNameUpdate => onChange({ name: { givenName: givenNameUpdate } })}
               uiConfigResources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME]}
               uiConfigAllowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
+              data-testid="profile-details-given-name"
             >
               <Input
-                label={t('First Name')}
+                label={t('account.first-name')}
                 id="givenName"
                 value={givenName}
                 onChange={handleGivenName}
-                className="flex flex-gap-1"
-                labelClassName="flex-30"
+                className="flex flex-gap-1 flex-center"
+                labelClassName="flex-auto"
                 inputClassName="flex-auto"
+                data-testid="given-name-input"
               />
             </EditableContent>
             <EditableContent
-              onCancel={originalValue => setFamilyName(originalValue)}
+              onCancel={onFamilyNameChange}
               onSave={familyNameUpdate => onChange({ name: { familyName: familyNameUpdate } })}
               uiConfigResources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME]}
               uiConfigAllowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
+              data-testid="profile-details-family-name"
             >
               <Input
-                label={t('Last Name')}
+                label={t('account.last-name')}
                 id="familyName"
                 value={familyName}
                 onChange={handleFamilyName}
-                className="flex flex-gap-1"
-                labelClassName="flex-30"
+                className="flex flex-gap-1 flex-center"
+                labelClassName="flex-auto"
                 inputClassName="flex-auto"
+                data-testid="family-name-input"
               />
             </EditableContent>
           </div>

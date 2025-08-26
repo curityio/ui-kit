@@ -62,13 +62,13 @@ export const Sessions = () => {
   ];
 
   const columns: Column<Session>[] = [
-    { key: 'id', label: t('Session id') },
-    { key: 'created', label: t('Created') },
-    { key: 'remaining', label: t('Session time remaining') },
+    { key: 'id', label: t('session.session-id') },
+    { key: 'created', label: t('account.created') },
+    { key: 'remaining', label: t('session.time-remaining') },
     { key: 'authorized_client', label: t('Authorized client') },
     {
       key: 'name',
-      label: t('Authorized client name'),
+      label: t('session.authorized-client-name'),
       customRender: (session: { [key: string]: string }) => (
         <div className="flex flex-center flex-gap-2 p2">
           <img src={session.logo} alt={session.id} className="block w-3 h-3" />
@@ -81,15 +81,13 @@ export const Sessions = () => {
   return (
     <>
       <PageHeader
-        title={t('Sessions')}
-        description={t(
-          'Your account is currently logged into multiple authenticators or browsers, creating sessions that allow you to stay connected across platforms. Each session represents an active login that securely stores an access token to keep you authenticated'
-        )}
+        title={t('session.title')}
+        description={t('session.description')}
         icon={<IconToken width={128} height={128} />}
       />
 
       <DataTable
-        title={t('Sessions')}
+        title={t('session.title')}
         columns={columns}
         data={data}
         showCreate={false}
@@ -99,7 +97,7 @@ export const Sessions = () => {
           <Button
             className="button-small button-transparent"
             icon={<IconGeneralArrowForward width={24} height={24} />}
-            title={t('View Details')}
+            title={t('view-details')}
             onClick={() => console.log('View details clicked for:', row)}
           />
         )}

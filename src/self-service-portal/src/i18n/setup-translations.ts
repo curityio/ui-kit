@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { UiConfig } from '@/ui-config/typings';
 
-export const setupI18nTranslations = (translations: UiConfig['translations']) => {
+export const setupI18nTranslations = (translations: UiConfig['messages']) => {
   /*
    * This app is supported in 'en', 'sv', 'pt', 'pt-PT' languages but is the backend that will detect
    * the user's language (based in the Accept Language header) and send the correct translations.

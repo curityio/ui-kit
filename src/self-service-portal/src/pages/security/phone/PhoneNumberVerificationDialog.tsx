@@ -23,39 +23,46 @@ import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API
 
 type Props = {
   accountId: string;
-  phoneNumberForOtpVerification?: string | null;
   onClose: () => void;
-  onPhoneNumberListChange: () => void;
+  phoneNumberForOtpVerification?: string | null;
+  setPhoneNumberAsPrimaryAfterVerification?: boolean;
+  onPhoneNumberListChange?: () => void;
 };
 export const PhoneNumberVerificationDialog = ({
   accountId,
-  phoneNumberForOtpVerification: phoneNumberForOtpVerification = '',
   onClose,
-  onPhoneNumberListChange: onPhoneNumberListChange,
+  phoneNumberForOtpVerification = '',
+  setPhoneNumberAsPrimaryAfterVerification,
+  onPhoneNumberListChange,
 }: Props) => {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [phoneNumber, setPhoneNumber] = useState(phoneNumberForOtpVerification ?? '');
+  const [phoneNumberVerificationState, setPhoneNumberVerificationState] = useState('');
   const [forcePhoneNumberStep, setForcePhoneNumberStep] = useState(false);
+  const [otpDigits, setOtpDigits] = useState('');
   const [
-    startVerifyPhoneNumber,
+    startVerifyPhoneNumberByAccountId,
     {
       data: verificationStartData,
       loading: verificationStartLoading,
       error: verificationStartError,
       reset: restVerificationStartError,
     },
-  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyPhoneNumber);
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyPhoneNumberByAccountId);
   const [
-    completeVerifyPhoneNumber,
+    completeVerifyPhoneNumberByAccountId,
     {
       data: verificationCompleteData,
       loading: verificationCompleteLoading,
       error: verificationCompleteError,
       reset: restVerificationCompleteError,
     },
-  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyPhoneNumber);
-  const [otpDigits, setOtpDigits] = useState('');
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyPhoneNumberByAccountId);
+  const [updatePrimaryPhoneNumberByAccountId] = useMutation(
+    USER_MANAGEMENT_API.MUTATIONS.updatePrimaryPhoneNumberByAccountId
+  );
+  const hasTriggeredStartVerification = useRef(false);
 
   const isStartVerificationLoading = verificationStartLoading;
   const isCompleteVerificationLoading = verificationCompleteLoading;
@@ -66,17 +73,21 @@ export const PhoneNumberVerificationDialog = ({
   const isDialogPhoneNumberVerificationSuccessStep = !!verificationCompleteData;
 
   useEffect(() => {
-    if (phoneNumberForOtpVerification) {
-      startVerifyPhoneNumber({
+    if (phoneNumberForOtpVerification && !hasTriggeredStartVerification.current) {
+      hasTriggeredStartVerification.current = true;
+      startVerifyPhoneNumberByAccountId({
         variables: {
           input: {
             accountId,
             phoneNumber: phoneNumberForOtpVerification,
           },
         },
+      }).then(response => {
+        const state = response?.data?.startVerifyPhoneNumberByAccountId?.state;
+        if (state) setPhoneNumberVerificationState(state);
       });
     }
-  }, [accountId, phoneNumberForOtpVerification, startVerifyPhoneNumber]);
+  }, [accountId, phoneNumberForOtpVerification, startVerifyPhoneNumberByAccountId]);
 
   useEffect(() => {
     if (isDialogPhoneNumberStep) {
@@ -86,24 +97,24 @@ export const PhoneNumberVerificationDialog = ({
 
   const dialogConfig = {
     phoneNumber: {
-      title: t('New Phone Number'),
-      actionText: t('Send Verification Code'),
-      cancelText: t('Cancel'),
+      subtitle: phoneNumberForOtpVerification ? t('account.phone.verify') : t('account.phone.new'),
+      actionText: t('account.send-code'),
+      cancelText: t('cancel'),
     },
     otp: {
-      title: t('Check your phone'),
-      actionText: t('Verify Code'),
-      cancelText: t('Add a Different Phone Number'),
+      subtitle: t('account.phone.check'),
+      actionText: t('account.verify-code'),
+      cancelText: '',
     },
     loading: {
-      title: t('Processing'),
-      actionText: t('Verify Code'),
-      cancelText: t('Cancel'),
+      subtitle: t('account.processing'),
+      actionText: t('account.verify-code'),
+      cancelText: '',
     },
     success: {
-      title: t('Phone Number Verified'),
-      actionText: t('Done'),
-      cancelText: t('Close'),
+      subtitle: t('account.phone.verification'),
+      actionText: t('done'),
+      cancelText: '',
     },
   } as const;
 
@@ -115,7 +126,7 @@ export const PhoneNumberVerificationDialog = ({
     return 'phoneNumber';
   };
 
-  const getDialogTitle = () => dialogConfig[getDialogStepKey()].title;
+  const getDialogSubtitle = () => dialogConfig[getDialogStepKey()].subtitle;
   const getActionButtonText = () => dialogConfig[getDialogStepKey()].actionText;
   const getCancelButtonText = () => dialogConfig[getDialogStepKey()].cancelText;
 
@@ -141,28 +152,44 @@ export const PhoneNumberVerificationDialog = ({
 
   const submitPhoneNumber = async () => {
     setForcePhoneNumberStep(false);
-    await startVerifyPhoneNumber({
+    await startVerifyPhoneNumberByAccountId({
       variables: {
         input: {
           accountId,
           phoneNumber: phoneNumber,
         },
       },
+    }).then(response => {
+      const state = response?.data?.startVerifyPhoneNumberByAccountId?.state;
+      if (state) setPhoneNumberVerificationState(state);
     });
-    onPhoneNumberListChange();
+    onPhoneNumberListChange?.();
   };
 
   const verifyOtpCode = async () => {
     const code = otpDigits;
-    await completeVerifyPhoneNumber({
+    await completeVerifyPhoneNumberByAccountId({
       variables: {
         input: {
           accountId,
           otp: code,
+          state: phoneNumberVerificationState,
         },
       },
     });
-    onPhoneNumberListChange();
+
+    if (setPhoneNumberAsPrimaryAfterVerification) {
+      await updatePrimaryPhoneNumberByAccountId({
+        variables: {
+          input: {
+            accountId,
+            newPrimaryPhoneNumber: phoneNumberForOtpVerification || phoneNumber,
+          },
+        },
+      });
+    }
+
+    onPhoneNumberListChange?.();
   };
 
   const resetDialog = () => {
@@ -185,10 +212,10 @@ export const PhoneNumberVerificationDialog = ({
   return (
     <Dialog
       isOpen={true}
-      title={t('New Phone Number')}
-      subTitle={getDialogTitle()}
+      title={t('account.phone.verification')}
+      subTitle={getDialogSubtitle()}
       showActionButton
-      showCancelButton
+      showCancelButton={isDialogPhoneNumberStep}
       closeDialogOnActionButtonClick={false}
       closeDialogOnCancelButtonClick={false}
       isActionButtonDisabled={isActionButtonDisabled()}
@@ -200,10 +227,10 @@ export const PhoneNumberVerificationDialog = ({
     >
       {isDialogPhoneNumberStep && (
         <>
-          <p>{t("We'll send a verification code to this phone number")}</p>
+          <p>{t('account.phone.send-code')}</p>
           <div className="left-align">
             <label htmlFor="newphoneNumber" className="label inline-flex flex-center flex-gap-1">
-              {t('Phone number')}
+              {t('account.phone.title')}
             </label>
             <Input
               ref={inputRef}
@@ -218,7 +245,7 @@ export const PhoneNumberVerificationDialog = ({
             {verificationStartError && (
               <Alert
                 kind="danger"
-                errorMessage={t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumber)}
+                errorMessage={t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumberByAccountId)}
                 classes="mt2"
                 data-testid="phone-number-start-verification-error"
               />
@@ -230,7 +257,7 @@ export const PhoneNumberVerificationDialog = ({
       {isDialogLoading && (
         <div className="flex flex-column flex-center flex-gap-2">
           <Spinner width={48} height={48} />
-          <div> {isStartVerificationLoading ? t('Sending verification code...') : t('Verifying code...')}</div>
+          <div> {isStartVerificationLoading ? t('account.sending-code') : t('account.verifying-code')}</div>
         </div>
       )}
 
@@ -238,14 +265,12 @@ export const PhoneNumberVerificationDialog = ({
         <>
           <div className="flex flex-column flex-center mb0">
             <p className="mt0 mb3" data-testid="otp-description">
-              {verificationCompleteError
-                ? t(GRAPHQL_API_ERROR_MESSAGES.completeVerifyPhoneNumber)
-                : t(
-                    'We have send a 6-digit code to your phone number. Enter the code below to verify your phone number.'
-                  )}
+              {t('account.phone.enter-code')}
             </p>
             <OtpInput
-              errorMessage={verificationCompleteError && GRAPHQL_API_ERROR_MESSAGES.completeVerifyPhoneNumber}
+              errorMessage={
+                verificationCompleteError && GRAPHQL_API_ERROR_MESSAGES.completeVerifyPhoneNumberByAccountId
+              }
               onChange={setOtpDigits}
             />
           </div>
@@ -256,7 +281,7 @@ export const PhoneNumberVerificationDialog = ({
         <div className="p3 flex flex-column flex-center">
           <SuccessCheckmark />
           <p className="mb0" data-testid="phone-number-verification-success-message">
-            {t('Your new phone number has been successfully verified')}
+            {t('account.phone.verification-success')}
           </p>
         </div>
       )}

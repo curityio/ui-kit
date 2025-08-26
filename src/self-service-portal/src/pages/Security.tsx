@@ -20,20 +20,24 @@ import {
 
 import { ROUTE_PATHS } from '@/routes';
 import { List, ListCell, ListRow, PageHeader } from '@shared/ui';
-import { Section } from '@shared/ui/Section';
+import { Section } from '@/shared/ui/section/Section';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@auth/data-access/AuthProvider';
 import { useQuery } from '@apollo/client';
 import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API';
 import { Account, DEVICE_TYPES } from '@shared/data-access/API';
+import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
-interface AppData {
+interface SecuritySectionConfig {
   name: string;
   message: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   link: string;
   testId: string;
+  resources: UI_CONFIG_RESOURCES[];
 }
 
 export const Security = () => {
@@ -46,113 +50,122 @@ export const Security = () => {
 
   const getPhoneNumberMessage = (account: Account | null | undefined) => {
     if (!account?.phoneNumbers?.length) {
-      return t('No phone number added yet');
-    }
-
-    if (account.phoneNumbers.length === 1) {
-      return account.phoneNumbers.find(phone => phone?.primary)?.value || t('No phone number added yet');
+      return t('security.no-phone-added');
     } else {
-      return t('{{numberOfPhones}} phone numbers', { numberOfPhones: account.phoneNumbers.length });
+      return getPrimaryOrFirstDevice(account?.phoneNumbers)?.value || '';
     }
   };
 
   const getEmailMessage = (account: Account | null | undefined) => {
     if (!account?.emails?.length) {
-      return t('No email address added yet');
-    }
-
-    if (account.emails.length === 1) {
-      return account.emails.find(phone => phone?.primary)?.value || t('No email address added yet');
+      return t('security.no-email-added');
     } else {
-      return t('{{numberOfEmails}} email addresses', { numberOfEmails: account.emails.length });
+      return getPrimaryOrFirstDevice(account?.emails)?.value || '';
     }
   };
 
   const getDevicesMessage = (account: Account | null | undefined, deviceType: DEVICE_TYPES) => {
     const devices = account?.devices?.filter(device => device?.category?.name === deviceType);
+    const deviceTitle =
+      deviceType === DEVICE_TYPES.TOTP ? t('security.otp-authenticators.authenticators') : t('security.passkeys.keys');
 
     if (!devices?.length) {
-      return t('No devices added yet');
-    }
-
-    if (devices.length === 1) {
-      return t('1 device');
+      return t('security.otp-authenticators.none-added', { deviceTitle });
+    } else if (devices?.length === 1) {
+      return t('security.otp-authenticators.single-added', { deviceTitle: deviceTitle });
     } else {
-      return t('{{numberOfDevices}} devices', { numberOfDevices: devices.length });
+      return t('security.otp-authenticators.multiple-added', {
+        numberOfDevices: devices?.length,
+        deviceTitle,
+      });
     }
   };
 
   const getMFAMessage = (account: Account | null | undefined) =>
-    account?.mfaOptIn && !account?.mfaOptIn.preferences ? t('On') : t('Currently not used for your account');
+    account?.mfaOptIn && !account?.mfaOptIn.preferences
+      ? t('security.multi-factor-authentication.on')
+      : t('security.multi-factor-authentication.inactive');
 
-  const data: AppData[] = [
+  const sections: SecuritySectionConfig[] = [
     {
-      name: t('Email addresses'),
+      name: t('account.email.title'),
       message: getEmailMessage(account),
       icon: IconFacilitiesEmail,
-      link: ROUTE_PATHS.SECURITY_EMAIL,
-      testId: 'email-address-value',
+      link: ROUTE_PATHS.ACCOUNT,
+      testId: 'email-address',
+      resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_EMAIL],
     },
     {
-      name: t('Phone number'),
+      name: t('account.phone.title'),
       message: getPhoneNumberMessage(account),
       icon: IconFacilitiesSms,
-      link: ROUTE_PATHS.SECURITY_PHONE,
-      testId: 'phone-number-value',
+      link: ROUTE_PATHS.ACCOUNT,
+      testId: 'phone-number',
+      resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_PHONE_NUMBER],
     },
     {
-      name: t('Multi-factor Authentication'),
-      message: getMFAMessage(account),
-      icon: IconGeneralLock,
-      link: ROUTE_PATHS.SECURITY_MFA,
-      testId: 'mfa-value',
-    },
-    {
-      name: t('OTP Authenticators'),
+      name: t('security.otp-authenticators.title'),
       message: getDevicesMessage(account, DEVICE_TYPES.TOTP),
       icon: IconAuthenticatorTotp,
-      link: ROUTE_PATHS.SECURITY_OTP,
-      testId: 'totp-value',
+      link: `${ROUTE_PATHS.SECURITY}/${ROUTE_PATHS.SECURITY_OTP}`,
+      testId: 'totp',
+      resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_TOTP],
     },
     {
-      name: t('Passkeys'),
+      name: t('security.passkeys.title'),
       message: getDevicesMessage(account, DEVICE_TYPES.PASSKEYS),
       icon: IconAuthenticatorPasskeys,
-      link: ROUTE_PATHS.SECURITY_PASSKEYS,
-      testId: 'passkeys-value',
+      link: `${ROUTE_PATHS.SECURITY}/${ROUTE_PATHS.SECURITY_PASSKEYS}`,
+      testId: 'passkeys',
+      resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_PASSKEY],
+    },
+    {
+      name: t('security.multi-factor-authentication.title'),
+      message: getMFAMessage(account),
+      icon: IconGeneralLock,
+      link: `${ROUTE_PATHS.SECURITY}/${ROUTE_PATHS.SECURITY_MFA}`,
+      testId: 'mfa',
+      resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_OPTIN_MFA],
     },
   ];
 
   return (
     <>
       <PageHeader
-        title={t('Security')}
-        description={t('Settings and recommendations to protect the account')}
+        title={t('security.title')}
+        description={t('security.description')}
         icon={<IconGeneralLock width={128} height={128} />}
+        data-testid="security-page-header"
       />
 
-      <Section title={t('How to log in to your Account')}>
-        <p>{t('Make sure these details are up-to-date so you can always access your Account')}</p>
+      <Section title={t('security.how-to-log-in-to-your-account')}>
+        <p>{t('security.access-reminder')}</p>
         <List className="block">
-          {data.map((item, index) => (
-            <Link to={'/' + item?.link} key={index}>
-              <ListRow key={index} className="flex flex-center justify-between flex-gap-2 w100 button-transparent p2">
-                <ListCell className="flex-40 flex flex-center flex-gap-2">
-                  <item.icon width={48} height={48} />
-                  {item?.name}
-                </ListCell>
-                {item?.message && (
-                  <ListCell className="flex-20">
-                    <span data-testid={item?.testId}>{item?.message}</span>
+          {sections.map((section, index) => (
+            <UiConfigIf key={index} resources={section.resources} allowedOperations={[UI_CONFIG_OPERATIONS.READ]}>
+              <Link to={`/${section?.link}`} key={index}>
+                <ListRow
+                  key={index}
+                  className="sm-flex flex-center justify-between flex-gap-2 w100 button-transparent p2"
+                  data-testid={`security-${section?.testId}-list-row`}
+                >
+                  <ListCell className="flex-40 flex flex-center flex-gap-2">
+                    <section.icon width={48} height={48} />
+                    {section?.name}
                   </ListCell>
-                )}
-                <ListCell>
-                  <span className="button button-small button-transparent">
-                    <IconGeneralArrowForward width={24} height={24} />
-                  </span>
-                </ListCell>
-              </ListRow>
-            </Link>
+                  {section?.message && (
+                    <ListCell className="flex-20">
+                      <span data-testid={`${section?.testId}-value`}>{section?.message}</span>
+                    </ListCell>
+                  )}
+                  <ListCell>
+                    <span className="button button-small button-transparent">
+                      <IconGeneralArrowForward width={24} height={24} />
+                    </span>
+                  </ListCell>
+                </ListRow>
+              </Link>
+            </UiConfigIf>
           ))}
         </List>
       </Section>

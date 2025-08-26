@@ -18,15 +18,16 @@ import { useMutation, useQuery } from '@apollo/client';
 import { LinkedAccount } from '@/shared/data-access/API';
 import { Column } from '@/shared/ui/data-table/typings';
 import { getFormattedDate } from '@shared/utils/date.ts';
+import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export const LinkedAccounts = () => {
   const { t } = useTranslation();
   const linkedAccountsTableColumns: Column<LinkedAccount>[] = [
-    { key: 'value', label: t('Foreign Account Username') },
-    { key: 'domain', label: t('Foreign Account Domain') },
+    { key: 'value', label: t('linked-accounts.foreign-account-username') },
+    { key: 'domain', label: t('linked-accounts.foreign-account-domain') },
     {
       key: 'created',
-      label: t('Created'),
+      label: t('account.created'),
       customRender: value => getFormattedDate(value.created),
     },
   ];
@@ -61,18 +62,20 @@ export const LinkedAccounts = () => {
   return (
     <>
       <PageHeader
-        title={t('Linked Accounts')}
-        description={t('Account Linking is the task of binding a foreign account to a local account.')}
+        title={t('linked-accounts.title')}
+        description={t('linked-accounts.description')}
         icon={<IconActionAutoLinkAccount width={128} height={128} />}
+        data-testid="linked-accounts-page-header"
       />
 
       <DataTable
         columns={linkedAccountsTableColumns}
-        title={t('Linked Accounts')}
+        title={t('linked-accounts.title')}
         data={account?.linkedAccounts?.filter(linkedAccount => linkedAccount !== null)}
         showCreate={false}
         showSearch={false}
         onRowDelete={linkedAccountToDelete => handleDeleteAccount(linkedAccountToDelete)}
+        uiConfigResources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_LINKED_ACCOUNTS]}
         data-testid="linked-account-list"
       />
     </>

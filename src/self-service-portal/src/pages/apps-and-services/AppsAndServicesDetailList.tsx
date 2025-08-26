@@ -6,11 +6,11 @@ interface AppsAndServicesDetailListProps {
   collection?: (AuthorizedScope | AuthorizedClaim)[];
 }
 
-export const AppsAndServicesDetailList = ({ collection }: AppsAndServicesDetailListProps) => {
+export const AppsAndServicesDetailList = ({ collection, ...props }: AppsAndServicesDetailListProps) => {
   const { t } = useTranslation();
 
   return (
-    <List>
+    <List {...props}>
       {collection?.length ? (
         collection.map((element, index) => (
           <ListRow key={index} className="flex flex-gap-3">

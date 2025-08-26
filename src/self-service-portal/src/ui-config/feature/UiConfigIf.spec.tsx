@@ -3,17 +3,17 @@ import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import {
+  expectAsyncElementNotToBeFoundByTestId,
+  mockUiConfigProvider,
+  mockUseCurrentRouteResources,
+} from '@/shared/utils/test';
 import * as utils from '@/ui-config/utils/ui-config-if-utils';
-import { expectAsyncElementNotToBeFoundByTestId, mockUiConfigProvider } from '@/shared/utils/test';
 
 describe('UiConfigIf', () => {
   beforeEach(() => {
     mockUiConfigProvider();
-
-    // all the tests in this spec are related to the UIConfigIf component,
-    // since useCurrentRouteResources() calls useLocation() which can be invoked only in a Router context,
-    // we need to mock it to avoid errors when running the tests
-    vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([]);
+    mockUseCurrentRouteResources();
   });
 
   it('should default to `read` permissions when not configured', async () => {
@@ -55,7 +55,7 @@ describe('UiConfigIf', () => {
 
     render(
       <UiConfigProvider>
-        <UiConfigIf allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}>
+        <UiConfigIf allowedOperations={[UI_CONFIG_OPERATIONS.DELETE]}>
           <div data-testid={testId}>Content</div>
         </UiConfigIf>
       </UiConfigProvider>
@@ -93,7 +93,7 @@ describe('UiConfigIf', () => {
         <UiConfigProvider>
           <UiConfigIf
             resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_PHONE_NUMBER]}
-            allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE, UI_CONFIG_OPERATIONS.DELETE]}
           >
             <div data-testid={testId}>Content</div>
           </UiConfigIf>
@@ -133,7 +133,6 @@ describe('UiConfigIf', () => {
           <UiConfigIf
             resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
             allowedOperations={[UI_CONFIG_OPERATIONS.DELETE]}
-            displayWithPartialResourcePermissions={true}
           >
             <div data-testid={testId}>Content</div>
           </UiConfigIf>

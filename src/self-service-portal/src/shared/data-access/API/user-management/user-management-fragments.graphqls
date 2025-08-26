@@ -62,6 +62,19 @@ fragment DEVICE_FIELDS on Device {
     resourceType
     timeZoneId
   }
+  details {
+    __typename
+    ... on TotpDeviceDetails {
+      canUseWithTotpAuthenticator
+    }
+    ... on WebAuthnDeviceDetails {
+      webAuthnAuthenticator {
+        name
+        iconDarkUri
+        iconLightUri
+      }
+    }
+  }
 }
 
 fragment CLIENT_FIELDS on DynamicallyRegisteredClient {
@@ -97,6 +110,14 @@ fragment USER_ACCOUNT_FIELDS on Account {
         changedAt
         description
         type
+      }
+    }
+    registrableFactors {
+      factors {
+        acr
+        description
+        type
+        hasDevices
       }
     }
     preferences {

@@ -12,8 +12,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ListRow } from './ListRow';
-import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG } from '@/ui-config/ui-config.ts';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
 import { expectAsyncElementNotToBeFound } from '@/shared/utils/test';
 
 const mockOnDelete = vi.fn();
@@ -36,6 +36,7 @@ vi.mock('react-router', () => ({
       {children}
     </a>
   ),
+  Outlet: () => <div data-testid="mock-outlet" />,
 }));
 
 describe('ListRow Component', () => {
@@ -43,7 +44,12 @@ describe('ListRow Component', () => {
     vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue(UI_CONFIG);
     vi.mock('react-i18next', () => ({
       useTranslation: () => ({
-        t: (key: string) => key,
+        t: (key: string) => {
+          if (key === 'delete-row') {
+            return 'delete row';
+          }
+          return key;
+        },
         i18n: { language: 'en' },
         ready: true,
       }),

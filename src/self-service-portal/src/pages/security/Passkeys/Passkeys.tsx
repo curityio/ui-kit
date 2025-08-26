@@ -19,10 +19,8 @@ import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useQuery, useMutation } from '@apollo/client';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
-import { useVerifyPasskey } from './useVerifyPasskey';
 import { Spinner } from '@/shared/ui/Spinner';
-import { Dialog } from '@/shared/ui/dialog/Dialog';
-import { Input } from '@/shared/ui/input/Input';
+import { NewPasskeyDialog } from './NewPasskeyDialog';
 import { getFormattedDate } from '@shared/utils/date.ts';
 
 export const Passkeys = () => {
@@ -30,7 +28,6 @@ export const Passkeys = () => {
   const { session } = useAuth();
   const [search, setSearch] = useState('');
   const [showNewPasskeyDialog, setShowNewPasskeyDialog] = useState(false);
-  const [newPasskeyAlias, setNewPasskeyAlias] = useState('');
   const { data: accountResponse, refetch: refetchAccount } = useQuery(
     GRAPHQL_API.USER_MANAGEMENT.QUERIES.getAccountByUserName,
     {
@@ -40,24 +37,37 @@ export const Passkeys = () => {
   const [deleteDeviceFromAccountByAccountId] = useMutation(
     USER_MANAGEMENT_API.MUTATIONS.deleteDeviceFromAccountByAccountId
   );
-  const { verifyPasskey } = useVerifyPasskey();
 
   const columns: Column<Device>[] = [
-    { key: 'alias', label: t('Alias') },
+    {
+      key: 'deviceId',
+      label: t('name'),
+      customRender: (device: Device) => {
+        const details = device?.details;
+        if (!details || !('webAuthnAuthenticator' in details) || !details.webAuthnAuthenticator) return null;
+        const webAuthn = details.webAuthnAuthenticator;
+        return (
+          <div className="flex flex-center flex-gap-1">
+            {webAuthn.iconLightUri && (
+              <img src={webAuthn.iconLightUri} alt={webAuthn.name ?? ''} width={32} height={32} />
+            )}
+            <span>{webAuthn.name}</span>
+          </div>
+        );
+      },
+    },
+
+    { key: 'alias', label: t('alias') },
     {
       key: 'meta',
-      label: t('Created'),
+      label: t('account.created'),
       customRender: (passkey: Device) => (passkey.meta?.created ? getFormattedDate(passkey.meta?.created) : ''),
     },
   ];
   const accountId = accountResponse?.accountByUserName?.id;
 
   if (!accountId) {
-    return (
-      <div className="flex flex-center flex-column justify-center h100">
-        <Spinner width={48} height={48} />
-      </div>
-    );
+    return <Spinner width={48} height={48} mode="fullscreen" />;
   }
 
   const passKeys =
@@ -81,57 +91,32 @@ export const Passkeys = () => {
     }).then(() => refetchAccount());
   };
 
-  const resetNewPasskeyAlias = () => {
-    setNewPasskeyAlias('');
-    setShowNewPasskeyDialog(false);
-  };
-
   return (
     <>
       <PageHeader
-        title={t('Passkeys')}
-        description={t(
-          'With passkeys, you can securely sign in to your Account using just your fingerprint, face, screen lock, or security key. Passkeys and security keys can also be used as a second step when signing in with your password. Be sure to keep your screen locks private and security keys safe, so only you can use them.'
-        )}
+        title={t('security.passkeys.title')}
+        description={t('security.passkeys.description')}
         icon={<IconAuthenticatorTotp width={128} height={128} />}
+        data-testid="passkeys-page-header"
       />
 
       <DataTable
-        title={t('Passkeys')}
+        title={t('security.passkeys.title')}
         columns={columns}
         data={passKeys}
-        createButtonLabel={t('passkey')}
+        createButtonLabel={t('security.passkeys.passkey')}
         onRowDelete={deletePasskeyFromAccount}
         onSearch={setSearch}
         onCreateNew={() => setShowNewPasskeyDialog(true)}
         data-testid="passkeys-list"
       />
 
-      <Dialog
+      <NewPasskeyDialog
         isOpen={showNewPasskeyDialog}
-        title={t('New Passkey')}
-        closeCallback={resetNewPasskeyAlias}
-        showActionButton={true}
-        actionButtonText={t('Create and verify')}
-        actionButtonCallback={() => {
-          verifyPasskey(accountId, newPasskeyAlias, refetchAccount);
-          resetNewPasskeyAlias();
-        }}
-        isActionButtonDisabled={!newPasskeyAlias}
-        showCancelButton={true}
-        cancelButtonText={t('Cancel')}
-      >
-        <Input
-          id={t('alias')}
-          label={t('Alias')}
-          onInput={e => setNewPasskeyAlias((e.target as HTMLInputElement).value)}
-          className="left-align"
-          inputClassName="w100"
-          autoFocus
-          value={newPasskeyAlias}
-          data-testid="new-passkey-alias-input"
-        />
-      </Dialog>
+        accountId={accountId}
+        refetchAccount={refetchAccount}
+        onClose={() => setShowNewPasskeyDialog(false)}
+      />
     </>
   );
 };

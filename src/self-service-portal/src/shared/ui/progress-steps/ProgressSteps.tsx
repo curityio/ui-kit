@@ -12,9 +12,9 @@ interface ProgressStepsProps {
 
 export const ProgressSteps = ({ currentStep, steps }: ProgressStepsProps) => {
   const defaultSteps: Step[] = [
-    { label: t('Start', 'Start') },
-    { label: t('Add methods', 'Add methods') },
-    { label: t('Confirm', 'Confirm') },
+    { label: t('start', 'Start') },
+    { label: t('add-methods', 'Add methods') },
+    { label: t('confirm', 'Confirm') },
   ];
   const stepsToRender = steps ?? defaultSteps;
   const getCircleClass = (stepIndex: number) => {

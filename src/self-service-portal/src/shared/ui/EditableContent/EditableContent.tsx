@@ -1,7 +1,7 @@
 import React, { JSX, useEffect, useRef, useState } from 'react';
 import { Button } from '../Button';
 import { IconGeneralEdit } from '@icons';
-import { useOutsideClick } from '@shared/hooks/useOutsideClick.tsx';
+import { useOutsideClick } from '@shared/hooks/useOutsideClick';
 import { useTranslation } from 'react-i18next';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
@@ -12,6 +12,7 @@ interface EditableContentProps {
   onCancel?: (value: string) => void;
   uiConfigResources?: UI_CONFIG_RESOURCES[];
   uiConfigAllowedOperations?: UI_CONFIG_OPERATIONS[];
+  'data-testid'?: string;
 }
 
 export const EditableContent = ({
@@ -20,6 +21,7 @@ export const EditableContent = ({
   onCancel,
   uiConfigResources,
   uiConfigAllowedOperations,
+  'data-testid': testId,
 }: EditableContentProps) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
@@ -86,11 +88,11 @@ export const EditableContent = ({
       icon={<IconGeneralEdit width={18} height={18} />}
       onClick={() => setIsEditing(true)}
       data-testid="edit-button"
-      aria-label={isEditing ? t('Editing') : t('Edit')}
+      aria-label={isEditing ? t('editing') : t('edit')}
     />
   );
   const editModeElement = (
-    <div className="flex flex-center flex-gap-2">
+    <div className="flex flex-center flex-gap-2" data-testid="editable-content-edit-mode">
       {React.cloneElement(children, {
         ref: inputRef,
         value: tempValue,
@@ -98,18 +100,18 @@ export const EditableContent = ({
         onChange: handleChange,
       })}
       <Button
-        title={t('Save')}
+        title={t('save')}
         className="button-small button-primary"
         onClick={handleSave}
         data-testid="save-button"
-        aria-label={t('Save')}
+        aria-label={t('save')}
         style={{ height: 'var(--form-field-height)' }}
       />
     </div>
   );
   const readModeElement = (
-    <div className="flex flex-center flex-gap-2">
-      {children?.props?.label && <label>{children.props.label}</label>}
+    <div className="flex flex-center flex-gap-2" data-testid="editable-content-read-mode">
+      {children?.props?.label && <label className="nowrap">{children.props.label}</label>}
       <p className="m0">{tempValue}</p>
       {uiConfigResources ? (
         <UiConfigIf resources={uiConfigResources} allowedOperations={uiConfigAllowedOperations}>
@@ -121,7 +123,9 @@ export const EditableContent = ({
     </div>
   );
   const editableContentElement = (
-    <div className="flex flex-column flex-gap-1">{isEditing ? editModeElement : readModeElement}</div>
+    <div className="flex flex-column flex-gap-1 justify-center" data-testid={testId}>
+      {isEditing ? editModeElement : readModeElement}
+    </div>
   );
 
   return uiConfigResources ? (

@@ -14,7 +14,7 @@ import { AuthContextType } from '../utils/typings.ts';
 import { OAuthAgentClient } from '@curity/token-handler-js-assistant';
 import { EndLoginRequest, SessionResponse } from '@curity/token-handler-js-assistant/lib/types';
 import { Outlet, useNavigate } from 'react-router';
-import { Spinner } from '@/shared/ui/Spinner.tsx';
+import { Spinner } from '@/shared/ui/Spinner';
 import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,10 +42,11 @@ export const useAuth = () => {
   return context;
 };
 
+let sessionInitialized = false;
+
 export function AuthProvider() {
   const uiConfig = useUiConfig();
   const [session, setSession] = useState<SessionResponse>();
-  const oauthClientHasBeenInitialized = session !== undefined;
   const navigate = useNavigate();
   const oauthClient = useMemo(() => {
     return new OAuthAgentClient({
@@ -54,12 +55,17 @@ export function AuthProvider() {
       oauthAgentBaseUrl: `${uiConfig.PATHS.BACKEND}${uiConfig.PATHS.OAUTH_AGENT}`,
     });
   }, [uiConfig]);
+  const oauthClientHasBeenInitialized = session !== undefined;
 
   const configureOAuthAgentClient = useCallback(async () => {
     try {
-      const sessionResponse = await oauthClient.onPageLoad(location.href);
+      if (!sessionInitialized) {
+        sessionInitialized = true;
 
-      setSession(sessionResponse);
+        const sessionResponse = await oauthClient.onPageLoad(location.href);
+
+        setSession(sessionResponse);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -95,7 +101,7 @@ export function AuthProvider() {
   const logout = async () => {
     const logoutResponse = await oauthClient.logout();
 
-    if (logoutResponse?.logoutUrl && logoutResponse?.logoutUrl.includes('post_logout_redirect_uri')) {
+    if (logoutResponse?.logoutUrl) {
       location.href = logoutResponse.logoutUrl;
     } else {
       navigate('/login');
@@ -107,11 +113,7 @@ export function AuthProvider() {
   }, [configureOAuthAgentClient, refresh]);
 
   if (!oauthClientHasBeenInitialized) {
-    return (
-      <div className="flex flex-center flex-column justify-center">
-        <Spinner width={48} height={48} />
-      </div>
-    );
+    return <Spinner width={48} height={48} mode="fullscreen" />;
   }
 
   const authProviderValue = {

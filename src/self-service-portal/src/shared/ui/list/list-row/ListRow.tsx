@@ -40,7 +40,7 @@ export const ListRow = <T extends ListItem<T>>({
 
   return (
     <li {...props}>
-      <div className={className ? className : 'flex flex-center justify-between flex-gap-2 w100'}>
+      <div className={className ? className : 'md-flex flex-center justify-between flex-gap-2 w100'}>
         {children || (
           <>
             <ListCell className="flex flex-40 flex-center flex-gap-2 p2">
@@ -60,7 +60,7 @@ export const ListRow = <T extends ListItem<T>>({
               {showDelete && item && (
                 <Button
                   className="button-small button-danger-outline"
-                  aria-label={t('delete row')}
+                  aria-label={t('delete-row')}
                   onClick={() => onItemDelete?.(item)}
                   icon={<IconGeneralTrash width={18} height={18} />}
                 />

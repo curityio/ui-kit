@@ -4,9 +4,10 @@ export interface BootstrapUiConfig {
     APP_BASE: string;
     METADATA: string;
   };
-  css: unknown;
-  messages: unknown;
-  templates: unknown;
+  theme: {
+    logoImage?: string;
+    loginImage?: string;
+  };
 }
 
 export const BOOTSTRAP_UI_CONFIG: BootstrapUiConfig =
@@ -17,9 +18,10 @@ export const BOOTSTRAP_UI_CONFIG: BootstrapUiConfig =
           BACKEND: window.__CONFIG__.bffBaseUrl,
           METADATA: window.__CONFIG__.metadataPath,
         },
-        css: {},
-        messages: {},
-        templates: {},
+        theme: {
+          logoImage: window.__CONFIG__.theme.logoImage,
+          loginImage: window.__CONFIG__.theme.loginImage,
+        },
       }
     : {
         PATHS: {
@@ -27,7 +29,8 @@ export const BOOTSTRAP_UI_CONFIG: BootstrapUiConfig =
           BACKEND: import.meta.env.VITE_APP_BFF_BASE_URL,
           METADATA: import.meta.env.VITE_APP_METADATA_PATH,
         },
-        css: {},
-        messages: {},
-        templates: {},
+        theme: {
+          logoImage: import.meta.env.VITE_THEME_LOGO,
+          loginImage: import.meta.env.VITE_THEME_INTRO_IMG,
+        },
       };

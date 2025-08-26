@@ -1,24 +1,33 @@
 .header {
-	height: var(--header-height);
-	top: 0;
-	left: 0;
-	border-bottom: 1px solid var(--color-grey-light);
-	position: fixed;
-	background-color: white;
-	z-index: 2;
+  height: var(--header-height);
+  top: 0;
+  left: 0;
+  border-bottom: 1px solid var(--color-grey-light);
+  position: fixed;
+  background-color: white;
+  z-index: 2;
+  overflow-x: auto;
+  overflow-y: clip;
+  width: max-content;
+  white-space: nowrap;
 }
 
 .header div button:last-child {
-	display: inline-flex;
+  display: inline-flex;
 }
 
 @media (width >=64em) {
-	.header div button:last-child {
-		display: none;
-	}
+  .header div button:last-child {
+    display: none;
+  }
 }
 
 .header a {
-	--color-link: black;
-	--color-link-hover: black;
+  --color-link: black;
+  --color-link-hover: black;
+}
+
+.header button,
+.header svg {
+  flex-shrink: 0;
 }

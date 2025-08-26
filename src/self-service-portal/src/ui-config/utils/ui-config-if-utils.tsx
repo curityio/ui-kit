@@ -27,12 +27,14 @@ export const getResourceUiConfigAllowedOperations = (
 
   if (resourceGroup === UI_CONFIG_RESOURCE_GROUPS.USER_MANAGEMENT) {
     resourceUiConfigAllowedOperations =
-      uiConfig.resourceGroups[resourceGroup]?.resources?.[resourceKey as keyof UserManagementResources]?.operations ||
-      [];
+      uiConfig.accessControlPolicy?.resourceGroups?.[resourceGroup]?.resources?.[
+        resourceKey as keyof UserManagementResources
+      ]?.operations || [];
   } else if (resourceGroup === UI_CONFIG_RESOURCE_GROUPS.GRANTED_AUTHORIZATIONS) {
     resourceUiConfigAllowedOperations =
-      uiConfig.resourceGroups[resourceGroup]?.resources?.[resourceKey as keyof GrantedAuthorizationsResources]
-        ?.operations || [];
+      uiConfig.accessControlPolicy?.resourceGroups?.[resourceGroup]?.resources?.[
+        resourceKey as keyof GrantedAuthorizationsResources
+      ]?.operations || [];
   }
 
   return resourceUiConfigAllowedOperations;

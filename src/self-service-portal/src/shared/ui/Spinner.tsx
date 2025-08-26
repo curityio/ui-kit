@@ -1,11 +1,13 @@
 import { FC, SVGProps } from 'react';
-import { useTranslation } from 'react-i18next';
 
-export const Spinner: FC<SVGProps<SVGSVGElement>> = ({ height = 24, width = 24, ...props }) => {
-  const { t } = useTranslation();
+interface SpinnerProps extends SVGProps<SVGSVGElement> {
+  mode?: 'default' | 'fullscreen';
+}
 
+export const Spinner: FC<SpinnerProps> = ({ height = 24, width = 24, mode = 'default', ...props }) => {
   const radius = Math.min(Number(width), Number(height)) / 8;
-  return (
+
+  const spinnerSvg = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       role="img"
@@ -15,7 +17,7 @@ export const Spinner: FC<SVGProps<SVGSVGElement>> = ({ height = 24, width = 24, 
       height={height}
       {...props}
     >
-      <title id="svgTitle">{t('Loading Self Service Portal')}...</title>
+      <title id="svgTitle">Loading</title>
       <style>
         {`
           @keyframes spinner-animation {
@@ -48,4 +50,10 @@ export const Spinner: FC<SVGProps<SVGSVGElement>> = ({ height = 24, width = 24, 
       />
     </svg>
   );
+
+  if (mode === 'fullscreen') {
+    return <div className="flex flex-center flex-column justify-center h100">{spinnerSvg}</div>;
+  }
+
+  return spinnerSvg;
 };

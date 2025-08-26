@@ -12,6 +12,21 @@ describe('SearchField', () => {
     length: 42,
   };
 
+  beforeAll(() => {
+    vi.mock('react-i18next', () => ({
+      useTranslation: () => ({
+        t: (key: string) => {
+          if (key === 'search') {
+            return 'Search';
+          }
+          return key;
+        },
+        i18n: { language: 'en' },
+        ready: true,
+      }),
+    }));
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
   });

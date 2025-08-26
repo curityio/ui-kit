@@ -27,7 +27,7 @@ export const SearchField = ({ title, className, onSearch, length, ...props }: Se
   return (
     <Input
       type="search"
-      placeholder={`${t('Search')} ${length} ${title}...`}
+      placeholder={`${t('search')} ${length} ${title}...`}
       className={`${className || ''}`.trim()}
       inputClassName={`field ${styles['search-field']}`}
       onChange={e => onSearch && onSearch(e.target.value)}
