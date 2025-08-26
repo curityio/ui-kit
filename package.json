@@ -1,9 +1,9 @@
 {
   "name": "ui-kit",
-	"version": "1.0.0",
-	"description": "Monorepo for Self Service Portal, Login Web App, Template System, and Styles",
-	"author": "Curity AB",
-	"private": true,
+  "version": "1.0.0",
+  "description": "Monorepo for Self Service Portal, Login Web App, Template System, and Styles",
+  "author": "Curity AB",
+  "private": true,
   "workspaces": [
     "src/assets",
     "src/self-service-portal"
@@ -13,15 +13,13 @@
     "start:login": "npm run start --workspace=login-web-app",
     "start:template": "npm run start --workspace=template-system",
     "start:styles": "npm run start --workspace=styles",
-
-		"build:ussp": "npm run build --workspace=self-service-portal",
+    "build:ussp": "npm run build --workspace=self-service-portal",
     "build:login": "npm run build --workspace=login-web-app",
     "build:templates": "npm run build --workspace=template-system",
     "build:messages": "npm run build --workspace=messages",
     "build:styles": "npm run build --workspace=styles",
     "build:all": "npm run build -ws",
-
-		"start:all": "concurrently \"npm run start:ssp\" \"npm run start:login\" \"npm run start:templates\" \"npm run start:styles\""
+    "start:all": "concurrently \"npm run start:ssp\" \"npm run start:login\" \"npm run start:templates\" \"npm run start:styles\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
