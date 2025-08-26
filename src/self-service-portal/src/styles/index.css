@@ -24,28 +24,28 @@
   font-family: Roboto-Regular;
   font-style: normal;
   font-weight: normal;
-  src: url('../fonts/Roboto-Regular.woff2') format('woff2');
+  src: url('../../../assets/fonts/Roboto-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: Roboto-Medium;
   font-style: normal;
   font-weight: normal;
-  src: url('../fonts/Roboto-Medium.woff2') format('woff2');
+  src: url('../../../assets/fonts/Roboto-Medium.woff2') format('woff2');
 }
 
 @font-face {
   font-family: Roboto-Bold;
   font-style: normal;
   font-weight: normal;
-  src: url('../fonts/Roboto-Bold.woff2') format('woff2');
+  src: url('../../../assets/fonts/Roboto-Bold.woff2') format('woff2');
 }
 
 @font-face {
   font-display: swap;
   font-family: Roboto-Mono;
   font-weight: normal;
-  src: url('../fonts/roboto-mono-v12-latin-regular.woff2') format('woff2');
+  src: url('../../../assets/fonts/roboto-mono-v12-latin-regular.woff2') format('woff2');
 }
 
 body {
