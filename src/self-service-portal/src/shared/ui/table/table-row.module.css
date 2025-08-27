@@ -1,0 +1,11 @@
+.table-row:last-child td:first-child {
+	border-bottom-left-radius: 8px;
+}
+
+.table-row:last-child td:last-child {
+	border-bottom-right-radius: 8px;
+}
+
+.table-row:not(:has([aria-labelledby="empty-state-heading"])):hover td {
+	background-color: color-mix(in srgb, var(--color-grey-light), white 80%);
+}

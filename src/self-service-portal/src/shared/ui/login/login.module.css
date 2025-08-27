@@ -1,0 +1,55 @@
+.login-layout {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  grid-template-areas: 'main';
+}
+
+body:has(.header) .login-layout {
+  min-height: calc(100dvh - var(--header-height));
+}
+
+@media (width >=64em) {
+  .login-layout {
+    --sidebar-width: 40%;
+    grid-template-areas: 'sidebar main';
+  }
+}
+
+.login-layout main {
+  grid-area: main;
+  height: 100%;
+}
+
+.login-layout aside {
+  background-color: var(--self-service-portal-login-sidebar-background-color);
+  background-image: var(--self-service-portal-login-sidebar-background-image-url);
+  background-position: center top;
+  background-size: 180%;
+  background-repeat: no-repeat;
+  grid-area: sidebar;
+  display: none;
+}
+
+@media (width >=64em) {
+  .login-layout aside {
+    display: initial;
+  }
+}
+
+.login-layout .login-logo {
+  max-width: var(--login-logo-max-width);
+  max-height: var(--login-logo-max-height);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: unset;
+}
+
+.login-layout aside img {
+  display: var(--self-service-portal-login-sidebar-image-display);
+  position: absolute;
+  top: 45%;
+  max-width: 600px;
+  right: -10em;
+}

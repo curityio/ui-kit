@@ -1,0 +1,400 @@
+"""
+Long is a 64-bit integer number.
+"""
+scalar Long
+
+"""
+An Object can contain any valid JSON object.
+"""
+scalar Object
+
+"""
+Sort attribute.
+"""
+enum SortAttribute {
+  """
+  Created.
+  """
+  created
+  """
+  Last modified.
+  """
+  lastModified
+  """
+  Sort by resource name. Which field is used for sorting depends on the resource type.
+  """
+  name
+}
+
+"""
+Sort order.
+"""
+enum SortOrder {
+  """
+  Ascending
+  """
+  ASCENDING
+  """
+  Descending
+  """
+  DESCENDING
+}
+
+"""
+Sorting.
+"""
+input Sorting {
+  """
+  Sort by attribute.
+  """
+  sortBy: SortAttribute
+  """
+  Sort order.
+  """
+  sortOrder: SortOrder!
+}
+
+# Pagination types, based on https://relay.dev/graphql/connections.htm and https://docs.github.com/en/graphql
+"""
+Information about pagination in a connection
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+}
+
+"""
+Whether the client should issue pairwise pseudonym subject identifiers
+or public identifiers.
+"""
+enum SubjectType {
+  """
+  Pairwise.
+  """
+  pairwise
+  """
+  Public.
+  """
+  public
+}
+
+"""
+Abstract type to authenticate client through Mutual-TLS.
+"""
+interface NameAndCa {
+  """
+  The CA's that can be the issuer of the client certificate that can be accepted
+  to authenticate this client.
+  If empty, then all profile certificates may be used to authenticate the client.
+  """
+  # These CAs reference config path
+  # '/base:facilities/base:crypto/base:ssl/base:client-truststore/base:client-certificate/base:id'
+  trusted_cas: [String!]!
+}
+
+"Value used to indicate no authentication is required."
+enum NoAuth {
+  "Value used to indicate no authentication is required."
+  no_auth
+}
+
+"Algorithms supported to encrypt the content encryption key, present as 'alg' in JWE header."
+enum AsymmetricKeyManagementAlgorithm {
+  "RSA 1.5 algorithm"
+  RSA1_5
+  "RSA OAEP algorithm"
+  RSA_OAEP
+  "RSA OAEP 256 algorithm"
+  RSA_OAEP_256
+  "ECDH ES algorithm"
+  ECDH_ES
+  "ECDH ES A128KW algorithm"
+  ECDH_ES_A128KW
+  "ECDH ES A192KW algorithm"
+  ECDH_ES_A192KW
+  "ECDH ES A256KW algorithm"
+  ECDH_ES_A256KW
+}
+
+"Supported content encryption algorithms, present as 'enc' in JWE header."
+enum ContentEncryptionAlgorithm {
+  "A128CBC HS256 algorithm"
+  A128CBC_HS256
+  "A192CBC HS384 algorithm"
+  A192CBC_HS384
+  "A256CBC HS512 algorithm"
+  A256CBC_HS512
+  "A128CBC GCM algorithm"
+  A128GCM
+  "A192CBC GCM algorithm"
+  A192GCM
+  "A256CBC GCM algorithm"
+  A256GCM
+}
+
+"Metadata about client."
+type Meta {
+  """
+  Instant the resource was created (in epoch-seconds)."
+  """
+  created: Long!
+  """
+  Instant the resource was last modified (in epoch-seconds).
+  """
+  lastModified: Long!
+}
+
+type AuthorizedOAuthClient {
+  """
+  The unique and stable identifier for the client.
+  """
+  id: ID!
+
+  """
+  An optional human readable name of the client.
+  """
+  name: String
+
+  """
+  An optional description of the client.
+  """
+  description: String
+
+  """
+  The optional client's Logo URL.
+  """
+  logoUri: String
+}
+
+type AuthorizedScope {
+  """
+  The unique and stable scope name.
+  """
+  name: String!
+
+  """
+  The localized scope name.
+  Defaults to the scope name if no localization information is available.
+  """
+  localizedName: String!
+
+  """
+  An optional human readable description of the scope.
+  """
+  description: String
+}
+
+type AuthorizedClaim {
+  """
+  The unique and stable claim name.
+  """
+  name: String!
+
+  """
+  The localized claim name.
+  Defaults to the claim name if no localization information is available.
+  """
+  localizedName: String!
+
+  """
+  An optional human readable description of the claim.
+  """
+  description: String
+}
+
+"""
+Represents an authorization granted by a resource owner (user) to a client.
+"""
+type GrantedAuthorization {
+  """
+  The username that granted the authorization
+  """
+  owner: String!
+
+  """
+  Information about the authorized client.
+  """
+  authorizedClient: AuthorizedOAuthClient!
+
+  """
+  Authorized scopes.
+  """
+  authorizedScopes: [AuthorizedScope!]!
+
+  """
+  Authorized claims names
+  """
+  authorizedClaims: [AuthorizedClaim!]!
+
+  """
+  Metadata about this authorization, namely creation and modification timestamps
+  """
+  meta: Meta!
+
+  # we may include consentor information  in the future
+  # we may include RAR information in the future
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  """
+  Obtains all authorizations granted by an owner
+  """
+  grantedAuthorizationsByOwner(
+    """
+    The resource owner for which to obtain the authorizations.
+    """
+    owner: String!
+
+    """
+    Maximum number of entries to retrieve
+    """
+    first: Int
+    """
+    Cursor returned in a previous request.
+    """
+    after: String
+  ): GrantedAuthorizationConnection!
+
+  # Note: even if we return only one authorization per client initially we still use a connection
+  # since we may change this in the future.
+  """
+  Obtains all authorizations granted by an owner to a specific client
+  """
+  grantedAuthorizationsByOwnerAndClient(
+    """
+    The resource owner for which to obtain the authorizations.
+    """
+    owner: String!
+    """
+    The client for which to obtain the authorizations
+    """
+    clientId: String!
+
+    """
+    Maximum number of entries to retrieve
+    """
+    first: Int
+    """
+    Cursor returned in a previous request.
+    """
+    after: String
+  ): GrantedAuthorizationConnection!
+}
+
+type Mutation {
+  """
+  Revokes all authorizations granted by an owner
+  """
+  revokeGrantedAuthorizationsByOwner(
+    """
+    Input to the mutation
+    """
+    input: RevokeGrantedAuthorizationsByOwnerInput
+  ): RevokeGrantedAuthorizationPayload
+
+  """
+  Revokes all authorizations granted by an owner to a specific client
+  """
+  revokeGrantedAuthorizationsByOwnerAndClient(
+    """
+    Input to the mutation
+    """
+    input: RevokeGrantedAuthorizationByOwnerAndClientInput
+  ): RevokeGrantedAuthorizationPayload
+}
+
+type GrantedAuthorizationConnection {
+  """
+  The list of edges containing the authorization nodes.
+  """
+  edges: [GrantedAuthorizationEdge!]!
+
+  """
+  Pagination information for this connection.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Total number of authorizations based on input parameters.
+  """
+  totalCount: Long!
+
+  """
+  Warning related to this query result
+  """
+  warnings: [GrantedAuthorizationQueryResultWarning!]
+}
+
+type GrantedAuthorizationEdge {
+  node: GrantedAuthorization!
+}
+
+"""
+Contains the currently existing types of warning that can be returned
+"""
+enum GrantedAuthorizationQueryResultWarningType {
+  """
+  The query result is incomplete: there may be missing granted authorizations and the granted authorizations
+  may not include the complete information, namely for scopes and claims.
+  """
+  INCOMPLETE_RESULT
+}
+
+type GrantedAuthorizationQueryResultWarning {
+  type: GrantedAuthorizationQueryResultWarningType!
+}
+
+"""
+Input to the revokeAuthorizationsByOwner mutation
+"""
+input RevokeGrantedAuthorizationsByOwnerInput {
+  """
+  The resource owner for which to revoke the authorizations.
+  """
+  owner: String!
+}
+
+"""
+Input to the revokeAuthorizationsByOwnerAndClient mutation
+"""
+input RevokeGrantedAuthorizationByOwnerAndClientInput {
+  """
+  The resource owner for which to revoke the authorizations.
+  """
+  owner: String!
+
+  """
+  The client for which to revoke the authorizations.
+  """
+  clientId: String!
+}
+
+"""
+Represents the result of a revoke operation
+"""
+type RevokeGrantedAuthorizationPayload {
+  """
+  True if the revocation is completed successful.
+  Note that there may be conditions that make it impossible for authorizations to be revoked,
+  event if the system is operating correctly.
+  """
+  success: Boolean!
+
+  """
+  True if the revocation is going to be completed asynchronously,
+  meaning that it may take some time until being complete.
+  """
+  asynchronous: Boolean!
+}

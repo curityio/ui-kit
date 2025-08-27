@@ -1,0 +1,61 @@
+.progressContainer {
+	--step-circle-size: 30px;
+	--step-circle-line-width: 2px;
+}
+
+.progressContainer::before {
+	content: "";
+	background-color: var(--color-grey-light);
+	position: absolute;
+	top: calc(50% + var(--step-circle-line-width));
+	left: calc(var(--step-circle-size) / 2);
+	transform: translateY(calc(-50% - calc(var(--step-circle-size) / 2)));
+	height: var(--step-circle-line-width);
+	z-index: 0;
+	width: calc(100% - var(--step-circle-size));
+}
+
+.progressStep {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	justify-self: center;
+	gap: 0.5rem;
+	z-index: 1;
+}
+
+
+.progressStep span:not(.number) {
+	display: flex;
+	font-size: clamp(0.5rem, 2vw, .85rem);
+
+}
+
+.progressStep span:is(.number) {
+	color: var(--color-grey-light)
+}
+
+.circle {
+	border: 2px solid var(--color-grey-light);
+	background-color: white;
+	color: var(--color-primary);
+	border-radius: 50%;
+	height: var(--step-circle-size);
+	width: var(--step-circle-size);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.4s ease;
+	z-index: 2;
+}
+
+.active {
+	border-color: var(--color-primary);
+	background-color: var(--color-primary);
+	color: white
+}
+
+.done {
+	border-color: var(--color-success);
+}
