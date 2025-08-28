@@ -1,0 +1,13 @@
+meta.title=Glömt användarnamn
+page.title=Glömt användarnamn
+view.head1=Glömt ditt användarnamn?
+view.p1=Ange e-postadressen du angav när du skapade ditt konto så skickar vi ditt användarnamn.
+view.email=E-post
+view.button=Skcka mitt användarnamn
+view.cancel=Ta mig till inloggningssidan
+view.success.head1=Kolla din inkorg!
+view.success.p1=Ett mail med ditt användarnamn har skickats till dig.
+view.back.to.login=Ta mig till inloggningssidan
+
+validation.error.email.required=Du måste ange din e-postadress
+validation.error.email.invalid=E-postadressen du angav är felaktig
