@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 import { Link } from 'react-router';
-import curityLogoLandscapeImg from '@curity-ui-kit/assets/images/curity-logo-landscape.svg';
+import curityLogoLandscapeImg from '/src/images/curity-logo-landscape.svg';
 
 import { useTranslation } from 'react-i18next';
 

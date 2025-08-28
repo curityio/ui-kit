@@ -12,7 +12,7 @@
   --page-background-color: #f3f5f7;
 
   --self-service-portal-login-sidebar-image-display: flex;
-  --self-service-portal-login-sidebar-background-image-url: url('../../../assets/images/bg-lines-magenta.svg');
+  --self-service-portal-login-sidebar-background-image-url: url('../images/bg-lines-magenta.svg');
   --self-service-portal-login-sidebar-background-color: var(--color-primary-dark);
   --self-service-portal-sidebar-background-color: white;
   --self-service-portal-main-background-color: white;
