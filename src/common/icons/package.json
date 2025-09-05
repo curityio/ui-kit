@@ -2,9 +2,6 @@
   "name": "@curity-ui-kit/icons",
   "version": "1.0.0",
   "description": "Curity UI Icons React",
-  "publishConfig": {
-    "registry": "https://hub.curityio.net/repository/curity-npm-registry/"
-  },
   "author": "Curity AB",
   "license": "UNLICENSED",
   "type": "module",

@@ -1,0 +1,57 @@
+.toggle-switch {
+	align-items: center;
+	display: flex;
+}
+
+.toggle-switch>label {
+	display: inline-block;
+	font-size: 0.8rem;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 500;
+	height: 24px;
+	margin-right: .5rem;
+	position: relative;
+	width: 50px;
+	word-break: break-all;
+}
+
+.toggle-switch input {
+	display: none;
+}
+
+/* The slider */
+
+.toggle-switch-slider {
+	background-color: var(--form-field-placeholder-color);
+	border-radius: 34px;
+	cursor: pointer;
+	inset: 0;
+	position: absolute;
+	transition: 0.2s;
+}
+
+
+.toggle-switch-slider::before {
+	background-color: white;
+	border-radius: 50%;
+	bottom: 4px;
+	content: "";
+	height: 16px;
+	left: 4px;
+	position: absolute;
+	transition: 0.2s;
+	width: 16px;
+}
+
+input:checked+.toggle-switch-slider {
+	background-color: var(--color-success)
+}
+
+input:checked+.toggle-switch-slider::before {
+	transform: translateX(26px);
+}
+
+input:disabled+.toggle-switch-slider {
+	background-color: #f1f1f1;
+}

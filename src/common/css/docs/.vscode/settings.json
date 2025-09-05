@@ -1,0 +1,30 @@
+{
+  "window.title": "🟠 Curity CSS Docs",
+  "files.exclude": {
+    "node_modules": true
+  },
+  "editor.formatOnSave": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[mdx]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "files.trimTrailingWhitespace": false,
+    "files.insertFinalNewline": false,
+    "editor.trimAutoWhitespace": false,
+    "editor.lineHeight": 26,
+    "editor.wordWrapColumn": 172,
+    "editor.lineNumbers": "on",
+    "editor.fontSize": 16,
+    "editor.fontLigatures": true,
+    "editor.wordWrap": "off",
+    "editor.codeActionsOnSave": {}
+  }
+}

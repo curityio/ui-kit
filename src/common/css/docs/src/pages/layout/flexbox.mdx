@@ -1,0 +1,127 @@
+---
+layout: '../../layouts/Page.astro'
+title: 'Flexbox'
+description: 'Usage on how to use Flexbox'
+updatedAt: 'August 08 2022'
+order: 2
+---
+
+# Flexbox
+
+Using the flex classes you can create a layout in both row and column based layout modes.
+
+## Classes built in
+
+- `flex` - Set to use flexbox layout
+- `sm-flex` Use flex layout when larger than 40em
+- `flex-center` Center items vertically (in the default flex row layout)
+- `justify-between	` Center items vertically (in the default flex row layout)
+- `flex-column` - Set `flex-direction` to `column` Which will align children from top to bottom instead of left to right which is the default
+- `flex-10/20/25/33/40/50/60/70/80/90/100` - Percentage based flex-basis. Used in the shorthand `flex: 0 0 X%`
+
+* `.flex-row-reverse` - Reverse order when in row based flow
+* `.flex-column-reverse` - Reverse order when in column based flow
+* `.no-flex` - Flex none
+* `flex-gap-1/2/3/4`. Using the `--space-X` utilities for setting gap betwen flex items
+
+## Responsive
+
+You can use the media query prefixes like `sm-flex`, `md-flex` and `lg-flex` to only use flexbox layout on certain viewports.
+
+- `sm-flex` Only use flexbox when ~ larger than a mobile phone
+- `md-flex` Only use flexbox when ~ larger than a tablet
+- `lg-flex` Only use flexbox when ~ larger than desktop
+
+## Example
+
+A simple demo showing how to compose flex classes to quickly create a nice layout. It's responsive and you don't need to write custom CSS.
+
+<div class="container demo-element p2 mt2 mb2">
+  <header class="sm-flex flex-center justify-between p2">
+    <h1 class="m0">Header</h1>
+    <a href="#">A link</a>
+  </header>
+  <div class="flex flex-gap-2 demo-element p2">
+    <aside class="flex-30 demo-element p2">
+      <h2>Sidebar</h2>
+      <ul class="list-reset">
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+      </ul>
+    </aside>
+    <main class="flex-auto p2">
+      <h2>Main</h2>
+      <p>A paragraph</p>
+      <form>
+        <div class="sm-flex flex-column flex-gap-2">
+          <label>
+            Your name
+            <input type="text" class="field w100" placeholder="Your name" />
+          </label>
+          <label>
+            Your email
+            <input type="email" class="field w100" placeholder="Your email" />
+          </label>
+          <button class="button button-medium button-primary">Submit</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+
+## HTML
+
+```html
+<div class="container p2 mt2 mb2">
+  <header class="sm-flex flex-center justify-between p2">
+    <h1 class="m0">Header</h1>
+    <a href="#">A link</a>
+  </header>
+  <div class="flex flex-gap-2 p2">
+    <aside class="flex-30 p2">
+      <h2>Sidebar</h2>
+      <ul class="list-reset">
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+      </ul>
+    </aside>
+    <main class="flex-auto p2">
+      <h2>Main</h2>
+      <p>A paragraph</p>
+      <form>
+        <div class="sm-flex flex-column flex-gap-2">
+          <label>
+            Your name
+            <input type="text" class="field w100" placeholder="Your name" />
+          </label>
+          <label>
+            Your email
+            <input type="email" class="field w100" placeholder="Your email" />
+          </label>
+          <button class="button button-medium button-primary">Submit</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+```

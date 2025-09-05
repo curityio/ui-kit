@@ -1,0 +1,59 @@
+.pill {
+  align-items: center;
+  border: none;
+  border-radius: 1rem;
+  color: white;
+  display: inline-flex;
+  font-family: var(--font-bold);
+  font-size: 0.75rem;
+  -webkit-font-smoothing: antialiased;
+  height: 24px;
+  justify-content: space-between;
+  letter-spacing: 0.025em;
+  padding: 0 0.5rem 0 0.5rem;
+  text-rendering: optimizeLegibility;
+  text-transform: uppercase;
+}
+
+.pill:hover {
+  text-decoration: none;
+}
+
+.pill-grey {
+  background-color: #eee;
+  border-color: #ddd;
+  color: #666;
+}
+
+.pill-success {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.pill-warning {
+  background-color: var(--color-warning);
+  color: white;
+}
+
+.pill-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.pill-bright {
+  background-color: var(--color-spot);
+  border: none;
+  color: white;
+}
+
+.pill-primary {
+  background-color: var(--color-primary);
+  border: none;
+  color: white;
+}
+
+.pill-danger {
+  background-color: var(--color-danger);
+  border: none;
+  color: white;
+}

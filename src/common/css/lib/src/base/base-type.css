@@ -1,0 +1,220 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+strong,
+b {
+  color: currentcolor;
+  font-family: var(--type-sans-bold);
+  font-weight: var(--type-weight-bold);
+}
+
+i,
+em,
+blockquote {
+  font-style: italic;
+}
+
+/*
+SELECTIONS
+--------------------------------------------- */
+::selection {
+  background: var(--color-primary-light);
+  color: rgb(255 255 255);
+  text-shadow: none;
+}
+
+img::selection {
+  background: transparent;
+}
+
+/*
+BASE TYPOGRAPHY
+--------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-heading);
+  font-weight: var(--type-weight);
+  line-height: calc(var(--type-line-height) * 0.75);
+  margin-bottom: var(--space-2);
+  margin-top: var(--space-2);
+  text-rendering: optimizelegibility;
+}
+
+.type-extra-bold {
+  font-family: var(--type-sans-extra-bold);
+  letter-spacing: 0.004em;
+}
+
+h1 {
+  font-size: calc(var(--type-base-size) * 1.75);
+}
+
+@media (width >=64em) {
+  h1 {
+    font-size: calc(var(--type-base-size) * 2.25);
+  }
+}
+
+h2 {
+  font-size: calc(var(--type-base-size) * 1.25);
+}
+
+@media (width >=64em) {
+
+  .h2,
+  h2 {
+    font-size: calc(var(--type-base-size) * 1.5);
+  }
+}
+
+.h3,
+h3 {
+  font-size: calc(var(--type-base-size) * 1.175);
+}
+
+@media (width >=64em) {
+
+  .h3,
+  h3 {
+    font-size: calc(var(--type-base-size) * 1.25);
+  }
+}
+
+.h4,
+h4 {
+  font-size: calc(var(--type-base-size) * 1);
+}
+
+@media (width >=64em) {
+
+  .h4,
+  h4 {
+    font-size: calc(var(--type-base-size) * 1.15);
+  }
+}
+
+p {
+  color: var(--color-text);
+  font-weight: var(--type-weight);
+  line-height: 1.5;
+  line-height: calc(var(--type-line-height));
+  margin-bottom: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+abbr {
+  cursor: help;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+}
+
+sub,
+sup {
+  font-size: 65%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+blockquote {
+  border-left: 2px solid var(--color-spot);
+  color: rgb(90 90 90);
+  font-size: calc(var(--type-base-size) * 1.25);
+  font-style: normal;
+  margin: calc(var(--space-4)) 0 calc(var(--space-4)) calc(var(--space-2));
+  padding-left: var(--space-2);
+  position: relative;
+}
+
+dl,
+ol,
+ul {
+  margin-bottom: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+ul,
+ol {
+  line-height: calc(var(--type-line-height));
+  margin-left: 0;
+}
+
+ul {
+  color: var(--color-text);
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: lower-roman;
+}
+
+/* Code */
+code {
+  background-color: #f7fafc;
+  border: 1px solid rgb(0 0 0 / 5%);
+  border-radius: var(--form-field-border-radius);
+  color: var(--color-text);
+  font-family: var(--type-mono);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  padding: 0.15em 0.2em 0.05em;
+  word-break: break-word;
+}
+
+pre {
+  border-radius: 2px;
+  font-family: var(--type-mono);
+  font-size: 1rem;
+  overflow-wrap: break-word;
+  overflow-x: auto;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+pre code {
+  background-color: unset;
+  border-radius: unset;
+  overflow-x: auto;
+  padding: unset;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Or divider */
+.or {
+  align-items: center;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: minmax(20px, 1fr) auto minmax(20px, 1fr);
+  text-align: center;
+  width: 100%;
+}
+
+.or::before,
+.or::after {
+  border-top: 1px solid #ccc;
+  content: '';
+}
