@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // Use the latest ECMAScript features
+    "module": "ESNext", // Use ESNext module resolution
+    "jsx": "react-jsx", // Use the new JSX transform (React 17+)
+    "strict": true, // Enable all strict type-checking options
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "moduleResolution": "node", // Use Node.js module resolution
+    "resolveJsonModule": true, // Allow importing JSON files
+    "isolatedModules": true, // Ensure that each file can be safely transpiled independently
+    "noEmit": true, // Do not emit output (useful for type-checking only)
+    "baseUrl": "./src", // Base directory to resolve non-relative module names
+    "paths": {
+      "@/*": ["*"] // Allow using '@' as an alias for the 'src' directory
+    },
+    "declaration": true, // Enable declaration file generation
+    "outDir": "./dist-ssp/types" // Output directory for declaration files
+  },
+  "include": [
+    "src-ssp/**/*"
+  ],
+  "exclude": [
+    "node_modules", // Exclude node_modules
+    "dist-ssp" // Exclude build output directory
+  ]
+}

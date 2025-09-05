@@ -1,0 +1,34 @@
+{
+  "name": "@curity-ui-kit/icons",
+  "version": "1.0.0",
+  "description": "Curity UI Icons React",
+  "publishConfig": {
+    "registry": "https://hub.curityio.net/repository/curity-npm-registry/"
+  },
+  "author": "Curity AB",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    "import": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "build:ssp": "BUILD_VARIANT=ssp rollup -c",
+    "clean": "rm -rf dist && rm -rf dist-ssp && rm -rf src-ssp"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.8",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.28.1",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^5.7.2"
+  }
+}
