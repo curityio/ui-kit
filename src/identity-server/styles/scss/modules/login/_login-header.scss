@@ -1,0 +1,42 @@
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+.login-header {
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 0 rgba(175, 175, 175, 0.12);
+}
+
+.login-header-logo {
+    max-width: 160px;
+}
+
+.login-header-nav {
+    @media #{$breakpoint-md} {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.login-header-links {
+    justify-content: flex-start;
+
+    @media #{$breakpoint-sm} {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
+.login-header-links div:first-child {
+    margin-right: 1rem;
+}

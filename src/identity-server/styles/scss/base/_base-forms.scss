@@ -1,0 +1,377 @@
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+/* -------------------------------------------------------------------
+Base fields
+------------------------------------------------------------------- */
+// The .field-light class will use the standard basscss .field class.
+
+.field {
+  color: var(--form-field-color);
+  border-radius: var(--form-field-border-radius);
+  transition: box-shadow 200ms, border-color 200ms, background-color 200ms;
+  outline: none;
+  box-shadow: var(--form-field-box-shadow);
+  background-color: var(--form-field-background-color);
+  border-width: var(--form-field-border-width);
+  border-style: var(--form-field-border-style);
+  border-color: var(--form-field-border-color);
+  caret-color: var(--form-field-caret-color);
+}
+
+.field:hover {
+  border-color: var(--form-field-border-color-hover);
+}
+
+.field:focus {
+  border-color: var(--form-field-border-color-focus);
+  box-shadow: var(--form-field-box-shadow-focus);
+}
+
+.field:disabled {
+  background-color: var(--form-field-disabled-background-color);
+  opacity: var(--form-field-disabled-opacity);
+}
+
+.field[readonly]:not(select),
+.field.is-read-only {
+  background-color: var(--form-field-readonly-background-color);
+}
+
+.field-light {
+  @extend .field;
+}
+
+// Fields on dark background and transparent forms
+.body-dark .form-transparent .field {
+  color: var(--form-field-color-dark);
+  background-color: var(--form-field-background-color-dark);
+  border-color: var(--form-field-border-color-dark);
+}
+
+// Full width fields
+
+.full-width {
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------
+Error responses
+------------------------------------------------------------------- */
+
+label.is-error {
+  color: var(--color-danger);
+}
+
+// Label
+
+label {
+  display: inline-block;
+  color: var(--form-label-color);
+  font-size: var(--form-label-font-size);
+  line-height: var(--form-label-line-height);
+}
+
+// Form input types
+input[type="text"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  color: var(--form-field-color);
+  font-size: var(--form-field-font-size);
+  height: var(--form-field-height);
+  padding-left: var(--form-field-padding);
+  padding-right: var(--form-field-padding);
+  transition: border-color ease-out 0.2s, box-shadow ease-out 0.2s;
+}
+
+// Form textarea
+
+textarea {
+  color: #666;
+
+  &:focus {
+    background-color: var(--form-field-background-color-dark);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    outline: 0;
+  }
+}
+
+// Submit buttons
+
+button[type="submit"].button,
+input[type="submit"].button {
+  margin-top: var(--space-1);
+}
+
+/* -------------------------------------------------------------------
+Nicer looking select boxes
+------------------------------------------------------------------- */
+
+select {
+  background-color: white;
+  border: 1px solid var(--form-field-border-color);
+  border-radius: var(--form-field-border-radius);
+  box-shadow: none;
+  height: var(--form-field-height);
+  padding-left: var(--form-field-padding);
+  padding-right: calc(var(--form-field-padding) * 2);
+  width: 100%;
+  appearance: none;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  line-height: 1.2;
+  background-size: 1.5em 1.5em;
+}
+
+/* -------------------------------------------------------------------
+Fieldset
+------------------------------------------------------------------- */
+
+fieldset {
+  border: 1px solid var(--form-field-border-color);
+  border-radius: var(--form-field-border-radius);
+  margin-bottom: var(--space-2);
+  padding: var(--space-2);
+}
+
+/* -------------------------------------------------------------------
+Password revealer
+------------------------------------------------------------------- */
+
+.form-password-reveal-form {
+  position: relative;
+
+  input {
+    padding-right: 42px;
+  }
+}
+
+.form-password-reveal-form-icon {
+  background-image: url("../images/eye.svg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-size: 20px 20px;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  position: absolute;
+  right: 0.5rem;
+  top: calc(var(--form-field-height) * 0.95);
+  transition: opacity 200ms ease;
+  vertical-align: middle;
+  width: 20px;
+
+  &.active {
+    background-image: url("../images/eye-hide.svg");
+  }
+}
+
+// Placeholders
+
+::placeholder {
+  color: var(--form-field-placeholder-color);
+}
+
+// Form field
+.form-field {
+  position: relative;
+}
+
+.form-field input {
+  padding-left: var(--form-field-padding-left);
+}
+
+// Form field icons
+
+.form-field-icon {
+  display: var(--form-field-icon-display);
+  color: var(--form-field-icon-color);
+  font-size: var(--form-field-icon-size);
+  left: 1rem;
+  position: absolute;
+  transition: color 300ms;
+  top: calc(var(--form-field-height) * 0.725);
+}
+
+// Fieldset Legend
+
+legend {
+  body.body-dark .form-transparent & {
+    color: white;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+}
+
+// Backup codes
+
+.backup-codes {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  ul {
+    font-family: var(--type-mono);
+    font-size: 1rem;
+
+    @media #{$breakpoint-sm} {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1rem;
+    }
+  }
+
+  li {
+    @media #{$breakpoint-sm} {
+      justify-self: center;
+    }
+
+    text-align: center;
+  }
+}
+
+.backup-codes code {
+  body.body-dark .form-transparent & {
+    color: white;
+  }
+}
+
+// Confirm
+
+.confirm {
+  @media #{$breakpoint-sm} {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.confirm input[type="checkbox"] {
+  @media #{$breakpoint-sm} {
+    position: relative;
+    top: 0.5ex;
+  }
+}
+
+.confirm label {
+  line-height: 1.5;
+  margin-top: 0;
+}
+
+// Accent color
+input {
+  accent-color: var(--color-spot);
+}
+
+// Agree checkbox
+.login-links-forgot label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// Bank id form needs to have correct white space
+// div.center placed immediately after form
+#bankid-form,
+form + div.center {
+  @extend .area;
+}
+
+// Center QR Code
+img#autostartTokenQr,
+img[alt*="barcode"] {
+  margin: 0 auto;
+}
+
+/* QR code is larger when clicked */
+#trigger-fullscreen:focus {
+  box-shadow: none;
+}
+
+img.qr-enlarge{
+  min-width: 100%;
+
+  @media #{$breakpoint-sm} {
+    min-width: 400px;
+  }
+}
+
+// Auto fill
+
+// Firefox 94 and newer
+input:autofill {
+  background: transparent;
+}
+
+// Chrome and Safari
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+input[data-autocompleted] {
+  background-color: transparent !important;
+}
+
+/* Details */
+
+details {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  padding: 0.75em 0.75em 0;
+}
+
+details,
+details p {
+  color: var(--color-text);
+}
+
+.login-well details p {
+  text-align: left;
+}
+
+summary {
+  cursor: pointer;
+  margin: -0.75em -0.75em 0;
+  padding: 0.75em;
+}
+
+details[open]::details-content {
+  padding: 0.75em;
+}
+
+details[open] ul {
+  list-style-position: inside;
+}
+
+details[open] summary {
+  margin-bottom: 0.75em;
+}

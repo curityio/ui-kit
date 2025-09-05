@@ -1,0 +1,160 @@
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+/* -------------------------------------------------------------------
+Login well
+------------------------------------------------------------------- */
+// If form white is activated
+.login-well.form-light {
+  background-color: var(--well-background-color);
+  border-width: var(--well-border-width);
+  border-style: var(--well-border-style);
+  border-color: var(--well-border-color);
+  border-radius: var(--well-border-radius);
+  box-shadow: var(--well-box-shadow);
+}
+
+// If form transparent is activated
+.login-well.form-transparent {
+  background-color: transparent;
+}
+
+.login-well {
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+
+  @media #{$breakpoint-sm} {
+    margin-top: 6rem;
+  }
+}
+
+.body-logo-outside .login-well {
+  @media #{$breakpoint-sm} {
+    margin-top: 1rem;
+  }
+}
+
+.login-well-progressbar {
+  @media #{$breakpoint-sm} {
+    margin-top: 4rem;
+  }
+}
+
+.login-well-info {
+  @media #{$breakpoint-sm} {
+    margin-top: 2rem;
+  }
+}
+
+.login-well-full {
+  max-width: none;
+}
+
+.login-well-wide {
+  max-width: none;
+}
+
+.login-well.login-well-full {
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    @media #{$breakpoint-sm} {
+      text-align: left;
+    }
+  }
+}
+
+.login-well:not(.login-well-info) form,
+.login-well:not(.login-well-info) .area {
+  &:not(form.no-top-padding) {
+    padding-top: 1rem;
+  }
+
+  &:not(form.no-bottom-padding) {
+    padding-bottom: 1rem;
+  }
+
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media #{$breakpoint-sm} {
+    &:not(form.no-bottom-padding) {
+      padding-bottom: 2.5rem;
+    }
+
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  &.no-padding {
+    padding: 0;
+  }
+}
+
+.login-well form.manuallink:not([name="cancel"]) {
+  padding-bottom: 0;
+  @media #{$breakpoint-sm} {
+    &:not(form.no-bottom-padding) {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.login-well.login-well-errors .alert-wrapper {
+  padding-bottom: 0;
+}
+
+.login-well.login-well-errors form,
+.login-well.login-well-errors area {
+  h1 {
+    margin-top: 0;
+  }
+}
+
+// Type inside login well
+.login-well h2,
+.login-well h3,
+.login-well h4,
+.login-well p {
+  text-align: center;
+}
+
+.login-well h1 {
+  font-size: calc(var(--type-base-size) * 1.5);
+  word-wrap: break-word;
+
+  @media #{$breakpoint-lg} {
+    font-size: calc(var(--type-base-size) * 1.75);
+  }
+}
+
+// App Store Badges
+.appstorebadges {
+  display: flex;
+  align-items: center;
+}
+
+.appstorebadges img {
+  max-width: 150px;
+}
+
+img[alt*="App Store"],
+img[alt*="Google Play"] {
+  max-width: 150px;
+  margin: 0 auto;
+}

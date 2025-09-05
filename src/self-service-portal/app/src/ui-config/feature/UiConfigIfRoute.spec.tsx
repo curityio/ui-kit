@@ -1,0 +1,246 @@
+import * as UiConfigProviderAll from '../data-access/UiConfigProvider.tsx';
+import { UiConfigProvider } from '../data-access/UiConfigProvider.tsx';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../typings.ts';
+import { render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { UiConfigIfRoute } from './UiConfigIfRoute.tsx';
+import * as utils from '../utils/ui-config-if-utils.tsx';
+import { MemoryRouter, Route, Routes } from 'react-router';
+import { ROUTE_PATHS } from '../../routes.tsx';
+import { FeatureNotAvailable } from '../../shared/ui/FeatureNotAvailable.tsx';
+import { UI_CONFIG } from '../utils/ui-config-fixture.ts';
+import { mockUiConfigProvider } from '../../shared/utils/test.ts';
+
+describe('UiConfigIfRoute', () => {
+  beforeEach(() => {
+    mockUiConfigProvider();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe('Route Access', () => {
+    describe('allowedOperations', () => {
+      it('should allow configuring the route`s allowedOperations (prop)', async () => {
+        const testId = 'feature-not-available';
+
+        vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME,
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS,
+        ]);
+
+        vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue({
+          ...UI_CONFIG,
+          accessControlPolicy: {
+            resourceGroups: {
+              ...UI_CONFIG.accessControlPolicy.resourceGroups,
+              userManagement: {
+                ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement,
+                resources: {
+                  ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement?.resources,
+                  name: {
+                    operations: [UI_CONFIG_OPERATIONS.READ],
+                  },
+                  address: {
+                    operations: [UI_CONFIG_OPERATIONS.READ],
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const { findByTestId } = render(
+          <MemoryRouter initialEntries={['/test']}>
+            <UiConfigProvider>
+              <Routes>
+                <Route
+                  path="/test"
+                  element={
+                    <UiConfigIfRoute allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}>
+                      <div>Content</div>
+                    </UiConfigIfRoute>
+                  }
+                />
+                <Route path={ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
+              </Routes>
+            </UiConfigProvider>
+          </MemoryRouter>
+        );
+
+        const featureNotAvailable = await findByTestId(testId);
+
+        expect(featureNotAvailable).toBeVisible();
+      });
+    });
+
+    describe('allowAccessWithPartialPermissions (Some route resources have UIConfig operation permissions (default behavior))', () => {
+      it('should allow accessing the route when some route resources have UIConfig permissions', async () => {
+        const testId = 'route-with-permissions';
+
+        vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME,
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS,
+        ]);
+
+        const { findByTestId } = render(
+          <MemoryRouter initialEntries={['/test']}>
+            <UiConfigProvider>
+              <Routes>
+                <Route
+                  path="/test"
+                  element={
+                    <UiConfigIfRoute>
+                      <div data-testid={testId}>Content</div>
+                    </UiConfigIfRoute>
+                  }
+                />
+              </Routes>
+            </UiConfigProvider>
+          </MemoryRouter>
+        );
+
+        const contentWithPermissions = await findByTestId(testId);
+
+        expect(contentWithPermissions).toBeVisible();
+      });
+
+      it('should navigate to "Feature Not Available" when all route resources do not have UIConfig permissions', async () => {
+        const testId = 'feature-not-available';
+
+        vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME,
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS,
+        ]);
+
+        vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue({
+          ...UI_CONFIG,
+          accessControlPolicy: {
+            resourceGroups: {
+              ...UI_CONFIG.accessControlPolicy.resourceGroups,
+              userManagement: {
+                ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement,
+                resources: {
+                  ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement?.resources,
+                  name: {
+                    operations: [],
+                  },
+                  address: {
+                    operations: [],
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const { findByTestId } = render(
+          <MemoryRouter initialEntries={['/test']}>
+            <UiConfigProvider>
+              <Routes>
+                <Route
+                  path="/test"
+                  element={
+                    <UiConfigIfRoute>
+                      <div>Content</div>
+                    </UiConfigIfRoute>
+                  }
+                />
+                <Route path={ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
+              </Routes>
+            </UiConfigProvider>
+          </MemoryRouter>
+        );
+
+        const featureNotAvailable = await findByTestId(testId);
+
+        expect(featureNotAvailable).toBeVisible();
+      });
+    });
+
+    describe('!allowAccessWithPartialPermissions (Every route resource has UIConfig operation permissions)', () => {
+      it('should allow accessing the route when every route resource has UIConfig permissions', async () => {
+        const testId = 'route-with-permissions';
+
+        vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME,
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS,
+        ]);
+
+        const { findByTestId } = render(
+          <MemoryRouter initialEntries={['/test']}>
+            <UiConfigProvider>
+              <Routes>
+                <Route
+                  path="/test"
+                  element={
+                    <UiConfigIfRoute allowAccessWithPartialResourcePermissions={false}>
+                      <div data-testid={testId}>Content</div>
+                    </UiConfigIfRoute>
+                  }
+                />
+              </Routes>
+            </UiConfigProvider>
+          </MemoryRouter>
+        );
+
+        const contentWithPermissions = await findByTestId(testId);
+
+        expect(contentWithPermissions).toBeVisible();
+      });
+
+      it('should navigate to "Feature Not Available" when some route resources do not have UIConfig permissions', async () => {
+        const testId = 'feature-not-available';
+
+        vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME,
+          UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS,
+        ]);
+
+        vi.spyOn(UiConfigProviderAll, 'useUiConfig').mockReturnValue({
+          ...UI_CONFIG,
+          accessControlPolicy: {
+            resourceGroups: {
+              ...UI_CONFIG.accessControlPolicy.resourceGroups,
+              userManagement: {
+                ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement,
+                resources: {
+                  ...UI_CONFIG.accessControlPolicy.resourceGroups.userManagement?.resources,
+                  name: {
+                    operations: [],
+                  },
+                  address: {
+                    operations: [UI_CONFIG_OPERATIONS.READ, UI_CONFIG_OPERATIONS.UPDATE],
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const { findByTestId } = render(
+          <MemoryRouter initialEntries={['/test']}>
+            <UiConfigProvider>
+              <Routes>
+                <Route
+                  path="/test"
+                  element={
+                    <UiConfigIfRoute allowAccessWithPartialResourcePermissions={false}>
+                      <div>Content</div>
+                    </UiConfigIfRoute>
+                  }
+                />
+                <Route path={ROUTE_PATHS.FEATURE_NOT_AVAILABLE} element={<FeatureNotAvailable />} />
+              </Routes>
+            </UiConfigProvider>
+          </MemoryRouter>
+        );
+
+        const featureNotAvailable = await findByTestId(testId);
+
+        expect(featureNotAvailable).toBeVisible();
+      });
+    });
+  });
+});

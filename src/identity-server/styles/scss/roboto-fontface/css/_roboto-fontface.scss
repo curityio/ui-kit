@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "Roboto-Regular";
+  src: local("Roboto-Regular"),
+    url("#{$fontPath}Roboto-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Roboto-Regular-Italic";
+  src: local("Roboto RegularItalic"),
+    url("#{$fontPath}Roboto-RegularItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Roboto-Medium";
+  src: local("Roboto Medium"),
+    url("#{$fontPath}Roboto-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Roboto-Bold";
+  src: local("Roboto Bold"),
+    url("#{$fontPath}Roboto-Bold.woff2") format("woff2");
+}

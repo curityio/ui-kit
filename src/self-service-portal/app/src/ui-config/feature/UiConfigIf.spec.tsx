@@ -1,0 +1,145 @@
+import { UiConfigProvider } from '../data-access/UiConfigProvider.tsx';
+import { UiConfigIf } from './UiConfigIf.tsx';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../typings.ts';
+import { render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import {
+  expectAsyncElementNotToBeFoundByTestId,
+  mockUiConfigProvider,
+  mockUseCurrentRouteResources,
+} from '../../shared/utils/test.ts';
+import * as utils from '../utils/ui-config-if-utils.tsx';
+
+describe('UiConfigIf', () => {
+  beforeEach(() => {
+    mockUiConfigProvider();
+    mockUseCurrentRouteResources();
+  });
+
+  it('should default to `read` permissions when not configured', async () => {
+    const testId = 'content-with-permissions';
+
+    const { findByTestId } = render(
+      <UiConfigProvider>
+        <UiConfigIf resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME]}>
+          <div data-testid={testId}>Content</div>
+        </UiConfigIf>
+      </UiConfigProvider>
+    );
+
+    const contentWithPermissions = await findByTestId(testId);
+
+    expect(contentWithPermissions).toBeVisible();
+  });
+
+  it('should grant `read` permissions when any other permission is allowed', async () => {
+    const testId = 'content-with-permissions';
+
+    const { findByTestId } = render(
+      <UiConfigProvider>
+        <UiConfigIf resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}>
+          <div data-testid={testId}>Content</div>
+        </UiConfigIf>
+      </UiConfigProvider>
+    );
+
+    const contentWithPermissions = await findByTestId(testId);
+
+    expect(contentWithPermissions).toBeVisible();
+  });
+
+  it('should default to the route resources when not configured', async () => {
+    const testId = 'content-with-route-resources';
+
+    vi.spyOn(utils, 'useCurrentRouteResources').mockReturnValue([UI_CONFIG_RESOURCES.USER_MANAGEMENT_PHONE_NUMBER]);
+
+    render(
+      <UiConfigProvider>
+        <UiConfigIf allowedOperations={[UI_CONFIG_OPERATIONS.DELETE]}>
+          <div data-testid={testId}>Content</div>
+        </UiConfigIf>
+      </UiConfigProvider>
+    );
+
+    await expectAsyncElementNotToBeFoundByTestId(testId);
+
+    vi.restoreAllMocks();
+  });
+
+  describe('!displayWithPartialPermissions (Every element resource has UIConfig operation permissions (default behavior))', () => {
+    it('should display the content when every operation configured is allowed by the UIConfig on every configured resource', async () => {
+      const testId = 'content-with-permissions';
+
+      const { findByTestId } = render(
+        <UiConfigProvider>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.READ]}
+          >
+            <div data-testid={testId}>Content</div>
+          </UiConfigIf>
+        </UiConfigProvider>
+      );
+
+      const contentWithPermissions = await findByTestId(testId);
+
+      expect(contentWithPermissions).toBeVisible();
+    });
+
+    it('should NOT display the content when any operation configured is NOT allowed by the UIConfig on any configured resource', async () => {
+      const testId = 'content-without-permissions';
+
+      render(
+        <UiConfigProvider>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_PHONE_NUMBER]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE, UI_CONFIG_OPERATIONS.DELETE]}
+          >
+            <div data-testid={testId}>Content</div>
+          </UiConfigIf>
+        </UiConfigProvider>
+      );
+
+      await expectAsyncElementNotToBeFoundByTestId(testId);
+    });
+  });
+
+  describe('displayWithPartialPermissions (Some element resources have UIConfig operation permissions)', () => {
+    it('should display the content when some operations configured are allowed by the UIConfig on some resources', async () => {
+      const testId = 'content-with-permissions';
+
+      const { findByTestId } = render(
+        <UiConfigProvider>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
+            displayWithPartialResourcePermissions={true}
+          >
+            <div data-testid={testId}>Content</div>
+          </UiConfigIf>
+        </UiConfigProvider>
+      );
+
+      const contentWithPermissions = await findByTestId(testId);
+
+      expect(contentWithPermissions).toBeVisible();
+    });
+
+    it('should NOT display the content when any operation configured is NOT allowed by the UIConfig on any configured resource', async () => {
+      const testId = 'content-without-permissions';
+
+      render(
+        <UiConfigProvider>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.DELETE]}
+          >
+            <div data-testid={testId}>Content</div>
+          </UiConfigIf>
+        </UiConfigProvider>
+      );
+
+      await expectAsyncElementNotToBeFoundByTestId(testId);
+    });
+  });
+});

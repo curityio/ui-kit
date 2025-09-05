@@ -22,7 +22,7 @@ To start preview servers concurrently for all projects, run:
 npm start:all
 ```
 
-To start projects indivudually, run:
+To start projects individually, run:
 
 - `npm start:ussp` to start the Self Service Portal
 - `npm start:login` to start the Login Web App,
@@ -37,7 +37,7 @@ To build everything, run:
 npm run build:all
 ```
 
-To build projects indivudually, run:
+To build projects individually, run:
 
 - `npm run build:ussp` to build the Self Service Portal
 - `npm run build:login` to build the Login Web App,
@@ -48,4 +48,4 @@ To build projects indivudually, run:
 
 ## Deploy
 
-This monorepo is a git submobule to the Identity Server. When built, the resulting build fold will end up in the right place, ready to be deployed.
+This monorepo is a git submodule to the Identity Server. When built, the resulting build fold will end up in the right place, ready to be deployed.

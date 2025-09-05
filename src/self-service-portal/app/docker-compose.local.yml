@@ -1,0 +1,8 @@
+version: '3.2'
+services:
+  curity:
+    container_name: curity
+    ports:
+      - 6749:6749
+      - 8443:8443
+      - 8081:8081
