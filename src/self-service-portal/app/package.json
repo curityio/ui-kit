@@ -1,5 +1,5 @@
 {
-  "name": "@curity-internal/self-service-portal",
+  "name": "@curity-ui-kit/self-service-portal",
   "version": "0.0.0-SNAPSHOT-1",
   "type": "module",
   "scripts": {

@@ -9,6 +9,7 @@
     "src/common/components",
     "src/common/css",
     "src/common/icons",
+    "src/identity-server",
     "src/self-service-portal/app",
     "src/login-web-app"
   ],
