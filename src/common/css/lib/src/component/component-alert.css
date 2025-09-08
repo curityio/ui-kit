@@ -1,0 +1,140 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+/* -------------------------------------------------------------------
+ Alerts
+ ------------------------------------------------------------------- */
+.alert-wrapper {
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+}
+
+@media (min-width: 40em) {
+  .alert-wrapper {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.alert {
+  align-items: center;
+  border-color: var(--alert-border-color);
+  border-color: var(--alert-border-color);
+  border-radius: 2px;
+  border-radius: var(--alert-border-radius);
+  border-style: var(--alert-border-style);
+  border-style: var(--alert-border-style);
+  border-width: var(--alert-border-width);
+  border-width: var(--alert-border-width);
+  color: var(--color-text);
+  display: flex;
+  font-size: 0.8rem;
+  justify-content: space-between;
+  max-width: 100%;
+  min-width: 30em;
+  overflow: hidden;
+  padding: 1rem 1rem 1rem 60px;
+  position: relative;
+  width: max-content;
+}
+
+.alert::before {
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1.5rem;
+  color: transparent;
+  content: '';
+  display: flex;
+  height: calc(100%);
+  justify-content: center;
+  left: 0;
+  line-height: 0;
+  padding: 1.5rem;
+  position: absolute;
+  text-shadow: 0 0 0 white;
+  top: 0;
+  width: 30px;
+}
+
+.alert-warning {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.alert-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.alert-success {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.alert-info {
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+/* Icons */
+
+.alert-warning::before {
+  background-color: var(--color-warning);
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>');
+}
+
+.alert-danger::before {
+  background-color: var(--color-danger);
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>');
+}
+
+.alert-success::before {
+  background-color: var(--color-success);
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5"/></svg>');
+}
+
+.alert-info::before {
+  background-color: var(--color-info);
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>');
+}
+
+/* Dark skin */
+.body-dark .form-transparent .alert {
+  color: white;
+}
+
+.body-dark .form-transparent .alert.alert-info {
+  border: 1px solid var(--color-info);
+}
+
+.body-dark .form-transparent .alert.alert-success {
+  border: 1px solid var(--color-success);
+}
+
+.body-dark .form-transparent .alert.alert-danger {
+  border: 1px solid var(--color-danger);
+}
+
+.body-dark .form-transparent .alert.alert-warning {
+  border: 1px solid var(--color-warning);
+}

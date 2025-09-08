@@ -1,0 +1,51 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Tables"
+description: "Usage on how to use Tables"
+updatedAt: "August 08 2022"
+---
+
+# Tables
+
+| Item              | In Stock | Price |
+| :---------------- | :------: | ----: |
+| Python Hat        |   True   | 23.99 |
+| SQL Hat           |   True   | 23.99 |
+| Codecademy Tee    |  False   | 19.99 |
+| Codecademy Hoodie |  False   | 42.99 |
+
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th align="left">Item</th>
+      <th align="center">In Stock</th>
+      <th align="right">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">Python Hat</td>
+      <td align="center">True</td>
+      <td align="right">23.99</td>
+    </tr>
+    <tr>
+      <td align="left">SQL Hat</td>
+      <td align="center">True</td>
+      <td align="right">23.99</td>
+    </tr>
+    <tr>
+      <td align="left">Codecademy Tee</td>
+      <td align="center">False</td>
+      <td align="right">19.99</td>
+    </tr>
+    <tr>
+      <td align="left">Codecademy Hoodie</td>
+      <td align="center">False</td>
+      <td align="right">42.99</td>
+    </tr>
+  </tbody>
+</table>
+
+```

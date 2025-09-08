@@ -1,0 +1,34 @@
+@for $i from 1 through 45 {
+  $width: $i + 0.5rem;
+  .w-#{$i} {
+    width: $width;
+  }
+}
+
+@for $i from 1 through 45 {
+  $width: $i + 0.5rem;
+  .md-w-#{$i} {
+    width: calc(#{$width} / 1.5);
+
+    @media #{$breakpoint-md} {
+      width: $width;
+    }
+
+    @media #{$breakpoint-lg} {
+      width: calc(#{$width} * 1.05);
+    }
+
+    @media #{$breakpoint-xlg} {
+      width: calc(#{$width} * 1.15);
+    }
+  }
+}
+
+@for $i from 1 through 45 {
+  $width: $i + 0;
+  .mw-#{$i} {
+    @media #{$breakpoint-md} {
+      max-width: $width;
+    }
+  }
+}

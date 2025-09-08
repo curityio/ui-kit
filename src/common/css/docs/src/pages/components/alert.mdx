@@ -1,0 +1,45 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Alert"
+description: "Usage on how to use Alert"
+updatedAt: "August 08 2022"
+---
+
+import { IconGeneralClose } from '@curity-internal/ui-icons-react';
+
+# Alert
+
+<div class="alert alert-danger">
+	<p class="m0">Something went wrong etc</p>
+</div>
+<div class="alert alert-danger">
+	<p class="m0">Something went wrong with button</p>
+	<button className="button button-tiny button-danger-outline"><IconGeneralClose width={18} height={18}/></button>
+</div>
+<div class="alert alert-warning">
+	<p class="m0">Some warning</p>
+</div>
+<div class="alert alert-success">
+	<p class="m0">Some text</p>
+</div>
+<div class="alert alert-info">
+	<p class="m0">Some text that is important to show here. Learn more about this thing in our Docs <a href="https://curity.io/docs">View Docs</a></p>
+
+</div>
+
+
+```html
+<div class="alert alert-danger">
+	<p class="m0">Something went wrong etc</p>
+</div>
+<div class="alert alert-warning">
+	<p class="m0">Some warning</p>
+</div>
+<div class="alert alert-success">
+	<p class="m0">Some text</p>
+</div>
+<div class="alert alert-info">
+	<p class="m0">Some text that is important to show here. Learn more about this thing in our Docs</p>
+	<a href="https://curity.io/docs">View Docs</a>
+</div>
+	```

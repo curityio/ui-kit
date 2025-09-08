@@ -1,0 +1,216 @@
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+strong,
+b {
+  color: currentcolor;
+  font-family: var(--type-sans-bold);
+  font-weight: var(--type-weight-bold);
+}
+
+i,
+em,
+blockquote {
+  font-style: italic;
+}
+
+html {
+  background: rgb(255 255 255);
+  overflow-y: scroll;
+  text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/*
+SELECTIONS
+--------------------------------------------- */
+
+::selection {
+  background: var(--color-primary-light);
+  color: rgb(255 255 255);
+  text-shadow: none;
+}
+
+::selection:window-inactive {
+  background: var(--color-primary-light);
+  color: rgb(50 50 50);
+}
+
+img::selection {
+  background: transparent;
+}
+
+/*
+BASE TYPOGRAPHY
+--------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-heading);
+  font-family: var(--type-sans-medium);
+  font-weight: var(--type-weight);
+  text-rendering: optimizelegibility;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+  line-height: calc(var(--type-line-height) * 0.75);
+  text-wrap: balance;
+}
+
+:is(h1, h2) {
+    font-family: var(--type-sans-bold);
+}
+
+h1 {
+  font-size: calc(var(--type-base-size) * 2);
+
+  @media #{$breakpoint-lg} {
+    font-size: calc(var(--type-base-size) * 3);
+  }
+}
+
+h2 {
+    font-size: calc(var(--type-base-size) * 1.5);
+
+  @media #{$breakpoint-lg} {
+    font-size: calc(var(--type-base-size) * 1.75);
+  }
+}
+
+p {
+  color: var(--color-text);
+  font-weight: var(--type-weight);
+  line-height: 1.5;
+  line-height: calc(var(--type-line-height));
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+abbr {
+  cursor: help;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+}
+
+sub,
+sup {
+  font-size: 65%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+blockquote {
+  color: rgb(90 90 90);
+  font-style: normal;
+  margin: 2.5em 0 2.5em 1.80203em;
+  position: relative;
+}
+
+dl,
+ol,
+ul {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+ul,
+ol {
+  margin-left: 0;
+}
+
+ul {
+  color: var(--color-text);
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: lower-roman;
+}
+
+.hidden {
+  display: none;
+}
+
+// Code
+pre {
+  background-color: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  font-family: var(--type-mono);
+  font-size: 1rem;
+  overflow-wrap: break-word;
+  overflow-x: auto;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+pre code {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.detailed-error code {
+  padding: 0.15em 0.2em 0.05em;
+  word-break: break-word;
+  white-space: normal;
+  border: 1px solid rgb(0 0 0 / 5%);
+  background-color: #f7fafc;
+  border-radius: 4px;
+  margin-left: 0.25rem;
+}
+
+.detailed-error-message.expanded {
+  max-width: initial;
+  margin-left: calc(50% - 45vw);
+  width: 90vw;
+  padding: 1.5rem;
+  border-width: var(--well-border-width);
+  border-style: var(--well-border-style);
+  border-color: var(--well-border-color);
+  border-radius: calc(var(--well-border-radius) / 2);
+  box-shadow: var(--well-box-shadow);
+  @media #{$breakpoint-sm} {
+    margin-left: calc(50% - 30vw);
+    width: 60vw;
+  }
+}
+
+// Or divider
+.or {
+  align-items: center;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: minmax(20px, 1fr) auto minmax(20px, 1fr);
+  text-align: center;
+  width: 100%;
+}
+
+.or::before,
+.or::after {
+  border-top: 1px solid #ccc;
+  content: "";
+}

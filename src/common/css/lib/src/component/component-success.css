@@ -1,0 +1,78 @@
+.success-checkmark-circle {
+  animation: success-stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  fill: none;
+  stroke: var(--color-success);
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-miterlimit: 10;
+  stroke-width: 3;
+}
+
+.success-checkmark {
+  animation: success-fill 0.4s ease-in-out 0.4s forwards,
+    scale 0.3s ease-in-out 0.9s both;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 var(--color-success);
+  display: block;
+  height: 56px;
+  margin: 2rem auto;
+  stroke: var(--color-success);
+  stroke-miterlimit: 10;
+  stroke-width: 3;
+  width: 56px;
+}
+
+.success-checkmark-check {
+  animation: success-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  transform-origin: 50% 50%;
+}
+
+.modal .success-checkmark-circle {
+  animation: none;
+}
+
+.modal.active .success-checkmark-circle {
+  animation: success-stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.modal .success-checkmark {
+  animation: none;
+}
+
+.modal.active .success-checkmark {
+  animation: success-fill 0.4s ease-in-out 0.4s forwards,
+    scale 0.3s ease-in-out 0.9s both;
+}
+
+.modal .success-checkmark-check {
+  animation: none;
+}
+
+.modal.active .success-checkmark-check {
+  animation: success-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes success-stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes success-scale {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes success-fill {
+  100% {
+    box-shadow: inset 0 0 0 30px #fff;
+  }
+}

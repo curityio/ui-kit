@@ -1,0 +1,33 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+svg {
+  max-height: 100%;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+iframe {
+  border: none;
+}
+
+article iframe {
+  aspect-ratio: 16 / 9;
+  height: 100%;
+  width: 100%;
+}

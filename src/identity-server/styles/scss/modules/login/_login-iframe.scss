@@ -1,0 +1,117 @@
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+ 
+
+/*-------------------------------------------------------------------
+Login iframe
+-------------------------------------------------------------------*/
+.login-iframe .login-logo {
+	display: none;
+}
+
+.login-iframe .login-well {
+	margin-top: 0;
+	@media #{$breakpoint-md} {
+		margin-top: 0;
+	}
+}
+
+.iframe-login  iframe {
+	width: 280px;
+	min-height: 300px;
+	@media #{$breakpoint-md} {
+		width: 25em;
+		min-height: 460px;
+	}
+}
+
+// When using iframe-login. Hide header, wizard and use less white space
+.login-iframe {
+	.walkthrough {
+		display: none;
+	}
+	.login-header {
+		display: none;
+	}
+    h2 {
+        font-size: 1.25rem;
+        @media #{$breakpoint-lg} {
+            font-size: 2rem;
+        }
+    }
+}
+
+// Box with arrow
+.iframe-login {
+	position: absolute;
+	background: white;
+	border: 1px solid #ccc;
+	right: 10px;
+	top: 55px;
+	z-index: 100;
+	transform-origin: top right;
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(0.95);
+	transition: transform 0.15s, opacity 0.15s;
+	&.active {
+		visibility: visible;
+		opacity: 1;
+		transform: scale(1);
+	}
+	@media #{$breakpoint-sm} {
+		top: 55px;
+		width: auto;
+	}
+	@media #{$breakpoint-md} {
+		right: 0px;
+	}
+}
+
+// The arrow
+.iframe-login:after,
+.iframe-login:before {
+	bottom: 100%;
+	left: 90%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.iframe-login:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: white;
+	border-width: 7px;
+	margin-left: -7px;
+	@media #{$breakpoint-md} {
+		border-width: 10px;
+		margin-left: -10px;
+	}
+}
+
+.iframe-login:before {
+	border-color: rgba(204, 204, 204, 0);
+	border-bottom-color: #ccc;
+	border-width: 8px;
+	margin-left: -8px;
+	@media #{$breakpoint-md} {
+		border-width: 11px;
+		margin-left: -11px;
+	}
+}
+
+.login-iframe .login-well form {
+	padding-left: 0;
+	padding-right: 0;
+}

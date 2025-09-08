@@ -1,0 +1,38 @@
+---
+layout: '../../layouts/Page.astro'
+title: 'Code'
+description: 'Usage on how to use Code'
+updatedAt: 'August 08 2022'
+---
+
+# Code
+
+## Inline code
+
+```js
+<code>test: /\.tsx?$/,</code>
+```
+
+Output
+
+<code>test: /\.tsx?$/,</code>
+
+## Code blocks
+
+```js
+<pre>
+const path = require('path');
+module.exports = {
+  entry: './src/index.tsx',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+};
+</pre>
+```

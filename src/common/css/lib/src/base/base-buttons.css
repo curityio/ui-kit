@@ -1,0 +1,333 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+.button {
+  align-items: center;
+  background-color: var(--button-background-color);
+  border: none;
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--type-sans-bold);
+  font-size: var(--button-font-size);
+  -webkit-font-smoothing: antialiased;
+  font-weight: var(--type-weight-bold);
+  gap: var(--space-1);
+  justify-content: center;
+  line-height: normal;
+  padding-bottom: unset;
+  padding-left: calc(var(--button-padding-x) * 1.25);
+  padding-right: calc(var(--button-padding-x) * 1.25);
+  padding-top: unset;
+  transition:
+    background-color 200ms,
+    transform 200ms,
+    color 200ms,
+    box-shadow 200ms,
+    border-color 200ms;
+}
+
+.button:hover {
+  background-color: var(--button-background-color-hover);
+  text-decoration: none;
+}
+
+.button:active,
+.button:focus {
+  border-color: var(--form-field-border-color-focus);
+  box-shadow: var(--form-field-box-shadow-focus);
+  outline: none;
+}
+
+.login-well.form-transparent {
+  --button-color: #576487;
+  --button-color-hover: #4a5675;
+}
+
+.button-spot {
+  background-color: var(--color-spot);
+  border: 1px solid var(--color-spot);
+  color: white;
+}
+
+.button-primary {
+  background-color: var(--button-background-color);
+  border: 1px solid var(--button-border-color);
+  color: white;
+}
+
+.button-primary:hover,
+.button-primary:active {
+  background-color: var(--button-background-color-hover);
+  color: white;
+}
+
+.button-primary-outline {
+  background-color: transparent;
+  border: 1px solid var(--button-border-color);
+  color: var(--button-color);
+}
+
+.button-primary-outline:hover,
+.button-primary-outline:active {
+  background-color: var(--button-color);
+  color: white;
+}
+
+.button-white-outline {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+}
+
+.button-white-outline:hover,
+.button-white-outline:active {
+  background-color: white;
+  color: var(--button-color);
+}
+
+.body-dark .form-transparent .button-primary-outline {
+  border: 1px solid var(--color-light);
+  color: var(--color-light);
+}
+
+.button-warning {
+  background-color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+}
+
+.button-warning:hover,
+.button-warning:active {
+  background: var(--color-warning);
+  color: white;
+}
+
+.button-danger {
+  background-color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  color: white;
+}
+
+.button-danger:hover,
+.button-danger:active {
+  background: var(--color-danger);
+  color: white;
+}
+
+.button-danger-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+}
+
+.button-danger-outline:hover,
+.button-danger-outline:active {
+  background: var(--color-danger);
+  color: white;
+}
+
+.button-success {
+  background-color: var(--color-success);
+  border: 1px solid var(--color-success);
+  color: white;
+}
+
+.button-success:hover,
+.button-success:active {
+  background: var(--color-success);
+  color: white;
+}
+
+.button-info {
+  background-color: var(--color-info);
+  border: 1px solid var(--color-info);
+  color: white;
+}
+
+.button-info:hover,
+.button-info:active {
+  background: var(--color-info);
+  color: white;
+}
+
+.button-tiny {
+  font-size: 0.85em;
+  height: 28px;
+  padding-left: calc(var(--button-padding-x) * 0.65);
+  padding-right: calc(var(--button-padding-x) * 0.65);
+}
+
+@media (width >=52em) {
+  .button-tiny {
+    font-size: 0.75rem;
+    height: 28px;
+  }
+}
+
+.button-small {
+  font-size: 0.95rem;
+  height: 34px;
+  padding-left: calc(var(--button-padding-x) * 0.95);
+  padding-right: calc(var(--button-padding-x) * 0.95);
+}
+
+@media (width >=52em) {
+  .button-small {
+    font-size: 0.85rem;
+    height: 34px;
+  }
+}
+
+.button-medium {
+  font-size: 1rem;
+  height: 44px;
+  padding-left: calc(var(--button-padding-x) * 1.15);
+  padding-right: calc(var(--button-padding-x) * 1.15);
+}
+
+@media (width >=52em) {
+  .button-medium {
+    font-size: 1.2em;
+  }
+}
+
+.button-large {
+  font-size: 1.25em;
+  height: 52px;
+  padding-left: calc(var(--button-padding-x) * 1.75);
+  padding-right: calc(var(--button-padding-x) * 1.75);
+}
+
+@media (width >=52em) {
+  .button-large {
+    font-size: 1.5em;
+  }
+}
+
+.button-white {
+  background-color: white;
+  color: var(--color-primary);
+}
+
+.button-white:hover {
+  background-color: whitesmoke;
+  color: var(--color-primary);
+}
+
+.button-transparent {
+  background-color: transparent;
+  box-shadow: none;
+  color: initial;
+}
+
+.button-transparent:focus,
+.button-transparent:active {
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--color-primary);
+}
+
+a.button-transparent {
+  color: initial;
+}
+
+a.button-transparent:hover,
+.button-transparent:hover {
+  background-color: var(--color-grey-subtle);
+  box-shadow: none;
+  color: var(--color-primary);
+}
+
+.button-transparent::before {
+  display: none;
+}
+
+.button-transparent:visited {
+  background-color: transparent;
+}
+
+.button-transparent {
+  background-color: transparent;
+}
+
+.button-fullwidth {
+  text-align: center;
+  width: 100%;
+}
+
+.button:disabled,
+.button[disabled],
+.button[disabled='disabled'],
+button[disabled] {
+  filter: grayscale(100%);
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.button-link {
+  background-color: transparent;
+  color: var(--color-primary);
+}
+
+.button-link:focus,
+.button-link:active {
+  background-color: transparent;
+  color: var(--color-primary);
+}
+
+.button-link:hover {
+  background-color: #f6f6f6;
+  color: var(--color-primary);
+}
+
+body.body-dark .form-transparent .button-link {
+  background-color: white;
+}
+
+.button-loading {
+  position: relative;
+}
+
+.button-loading span {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  transition: opacity 100ms ease;
+}
+
+.button-loading-active span {
+  opacity: 0;
+}
+
+.button-loading-active::after {
+  animation: loading 300ms infinite linear;
+  border: 0.15rem solid;
+  border-radius: 100%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: '';
+  display: block;
+  height: 16px;
+  left: calc(50% - 8px);
+  position: absolute;
+  top: calc(50% - 8px);
+  width: 16px;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

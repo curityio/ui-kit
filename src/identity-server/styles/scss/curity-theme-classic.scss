@@ -1,0 +1,210 @@
+/*
+ * Copyright (C) 2021 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+// Theme variables
+// 1. Page
+// The main page that contains the login well.
+:root {
+  --page-background-image-url: none;
+  --page-background-image-gradient: none;
+  --page-background-position: center center;
+  --page-background-repeat: no-repeat;
+  --page-background-size: cover;
+  --page-background-color: white;
+  --page-background-color-dark: #262c3d;
+  --page-powered-by-display: flex;
+}
+
+// 2 Well
+// The main area with the forms
+:root {
+  --well-border-color: transparent;
+  --well-background-color: white;
+  --well-border-radius: 6px;
+  --well-border-style: solid;
+  --well-border-width: 1px;
+  --well-box-shadow: rgb(0 0 0 / 5%) 0 6px 24px 0, rgb(0 0 0 / 8%) 0 0 0 1px;
+}
+
+// 3 Login symbol
+:root {
+  --login-symbol-display: flex;
+  --login-symbol-size: 110px;
+  --login-symbol-margin-top: 2rem;
+  --login-symbol-margin-bottom: 0;
+  --login-symbol-border-radius: 50%;
+}
+
+// 4 Login logo
+:root {
+  --login-logo-display: block;
+  --login-logo-max-width: 200px;
+  --login-logo-max-height: 40px;
+}
+
+// 5. Colors
+:root {
+  --color-text: #737373;
+  --color-heading: #111;
+  --color-light: white;
+  --color-primary: #626c87;
+  --color-primary-dark: #262c3d;
+  --color-primary-medium: #3a435c;
+  --color-primary-light: #7e89a8;
+  --color-success: #57c75c;
+  --color-info: #62818f;
+  --color-danger: #ca2e2b;
+  --color-warning: #e0c01c;
+  --color-add: #0092ff;
+  --color-spot: #d859a1;
+  --color-link: #626c87;
+  --color-link-hover: #262c3d;
+}
+
+// 6. Forms
+:root {
+  --form-field-disabled-background-color: rgb(0 0 0 / 12.5%);
+  --form-field-disabled-opacity: 0.5;
+  --form-field-readonly-background-color: rgb(0 0 0 / 12.5%);
+  --form-label-color: #666;
+  --form-label-line-height: 2;
+  --form-label-font-size: calc(var(--type-base-size) * 0.85);
+  --form-field-placeholder-color: rgb(141 141 141);
+  --form-field-background-color: white;
+  --form-field-background-color-dark: var(--color-primary-dark);
+  --form-field-border-color: #cfd9e0;
+  --form-field-border-color-hover: rgb(152 152 153);
+  --form-field-box-shadow: rgb(225 228 232 / 20%) 0 2px 0 inset;
+  --form-field-box-shadow-focus: rgb(152 203 255) 0 0 0 3px;
+  --form-field-border-color-focus: rgb(0 89 200);
+  --form-field-height: 2.55rem;
+  --form-field-padding: 0.6rem;
+  --form-field-padding-left: 0.6rem;
+  --form-field-icon-display: none;
+  --form-field-icon-color: #ccc;
+  --form-field-icon-size: 1.5rem;
+  --form-field-border-radius: 6px;
+  --form-field-border-style: solid;
+  --form-field-border-width: 1px;
+  --form-field-border-color: #cfd9e0;
+  --form-field-border-color-dark: var(--color-primary-dark);
+  --form-caret-color: var(--color-primary);
+  --form-field-font-size: var(--type-base-size);
+}
+
+// 7. type
+// The font stacks can be native system fonts, or web fonts. If web fonts is used the fonts need to be setup in the css using @font-face
+:root {
+  --type-sans:
+    "Roboto-Regular",
+    system,
+    -apple-system,
+    "Roboto",
+    "Segoe UI",
+    "Lucida Grande",
+    sans-serif;
+  --type-weight: 500;
+  --type-sans-bold:
+    "Roboto-Medium",
+    system,
+    -apple-system,
+    "Roboto",
+    "Segoe UI",
+    "Lucida Grande",
+    sans-serif;
+  --type-weight-bold: normal;
+  --type-mono: "SF Mono", consolas, monaco, "Courier New", courier, monospace;
+  --type-line-height: 1.5;
+  --type-base-size: 1rem;
+}
+
+// 8. Spacing
+// Space between elements and components. Can be relative units like rem, ems but also pixels (px)
+:root {
+  --space-1: 0.5rem;
+  --space-2: calc(var(--space-1) * 2);
+  --space-3: calc(var(--space-1) * 4);
+  --space-4: calc(var(--space-1) * 8);
+}
+
+// 9. Progress bar
+:root {
+  --progress-bar-height: 6px;
+  --progress-bar-border-radius: 6px;
+}
+
+// 10. Buttons
+:root {
+  --button-padding-y: 0.6rem;
+  --button-padding-x: 1rem;
+  --button-border-radius: 6px;
+  --button-font-size: var(--type-base-size);
+  --button-background-color: var(--color-primary);
+  --button-color: var(--color-primary);
+  --button-color-hover: var(--color-primary);
+}
+
+// 11 Authenticator colors
+:root {
+  --authenticator-google-color: #4285f4;
+  --authenticator-pingfederate-color: #002050;
+  --authenticator-email-color: grey;
+  --authenticator-oidc-color: #f78c40;
+  --authenticator-group-color: green;
+  --authenticator-encap-color: #fbb034;
+  --authenticator-windows-color: #0078d7;
+  --authenticator-siths-color: #008272;
+  --authenticator-facebook-color: #3b5998;
+  --authenticator-x-color: #0f1419;
+  --authenticator-linkedin-color: #0077b5;
+  --authenticator-sms-color: #70b29c;
+  --authenticator-html-form-color: #626c87;
+  --authenticator-saml-color: #c32527;
+  --authenticator-saml2-color: #c32527;
+  --authenticator-totp-color: #4682b4;
+  --authenticator-github-color: #333;
+  --authenticator-bankid-color: #235971;
+  --authenticator-dropbox-color: #007ee5;
+  --authenticator-aws-color: #f90;
+  --authenticator-salesforce-color: #1798c1;
+  --authenticator-windowslive-color: #d83b01;
+  --authenticator-slack-color: #6ecadc;
+  --authenticator-box-color: #0061d5;
+  --authenticator-bitbucket-color: #205081;
+  --authenticator-instagram-color: #c13584;
+  --authenticator-signicat-color: #212831;
+  --authenticator-stackexchange-color: #1e5397;
+  --authenticator-criipto-color: #edb0ab;
+  --authenticator-freja-color: #48429e;
+  --authenticator-cgi-color: #c03;
+  --authenticator-duo-color: #6dc04f;
+  --authenticator-sign-in-with-apple-color: #000;
+  --authenticator-social-single-color: var(--color-primary);
+  --authenticator-username-color: var(--color-primary);
+  --authenticator-netidaccess-os-color: #000;
+  --authenticator-passkeys-color: #626c87;
+}
+
+// 12 Alerts
+:root {
+  --alert-border-radius: 8px;
+  --alert-border-style: solid;
+  --alert-border-width: 1px;
+  --alert-border-color: #cfd9e0;
+}
+
+// 13 Done checkmark
+:root {
+  --done-checkmark-container-size: 100px;
+  --done-checkmark-size: 80px;
+  --done-checkmark-line-color: var(--color-success);
+  --done-checkmark-circle-color: var(--color-success);
+}

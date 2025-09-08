@@ -5,12 +5,16 @@
   "author": "Curity AB",
   "private": true,
   "workspaces": [
-    "src/assets",
-    "src/self-service-portal"
+    "src/common/assets",
+    "src/common/components",
+    "src/common/css",
+    "src/common/icons",
+    "src/self-service-portal/app",
+    "src/login-web-app"
   ],
   "scripts": {
-    "start:ussp": "npm run start --workspace=src/self-service-portal",
-    "start:login": "npm run start --workspace=src/login-web-app",
+    "start:ussp": "npm run start --workspace=src/self-service-portal/app",
+    "start:login": "npm run start --workspace=src/login-web-app/app",
     "start:template": "npm run start --workspace=src/template-system",
     "start:styles": "npm run start --workspace=src/styles",
     "build:ussp": "npm run build --workspace=src/self-service-portal",

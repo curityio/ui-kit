@@ -1,0 +1,166 @@
+.spinner-container {
+  --spinnerSize: 80px;
+  --spinnerCircleSize: 80px;
+  --spinnerLogoSize: 40px;
+  align-items: flex-start;
+
+  display: flex;
+
+  justify-content: center;
+
+
+}
+
+.spinner {
+  align-items: center;
+  display: inline-flex;
+  height: var(--spinnerSize);
+  justify-content: center;
+  position: relative;
+  width: var(--spinnerSize);
+}
+
+
+.spinner-circle {
+  animation: spin 0.5s linear infinite;
+  border-color: color-mix(in srgb, var(--color-primary) 30%, white) transparent transparent;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform-origin: 50% 50%;
+}
+
+.spinner-medium .spinner-circle {
+  border-width: 2px;
+  height: 72px;
+  width: 72px;
+}
+
+.spinner-logo {
+  fill: var(--color-primary);
+  height: var(--spinnerLogoSize);
+  left: -5%;
+  position: relative;
+  width: var(--spinnerLogoSize);
+}
+
+.spinner-top-line {
+  animation: top-animation 1s cubic-bezier(0.64, 0.57, 0.67, 1.53) 0s infinite;
+  opacity: 0;
+  transition:
+    transform 0.5s ease 0s,
+    opacity 0.5s ease 0.5s;
+}
+
+.spinner-middle-line {
+  animation: middle-animation 1s cubic-bezier(0.64, 0.57, 0.67, 1.53) 0.45s infinite;
+  opacity: 0;
+  transition:
+    transform 0.5s ease 0s,
+    opacity 0.5s ease 0.5s;
+}
+
+.spinner-tiny-line {
+  animation: tiny-animation 0.5s cubic-bezier(0.64, 0.57, 0.67, 1.53) 0.5s infinite;
+  opacity: 0;
+  transition:
+    transform 0.5s ease 0s,
+    opacity 0.5s ease 0.5s;
+}
+
+.spinner-bottom-line {
+  animation: bottom-animation 1s cubic-bezier(0.64, 0.57, 0.67, 1.53) 0.6s infinite;
+  opacity: 0;
+  transform-origin: 0% 50%;
+  transition:
+    transform 0.5s ease 0s,
+    opacity 0.5s ease 0.5s;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bottom-animation {
+  0% {
+    transform: translateX(9px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+}
+
+@keyframes tiny-animation {
+  0% {
+    transform: translateX(2px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+
+  70% {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+}
+
+@keyframes top-animation {
+  0% {
+    transform: translateX(16px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(8px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+}
+
+@keyframes middle-animation {
+  0% {
+    transform: translateX(16px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(8px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+}
+
+.spinner-container-transparent {
+  background-color: transparent;
+}
+
+.spinner-container-transparent .spinner-circle {
+  border-color: var(--color-primary-light) transparent transparent;
+}
+
+.spinner-container-transparent .spinner-logo {
+  fill: var(--color-primary-light);
+}

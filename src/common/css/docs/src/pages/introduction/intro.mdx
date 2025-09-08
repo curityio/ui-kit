@@ -1,0 +1,53 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Intro"
+description: "Intro"
+updatedAt: "August 08 2022"
+order: 1
+---
+
+# Intro
+
+## What is the difference between Flexbox and CSS Grid layout models?
+
+Flexbox is a one-dimensional layout model primarily used for arranging items along a single axis, enabling flexible and responsive designs. CSS Grid, on the other hand, is a two-dimensional layout system suitable for creating complex, precise layouts with rows and columns, ideal for overall page structure. While Flexbox excels in component-level arrangements, Grid is best suited for defining the broader page layout.
+
+## Mobile friendly by default
+
+
+The library is meant to use a mobile first responsive approach using `min-width` media queries.
+
+## Media queries
+
++ `sm`: 40em (640) and larger. For mobile phones
++ `md`: 52em (833px) and larger. For ~tablets
++ `lg`: 64em (1024px) larger. For desktop or larger
++ `xlg`: 74em (1184) and larger. For larger desktop sizes
+
+The sizing prefixes are for example used in the layout classes, so you can make a responsive layout just using HTML.
+
+> Note: Curity CSS is using [rems](https://www.sitepoint.com/understanding-and-using-rem-units-in-css/), root relative rems. So in a 16px base font size, 40ems is 640px
+
+
+### What is rem units?
+
+In CSS rem stands for “root em”, a unit of measurement that represents the font size of the root element. This means that 1rem equals the font size of the html element, which for most browsers has a default value of 16px. Using rem can help ensure consistency of font size and spacing throughout your UI.
+
+According to the W3C spec the definition for one rem unit is:
+
+Equal to the computed value of font-size on the root element. When specified on the font-size property of the root element, the rem units refer to the property’s initial value.
+
+
+## Container
+
+There is a default container class you can use for page layout. It has left and right padding
+
+
+```html
+<div class="container"></div>
+```
+
+<div class="container border-light p4">
+This is a container
+<div class="border-light p3">This is a child</div>
+</div>

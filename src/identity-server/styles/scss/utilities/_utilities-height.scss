@@ -1,0 +1,32 @@
+@for $i from 1 through 40 {
+  $height: $i + 0.5rem;
+  .h-#{$i} {
+    height: $height;
+  }
+}
+
+@for $i from 1 through 40 {
+  $height: $i + 0.5rem;
+  .md-h-#{$i} {
+    height: calc(#{$height} / 1.5);
+    @media #{$breakpoint-md} {
+      height: $height;
+    }
+    @media #{$breakpoint-lg} {
+      height: calc(#{$height} * 1.05);
+    }
+    @media #{$breakpoint-xlg} {
+      height: calc(#{$height} * 1.15);
+    }
+  }
+}
+
+@for $i from 1 through 40 {
+  $height: $i + 0.5rem;
+  .mh-#{$i} {
+    max-height: 250px;
+    @media #{$breakpoint-md} {
+      max-height: $height;
+    }
+  }
+}

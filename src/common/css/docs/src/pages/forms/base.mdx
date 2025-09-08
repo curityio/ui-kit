@@ -1,0 +1,137 @@
+---
+layout: '../../layouts/Page.astro'
+title: 'Base'
+description: 'Usage on how to use Formfield'
+updatedAt: 'August 08 2022'
+---
+
+import { IconAuthenticatorGoogle } from '@curity-internal/ui-icons-react';
+
+# Base
+
+## Form example
+
+The `.form-field` class can wrap form elements to provide a consistent look and feel. The `.label` class is used to style the label element, and the `.field` class is used to style the input element. The `.w100` class is used to make the input element take up the full width of its parent container.
+
+<form className="mx-auto mw-40 border-light p4 br-8 mt4 mb4">
+  <h2>Sign In</h2>
+
+<div className="form-field">
+  <label for="username">Username</label>
+  <input className="field w100" type="text" name="username" required autoFocus />
+</div>
+<div className="form-field">
+  <label for="password">Password </label>
+  <input className="field w100" type="password" name="password" required />
+</div>
+
+  <div className="form-field py2">
+  <label for="pet-select">Choose a pet:</label>
+
+    <select name="pets" id="pet-select">
+    <option value="">Select pet</option>
+    <option value="dog">Dog</option>
+    <option value="cat">Cat</option>
+    <option value="hamster">Hamster</option>
+    <option value="parrot">Parrot</option>
+    <option value="spider">Spider</option>
+    <option value="goldfish">Goldfish</option>
+    </select>
+
+    </div>
+
+<div classname="form-field py2">
+  <input className="button button-primary button-medium w100" type="submit" value="Login" />
+</div>
+
+<div className="form-field py2">
+  <div className="flex flex-gap-2 flex-center">
+    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+    <label for="vehicle1">
+      I agree to Curity's
+      <a href="#">&nbsp;Privacy Policy </a>
+    </label>
+  </div>
+</div>
+<div className="form-field py2">
+  <span className="or">OR</span>
+</div>
+
+<div className="form-field">
+  <div class="form-field">
+    <button
+      href="#"
+      id="#"
+      class="button button-primary button-fullwidth button-social button-google"
+    >
+      <div className="icon">
+        <IconAuthenticatorGoogle color="white" />
+      </div>
+      Sign in with Google
+    </button>
+  </div>
+</div>
+
+</form>
+
+```html
+<form className="mx-auto mw-40 border-light p4 br-8 mt4 mb4">
+  <h2>Create an account</h2>
+  <div className="form-field">
+    <label for="firstname">First name</label>
+    <input className="field w100" type="text" name="firstname" required />
+  </div>
+  <div className="form-field">
+    <label for="lastname">Last name</label>
+    <input className="field w100" type="text" name="lastname" required />
+  </div>
+  <div className="form-field">
+    <label for="email">Email</label>
+    <input className="field w100" type="email" name="email" required />
+  </div>
+  <div className="form-field">
+    <label for="password">Password </label>
+    <input className="field w100" type="password" name="password" required />
+  </div>
+
+  <div className="form-field py2">
+    <label for="pet-select">Choose a pet:</label>
+
+    <select name="pets" id="pet-select">
+      <option value="">Select pet</option>
+      <option value="dog">Dog</option>
+      <option value="cat">Cat</option>
+      <option value="hamster">Hamster</option>
+      <option value="parrot">Parrot</option>
+      <option value="spider">Spider</option>
+      <option value="goldfish">Goldfish</option>
+    </select>
+  </div>
+  <div className="form-field py2">
+    <span className="or">OR</span>
+  </div>
+
+  <div className="form-field">
+    <div class="form-field">
+      <button
+        href="#"
+        id="#"
+        class="button button-primary button-fullwidth button-social button-google"
+      >
+        <div className="icon">
+          <IconAuthenticatorGoogle color="white" />
+        </div>
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+  <div className="form-field py2">
+    <div className="flex flex-gap-2 flex-center">
+      <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+      <label for="vehicle1">I agree to Curity's <a href="#">&nbsp;Privacy Policy </a></label>
+    </div>
+  </div>
+  <input className="button button-primary button-medium w100" type="submit" value="Login!" />
+</form>
+```

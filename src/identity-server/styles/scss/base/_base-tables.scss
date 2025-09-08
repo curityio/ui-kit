@@ -1,0 +1,154 @@
+/*
+ * Copyright (C) 2020 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 16px;
+  margin-top: 0;
+  overflow: auto;
+  width: 100%;
+}
+
+table tr {
+  border-top: 1px solid #c6cbd1;
+}
+
+table th,
+table td {
+  border: 1px solid #dfe2e5;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+
+table th {
+  font-weight: normal;
+}
+
+#client-table {
+  margin-top: 1rem;
+}
+
+#client-table table {
+  border-collapse: collapse;
+}
+
+#client-table th,
+#client-table td {
+  border: none;
+}
+
+#client-table td img {
+  max-height: 50px;
+}
+
+#client-table tr:first-child {
+  border-top: none;
+}
+
+#client-table tr:not(:last-child) {
+  border-bottom: 1px solid #c6cbd1;
+  border-top: none;
+}
+
+#client-table td {
+  vertical-align: middle;
+}
+
+#client-table td:first-child {
+  width: 30%;
+}
+
+#client-table td:nth-child(2) {
+  width: 50%;
+}
+
+#client-table td:last-child {
+  width: 20%;
+}
+
+.table-spinner {
+  color: #ccc;
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  vertical-align: middle;
+  width: 24px;
+}
+
+.table-spinner span {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  transition: opacity 100ms ease;
+  white-space: nowrap;
+}
+
+.table-spinner-active span {
+  opacity: 0;
+}
+
+#client-table .check_mark {
+  display: inline-block;
+  max-height: 24px;
+  position: relative;
+  top: -6px;
+  transform: scale(0.5);
+  vertical-align: middle;
+}
+
+#client-table .check_mark .check-mark-icon {
+  top: -16px;
+  transform: scale(0.75);
+}
+
+.table-spinner-done {
+  display: none;
+}
+
+.table-spinner-done span {
+  opacity: 0;
+}
+
+.table-spinner-check {
+  height: 90px;
+  left: 28px;
+  position: absolute;
+  top: 8px;
+  transform: rotate(-45deg);
+  width: 5px;
+  z-index: 1;
+}
+
+.table-spinner-active::after {
+  animation: loading 300ms infinite linear;
+  border: 0.15rem solid;
+  border-radius: 100%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 16px;
+  left: calc(50% - 8px);
+  position: absolute;
+  top: calc(50% - 8px);
+  width: 16px;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

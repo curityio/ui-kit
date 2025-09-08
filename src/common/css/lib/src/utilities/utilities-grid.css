@@ -1,0 +1,176 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+.grid-container {
+  display: grid;
+  grid-gap: 1rem;
+}
+
+[grid-auto-flow="column"] {
+  grid-auto-flow: column;
+}
+
+@media (min-width: 52em) {
+  [md-grid-auto-flow="column"] {
+    grid-auto-flow: column;
+  }
+}
+
+[grid-auto-columns="max-content"] {
+  grid-auto-columns: max-content;
+}
+
+[grid-justify="center"] {
+  justify-content: center;
+}
+
+[grid-justify="start"] {
+  justify-content: start;
+}
+
+[align-center="center"] {
+  align-items: center;
+}
+
+[justify-items="center"] {
+  justify-items: center;
+}
+
+.span-all-columns {
+  grid-column: 1/-1;
+}
+
+[grid-auto-rows] {
+  grid-auto-rows: 1fr;
+}
+
+[gap="0"] {
+  grid-gap: 0.5rem;
+}
+
+@media (min-width: 40em) {
+  [gap="0"] {
+    grid-gap: 0rem;
+  }
+}
+
+[gap="1"] {
+  grid-gap: 0.5rem;
+}
+
+@media (min-width: 40em) {
+  [gap="1"] {
+    grid-gap: 1rem;
+  }
+}
+
+[gap="2"] {
+  grid-gap: 1rem;
+}
+
+@media (min-width: 40em) {
+  [gap="2"] {
+    grid-gap: 2rem;
+  }
+}
+
+[gap="3"] {
+  grid-gap: 1rem;
+}
+
+@media (min-width: 40em) {
+  [gap="3"] {
+    grid-gap: 3rem;
+  }
+}
+
+[gap="4"] {
+  grid-gap: 1rem;
+}
+
+@media (min-width: 40em) {
+  [gap="4"] {
+    grid-gap: 4rem;
+  }
+}
+
+[columns="1"] {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+[columns="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 40em) {
+  [sm-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 40em) {
+  [sm-columns="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 52em) {
+  [md-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 52em) {
+  [md-columns="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 52em) {
+  [md-columns="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64em) {
+  [lg-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 74em) {
+  [xlg-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64em) {
+  [lg-columns="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64em) {
+  [lg-columns="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64em) {
+  [lg-columns="5"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64em) {
+  [lg-columns="6"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,41 @@
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+.recipient span {
+  align-items: center;
+  display: inline-block;
+  display: flex;
+  font-family: var(--type-mono);
+  font-size: 1.15rem;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 0.25rem 0.55rem;
+
+  body.body-dark .form-transparent & {
+    background-color: transparent;
+    border: 1px solid var(--color-primary);
+  }
+}
+
+.recipient span::before,
+:dir(rtl) .recipient span::after {
+  font-family: Ionicons;
+  font-size: 1.75rem;
+  margin-inline-end: 1rem;
+}
+
+.recipient-phone span::before {
+  content: "\f1fa";
+}
+
+.recipient-email span::before {
+  content: "\f422";
+}

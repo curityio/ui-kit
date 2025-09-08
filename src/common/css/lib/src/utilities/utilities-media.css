@@ -1,0 +1,11 @@
+.ofc {
+  object-fit: cover;
+}
+
+.oft {
+  object-fit: contain;
+}
+
+.off {
+  object-fit: fill;
+}

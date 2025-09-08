@@ -1,0 +1,203 @@
+// Done symbol
+.login-symbol-circle-done {
+  width: calc(var(--done-checkmark-symbol-size) * 0.75);
+  height: calc(var(--done-checkmark-symbol-size) * 0.75);
+
+  @media #{$breakpoint-sm} {
+    width: var(--done-checkmark-symbol-size);
+    height: var(--done-checkmark-symbol-size);
+  }
+}
+
+.check-mark-icon {
+  width: var(--done-checkmark-size);
+  height: var(--done-checkmark-size);
+  transform: scale(0.7);
+
+  @media #{$breakpoint-md} {
+    transform: scale(1);
+  }
+
+  transform: scale(0.75);
+  border-width: 4px;
+  border-style: solid;
+  border-color: var(--done-checkmark-circle-color);
+  border-radius: calc(var(--done-checkmark-size) / 2);
+  border-radius: 50%;
+  padding: 0;
+  position: relative;
+  box-sizing: content-box;
+}
+
+.check-mark-icon::before,
+.check-mark-icon::after {
+  content: "";
+  border-radius: 40px;
+  border-radius: 50%;
+  position: absolute;
+  width: 60px;
+  height: 120px;
+  transform: rotate(45deg);
+}
+
+.check-mark-icon::before {
+  border-radius: 120px 0 0 120px;
+  top: -7px;
+  left: -33px;
+  transform: rotate(-45deg);
+  transform-origin: 60px 60px;
+}
+
+.check-mark-icon::after {
+  border-radius: 0 120px 120px 0;
+  top: -11px;
+  left: 30px;
+  transform: rotate(-45deg);
+  transform-origin: 0 60px;
+}
+
+.check-mark-icon .check-mark-icon-placeholder {
+  width: 80px;
+  height: 80px;
+  border: 4px solid var(--done-checkmark-circle-color);
+  border-radius: 40px;
+  border-radius: 50%;
+  box-sizing: content-box;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  z-index: 2;
+}
+
+.check-mark-icon .check-mark-icon-fix {
+  width: 5px;
+  height: 90px;
+  position: absolute;
+  left: 28px;
+  top: 8px;
+  z-index: 1;
+  transform: rotate(-45deg);
+}
+
+.check-mark-icon.animate::after {
+  animation: rotatePlaceholder 4.25s ease-in;
+}
+
+.check-mark-icon {
+  border-color: transparent\9;
+}
+
+.check-mark-icon .check-mark-icon-line.check-mark-icon-tip {
+  transform: rotate(45deg) \9;
+}
+
+.check-mark-icon .check-mark-icon-line.check-mark-icon-long {
+  transform: rotate(-45deg) \9;
+}
+
+.successtip {
+  animation: successtip 0.75s;
+}
+
+.successlong {
+  animation: successlong 0.75s;
+}
+
+@keyframes successtip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 45px;
+  }
+}
+
+@keyframes successlong {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+
+  84% {
+    width: 55px;
+    right: 0;
+    top: 35px;
+  }
+
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+
+.check-mark-icon .check-mark-icon-line {
+  height: 5px;
+  background-color: var(--done-checkmark-line-color);
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 2;
+}
+
+.check-mark-icon .check-mark-icon-line.check-mark-icon-tip {
+  width: 25px;
+  left: 14px;
+  top: 46px;
+  transform: rotate(45deg);
+}
+
+.check-mark-icon .check-mark-icon-line.check-mark-icon-long {
+  width: 47px;
+  right: 8px;
+  top: 38px;
+  transform: rotate(-45deg);
+}
+
+@keyframes rotatePlaceholder {
+  0% {
+    transform: rotate(-45deg);
+  }
+
+  5% {
+    transform: rotate(-45deg);
+  }
+
+  12% {
+    transform: rotate(-405deg);
+  }
+
+  100% {
+    transform: rotate(-405deg);
+  }
+}
