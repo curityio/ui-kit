@@ -8,16 +8,18 @@
   },
   "scripts": {
     "java": "node previewer",
-    "dev": "vite run dev",
     "prestart": "npm run build",
     "clean": "rm -rf build",
     "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
-    "build": "vite build",
-    "start": "concurrently --kill-others \" npm run java\" \" npm run dev:vite\""
+    "start": "concurrently --kill-others \" npm run java\" \" npm run dev:vite\"",
+    "dev:lib": "vite --config vite.lib.config.ts",
+    "dev:styles": "vite --config vite.styles.config.ts",
+    "dev": "concurrently \"npm:dev:lib\" \"npm:dev:styles\"",
+    "build": "vite build -c vite.lib.config.ts && vite build -c vite.styles.config.ts"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "jquery": "^3.5.1",
+    "jquery": "3.5.1",
     "vite": "^7.1.5",
     "vite-plugin-static-copy": "^3.1.2"
   }
