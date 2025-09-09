@@ -38,7 +38,7 @@
     "react-qr-code": "^2.0.15",
     "react-router": "^7.0.2",
     "react-verification-input": "^4.2.2",
-    "@curity-ui-kit/curity-css": "1.0.0"
+    "@curity-ui-kit/css": "1.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
