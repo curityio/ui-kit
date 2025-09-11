@@ -1,0 +1,165 @@
+/*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+.login-chooser {
+	display: flex;
+	justify-content: space-between;
+	align-content: center;
+	flex-direction: column;
+	margin-top: 1rem;
+}
+
+.login-chooser-item,
+a.login-chooser-item {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	border-radius: var(--form-field-border-radius);
+	transition: box-shadow 200ms, border-color 200ms, background-color 200ms;
+}
+
+.login-chooser-item.login-chooser-item-selected,
+a.login-chooser-item.login-chooser-item-selected {
+	pointer-events: none;
+}
+
+body.body-dark .form-transparent .login-chooser-item,
+body.body-dark .form-transparent a.login-chooser-item {
+	box-shadow: none;
+}
+
+.login-chooser-item:focus,
+a.login-chooser-item:focus {
+	box-shadow: var(--form-field-box-shadow-focus);
+}
+
+.login-chooser-item:active,
+.login-chooser-item:focus,
+.login-chooser-item:hover,
+a.login-chooser-item:active,
+a.login-chooser-item:focus,
+a.login-chooser-item:hover {
+	color: white;
+	text-decoration: none;
+	background-color: var(--color-primary-dark);
+}
+
+.login-chooser-item:active .icon,
+.login-chooser-item:focus .icon,
+.login-chooser-item:hover .icon,
+a.login-chooser-item:active .icon,
+a.login-chooser-item:focus .icon,
+a.login-chooser-item:hover .icon {
+	background-color: var(--color-primary);
+	color: white;
+}
+
+.login-chooser-item:active p,
+.login-chooser-item:focus p,
+.login-chooser-item:hover p,
+a.login-chooser-item:active p,
+a.login-chooser-item:focus p,
+a.login-chooser-item:hover p {
+	color: white;
+}
+
+.login-chooser-item:focus,
+a.login-chooser-item:focus {
+	outline: none;
+}
+.login-chooser-item .icon {
+	width: 100px;
+	height: 80px;
+	font-size: 3rem;
+	color: var(--color-primary);
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1 0 30%;
+	border-top-left-radius: var(--form-field-border-radius);
+	border-bottom-left-radius: var(--form-field-border-radius);
+}
+
+@media (min-width: 768px) {
+	.login-chooser-item .icon {
+		font-size: 4rem;
+		width: 100px;
+		height: 90px;
+	}
+}
+
+.login-chooser-item p {
+	flex: 1 0 70%;
+	margin: 0;
+	text-align: left;
+	font-size: 0.9rem;
+	padding: 1rem;
+}
+
+@media (min-width: 768px) {
+	.login-chooser-item p {
+		font-size: 1.15rem;
+	}
+}
+
+/* WebAuthn */
+
+.login-chooser-webauthn figure {
+	width: 90px;
+	height: 90px;
+	margin: 0;
+	padding: 0;
+	border-radius: 50%;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	align-self: center;
+}
+
+.login-chooser-webauthn img {
+	display: block;
+	width: 60px;
+	height: 60px;
+	object-fit: contain;
+}
+
+.login-chooser-webauthn button[type="submit"].button {
+  margin-top: 0;
+}
+
+.login-chooser-webauthn button.login-chooser-item:focus,
+.login-chooser-webauthn button.login-chooser-item:active,
+.login-chooser-webauthn button.login-chooser-item:hover,
+.login-chooser-webauthn a.login-chooser-item:focus,
+.login-chooser-webauthn a.login-chooser-item:active,
+.login-chooser-webauthn a.login-chooser-item:hover,
+.login-chooser-webauthn .login-chooser-item:focus,
+.login-chooser-webauthn .login-chooser-item:active,
+.login-chooser-webauthn .login-chooser-item:hover {
+	color: white;
+	text-decoration: none;
+	background-color: var(--color-primary-dark);
+}
+
+.login-chooser-webauthn button.login-chooser-item:focus strong,
+.login-chooser-webauthn button.login-chooser-item:active strong,
+.login-chooser-webauthn button.login-chooser-item:hover strong,
+.login-chooser-webauthn a.login-chooser-item:focus strong,
+.login-chooser-webauthn a.login-chooser-item:active strong,
+.login-chooser-webauthn a.login-chooser-item:hover strong,
+.login-chooser-webauthn .login-chooser-item:focus strong,
+.login-chooser-webauthn .login-chooser-item:active strong,
+.login-chooser-webauthn .login-chooser-item:hover strong {
+	color: white;
+}
