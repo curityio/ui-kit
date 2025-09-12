@@ -15,6 +15,7 @@
     "dev:lib": "vite --config vite.lib.config.ts",
     "dev:styles": "vite --config vite.styles.config.ts",
     "dev": "concurrently \"npm:dev:lib\" \"npm:dev:styles\"",
+    "prebuild": "npm run build --workspace @curity-ui-kit/css || true",
     "build": "vite build -c vite.lib.config.ts && vite build -c vite.styles.config.ts"
   },
   "dependencies": {
