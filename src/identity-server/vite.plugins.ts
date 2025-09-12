@@ -45,7 +45,9 @@ export function createSharedPlugins(): PluginOption[] {
           dest: "webroot/templates/template-areas",
         },
         {
-          src: "./node_modules/jquery/dist/jquery.min.js",
+          src: normalizePath(
+            path.resolve(__dirname, "../../node_modules/jquery/dist/jquery.min.js")
+          ),
           dest: "webroot/assets/js/lib",
         },
         {
