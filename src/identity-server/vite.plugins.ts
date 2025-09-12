@@ -30,19 +30,19 @@ export function createSharedPlugins(): PluginOption[] {
         },
         {
           src: "./messages/overrides/*",
-          dest: "webroot/messages/overrides",
+          dest: "messages/overrides",
         },
         {
           src: "./messages/template-areas/*",
-          dest: "webroot/messages/template-areas",
+          dest: "messages/template-areas",
         },
         {
           src: "./templates/overrides/*",
-          dest: "webroot/templates/overrides",
+          dest: "templates/overrides",
         },
         {
           src: "./templates/template-areas/*",
-          dest: "webroot/templates/template-areas",
+          dest: "templates/template-areas",
         },
         {
           src: normalizePath(
