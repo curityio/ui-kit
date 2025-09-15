@@ -101,7 +101,7 @@
 
 .login-logo-client-default {
   display: block;
-  background-image: url("../images/cube.svg");
+  background-image: url("/assets/images/cube.svg");
   background-repeat: no-repeat;
   background-size: 100%;
   width: 40px;
