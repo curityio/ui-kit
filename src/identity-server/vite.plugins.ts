@@ -55,6 +55,7 @@ export function createSharedPlugins(): PluginOption[] {
             path.resolve(__dirname, "../../node_modules/jquery/dist/jquery.min.js")
           ),
           dest: "webroot/assets/js/lib",
+          rename: "jquery-3.5.1.min.js"
         },
         {
           src: normalizePath(
@@ -93,7 +94,7 @@ export function createSharedPlugins(): PluginOption[] {
 
           console.log(
             "\x1b[32m%s\x1b[0m",
-            `✔︎ Copied jquery.min.js to build folder`
+            `✔︎ Copied jquery-3.5.1.min.js to build folder`
           );
         },
       },
