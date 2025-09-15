@@ -22,8 +22,3 @@ import "./opt-in-mfa.css";
 import "./recipient.css";
 import "./spinner.css";
 import "./well.css";
-
-/* TODO: Check what styles from src/identity-server/styles/scss/utilities is needed. Probably none */
-
-/* Curity Theme */
-import "./curity-theme.css";
