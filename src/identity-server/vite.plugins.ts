@@ -46,6 +46,12 @@ export function createSharedPlugins(): PluginOption[] {
         },
         {
           src: normalizePath(
+            path.resolve(__dirname, "../common/css/lib/src/curity-theme.css")
+          ),
+          dest: "webroot/assets/css",
+        },
+        {
+          src: normalizePath(
             path.resolve(__dirname, "../../node_modules/jquery/dist/jquery.min.js")
           ),
           dest: "webroot/assets/js/lib",
