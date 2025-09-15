@@ -11,7 +11,7 @@
     "prestart": "npm run build",
     "clean": "rm -rf build",
     "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
-    "start": "concurrently --kill-others \" npm run java\" \" npm run dev:vite\"",
+    "start": "concurrently --kill-others \" npm run java\" \" npm run dev\"",
     "dev:lib": "vite --config vite.lib.config.ts",
     "dev:styles": "vite --config vite.styles.config.ts",
     "dev": "concurrently \"npm:dev:lib\" \"npm:dev:styles\"",
