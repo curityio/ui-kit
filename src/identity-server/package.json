@@ -12,11 +12,13 @@
     "clean": "rm -rf build",
     "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
     "start": "concurrently --kill-others \" npm run java\" \" npm run dev\"",
-    "dev:lib": "vite --config vite.lib.config.ts",
-    "dev:styles": "vite --config vite.styles.config.ts",
-    "dev": "concurrently \"npm:dev:lib\" \"npm:dev:styles\"",
     "prebuild": "npm run build --workspace @curity-ui-kit/css || true",
-    "build": "vite build -c vite.lib.config.ts && vite build -c vite.styles.config.ts"
+    "build:styles": "vite build --mode styles",
+    "build:ui": "vite build --mode ui",
+    "build": "npm run build:styles && npm run build:ui",
+    "watch:styles": "vite build --watch --mode styles",
+    "watch:ui": "vite build --watch --mode ui",
+    "dev": "concurrently \"npm run watch:styles\" \"npm run watch:ui\""
   },
   "dependencies": {
     "jquery": "3.5.1"
