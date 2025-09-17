@@ -16,11 +16,6 @@
     "build:all": "npm-run-all -s build:lib build:docs",
     "build": "npm run build:lib"
   },
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git@bitbucket.org-urbansanden:curity/curity-css.git"
-  },
   "author": "Curity",
   "license": "ISC",
   "dependencies": {
