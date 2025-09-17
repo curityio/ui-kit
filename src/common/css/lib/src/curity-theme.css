@@ -103,12 +103,13 @@
 
   --type-sans: "Roboto-Regular", system, -apple-system, "Roboto", "Segoe UI",
     "Lucida Grande", sans-serif;
-  --type-weight: normal;
-  --type-sans-bold: "Roboto-Medium", system, -apple-system, "Roboto", "Segoe UI",
+  --type-sans-bold: "Roboto-Bold", system, -apple-system, "Roboto", "Segoe UI",
     "Lucida Grande", sans-serif;
-  --type-sans-bold: "Roboto-Bold", roboto, -apple-system, blinkmacsystemfont,
-    "Segoe UI", helvetica, arial, sans-serif;
-  --type-weight-bold: normal;
+  --type-weight: normal;
+  --type-weight-medium: "Roboto-Medium", system, -apple-system, "Roboto", "Segoe UI",
+    "Lucida Grande", sans-serif;
+  --type-weight-bold: "Roboto-Bold", system, -apple-system, "Roboto", "Segoe UI",
+    "Lucida Grande", sans-serif;
   --type-mono: "SF Mono", consolas, monaco, "Courier New", courier, monospace;
   --type-line-height: 1.5;
   --type-base-size: 1rem;
@@ -128,8 +129,8 @@
 
   /* 10. Buttons */
 
-  --button-padding-y: 0.6rem;
-  --button-padding-x: 1rem;
+  --button-padding-y: 0.5rem;
+  --button-padding-x: 0.75rem;
   --button-border-radius: 8px;
   --button-font-size: calc(var(--type-base-size));
   --button-color: var(--color-primary);

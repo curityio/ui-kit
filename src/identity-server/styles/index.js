@@ -3,6 +3,7 @@ import "@curity-ui-kit/css/lib/dist/index.css";
 
 /* Application styles */
 import "./css/account-linking.css";
+import "./css/authenticator-icons.css";
 import "./css/consent.css";
 import "./css/deviceflow.css";
 import "./css/dialog.css";

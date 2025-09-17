@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
       ...shared,
       build: {
         ...shared.build,
-        emptyOutDir: true, // clean once
+        emptyOutDir: true,
         rollupOptions: {
           input: {
             styles: path.resolve(__dirname, "styles/index.js"),
@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       ...shared,
       build: {
         ...shared.build,
-        emptyOutDir: false, // don't wipe styles
+        emptyOutDir: false,
         lib: {
           entry: path.resolve(__dirname, "scripts/curity-ui.js"),
           name: "curityui",
@@ -57,7 +57,6 @@ export default defineConfig(({ mode }) => {
     };
   }
 
-  // Default: fail loudly so it's clear a mode is required
   throw new Error(
     'Set a mode: use "--mode styles" or "--mode ui" (see package.json scripts).'
   );

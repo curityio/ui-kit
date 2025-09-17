@@ -53,8 +53,12 @@ h6 {
 }
 
 .type-extra-bold {
-  font-family: var(--type-sans-extra-bold);
+  font-family: var(--type-weight-bold);
   letter-spacing: 0.004em;
+}
+
+h1, h2, h3 {
+  font-family: var(--type-weight-bold);
 }
 
 h1 {
