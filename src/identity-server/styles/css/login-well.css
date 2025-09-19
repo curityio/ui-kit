@@ -166,3 +166,7 @@ img[alt*="Google Play"] {
 	max-width: 150px;
 	margin: 0 auto;
 }
+
+.login-well .alert {
+	width: 100%;
+}
