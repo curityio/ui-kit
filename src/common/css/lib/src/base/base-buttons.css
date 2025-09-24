@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-.btn, /*TODO: I want to remove this used in some templates*/
+.btn,
 .button {
   --y-tiny: 0.65;
   --x-tiny: 1;
@@ -43,6 +43,7 @@
   padding-block-end: calc(var(--button-padding-y) * var(--y-default));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-default));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-default));
+    transition: all 200ms;
 }
 
 .button:hover {
