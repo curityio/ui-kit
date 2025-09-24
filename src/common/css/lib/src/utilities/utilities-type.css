@@ -42,7 +42,7 @@
 }
 
 .uppercasecaps {
-  font-family: var(--type-sans-bold);
+  font-family: var(--type-weight-medium);
   -webkit-font-smoothing: antialiased;
   font-weight: var(--type-weight);
   letter-spacing: 0.085em;

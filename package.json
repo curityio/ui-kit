@@ -9,21 +9,17 @@
     "src/common/components",
     "src/common/css",
     "src/common/icons",
+    "src/identity-server",
     "src/self-service-portal/app",
     "src/login-web-app"
   ],
   "scripts": {
     "start:ussp": "npm run start --workspace=src/self-service-portal/app",
-    "start:login": "npm run start --workspace=src/login-web-app/app",
-    "start:template": "npm run start --workspace=src/template-system",
-    "start:styles": "npm run start --workspace=src/styles",
-    "build:ussp": "npm run build --workspace=src/self-service-portal",
-    "build:login": "npm run build --workspace=src/login-web-app",
-    "build:templates": "npm run build --workspace=src/template-system",
-    "build:messages": "npm run build --workspace=src/messages",
-    "build:styles": "npm run build --workspace=src/styles",
-    "build:all": "npm run build -ws",
-    "start:all": "concurrently \"npm run start:ssp\" \"npm run start:login\" \"npm run start:templates\" \"npm run start:styles\""
+    "start:lwa": "npm run start --workspace=src/login-web-app/app",
+    "start:identity-server": "npm run start --workspace=src/login-web-app/app",
+    "build:ussp": "npm run build --workspace=src/self-service-portal/app",
+    "build:lwa": "npm run build --workspace=src/login-web-app/app",
+    "build:all": "npm run build -ws"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

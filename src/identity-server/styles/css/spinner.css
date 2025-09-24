@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+.waiting-spinner {
+	--spinner-margin: 10px auto;
+	--size: 30px;
+	--animation-duration: 1.4s;
+	--delay-range: 0.32s;
+	margin: var(--spinner-margin);
+	text-align: center;
+}
+
+.waiting-spinner .waiting-spinner-child {
+	animation: waiting-spinner var(--animation-duration) ease-in-out 0s infinite both;
+	background-color: var(--color-primary);
+	border-radius: 100%;
+	display: inline-block;
+	height: calc(var(--size) / 2);
+	width: calc(var(--size) / 2);
+}
+
+.waiting-spinner .waiting-spinner-bounce1 {
+	animation-delay: calc(-1 * var(--delay-range));
+}
+
+.waiting-spinner .waiting-spinner-bounce2 {
+	animation-delay: calc(-1 * var(--delay-range) / 2);
+}
+
+.body-dark .waiting-spinner .waiting-spinner-child {
+	background-color: var(--color-primary-light);
+}
+
+@keyframes waiting-spinner {
+	0%,
+	80%,
+	100% {
+		transform: scale(0);
+	}
+
+	40% {
+		transform: scale(1);
+	}
+}
+
+.waiting-spinner p {
+	margin: 0;
+}

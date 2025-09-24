@@ -1,25 +1,16 @@
 {
-  "name": "@curity-internal/css",
+  "name": "@curity-ui-kit/css",
   "version": "0.6.6",
   "type": "module",
   "files": [
     "dist/index.css"
   ],
-  "homepage": "https://curity.io",
-  "repository": {
-    "type": "git",
-    "url": "https://bitbucket.org/curity/curity-css/"
-  },
-  "publishConfig": {
-    "registry": "https://hub.curityio.net/repository/curity-npm-registry/"
-  },
   "author": {
     "name": "Curity AB"
   },
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "generate": "node generate.js",
     "format": "npx prettier --write ./src/**/*.css",
     "preview": "vite preview",
     "lint": "stylelint ./src/**/**/*.css",

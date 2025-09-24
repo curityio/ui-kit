@@ -13,12 +13,8 @@
     "start": "npm-run-all -p start-docs start-lib",
     "build:docs": "npm run build --prefix docs",
     "build:lib": "npm run build --prefix lib",
-    "build": "npm-run-all -s build:lib build:docs"
-  },
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git@bitbucket.org-urbansanden:curity/curity-css.git"
+    "build:all": "npm-run-all -s build:lib build:docs",
+    "build": "npm run build:lib"
   },
   "author": "Curity",
   "license": "ISC",

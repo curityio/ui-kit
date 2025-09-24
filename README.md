@@ -6,11 +6,15 @@ Customize the public facing styles and templates to fit your needs.
 
 Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Self Service Portal, Login Web App, Template System, and Styles
 
-## Node Version Management
+## Prerequisites
+- Java v22 or later
+- Node.js
+
+## Setup
 
 This project uses a specific Node.js version as specified in the `.nvmrc` file. We recommend using [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm) to ensure compatibility.
 
-### Using nvm
+#### Using nvm
 
 If you have nvm installed, you can automatically use the correct Node.js version by running:
 
@@ -24,7 +28,7 @@ This will read the version from `.nvmrc` and switch to it. If the specified vers
 nvm install
 ```
 
-### Installing nvm
+#### Installing nvm
 
 If you don't have nvm installed:
 

@@ -28,7 +28,7 @@
 
 :where(h1, h2, h3, h4) {
   text-wrap: balance;
-  font-family: var(--type-sans-extra-bold);
+  font-family: var(--type-weight-bold);
 }
 
 .main {

@@ -1,0 +1,33 @@
+{
+  "name": "@curity-ui-kit/identity-server",
+  "author": "Curity",
+  "version": "1.6.0",
+  "engines": {
+    "node": ">=20.16.0",
+    "npm": ">=10.8.1"
+  },
+  "scripts": {
+    "java": "node previewer",
+    "prestart": "npm run build",
+    "clean": "rm -rf build",
+    "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
+    "start": "concurrently --kill-others \" npm run java\" \" npm run dev\"",
+    "prebuild": "npm run build --workspace @curity-ui-kit/css || true",
+    "build:styles": "vite build --mode styles",
+    "build:ui": "vite build --mode ui",
+    "build": "npm run build:styles && npm run build:ui",
+    "watch:styles": "vite build --watch --mode styles",
+    "watch:ui": "vite build --watch --mode ui",
+    "dev": "concurrently \"npm run watch:styles\" \"npm run watch:ui\""
+  },
+  "dependencies": {
+    "jquery": "3.5.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^7.1.5",
+    "vite-plugin-static-copy": "^3.1.2",
+    "browser-sync": "^3.0.2",
+    "node-env-file": "^0.1.8"
+  }
+}

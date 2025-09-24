@@ -8,30 +8,42 @@
  *
  * For further information, please contact Curity AB.
  */
+
+.btn,
 .button {
-  align-items: center;
+  --y-tiny: 0.65;
+  --x-tiny: 1;
+
+  --y-small: 0.85;
+  --x-small: 1;
+
+  --y-medium: 1.2;
+  --x-medium: 1.5;
+
+  --y-large: 1.25;
+  --x-large: 1.75;
+
+  --y-default: var(--y-medium);
+  --x-default: var(--x-medium);
+
   background-color: var(--button-background-color);
+  color: white;
   border: none;
   border-radius: var(--button-border-radius);
   cursor: pointer;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--type-sans-bold);
   font-size: var(--button-font-size);
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smalloothing: antialiased;
   font-weight: var(--type-weight-bold);
-  gap: var(--space-1);
-  justify-content: center;
-  line-height: normal;
-  padding-bottom: unset;
-  padding-left: calc(var(--button-padding-x) * 1.25);
-  padding-right: calc(var(--button-padding-x) * 1.25);
-  padding-top: unset;
-  transition:
-    background-color 200ms,
-    transform 200ms,
-    color 200ms,
-    box-shadow 200ms,
-    border-color 200ms;
+  min-height: 44px;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-default));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-default));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-default));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-default));
+    transition: all 200ms;
 }
 
 .button:hover {
@@ -69,6 +81,7 @@
   color: white;
 }
 
+input[type="submit"][value="Cancel"],
 .button-primary-outline {
   background-color: transparent;
   border: 1px solid var(--button-border-color);
@@ -157,58 +170,50 @@
   color: white;
 }
 
+a.button-tiny,
 .button-tiny {
-  font-size: 0.85em;
-  height: 28px;
-  padding-left: calc(var(--button-padding-x) * 0.65);
-  padding-right: calc(var(--button-padding-x) * 0.65);
+  font-size: calc(var(--button-font-size) * var(--y-tiny));
+  min-height: 24px;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-tiny));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-tiny));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-tiny));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-tiny));
 }
 
-@media (width >=52em) {
-  .button-tiny {
-    font-size: 0.75rem;
-    height: 28px;
-  }
-}
-
+a.button-small,
 .button-small {
-  font-size: 0.95rem;
-  height: 34px;
-  padding-left: calc(var(--button-padding-x) * 0.95);
-  padding-right: calc(var(--button-padding-x) * 0.95);
+  font-size: calc(var(--button-font-size) * var(--y-small));
+  min-height: 34px;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-small));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-small));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-small));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-small));
 }
 
-@media (width >=52em) {
-  .button-small {
-    font-size: 0.85rem;
-    height: 34px;
-  }
-}
-
+a.button-medium,
 .button-medium {
-  font-size: 1rem;
-  height: 44px;
-  padding-left: calc(var(--button-padding-x) * 1.15);
-  padding-right: calc(var(--button-padding-x) * 1.15);
+  font-size: calc(var(--button-font-size) * var(--y-medium));
+  min-height: 44px;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
 }
 
-@media (width >=52em) {
-  .button-medium {
-    font-size: 1.2em;
-  }
-}
-
+a.button-large,
 .button-large {
-  font-size: 1.25em;
-  height: 52px;
-  padding-left: calc(var(--button-padding-x) * 1.75);
-  padding-right: calc(var(--button-padding-x) * 1.75);
+  font-size: calc(var(--button-font-size) * var(--y-large));
+  min-height: 58px;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-large));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-large));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-large));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-large));
 }
 
-@media (width >=52em) {
-  .button-large {
-    font-size: 1.5em;
-  }
+.button-social {
+  padding-inline-start: 80px;
+  text-align: left;
+  justify-content: flex-start;
 }
 
 .button-white {
@@ -257,6 +262,7 @@ a.button-transparent:hover,
   background-color: transparent;
 }
 
+input[type='submit'].btn,
 .button-fullwidth {
   text-align: center;
   width: 100%;
