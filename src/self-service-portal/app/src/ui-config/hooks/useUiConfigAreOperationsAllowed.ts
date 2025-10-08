@@ -1,6 +1,6 @@
-import { useUiConfig } from '../data-access/UiConfigProvider.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../typings.ts';
-import { getResourceUiConfigAllowedOperations, useCurrentRouteResources } from '../utils/ui-config-if-utils.tsx';
+import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { getResourceUiConfigAllowedOperations, useCurrentRouteResources } from '@/ui-config/utils/ui-config-if-utils';
 
 export const useUiConfigAreOperationsAllowed = (
   resources?: UI_CONFIG_RESOURCES[],

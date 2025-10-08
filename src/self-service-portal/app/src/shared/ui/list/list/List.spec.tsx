@@ -11,7 +11,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { List } from './List.tsx';
+import { List } from './List';
 describe('List Component', () => {
   describe('Rendering', () => {
     const mockItems = ['Item 1', 'Item 2', 'Item 3'];

@@ -1,5 +1,5 @@
-import { StartVerifyPasskeyByAccountIdMutation } from '../../../shared/data-access/API';
-import { USER_MANAGEMENT_API } from '../../../shared/data-access/API/user-management';
+import { StartVerifyPasskeyByAccountIdMutation } from '@/shared/data-access/API';
+import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { FetchResult, useMutation } from '@apollo/client';
 import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
 

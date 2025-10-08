@@ -1,17 +1,17 @@
-import { useAuth } from '../../auth/data-access/AuthProvider.tsx';
-import { AppsAndServicesDetailList } from './AppsAndServicesDetailList.tsx';
-import { ROUTE_PATHS } from '../../routes.tsx';
-import { GRAPHQL_API } from '../../shared/data-access/API/GRAPHQL_API.ts';
-import { Button } from '../../shared/ui';
-import { Section } from '../../shared/ui/section/Section.tsx';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { AppsAndServicesDetailList } from '@/pages/apps-and-services/AppsAndServicesDetailList';
+import { ROUTE_PATHS } from '@/routes';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { Button } from '@/shared/ui';
+import { Section } from '@/shared/ui/section/Section';
 import { useMutation, useQuery } from '@apollo/client';
 import { IconAuthenticatorDefault, IconGeneralTrash } from '@icons';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { getFormattedDate } from '../../shared/utils/date.ts';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
-import { UiConfigIf } from '../../ui-config/feature/UiConfigIf.tsx';
+import { getFormattedDate } from '@shared/utils/date.ts';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 export const AppsAndServicesDetail = () => {
   const { t } = useTranslation();

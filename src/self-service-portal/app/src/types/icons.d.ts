@@ -61,6 +61,7 @@ declare module '@icons' {
   export { default as IconGeneralPlus } from './@icons/components/general/IconGeneralPlus';
   export { default as IconGeneralTrash } from './@icons/components/general/IconGeneralTrash';
   export { default as IconGeneralWarning } from './@icons/components/general/IconGeneralWarning';
+  export { default as IconGeneralChevron } from './@icons/components/general/IconGeneralChevron';
   export { default as IconKey } from './@icons/components/key/IconKey';
   export { default as IconToken } from './@icons/components/token/IconToken';
   export { default as IconUser } from './@icons/components/user/IconUser';

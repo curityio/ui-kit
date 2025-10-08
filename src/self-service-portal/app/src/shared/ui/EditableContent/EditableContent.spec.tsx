@@ -1,11 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { EditableContent } from './EditableContent.tsx';
+import { EditableContent } from './EditableContent';
 import { describe, expect, it, vi } from 'vitest';
-import { UiConfigProvider } from '../../../ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../ui-config/typings.ts';
-import { expectAsyncElementNotToBeFound } from '../../utils/test.ts';
-import * as utils from '../../../ui-config/utils/ui-config-if-utils.tsx';
-import { mockUiConfigProvider } from '../../utils/test.ts';
+import { UiConfigProvider } from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { expectAsyncElementNotToBeFound } from '@/shared/utils/test';
+import * as utils from '@/ui-config/utils/ui-config-if-utils';
+import { mockUiConfigProvider } from '../../utils/test';
 
 describe('EditableContent', () => {
   const onSaveMock = vi.fn();

@@ -18,18 +18,18 @@ import {
   IconGeneralLock,
 } from '@icons';
 
-import { ROUTE_PATHS } from '../routes.tsx';
-import { List, ListCell, ListRow, PageHeader } from '../shared/ui';
-import { Section } from '../shared/ui/section/Section.tsx';
+import { ROUTE_PATHS } from '@/routes';
+import { List, ListCell, ListRow, PageHeader } from '@shared/ui';
+import { Section } from '@/shared/ui/section/Section';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../auth/data-access/AuthProvider.tsx';
+import { useAuth } from '@auth/data-access/AuthProvider';
 import { useQuery } from '@apollo/client';
-import { GRAPHQL_API } from '../shared/data-access/API/GRAPHQL_API.ts';
-import { Account, DEVICE_TYPES } from '../shared/data-access/API';
-import { getPrimaryOrFirstDevice } from '../shared/utils/get-primary-or-first-device.ts';
-import { UiConfigIf } from '../ui-config/feature/UiConfigIf.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../ui-config/typings.ts';
+import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API';
+import { Account, DEVICE_TYPES } from '@shared/data-access/API';
+import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 interface SecuritySectionConfig {
   name: string;

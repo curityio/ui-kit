@@ -1,7 +1,7 @@
-import { ROUTE_PATHS } from '../../routes.tsx';
-import { useUiConfig } from '../data-access/UiConfigProvider.tsx';
-import { UI_CONFIG_OPERATIONS, UiConfigIfRouteProps } from '../typings.ts';
-import { getResourceUiConfigAllowedOperations, useCurrentRouteResources } from '../utils/ui-config-if-utils.tsx';
+import { ROUTE_PATHS } from '@/routes';
+import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG_OPERATIONS, UiConfigIfRouteProps } from '@/ui-config/typings';
+import { getResourceUiConfigAllowedOperations, useCurrentRouteResources } from '@/ui-config/utils/ui-config-if-utils';
 import { Navigate } from 'react-router';
 
 export const UiConfigIfRoute = ({

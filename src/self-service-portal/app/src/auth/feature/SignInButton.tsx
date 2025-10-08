@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 import { useState } from 'react';
-import { useAuth } from '../data-access/AuthProvider.tsx';
+import { useAuth } from '../data-access/AuthProvider';
 import { useTranslation } from 'react-i18next';
 
 export const SignInButton = () => {

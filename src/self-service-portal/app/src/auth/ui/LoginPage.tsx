@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Login } from '../../shared/ui/login/Login.tsx';
+import { Login } from '@/shared/ui/login/Login';
 import { useTranslation } from 'react-i18next';
 
 export const LoginPage = () => {

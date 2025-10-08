@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { UiConfig } from '../ui-config/typings.ts';
+import { UiConfig } from '@/ui-config/typings';
 
 export const setupI18nTranslations = (translations: UiConfig['messages']) => {
   /*

@@ -9,19 +9,19 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconAuthenticatorTotp } from '@icons';
-import { DataTable, PageHeader } from '../../../shared/ui';
+import { IconAuthenticatorPasskeys } from '@icons';
+import { DataTable, PageHeader } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
-import { Column } from '../../../shared/ui/data-table/typings.ts';
+import { Column } from '@/shared/ui/data-table/typings';
 import { useState } from 'react';
-import { GRAPHQL_API } from '../../../shared/data-access/API/GRAPHQL_API.ts';
-import { USER_MANAGEMENT_API } from '../../../shared/data-access/API/user-management';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useQuery, useMutation } from '@apollo/client';
-import { useAuth } from '../../../auth/data-access/AuthProvider.tsx';
-import { Device, DEVICE_TYPES } from '../../../shared/data-access/API';
-import { Spinner } from '../../../shared/ui/Spinner.tsx';
-import { NewPasskeyDialog } from './NewPasskeyDialog.tsx';
-import { getFormattedDate } from '../../../shared/utils/date.ts';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
+import { Spinner } from '@/shared/ui/Spinner';
+import { NewPasskeyDialog } from './NewPasskeyDialog';
+import { getFormattedDate } from '@shared/utils/date.ts';
 
 export const Passkeys = () => {
   const { t } = useTranslation();
@@ -34,6 +34,15 @@ export const Passkeys = () => {
       variables: { userName: session?.idTokenClaims?.sub },
     }
   );
+
+  const getDeviceInfo = (device: Device) => {
+    const details = device?.details;
+    const webAuthn = details && 'webAuthnAuthenticator' in details ? details.webAuthnAuthenticator : null;
+    const deviceName = webAuthn?.name || t('security.passkeys.passkey');
+    const deviceIconUrl = webAuthn?.iconLightUri;
+    return { deviceName, deviceIconUrl };
+  };
+
   const [deleteDeviceFromAccountByAccountId] = useMutation(
     USER_MANAGEMENT_API.MUTATIONS.deleteDeviceFromAccountByAccountId
   );
@@ -41,17 +50,18 @@ export const Passkeys = () => {
   const columns: Column<Device>[] = [
     {
       key: 'deviceId',
-      label: t('name'),
+      label: t('security.passkeys.device'),
       customRender: (device: Device) => {
-        const details = device?.details;
-        if (!details || !('webAuthnAuthenticator' in details) || !details.webAuthnAuthenticator) return null;
-        const webAuthn = details.webAuthnAuthenticator;
+        const { deviceName, deviceIconUrl } = getDeviceInfo(device);
+
         return (
           <div className="flex flex-center flex-gap-1">
-            {webAuthn.iconLightUri && (
-              <img src={webAuthn.iconLightUri} alt={webAuthn.name ?? ''} width={32} height={32} />
+            {deviceIconUrl ? (
+              <img src={deviceIconUrl} alt={deviceName} width={32} height={32} />
+            ) : (
+              <IconAuthenticatorPasskeys width={32} height={32} />
             )}
-            <span>{webAuthn.name}</span>
+            <span>{deviceName}</span>
           </div>
         );
       },
@@ -74,11 +84,13 @@ export const Passkeys = () => {
     accountResponse?.accountByUserName?.devices
       ?.filter(device => device !== null)
       .filter(device => device?.category?.name === DEVICE_TYPES.PASSKEYS)
-      ?.filter(device =>
-        `${device.deviceId}${device.deviceType}${device.alias}`
+      ?.filter(device => {
+        const { deviceName } = getDeviceInfo(device);
+
+        return `${device.deviceId}${device.deviceType}${device.alias}${deviceName}`
           .toLocaleLowerCase()
-          .includes(search?.toLocaleLowerCase())
-      ) || [];
+          .includes(search?.toLocaleLowerCase());
+      }) || [];
 
   const deletePasskeyFromAccount = ({ deviceId }: Device) => {
     return deleteDeviceFromAccountByAccountId({
@@ -96,7 +108,7 @@ export const Passkeys = () => {
       <PageHeader
         title={t('security.passkeys.title')}
         description={t('security.passkeys.description')}
-        icon={<IconAuthenticatorTotp width={128} height={128} />}
+        icon={<IconAuthenticatorPasskeys width={128} height={128} />}
         data-testid="passkeys-page-header"
       />
 

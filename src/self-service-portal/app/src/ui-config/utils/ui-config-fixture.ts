@@ -1,4 +1,4 @@
-import { UiConfig, UI_CONFIG_OPERATIONS } from '../typings.ts';
+import { UiConfig, UI_CONFIG_OPERATIONS } from '@/ui-config/typings';
 
 export const UI_CONFIG: UiConfig = {
   accessControlPolicy: {

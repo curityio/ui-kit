@@ -10,7 +10,7 @@
  */
 
 import { useLocation, Navigate, Outlet } from 'react-router';
-import { useAuth } from '../data-access/AuthProvider.tsx';
+import { useAuth } from '../data-access/AuthProvider';
 
 export interface AuthRoutesProps {
   children?: React.ReactNode;

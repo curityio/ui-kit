@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { matchRoutes, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '../../routes.tsx';
+import { ROUTES } from '@/routes';
 
 export const usePageTitle = () => {
   const defaultTitle = 'self-service-portal';

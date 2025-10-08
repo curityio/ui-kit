@@ -10,29 +10,29 @@
  */
 
 import { Outlet, RouteObject } from 'react-router';
-import { Layout } from './components/layout/Layout.tsx';
-import { Account } from './pages/Account.tsx';
-import { LoginPage } from './auth/ui/LoginPage.tsx';
-import { NoMatch } from './pages/NoMatch.tsx';
-import { Security } from './pages/Security.tsx';
-import { Totp } from './pages/security/Totp.tsx';
-import { AuthRoutes } from './auth/feature/AuthRoutes.tsx';
-import { AuthProvider } from './auth/data-access/AuthProvider.tsx';
-import { GraphQLAPIProvider } from './shared/data-access/API/GraphQLAPIProvider.tsx';
-import { LinkedAccounts } from './pages/LinkedAccounts.tsx';
-import { AppsAndServicesDetail } from './pages/apps-and-services/AppsAndServicesDetail.tsx';
-import { Address } from './pages/account/Address.tsx';
-import { AppsAndServices } from './pages/apps-and-services/AppsAndServices.tsx';
-import { UiConfigProvider } from './ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from './ui-config/typings.ts';
-import { UiConfigIfRoute } from './ui-config/feature/UiConfigIfRoute.tsx';
-import { FeatureNotAvailable } from './shared/ui/FeatureNotAvailable.tsx';
-import { MFA } from './pages/security/MFA/MFA.tsx';
+import { Layout } from './components/layout/Layout';
+import { Account } from './pages/Account';
+import { LoginPage } from './auth/ui/LoginPage';
+import { NoMatch } from './pages/NoMatch';
+import { Security } from './pages/Security';
+import { Totp } from './pages/security/Totp';
+import { AuthRoutes } from './auth/feature/AuthRoutes';
+import { AuthProvider } from './auth/data-access/AuthProvider';
+import { GraphQLAPIProvider } from '@shared/data-access/API/GraphQLAPIProvider';
+import { LinkedAccounts } from '@/pages/LinkedAccounts';
+import { AppsAndServicesDetail } from './pages/apps-and-services/AppsAndServicesDetail';
+import { Address } from './pages/account/Address';
+import { AppsAndServices } from './pages/apps-and-services/AppsAndServices';
+import { UiConfigProvider } from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIfRoute } from '@/ui-config/feature/UiConfigIfRoute';
+import { FeatureNotAvailable } from '@/shared/ui/FeatureNotAvailable';
+import { MFA } from '@/pages/security/MFA/MFA';
 import { Toaster } from 'react-hot-toast';
-import { Password } from './pages/Password/feature/Password.tsx';
-import { RouteErrorBoundary } from './error-handling/RouteErrorBoundary.tsx';
-import { appToastConfig } from './util.ts';
-import { Passkeys } from './pages/security/Passkeys/Passkeys.tsx';
+import { Password } from '@/pages/Password/feature/Password';
+import { RouteErrorBoundary } from '@/error-handling/RouteErrorBoundary';
+import { appToastConfig } from '@/util';
+import { Passkeys } from '@/pages/security/Passkeys/Passkeys';
 import {
   IconActionAutoLinkAccount,
   IconActionMultiFactor,
@@ -44,7 +44,7 @@ import {
   IconUserDataSources,
   IconUserManagement,
 } from '@icons';
-import { DefaultRoute } from './shared/components/DefaultRoute.tsx';
+import { DefaultRoute } from '@/shared/components/DefaultRoute';
 
 export const ROUTE_PATHS = {
   HOME: '/',

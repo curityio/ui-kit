@@ -10,21 +10,21 @@
  */
 
 import { IconFacilitiesEmail, IconFacilitiesSms, IconGeneralLocation } from '@icons';
-import { Section } from '../../shared/ui/section/Section.tsx';
-import { Account } from '../../shared/data-access/API';
-import { List } from '../../shared/ui';
+import { Section } from '@/shared/ui/section/Section';
+import { Account } from '@/shared/data-access/API';
+import { List } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
-import { EmailVerificationDialog } from '../../pages/security/email/EmailVerificationDialog.tsx';
-import { GRAPHQL_API } from '../../shared/data-access/API/GRAPHQL_API.ts';
+import { EmailVerificationDialog } from '@/pages/security/email/EmailVerificationDialog';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useQuery } from '@apollo/client';
-import { useAuth } from '../../auth/data-access/AuthProvider.tsx';
-import { Spinner } from '../../shared/ui/Spinner.tsx';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { Spinner } from '@/shared/ui/Spinner';
 import { useState } from 'react';
-import { PhoneNumberVerificationDialog } from '../../pages/security/phone/PhoneNumberVerificationDialog.tsx';
-import { getPrimaryOrFirstDevice } from '../../shared/utils/get-primary-or-first-device.ts';
-import { ContactItem } from './ContactItem.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
-import { UiConfigIf } from '../../ui-config/feature/UiConfigIf.tsx';
+import { PhoneNumberVerificationDialog } from '@/pages/security/phone/PhoneNumberVerificationDialog';
+import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
+import { ContactItem } from './ContactItem';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 interface ContactInfoProps {
   account: Account;
@@ -122,7 +122,7 @@ export const ContactInfo = ({ account }: ContactInfoProps) => {
       {showEmailDialog && (
         <EmailVerificationDialog
           accountId={accountId}
-          emailForOtpVerification={emailToShow?.value}
+          emailForOtpVerification={emailToShow?.value ?? null}
           setEmailAsPrimaryAfterVerification={!emailToShow?.primary}
           onClose={handleEmailDialogClose}
         />

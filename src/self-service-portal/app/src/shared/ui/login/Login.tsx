@@ -9,11 +9,11 @@
  * For further information, please contact Curity AB.
  */
 
-import { SignInButton } from '../../../auth/feature/SignInButton.tsx';
+import { SignInButton } from '@/auth/feature/SignInButton';
 import classes from './login.module.css';
 import selfServicePortalIntroImg from '/src/images/self-service-portal-intro.svg';
 import curityLogoLandscapeImg from '/src/images/curity-logo-landscape.svg';
-import { useUiConfig } from '../../../ui-config/data-access/UiConfigProvider.tsx';
+import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
 
 interface LoginProps {
   title: string;

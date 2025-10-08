@@ -14,15 +14,17 @@ import React, { ButtonHTMLAttributes } from 'react';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   title?: string;
   icon?: React.ReactElement;
+  children?: React.ReactNode;
 }
 
-export const Button = ({ title, icon, ...props }: ButtonProps) => {
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ title, icon, children, ...props }, ref) => {
   const className = props.className + ' button';
 
   return (
-    <button {...props} className={className}>
+    <button {...props} className={className} ref={ref}>
       {icon && <span>{icon}</span>}
       {title && <span>{title}</span>}
+      {children}
     </button>
   );
-};
+});

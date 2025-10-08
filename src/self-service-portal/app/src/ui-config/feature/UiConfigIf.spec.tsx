@@ -1,14 +1,14 @@
-import { UiConfigProvider } from '../data-access/UiConfigProvider.tsx';
-import { UiConfigIf } from './UiConfigIf.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../typings.ts';
+import { UiConfigProvider } from '@/ui-config/data-access/UiConfigProvider';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
   expectAsyncElementNotToBeFoundByTestId,
   mockUiConfigProvider,
   mockUseCurrentRouteResources,
-} from '../../shared/utils/test.ts';
-import * as utils from '../utils/ui-config-if-utils.tsx';
+} from '@/shared/utils/test';
+import * as utils from '@/ui-config/utils/ui-config-if-utils';
 
 describe('UiConfigIf', () => {
   beforeEach(() => {

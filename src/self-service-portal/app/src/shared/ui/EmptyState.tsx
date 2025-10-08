@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { EmptyStateIcon } from './icons/EmptyStateIcon.tsx';
+import { EmptyStateIcon } from '@/shared/ui/icons/EmptyStateIcon';
 import { IconGeneralPlus } from '@icons';
 import { useTranslation } from 'react-i18next';
 

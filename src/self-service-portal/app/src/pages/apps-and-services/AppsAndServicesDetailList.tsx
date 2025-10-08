@@ -1,5 +1,5 @@
-import { AuthorizedScope, AuthorizedClaim } from '../../shared/data-access/API';
-import { List, ListRow, ListCell } from '../../shared/ui';
+import { AuthorizedScope, AuthorizedClaim } from '@/shared/data-access/API';
+import { List, ListRow, ListCell } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 
 interface AppsAndServicesDetailListProps {

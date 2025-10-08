@@ -1,4 +1,4 @@
-import { Maybe, StringMultiValuedValue } from '../data-access/API';
+import { Maybe, StringMultiValuedValue } from '@/shared/data-access/API';
 
 export const getPrimaryOrFirstDevice = (devices?: Maybe<StringMultiValuedValue>[]) => {
   if (!devices?.length) {

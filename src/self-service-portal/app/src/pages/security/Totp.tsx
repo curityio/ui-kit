@@ -13,14 +13,14 @@ import { IconAuthenticatorTotp } from '@icons';
 import { DataTable, PageHeader } from '../../shared/ui';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { GRAPHQL_API } from '../../shared/data-access/API/GRAPHQL_API.ts';
-import { useAuth } from '../../auth/data-access/AuthProvider.tsx';
-import { Column } from '../../shared/ui/data-table/typings.ts';
-import { Device, DEVICE_TYPES } from '../../shared/data-access/API';
-import { USER_MANAGEMENT_API } from '../../shared/data-access/API/user-management';
-import { NewTotpDeviceDialog } from './NewTotpDeviceDialog.tsx';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { Column } from '@/shared/ui/data-table/typings';
+import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
+import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
+import { NewTotpDeviceDialog } from '@/pages/security/NewTotpDeviceDialog';
 import { useState } from 'react';
-import { UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
+import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export const Totp = () => {
   const { t } = useTranslation();

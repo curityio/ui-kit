@@ -1,3 +1,11 @@
+.page-header {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  padding-top: var(--space-2);
+  padding-bottom: clamp(var(--space-2), 5vh, calc(var(--space-4) * 3));
+}
+
 .page-header-icon {
   color: white;
   border-radius: 100%;

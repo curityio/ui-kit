@@ -1,4 +1,4 @@
-import { GRANTED_AUTHORIZATIONS_API_OPERATIONS } from './api.ts';
+import { GRANTED_AUTHORIZATIONS_API_OPERATIONS } from '@/shared/data-access/API/granted-authorizations/api';
 
 export const GRANTED_AUTHORIZATIONS_API_ERROR_MESSAGES: Record<GRANTED_AUTHORIZATIONS_API_OPERATIONS, string> = {
   // QUERIES

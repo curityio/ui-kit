@@ -10,17 +10,17 @@
  */
 
 import { useMutation, useQuery } from '@apollo/client';
-import { ContactInfo } from '../components/account/ContactInfo.tsx';
-import { ProfileDetails } from '../components/account/ProfileDetails.tsx';
-import { PageHeader } from '../shared/ui/page-header/PageHeader.tsx';
-import { useAuth } from '../auth/data-access/AuthProvider.tsx';
-import { AccountUpdateFields } from '../shared/data-access/API';
-import { GRAPHQL_API } from '../shared/data-access/API/GRAPHQL_API.ts';
-import { IconUserProfile } from '../shared/components/icons';
+import { ContactInfo } from '../components/account/ContactInfo';
+import { ProfileDetails } from '../components/account/ProfileDetails';
+import { PageHeader } from '@/shared/ui/page-header/PageHeader';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { AccountUpdateFields } from '@/shared/data-access/API';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { IconUserProfile } from '@/shared/components/icons';
 import { useTranslation } from 'react-i18next';
-import { UiConfigIf } from '../ui-config/feature/UiConfigIf.tsx';
-import { UI_CONFIG_RESOURCES, UI_CONFIG_OPERATIONS } from '../ui-config/typings.ts';
-import { Spinner } from '../shared/ui/Spinner.tsx';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_RESOURCES, UI_CONFIG_OPERATIONS } from '@/ui-config/typings';
+import { Spinner } from '@/shared/ui/Spinner';
 import { Outlet } from 'react-router';
 import { useEffect, useState } from 'react';
 

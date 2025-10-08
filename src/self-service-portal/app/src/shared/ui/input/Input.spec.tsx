@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Input } from './Input.tsx';
+import { Input } from './Input';
 
 describe('Input component', () => {
   it('should render the input with the provided label', () => {

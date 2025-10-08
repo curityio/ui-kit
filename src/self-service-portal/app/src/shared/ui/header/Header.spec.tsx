@@ -1,18 +1,20 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 
 import { MemoryRouter } from 'react-router';
 
-import { AuthContextType } from '../../../auth/utils/typings.ts';
+import { AuthContextType } from '@/auth/utils/typings';
 
-let Header: typeof import('./Header.tsx').Header;
+let Header: typeof import('./Header').Header;
 let useAuthMock: ReturnType<typeof vi.fn>;
 let usePageTitleMock: ReturnType<typeof vi.fn>;
 
+const TEST_USERNAME = 'teddie';
+
 beforeAll(async () => {
-  Header = (await import('./Header.tsx')).Header;
+  Header = (await import('./Header')).Header;
   vi.mock('@auth/data-access/AuthProvider', async () => {
-    const actual = await vi.importActual<typeof import('../../../auth/data-access/AuthProvider.tsx')>(
+    const actual = await vi.importActual<typeof import('@auth/data-access/AuthProvider')>(
       '@auth/data-access/AuthProvider'
     );
     useAuthMock = vi.fn();
@@ -38,7 +40,10 @@ beforeAll(async () => {
 
 const renderHeader = (isSidebarOpen = false, isLoggedIn = true) => {
   useAuthMock.mockReturnValue({
-    session: { isLoggedIn },
+    session: {
+      isLoggedIn,
+      idTokenClaims: isLoggedIn ? { sub: TEST_USERNAME } : undefined,
+    },
     logout: vi.fn(),
     startLogin: vi.fn(),
     endLogin: vi.fn(),
@@ -69,16 +74,27 @@ describe('Header Component', () => {
   });
 
   describe('login based display', () => {
-    it('should show the `Sign Out` option when the user is logged in', () => {
+    it('should show the username when the user is logged in', () => {
       renderHeader();
+      const userMenuButton = screen.getByTestId('user-menu-button');
 
-      expect(screen.getByTestId('logout-button')).toBeInTheDocument();
+      expect(userMenuButton).toBeInTheDocument();
+      expect(userMenuButton).toHaveTextContent(TEST_USERNAME);
     });
 
-    it('should not show the `Sign Out` option when the user is not logged in', () => {
+    it('should show the `Sign Out` option when clicking on the user menu', async () => {
+      renderHeader();
+      const userMenuButton = screen.getByTestId('user-menu-button');
+      fireEvent.click(userMenuButton);
+      const logoutButton = await screen.findByTestId('logout-button');
+
+      expect(logoutButton).toBeInTheDocument();
+    });
+
+    it('should not show the username when the user is not logged in', () => {
       renderHeader(false, false);
 
-      expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('user-menu-button')).not.toBeInTheDocument();
     });
   });
 
@@ -93,7 +109,10 @@ describe('Header Component', () => {
     it('should call toggleSidebar when the menu button is clicked', () => {
       const toggleSidebarMock = vi.fn();
       useAuthMock.mockReturnValue({
-        session: { isLoggedIn: true },
+        session: {
+          isLoggedIn: true,
+          idTokenClaims: { sub: TEST_USERNAME },
+        },
         logout: vi.fn(),
         startLogin: vi.fn(),
         endLogin: vi.fn(),

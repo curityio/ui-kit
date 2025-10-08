@@ -12,11 +12,11 @@
 import { vi, describe, it, beforeEach, afterEach, expect, MockedClass } from 'vitest';
 import * as TokenHandlerJsAssistant from '@curity/token-handler-js-assistant';
 import { render } from '@testing-library/react';
-import { AuthProvider, useAuth } from './AuthProvider.tsx';
+import { AuthProvider, useAuth } from './AuthProvider';
 import { useEffect } from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { OAuthAgentClient } from '@curity/token-handler-js-assistant';
-import { mockUseUiConfig } from '../../shared/utils/test.ts';
+import { mockUseUiConfig } from '../../shared/utils/test';
 
 describe('AuthProvider', () => {
   const OAuthClientMock = OAuthAgentClient as MockedClass<typeof OAuthAgentClient>;

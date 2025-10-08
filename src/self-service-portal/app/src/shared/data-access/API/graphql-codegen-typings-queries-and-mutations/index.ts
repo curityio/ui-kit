@@ -1,2 +1,2 @@
-export * from "./fragment-masking.ts";
-export * from "./gql.ts";
+export * from "./fragment-masking";
+export * from "./gql";

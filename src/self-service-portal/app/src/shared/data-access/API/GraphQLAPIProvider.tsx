@@ -11,15 +11,15 @@ import {
 } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { Outlet } from 'react-router';
-import { GraphQLAPIProviderProps, GRAPQL_API_ENDPOINTS } from './typings.ts';
+import { GraphQLAPIProviderProps, GRAPQL_API_ENDPOINTS } from './typings';
 import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
-import { GRAPHQL_API } from './GRAPHQL_API.ts';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { onError } from '@apollo/client/link/error';
-import { getAuthContextAPIFromOutsideRenderContext } from '../../../auth/data-access/AuthProvider.tsx';
+import { getAuthContextAPIFromOutsideRenderContext } from '@/auth/data-access/AuthProvider';
 import { toast } from 'react-hot-toast';
-import { GRAPHQL_API_ERROR_MESSAGES } from './GRAPHQL_API_ERROR_MESSAGES.ts';
-import { useUiConfig } from '../../../ui-config/data-access/UiConfigProvider.tsx';
-import { UiConfig } from '../../../ui-config/typings.ts';
+import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
+import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
+import { UiConfig } from '@/ui-config/typings';
 import i18n from 'i18next';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 

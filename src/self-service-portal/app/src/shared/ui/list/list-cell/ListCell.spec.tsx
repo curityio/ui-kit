@@ -11,7 +11,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { ListCell } from '../../index.ts';
+import { ListCell } from '../..';
 
 describe('ListCell Component', () => {
   it('should render the list cell with the provided class name', () => {

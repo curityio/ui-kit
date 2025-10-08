@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Input } from '../input/Input.tsx';
+import { Input } from '../input/Input';
 import styles from './search-field.module.css';
 import { useTranslation } from 'react-i18next';
 

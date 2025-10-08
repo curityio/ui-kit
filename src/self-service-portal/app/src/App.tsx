@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
-import { ROUTES } from './routes.tsx';
-import { BOOTSTRAP_UI_CONFIG } from './BOOTSTRAP_UI_CONFIG.ts';
+import { ROUTES } from './routes';
+import { BOOTSTRAP_UI_CONFIG } from '@/BOOTSTRAP_UI_CONFIG';
 
 const router = createBrowserRouter(ROUTES, { basename: BOOTSTRAP_UI_CONFIG.PATHS.APP_BASE });
 

@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { CredentialRuleDescriptor } from '../../../shared/data-access/API/user-management/typing-overwrites';
+import { CredentialRuleDescriptor } from '@/shared/data-access/API/user-management/typing-overwrites';
 
 export const passwordValidator = (
   passwordRules: CredentialRuleDescriptor[] = [],

@@ -1,1 +1,1 @@
-export { IconUserProfile } from './IconUserProfile.tsx';
+export { IconUserProfile } from './IconUserProfile';

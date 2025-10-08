@@ -9,8 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import { Button } from './Button.tsx';
-import { Dialog, DialogConfig } from './dialog/Dialog.tsx';
+import { Button } from '@/shared/ui/Button';
+import { Dialog, DialogConfig } from '@/shared/ui/dialog/Dialog';
 import { ButtonHTMLAttributes, ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -9,15 +9,16 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralKebabMenu, IconGeneralLock, IconVciCredentialHome } from '@icons';
+import { IconGeneralKebabMenu, IconVciCredentialHome } from '@icons';
 import { Link } from 'react-router';
 import { useEffect } from 'react';
-import { useAuth } from '../../../auth/data-access/AuthProvider.tsx';
-import { Button } from '../Button.tsx';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { Button } from '../Button';
 import classes from './header.module.css';
 import { useTranslation } from 'react-i18next';
-import { usePageTitle } from '../../utils/useRouteTitle.tsx';
-import { Breadcrumbs } from '../Breadcrumbs.tsx';
+import { usePageTitle } from '@/shared/utils/useRouteTitle';
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { UserMenu } from '../user-menu/UserMenu';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -43,20 +44,14 @@ export const Header = ({ toggleSidebar, isSidebarOpen }: HeaderProps) => {
         <Link to="/" className="button button-tiny button-transparent">
           <IconVciCredentialHome width={24} height={24} />
         </Link>
-
         <Breadcrumbs pageTitle={pageTitle} />
       </div>
 
       <div className="flex flex-center flex-gap-1 nowrap">
         {authContext?.session?.isLoggedIn && (
-          <Button
-            icon={<IconGeneralLock width={24} height={24} />}
-            title={t('sign-out')}
-            className="button-tiny button-transparent"
-            onClick={authContext.logout}
-            data-testid="logout-button"
-          />
+          <UserMenu username={authContext?.session?.idTokenClaims?.sub} onSignOut={authContext.logout} />
         )}
+
         <Button
           icon={<IconGeneralKebabMenu width={24} height={24} />}
           aria-label={t('toggle-sidebar-navigation')}

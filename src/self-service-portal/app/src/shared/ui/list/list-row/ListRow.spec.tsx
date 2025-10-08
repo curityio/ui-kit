@@ -11,10 +11,10 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ListRow } from './ListRow.tsx';
-import * as UiConfigProviderAll from '../../../../ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG } from '../../../../ui-config/utils/ui-config-fixture.ts';
-import { expectAsyncElementNotToBeFound } from '../../../utils/test.ts';
+import { ListRow } from './ListRow';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
+import { expectAsyncElementNotToBeFound } from '@/shared/utils/test';
 
 const mockOnDelete = vi.fn();
 

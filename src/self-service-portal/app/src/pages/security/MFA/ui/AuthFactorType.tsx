@@ -1,5 +1,5 @@
-import { MFA_REGISTRABLE_FACTORS } from '../MFA.tsx';
-import { RegistrableFactor, RegisteredFactor } from '../../../../shared/data-access/API';
+import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA';
+import { RegistrableFactor, RegisteredFactor } from '@/shared/data-access/API';
 import { IconFacilitiesEmail, IconFacilitiesSms, IconAuthenticatorTotp, IconAuthenticatorPasskeys } from '@icons';
 import { t } from 'i18next';
 

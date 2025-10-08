@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Login } from './Login.tsx';
-import * as AuthProviderAll from '../../../auth/data-access/AuthProvider.tsx';
-import { mockUseUiConfig } from '../../utils/test.ts';
+import { Login } from './Login';
+import * as AuthProviderAll from '@auth/data-access/AuthProvider';
+import { mockUseUiConfig } from '@/shared/utils/test';
 
 describe('Login component', () => {
   beforeEach(() => {
