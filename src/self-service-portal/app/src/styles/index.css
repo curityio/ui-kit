@@ -202,17 +202,28 @@ svg {
     visibility: visible;
   }
 
-  [data-testid='mfa-recovery-codes'] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    height: calc(297mm - 24mm);
+    overflow: hidden;
   }
 }
 
-[data-testid='profile-details-section'] input,
+[data-testid='profile-details-section'] input {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 [data-testid='profile-details-section'] p {
-  width: clamp(110px, 5vw + 90px, 260px);
+  width: fit-content;
+  max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

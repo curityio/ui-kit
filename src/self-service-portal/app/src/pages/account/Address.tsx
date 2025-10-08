@@ -10,31 +10,32 @@
  */
 
 import { IconGeneralLocation } from '@icons';
-import { useState } from 'react';
-import { Button, DataTable, PageHeader } from '../../shared/ui';
-import { USER_MANAGEMENT_API } from '../../shared/data-access/API/user-management';
+import { useState, useMemo } from 'react';
+import { Button, DataTable, PageHeader } from '@/shared/ui';
+import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useMutation, useQuery } from '@apollo/client';
-import { useAuth } from '../../auth/data-access/AuthProvider.tsx';
-import { AddressInput } from '../../shared/data-access/API';
-import { Input } from '../../shared/ui/input/Input.tsx';
-import { Dialog } from '../../shared/ui/dialog/Dialog.tsx';
-import { Column } from '../../shared/ui/data-table/typings.ts';
-import { Address as AddressType } from '../../shared/data-access/API/graphql-codegen-typings-queries-and-mutations/graphql.ts';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { AddressInput } from '@/shared/data-access/API';
+import { Input } from '@/shared/ui/input/Input';
+import { Dialog } from '@/shared/ui/dialog/Dialog';
+import { Column } from '@/shared/ui/data-table/typings';
+import { Address as AddressType } from '@/shared/data-access/API/graphql-codegen-typings-queries-and-mutations/graphql';
 import { useTranslation } from 'react-i18next';
-import { UiConfigIf } from '../../ui-config/feature/UiConfigIf.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import countriesData from '@/shared/data/countries.json';
 
 export const Address = () => {
   const { t } = useTranslation();
   const [addressSearch, setAddressSearch] = useState('');
   const initialFormData: AddressInput = {
-    country: '',
-    locality: '',
-    postalCode: '',
+    country: null,
+    locality: null,
+    postalCode: null,
     primary: false,
-    region: '',
-    streetAddress: '',
-    type: '',
+    region: null,
+    streetAddress: null,
+    type: null,
   };
   const [formData, setFormData] = useState<AddressInput>(() => initialFormData);
   const { session } = useAuth();
@@ -43,6 +44,8 @@ export const Address = () => {
     variables: { userName: session?.idTokenClaims?.sub },
   });
   const [showNewAddressDialog, setShowNewAddressDialog] = useState<boolean>(false);
+
+  const countries = useMemo(() => countriesData, []);
 
   const columns: Column<Pick<AddressType, 'display' | 'primary'>>[] = [
     { key: 'display', label: t('account.address') },
@@ -58,14 +61,24 @@ export const Address = () => {
   );
   const account = data?.accountByUserName;
 
-  const handleAddressFormInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddressFormInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value, primary: addresses.length === 0 }));
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: value.replace(/^\s+/, ''),
+      primary: addresses.length === 0,
+    }));
   };
 
   const handleCreateAddress = async (event: React.FormEvent) => {
     event.preventDefault();
-    await updateAddressData([...addresses.filter(address => address !== null), formData]);
+
+    const cleanedFormData = Object.fromEntries(
+      Object.entries(formData).map(([key, value]) => [key, typeof value === 'string' ? value.trimEnd() || null : value])
+    ) as AddressInput;
+
+    await updateAddressData([...addresses.filter(address => address !== null), cleanedFormData]);
     resetFormAndCloseDialog();
   };
 
@@ -185,7 +198,6 @@ export const Address = () => {
                   label: t('account.address.region'),
                   placeholder: t('account.address.region.placeholder'),
                 },
-                { name: 'country', label: t('account.address.country') },
                 { name: 'postalCode', label: t('account.address.postal-code'), placeholder: '12345' },
               ].map(({ name, label, placeholder }, index) => (
                 <Input
@@ -194,7 +206,7 @@ export const Address = () => {
                   label={label}
                   placeholder={placeholder || label}
                   type="text"
-                  value={String(formData[name as keyof AddressInput])}
+                  value={(formData[name as keyof AddressInput] as string) || ''}
                   onChange={handleAddressFormInputChange}
                   className="flex flex-column flex-gap-0"
                   labelClassName="flex-20 left-align"
@@ -204,6 +216,29 @@ export const Address = () => {
                   disablePasswordManager={false}
                 />
               ))}
+              <div className="left-align">
+                <label htmlFor="country" className="label inline-flex flex-center flex-gap-1">
+                  {t('account.address.country')}
+                </label>
+                <select
+                  id="country"
+                  name="country"
+                  value={formData.country || ''}
+                  onChange={handleAddressFormInputChange}
+                  className="field flex-auto"
+                  data-testid={`address-country-select`}
+                  style={{ color: formData.country ? 'inherit' : 'var(--form-field-placeholder-color)' }}
+                >
+                  <option value="" disabled>
+                    {t('account.address.country')}
+                  </option>
+                  {countries.map((country: { value: string; label: string }) => (
+                    <option key={country.value} value={country.label}>
+                      {country.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </form>
         </Dialog>

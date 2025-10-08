@@ -1,11 +1,11 @@
-import { Button, ListCell, ListRow } from '../../shared/ui';
+import { Button, ListCell, ListRow } from '@/shared/ui';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { IconGeneralArrowForward } from '@icons';
-import { Account, StringMultiValuedValue } from '../../shared/data-access/API';
-import { getPrimaryOrFirstDevice } from '../../shared/utils/get-primary-or-first-device.ts';
-import { UiConfigIf } from '../../ui-config/feature/UiConfigIf.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
+import { Account, StringMultiValuedValue } from '@/shared/data-access/API';
+import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 interface ContactItemProps {
   title: string;
@@ -58,7 +58,7 @@ export const ContactItem = ({ title, icon, collection, link, account, onVerify, 
           allowedOperations={[UI_CONFIG_OPERATIONS.UPDATE]}
         >
           <Button
-            title={t('Verify')}
+            title={t('account.verify')}
             className="button-tiny button-primary-outline"
             onClick={onVerify}
             data-testid={`contact-info-email-verify-button`}

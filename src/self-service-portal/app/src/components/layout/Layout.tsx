@@ -9,8 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import { Header } from '../../shared/ui/header/Header.tsx';
-import { Sidebar } from './sidebar/Sidebar.tsx';
+import { Header } from '@/shared/ui/header/Header';
+import { Sidebar } from './sidebar/Sidebar';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 

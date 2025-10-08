@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { PageHeader } from './PageHeader.tsx';
+import { PageHeader } from './PageHeader';
 import { describe, it, expect } from 'vitest';
 
 describe('PageHeader Component', () => {

@@ -10,9 +10,9 @@
  */
 
 import { Navigate } from 'react-router';
-import { useUiConfigAreOperationsAllowed } from '../../ui-config/hooks/useUiConfigAreOperationsAllowed.ts';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
-import { ROUTE_PATHS } from '../../routes.tsx';
+import { useUiConfigAreOperationsAllowed } from '@/ui-config/hooks/useUiConfigAreOperationsAllowed';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { ROUTE_PATHS } from '@/routes';
 
 export const DefaultRoute = () => {
   const hasAccountPermissions = useUiConfigAreOperationsAllowed(

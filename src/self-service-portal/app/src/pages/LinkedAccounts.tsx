@@ -11,14 +11,14 @@
 
 import { useTranslation } from 'react-i18next';
 import { IconActionAutoLinkAccount } from '@icons';
-import { DataTable, PageHeader } from '../shared/ui';
-import { useAuth } from '../auth/data-access/AuthProvider.tsx';
-import { USER_MANAGEMENT_API } from '../shared/data-access/API/user-management';
+import { DataTable, PageHeader } from '@/shared/ui';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useMutation, useQuery } from '@apollo/client';
-import { LinkedAccount } from '../shared/data-access/API';
-import { Column } from '../shared/ui/data-table/typings.ts';
-import { getFormattedDate } from '../shared/utils/date.ts';
-import { UI_CONFIG_RESOURCES } from '../ui-config/typings.ts';
+import { LinkedAccount } from '@/shared/data-access/API';
+import { Column } from '@/shared/ui/data-table/typings';
+import { getFormattedDate } from '@shared/utils/date.ts';
+import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export const LinkedAccounts = () => {
   const { t } = useTranslation();

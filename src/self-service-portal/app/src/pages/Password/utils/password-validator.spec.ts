@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { passwordValidator } from './password-validator.ts';
+import { passwordValidator } from './password-validator';
 import { describe, expect, it } from 'vitest';
 import { CredentialRuleDescriptor } from '../../../shared/data-access/API/user-management/typing-overwrites';
 

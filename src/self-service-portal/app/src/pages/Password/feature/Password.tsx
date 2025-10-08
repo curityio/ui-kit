@@ -10,21 +10,21 @@
  */
 
 import { useMutation, useQuery } from '@apollo/client';
-import { PageHeader } from '../../../shared/ui/page-header/PageHeader.tsx';
-import { useAuth } from '../../../auth/data-access/AuthProvider.tsx';
-import { GRAPHQL_API } from '../../../shared/data-access/API/GRAPHQL_API.ts';
+import { PageHeader } from '@/shared/ui/page-header/PageHeader';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useTranslation } from 'react-i18next';
 import { IconCapabilityResourceOwnerPasswordCredentials } from '@icons';
-import { Section } from '../../../shared/ui/section/Section.tsx';
+import { Section } from '@/shared/ui/section/Section';
 import { useState } from 'react';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
-import { Alert } from '../../../shared/ui/Alert.tsx';
-import { PasswordPolicy } from './PasswordPolicy.tsx';
-import { PasswordInput } from '../ui/PasswordInput.tsx';
-import { Button } from '../../../shared/ui/Button.tsx';
+import { Alert } from '@/shared/ui/Alert';
+import { PasswordPolicy } from '@/pages/Password/feature/PasswordPolicy';
+import { PasswordInput } from '@/pages/Password/ui/PasswordInput';
+import { Button } from '@/shared/ui/Button';
 import toast from 'react-hot-toast';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../ui-config/typings.ts';
-import { UiConfigIf } from '../../../ui-config/feature/UiConfigIf.tsx';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 interface PasswordUpdateBEValidationError extends GraphQLFormattedError {
   extensions: {

@@ -1,4 +1,4 @@
-import { ROUTES } from '../../routes.tsx';
+import { ROUTES } from '@/routes';
 import {
   GrantedAuthorizationsResources,
   UI_CONFIG_OPERATIONS,
@@ -6,7 +6,7 @@ import {
   UI_CONFIG_RESOURCES,
   UiConfig,
   UserManagementResources,
-} from '../typings.ts';
+} from '@/ui-config/typings';
 import { matchRoutes, useLocation } from 'react-router';
 
 export const useCurrentRouteResources = () => {

@@ -10,7 +10,7 @@
  */
 
 import { HTMLAttributes, JSX } from 'react';
-import { ListItem } from '../list-item.model.ts';
+import { ListItem } from '../list-item.model';
 
 interface ListProps extends HTMLAttributes<HTMLUListElement> {
   className?: string;

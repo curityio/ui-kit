@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Button, List, ListRow } from '../../../../shared/ui';
+import { Button, List, ListRow } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 
 export interface RecoveryCodesProps {

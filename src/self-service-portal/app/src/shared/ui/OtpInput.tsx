@@ -9,8 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import { Alert } from './Alert.tsx';
-import { DISABLE_PASSWORD_ATTRIBUTES } from '../utils/disable-password-managers.ts';
+import { Alert } from '@/shared/ui/Alert';
+import { DISABLE_PASSWORD_ATTRIBUTES } from '@/shared/utils/disable-password-managers';
 import { useTranslation } from 'react-i18next';
 import VerificationInput, { VerificationInputProps } from 'react-verification-input';
 

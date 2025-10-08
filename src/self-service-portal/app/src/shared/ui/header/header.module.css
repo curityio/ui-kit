@@ -6,18 +6,12 @@
   position: fixed;
   background-color: white;
   z-index: 2;
-  overflow-x: auto;
-  overflow-y: clip;
   width: max-content;
   white-space: nowrap;
 }
 
-.header div button:last-child {
-  display: inline-flex;
-}
-
 @media (width >=64em) {
-  .header div button:last-child {
+  .header button[aria-controls='sidebar-navigation'] {
     display: none;
   }
 }

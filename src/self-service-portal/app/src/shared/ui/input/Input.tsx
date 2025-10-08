@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, Ref, useState } from 'react';
-import { DISABLE_PASSWORD_ATTRIBUTES } from '../../utils/disable-password-managers.ts';
+import { DISABLE_PASSWORD_ATTRIBUTES } from '@/shared/utils/disable-password-managers';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

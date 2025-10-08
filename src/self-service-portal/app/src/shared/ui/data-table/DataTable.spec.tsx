@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { DataTable } from './DataTable.tsx';
-import { Column } from './typings.ts';
-import * as UiConfigProviderAll from '../../../ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG } from '../../../ui-config/utils/ui-config-fixture.ts';
-import { expectAsyncElementNotToBeFound, mockUseCurrentRouteResources } from '../../utils/test.ts';
+import { DataTable } from './DataTable';
+import { Column } from '@/shared/ui/data-table/typings';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
+import { expectAsyncElementNotToBeFound, mockUseCurrentRouteResources } from '@/shared/utils/test';
 
 interface TestElement {
   email: string;

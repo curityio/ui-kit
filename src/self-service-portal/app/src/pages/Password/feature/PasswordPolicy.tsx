@@ -10,10 +10,10 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { PasswordPolicyRule } from '../ui/PasswordPolicyRule.tsx';
+import { PasswordPolicyRule } from '../ui/PasswordPolicyRule';
 import styles from '../utils/password-policy.module.css';
-import { GRAPHQL_API } from '../../../shared/data-access/API/GRAPHQL_API.ts';
-import { passwordValidator } from '../utils/password-validator.ts';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { passwordValidator } from '@/pages/Password/utils/password-validator';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 

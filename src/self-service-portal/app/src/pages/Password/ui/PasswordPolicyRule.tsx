@@ -9,9 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { PasswordPolicyCheckmark } from './PasswordPolicyCheckmark.tsx';
+import { PasswordPolicyCheckmark } from './PasswordPolicyCheckmark';
 import styles from '../utils/password-policy.module.css';
-import { CredentialRuleDescriptor } from '../../../shared/data-access/API/user-management/typing-overwrites';
+import { CredentialRuleDescriptor } from '@/shared/data-access/API/user-management/typing-overwrites';
 
 interface PasswordPolicyRuleProps {
   rule: CredentialRuleDescriptor;

@@ -1,4 +1,4 @@
-import { BootstrapUiConfig } from '../BOOTSTRAP_UI_CONFIG.ts';
+import { BootstrapUiConfig } from '../BOOTSTRAP_UI_CONFIG';
 
 export enum UI_CONFIG_OPERATIONS {
   READ = 'read',

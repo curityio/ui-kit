@@ -1,4 +1,4 @@
-import { USER_MANAGEMENT_API_OPERATIONS } from './api.ts';
+import { USER_MANAGEMENT_API_OPERATIONS } from '@/shared/data-access/API/user-management/api';
 
 export const USER_MANAGEMENT_API_ERROR_MESSAGES: Record<USER_MANAGEMENT_API_OPERATIONS, string> = {
   // QUERIES

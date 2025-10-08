@@ -1,6 +1,6 @@
-import { BOOTSTRAP_UI_CONFIG, BootstrapUiConfig } from '../../BOOTSTRAP_UI_CONFIG.ts';
-import { setupI18nTranslations } from '../../i18n/setup-translations.ts';
-import { Spinner } from '../../shared/ui/Spinner.tsx';
+import { BOOTSTRAP_UI_CONFIG, BootstrapUiConfig } from '@/BOOTSTRAP_UI_CONFIG';
+import { setupI18nTranslations } from '@/i18n/setup-translations';
+import { Spinner } from '@/shared/ui/Spinner';
 import {
   GrantedAuthorizationsResources,
   UI_CONFIG_OPERATIONS,
@@ -8,7 +8,7 @@ import {
   UiConfig,
   UiConfigMetadataResponse,
   UserManagementResources,
-} from '../typings.ts';
+} from '@/ui-config/typings';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 export interface UiConfigProviderProps {
@@ -55,7 +55,7 @@ export const useUiConfig = () => {
 
 async function resolveConfig(bootstrapConfig: BootstrapUiConfig): Promise<UiConfig> {
   const uiConfigMetadataResponse = await fetch(`${bootstrapConfig.PATHS.BACKEND}${bootstrapConfig.PATHS.METADATA}`, {
-    credentials: 'omit',
+    credentials: 'include',
   });
 
   if (uiConfigMetadataResponse.status !== 200) {

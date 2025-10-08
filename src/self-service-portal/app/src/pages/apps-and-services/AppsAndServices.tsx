@@ -11,16 +11,16 @@
 
 import { IconAuthenticatorDefault, IconGeneralArrowForward, IconUserDataSources } from '@icons';
 import { List, ListCell, ListRow, PageHeader } from '../../shared/ui';
-import { Section } from '../../shared/ui/section/Section.tsx';
-import { useAuth } from '../../auth/data-access/AuthProvider.tsx';
+import { Section } from '@/shared/ui/section/Section';
+import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Link } from 'react-router';
-import { GRAPHQL_API } from '../../shared/data-access/API/GRAPHQL_API.ts';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
-import { AuthorizedOAuthClient } from '../../shared/data-access/API';
-import { EmptyState } from '../../shared/ui/EmptyState.tsx';
+import { AuthorizedOAuthClient } from '@/shared/data-access/API';
+import { EmptyState } from '@/shared/ui/EmptyState';
 import { useTranslation } from 'react-i18next';
-import { SearchField } from '../../shared/ui/search-field/SearchField.tsx';
+import { SearchField } from '@/shared/ui/search-field/SearchField';
 
 export const AppsAndServices = () => {
   const { t } = useTranslation();
@@ -72,7 +72,6 @@ export const AppsAndServices = () => {
 
       <Section title={t('apps-and-services.title')}>
         <>
-          <h2>{t('apps-and-services.title')}</h2>
           <p>{t('apps-and-services.shared-data')}</p>
           <div className="flex flex-gap-2 flex-center flex-wrap justify-between py2">
             <div>

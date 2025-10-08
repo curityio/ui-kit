@@ -1,15 +1,15 @@
-import * as UiConfigProviderAll from '../data-access/UiConfigProvider.tsx';
-import { UiConfigProvider } from '../data-access/UiConfigProvider.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../typings.ts';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UiConfigProvider } from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { UiConfigIfRoute } from './UiConfigIfRoute.tsx';
-import * as utils from '../utils/ui-config-if-utils.tsx';
+import { UiConfigIfRoute } from './UiConfigIfRoute';
+import * as utils from '@/ui-config/utils/ui-config-if-utils';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { ROUTE_PATHS } from '../../routes.tsx';
-import { FeatureNotAvailable } from '../../shared/ui/FeatureNotAvailable.tsx';
-import { UI_CONFIG } from '../utils/ui-config-fixture.ts';
-import { mockUiConfigProvider } from '../../shared/utils/test.ts';
+import { ROUTE_PATHS } from '@/routes';
+import { FeatureNotAvailable } from '@/shared/ui/FeatureNotAvailable';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
+import { mockUiConfigProvider } from '../../shared/utils/test';
 
 describe('UiConfigIfRoute', () => {
   beforeEach(() => {

@@ -1,18 +1,18 @@
-import { MFA_REGISTRABLE_FACTORS } from '../MFA.tsx';
-import { AuthFactorType } from '../ui/AuthFactorType.tsx';
+import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA';
+import { AuthFactorType } from '@/pages/security/MFA/ui/AuthFactorType';
 import {
   Account,
   DEVICE_TYPES,
   RegisteredFactor,
   RegistrableFactor,
   StringMultiValuedValue,
-} from '../../../../shared/data-access/API';
-import { DataTable, Button } from '../../../../shared/ui';
-import { Column } from '../../../../shared/ui/data-table/typings.ts';
-import { Toggle } from '../../../../shared/ui/toggle/Toggle.tsx';
-import { getPrimaryOrFirstDevice } from '../../../../shared/utils/get-primary-or-first-device.ts';
-import { useUiConfigAreOperationsAllowed } from '../../../../ui-config/hooks/useUiConfigAreOperationsAllowed.ts';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../../ui-config/typings.ts';
+} from '@/shared/data-access/API';
+import { DataTable, Button } from '@/shared/ui';
+import { Column } from '@/shared/ui/data-table/typings';
+import { Toggle } from '@/shared/ui/toggle/Toggle';
+import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
+import { useUiConfigAreOperationsAllowed } from '@/ui-config/hooks/useUiConfigAreOperationsAllowed';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { t } from 'i18next';
 
 export interface MFARegistrableAuthenticationFactorListProps {
@@ -155,7 +155,7 @@ const getRegistrableAuthFactorTableCustomActions = (
 
     return (
       <Toggle
-        label="security.multi-factor-authentication.enable"
+        label={t('security.multi-factor-authentication.enable')}
         checked={factorIsRegistered}
         onChange={() => factorToggled(authFactor, !factorIsRegistered)}
         data-testid="mfa-factor-toggle"

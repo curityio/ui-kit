@@ -33,7 +33,7 @@ import {
   StartOptInMfaSetupByAccountIdDocument,
   CompleteVerifyPasskeyByAccountIdDocument,
   StartVerifyPasskeyByAccountIdDocument,
-} from '../graphql-codegen-typings-queries-and-mutations/graphql.ts';
+} from '../graphql-codegen-typings-queries-and-mutations/graphql';
 
 export enum USER_MANAGEMENT_API_OPERATIONS {
   // QUERIES

@@ -4,21 +4,21 @@ import {
   RegisteredFactor,
   RegistrableFactor,
   StringMultiValuedValue,
-} from '../../../../../shared/data-access/API';
+} from '@shared/data-access/API';
 import { useState } from 'react';
-import { Alert } from '../../../../../shared/ui/Alert.tsx';
+import { Alert } from '@shared/ui/Alert';
 import { IconGeneralCheckmarkCircled } from '@icons';
-import { Dialog } from '../../../../../shared/ui/dialog/Dialog.tsx';
+import { Dialog } from '@shared/ui/dialog/Dialog';
 import { ApolloError, useMutation } from '@apollo/client';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../../../ui-config/typings.ts';
-import { UiConfigIf } from '../../../../../ui-config/feature/UiConfigIf.tsx';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings.ts';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { useTranslation } from 'react-i18next';
-import { GRAPHQL_API_ERROR_MESSAGES } from '../../../../../shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES.ts';
-import { MFARegisteredAuthenticationFactorList } from '../MFARegisteredAuthenticationFactorList.tsx';
-import { MFARegistrableAuthenticationFactorList } from '../MFARegistrableAuthenticationFactorList.tsx';
-import { GRAPHQL_API } from '../../../../../shared/data-access/API/GRAPHQL_API.ts';
-import { MFARecoveryCodes } from '../../ui/MFARecoveryCodes.tsx';
-import { Button } from '../../../../../shared/ui';
+import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
+import { MFARegisteredAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegisteredAuthenticationFactorList';
+import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';
+import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
+import { MFARecoveryCodes } from '@/pages/security/MFA/ui/MFARecoveryCodes';
+import { Button } from '@/shared/ui';
 import toast from 'react-hot-toast';
 
 interface MFAOptedInStateProps {

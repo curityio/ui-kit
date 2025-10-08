@@ -2,7 +2,7 @@ import { Dialog as ReachDialog, DialogProps } from '@reach/dialog';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Dialog.module.css';
-import { Button } from '../Button.tsx';
+import { Button } from '@/shared/ui/Button';
 import { IconGeneralClose } from '@icons';
 
 export interface CurityDialogProps {

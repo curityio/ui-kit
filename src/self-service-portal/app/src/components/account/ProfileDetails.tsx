@@ -9,13 +9,13 @@
  * For further information, please contact Curity AB.
  */
 
-import { Section } from '../../shared/ui/section/Section.tsx';
-import { AccountUpdateFields } from '../../shared/data-access/API';
+import { Section } from '@/shared/ui/section/Section';
+import { AccountUpdateFields } from '@/shared/data-access/API';
 import { ChangeEvent } from 'react';
-import { Input } from '../../shared/ui/input/Input.tsx';
-import { EditableContent } from '../../shared/ui/EditableContent/EditableContent.tsx';
+import { Input } from '@/shared/ui/input/Input';
+import { EditableContent } from '@shared/ui/EditableContent/EditableContent';
 import { useTranslation } from 'react-i18next';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../ui-config/typings.ts';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 interface ProfileProps {
   onChange: (accountUpdate: AccountUpdateFields) => void;

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Dialog } from '../../../shared/ui/dialog/Dialog.tsx';
-import { Input } from '../../../shared/ui/input/Input.tsx';
+import { Dialog } from '@/shared/ui/dialog/Dialog';
+import { Input } from '@/shared/ui/input/Input';
 import { useTranslation } from 'react-i18next';
-import { useVerifyPasskey } from './useVerifyPasskey.tsx';
+import { useVerifyPasskey } from './useVerifyPasskey';
 
 interface NewPasskeyDialogProps {
   isOpen: boolean;

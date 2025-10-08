@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Section } from './Section.tsx';
+import { Section } from './Section';
 import { describe, it, expect } from 'vitest';
 
 describe('Section Component', () => {

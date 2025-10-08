@@ -21,10 +21,7 @@ interface PageHeaderProps {
 
 export const PageHeader = ({ title, description, icon, ...props }: PageHeaderProps) => {
   return (
-    <header
-      className={`${classes['page-header']} flex flex-center flex-gap-2 flex-column justify-center p2 lg-p4 mb2`}
-      {...props}
-    >
+    <header className={`${classes['page-header']} flex flex-center flex-gap-2 flex-column justify-center`} {...props}>
       <figure
         role="img"
         aria-hidden="true"

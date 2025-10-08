@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Breadcrumbs } from './Breadcrumbs.tsx';
+import { Breadcrumbs } from './Breadcrumbs';
 import { MemoryRouter } from 'react-router';
 
 describe('Breadcrumbs', () => {

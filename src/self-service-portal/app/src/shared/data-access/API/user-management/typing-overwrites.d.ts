@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { CredentialRuleDescriptor as BaseCredentialRuleDescriptor } from '../index.ts';
+import { CredentialRuleDescriptor as BaseCredentialRuleDescriptor } from '@/shared/data-access/API';
 
 /**
  * Overrides the `CredentialRuleDescriptor` type because it is declared as an `interface`

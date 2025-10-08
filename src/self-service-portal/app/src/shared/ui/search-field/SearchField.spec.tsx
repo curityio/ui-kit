@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { SearchField } from './SearchField.tsx';
+import { SearchField } from './SearchField';
 
 vi.mock('i18next', () => ({
   t: vi.fn((key: string) => (key === 'Search' ? 'Search' : key)),

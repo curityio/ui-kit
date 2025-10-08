@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 import { findByTestId } from '@testing-library/react';
 import * as queries from '@testing-library/dom/types/queries';
-import * as UiConfigProviderAll from '../../ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG } from '../../ui-config/utils/ui-config-fixture.ts';
-import * as utils from '../../ui-config/utils/ui-config-if-utils.tsx';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG } from '../../ui-config/utils/ui-config-fixture';
+import * as utils from '@/ui-config/utils/ui-config-if-utils';
 
 /**
  * It turns out to be tricky to test/tell if an async element was not eventually added to the DOM because of a condition (e.g. UiConfigIf checks).

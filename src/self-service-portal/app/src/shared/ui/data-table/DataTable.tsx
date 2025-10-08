@@ -10,15 +10,15 @@
  */
 
 import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@icons';
-import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../index.ts';
-import { Column } from './typings.ts';
-import { EmptyState } from '../EmptyState.tsx';
+import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
+import { Column } from './typings';
+import { EmptyState } from '../EmptyState';
 import { useTranslation } from 'react-i18next';
-import { ConfirmButton } from '../ConfirmButton.tsx';
-import { SearchField } from '../search-field/SearchField.tsx';
+import { ConfirmButton } from '@/shared/ui/ConfirmButton';
+import { SearchField } from '@/shared/ui/search-field/SearchField';
 import { useState } from 'react';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../ui-config/typings.ts';
-import { UiConfigIf } from '../../../ui-config/feature/UiConfigIf.tsx';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 interface DataTableProps<T> {
   columns: Column<T>[];

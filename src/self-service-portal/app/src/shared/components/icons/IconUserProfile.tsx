@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { getProfileImageColor, getUserInitial } from '../../../util.ts';
+import { getProfileImageColor, getUserInitial } from '@/util';
 
 interface IconUserProfileProps {
   name: string;

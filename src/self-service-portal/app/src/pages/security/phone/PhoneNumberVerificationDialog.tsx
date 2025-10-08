@@ -9,17 +9,17 @@
  * For further information, please contact Curity AB.
  */
 
-import { Alert } from '../../../shared/ui/Alert.tsx';
-import { Dialog } from '../../../shared/ui/dialog/Dialog.tsx';
-import { Spinner } from '../../../shared/ui/Spinner.tsx';
-import { SuccessCheckmark } from '../../../shared/ui/SuccessCheckmark.tsx';
+import { Alert } from '@/shared/ui/Alert';
+import { Dialog } from '@/shared/ui/dialog/Dialog';
+import { Spinner } from '@/shared/ui/Spinner';
+import { SuccessCheckmark } from '@/shared/ui/SuccessCheckmark';
 import { useMutation } from '@apollo/client';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { OtpInput } from '../../../shared/ui/OtpInput.tsx';
-import { USER_MANAGEMENT_API } from '../../../shared/data-access/API/user-management';
-import { Input } from '../../../shared/ui/input/Input.tsx';
-import { GRAPHQL_API_ERROR_MESSAGES } from '../../../shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES.ts';
+import { OtpInput } from '../../../shared/ui/OtpInput';
+import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
+import { Input } from '@/shared/ui/input/Input';
+import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
 
 type Props = {
   accountId: string;

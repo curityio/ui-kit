@@ -1,4 +1,4 @@
-import { PageHeader } from './index.ts';
+import { PageHeader } from '@/shared/ui';
 import { IconGeneralArrowBack, IconGeneralEyeHide } from '@icons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';

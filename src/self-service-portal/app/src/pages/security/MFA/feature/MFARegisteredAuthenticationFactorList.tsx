@@ -1,12 +1,12 @@
-import { RegisteredFactor } from '../../../../shared/data-access/API';
-import { DataTable } from '../../../../shared/ui';
-import { ConfirmButton } from '../../../../shared/ui/ConfirmButton.tsx';
-import { Column } from '../../../../shared/ui/data-table/typings.ts';
-import { getFormattedDate } from '../../../../shared/utils/date.ts';
+import { RegisteredFactor } from '@/shared/data-access/API';
+import { DataTable } from '@/shared/ui';
+import { ConfirmButton } from '@/shared/ui/ConfirmButton';
+import { Column } from '@/shared/ui/data-table/typings';
+import { getFormattedDate } from '@/shared/utils/date';
 import { t } from 'i18next';
-import { AuthFactorType } from '../ui/AuthFactorType.tsx';
-import { UI_CONFIG_RESOURCES, UI_CONFIG_OPERATIONS } from '../../../../ui-config/typings.ts';
-import { UiConfigIf } from '../../../../ui-config/feature/UiConfigIf.tsx';
+import { AuthFactorType } from '../ui/AuthFactorType';
+import { UI_CONFIG_RESOURCES, UI_CONFIG_OPERATIONS } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 export interface MFARegisteredAuthenticationFactorListProps {
   factors: RegisteredFactor[];

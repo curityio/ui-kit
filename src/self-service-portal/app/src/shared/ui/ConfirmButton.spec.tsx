@@ -11,7 +11,7 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { ConfirmButton } from './ConfirmButton.tsx';
+import { ConfirmButton } from '@/shared/ui/ConfirmButton';
 import { IconGeneralClose } from '@icons';
 
 describe('ConfirmButton', () => {

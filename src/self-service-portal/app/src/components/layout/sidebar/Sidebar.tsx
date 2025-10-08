@@ -1,9 +1,9 @@
-import { AUTHENTICATED_ROUTES, USSPRouteConfig } from '../../../routes.tsx';
-import { List, ListCell, ListRow } from '../../../shared/ui';
+import { AUTHENTICATED_ROUTES, USSPRouteConfig } from '@/routes';
+import { List, ListCell, ListRow } from '@/shared/ui';
 import { NavLink } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../ui-config/typings.ts';
-import { UiConfigIf } from '../../../ui-config/feature/UiConfigIf.tsx';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 export const Sidebar = () => {
   const { t } = useTranslation();

@@ -1,10 +1,10 @@
 import { describe, it, beforeEach, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { Sidebar } from './Sidebar.tsx';
-import * as AuthProviderAll from '../../../auth/data-access/AuthProvider.tsx';
-import * as UiConfigProviderAll from '../../../ui-config/data-access/UiConfigProvider.tsx';
-import { UI_CONFIG } from '../../../ui-config/utils/ui-config-fixture.ts';
+import { Sidebar } from './Sidebar';
+import * as AuthProviderAll from '@auth/data-access/AuthProvider';
+import * as UiConfigProviderAll from '@/ui-config/data-access/UiConfigProvider';
+import { UI_CONFIG } from '@/ui-config/utils/ui-config-fixture';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),

@@ -10,35 +10,35 @@
  */
 
 import { IconActionMultiFactor } from '@icons';
-import { Button, PageHeader } from '../../../shared/ui';
-import { useAuth } from '../../../auth/data-access/AuthProvider.tsx';
-import { GRAPHQL_API } from '../../../shared/data-access/API/GRAPHQL_API.ts';
+import { Button, PageHeader } from '@shared/ui';
+import { useAuth } from '@auth/data-access/AuthProvider';
+import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API.ts';
 import { useMutation, useQuery } from '@apollo/client';
-import { MFAOptedInState } from './feature/MFA-states/MFAOptedInState.tsx';
-import { MFAOptedOutState } from './feature/MFA-states/MFAOptedOutState.tsx';
+import { MFAOptedInState } from '@/pages/security/MFA/feature/MFA-states/MFAOptedInState';
+import { MFAOptedOutState } from '@/pages/security/MFA/feature/MFA-states/MFAOptedOutState';
 import { useTranslation } from 'react-i18next';
-import { MFAInitialState } from './feature/MFA-states/MFAInitialState.tsx';
+import { MFAInitialState } from '@/pages/security/MFA/feature/MFA-states/MFAInitialState';
 import { useEffect, useState } from 'react';
 import {
   OptinMfa,
+  RegisteredFactor,
   RegistrableFactor,
   StartOptInMfaSetupByAccountIdMutation,
   StartOptInMfaSetupByAccountIdPayload,
   StringMultiValuedValue,
-} from '../../../shared/data-access/API';
-import { EmailVerificationDialog } from '../email/EmailVerificationDialog.tsx';
-import { PhoneNumberVerificationDialog } from '../phone/PhoneNumberVerificationDialog.tsx';
-import { NewTotpDeviceDialog } from '../NewTotpDeviceDialog.tsx';
-import { MFARecoveryCodes } from './ui/MFARecoveryCodes.tsx';
-import { Spinner } from '../../../shared/ui/Spinner.tsx';
-import { RegisteredFactor } from '../../../shared/data-access/API';
-import { MFASetupInitialState } from './feature/MFA-states/MFASetupInitialState.tsx';
-import { MFARegistrableAuthenticationFactorList } from './feature/MFARegistrableAuthenticationFactorList.tsx';
-import { ProgressSteps } from '../../../shared/ui/progress-steps/ProgressSteps.tsx';
-import { NewPasskeyDialog } from '../Passkeys/NewPasskeyDialog.tsx';
-import { GRAPHQL_API_ERROR_MESSAGES } from '../../../shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES.ts';
-import { UiConfigIf } from '../../../ui-config/feature/UiConfigIf.tsx';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '../../../ui-config/typings.ts';
+} from '@/shared/data-access/API';
+import { EmailVerificationDialog } from '@/pages/security/email/EmailVerificationDialog';
+import { PhoneNumberVerificationDialog } from '@/pages/security/phone/PhoneNumberVerificationDialog';
+import { NewTotpDeviceDialog } from '@/pages/security/NewTotpDeviceDialog';
+import { MFARecoveryCodes } from '@/pages/security/MFA/ui/MFARecoveryCodes';
+import { Spinner } from '@/shared/ui/Spinner';
+import { MFASetupInitialState } from './feature/MFA-states/MFASetupInitialState';
+import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';
+import { ProgressSteps } from '@/shared/ui/progress-steps/ProgressSteps';
+import { NewPasskeyDialog } from '../Passkeys/NewPasskeyDialog';
+import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
+import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export enum MFA_REGISTRABLE_FACTORS {
   EMAIL = 'email',
@@ -198,12 +198,20 @@ export const MFA = () => {
   let MFAStateContentToDisplay = null;
 
   if (currentMFAState === MFA_STATES.INITIAL) {
-    MFAStateContentToDisplay = (
-      <>
-        <ProgressSteps currentStep={1} />
-        <MFAInitialState>{turnOnMFAButtonElement}</MFAInitialState>
-      </>
-    );
+    if (optInMfaData !== null) {
+      MFAStateContentToDisplay = (
+        <>
+          <ProgressSteps currentStep={1} />
+          <MFAInitialState>{turnOnMFAButtonElement}</MFAInitialState>
+        </>
+      );
+    } else {
+      MFAStateContentToDisplay = (
+        <>
+          <MFAInitialState errorMessageKey={'security.multi-factor-authentication.not-used-no-optin-warning'} />
+        </>
+      );
+    }
   } else if (currentMFAState === MFA_STATES.SETUP_INITIAL) {
     MFAStateContentToDisplay = (
       <>
@@ -254,7 +262,7 @@ export const MFA = () => {
         </div>
       </>
     );
-  } else if (currentMFAState === MFA_STATES.OPTED_IN) {
+  } else if (currentMFAState === MFA_STATES.OPTED_IN && optInMfaData !== null) {
     MFAStateContentToDisplay = (
       <MFAOptedInState
         optInMfaData={optInMfaData!}
@@ -288,7 +296,7 @@ export const MFA = () => {
       {showCreateDeviceDialog === MFA_REGISTRABLE_FACTORS.EMAIL && (
         <EmailVerificationDialog
           accountId={accountId}
-          emailForOtpVerification={deviceToVerify?.value}
+          emailForOtpVerification={deviceToVerify?.value ?? null}
           setEmailAsPrimaryAfterVerification={true}
           onEmailListChange={() => {
             refetchAccount();

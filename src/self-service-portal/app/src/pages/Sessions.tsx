@@ -12,7 +12,7 @@
 import { IconGeneralArrowForward, IconToken } from '@icons';
 import { Button, DataTable, PageHeader } from '../shared/ui';
 import { useTranslation } from 'react-i18next';
-import { Column } from '../shared/ui/data-table/typings.ts';
+import { Column } from '@/shared/ui/data-table/typings';
 
 // TODO: remove this type when it is available in GraphQL schema
 type Session = {

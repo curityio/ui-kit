@@ -3,7 +3,7 @@ import {
   GetGrantedAuthorizationsByOwnerDocument,
   RevokeGrantedAuthorizationsByOwnerAndClientDocument,
   RevokeGrantedAuthorizationsByOwnerDocument,
-} from '../graphql-codegen-typings-queries-and-mutations/graphql.ts';
+} from '../graphql-codegen-typings-queries-and-mutations/graphql';
 
 export enum GRANTED_AUTHORIZATIONS_API_OPERATIONS {
   // QUERIES
