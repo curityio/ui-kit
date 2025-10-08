@@ -7,7 +7,7 @@ import {
 } from '@shared/data-access/API';
 import { useState } from 'react';
 import { Alert } from '@shared/ui/Alert';
-import { IconGeneralCheckmarkCircled } from '@icons';
+import { IconGeneralCheckmarkCircled } from '@curity-ui-kit/icons';
 import { Dialog } from '@shared/ui/dialog/Dialog';
 import { ApolloError, useMutation } from '@apollo/client';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings.ts';

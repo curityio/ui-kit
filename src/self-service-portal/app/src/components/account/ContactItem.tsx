@@ -1,7 +1,7 @@
 import { Button, ListCell, ListRow } from '@/shared/ui';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { IconGeneralArrowForward } from '@icons';
+import { IconGeneralArrowForward } from '@curity-ui-kit/icons';
 import { Account, StringMultiValuedValue } from '@/shared/data-access/API';
 import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';

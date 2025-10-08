@@ -43,7 +43,7 @@ import {
   IconGeneralLock,
   IconUserDataSources,
   IconUserManagement,
-} from '@icons';
+} from '@curity-ui-kit/icons';
 import { DefaultRoute } from '@/shared/components/DefaultRoute';
 
 export const ROUTE_PATHS = {

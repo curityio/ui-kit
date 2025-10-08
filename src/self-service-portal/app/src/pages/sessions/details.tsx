@@ -10,7 +10,7 @@
  */
 
 import { ZoomIcon } from '../../components/icons/ZoomIcon';
-import { IconGeneralDownload, IconGeneralEdit, IconGeneralTrash, IconUser } from '@icons';
+import { IconGeneralDownload, IconGeneralEdit, IconGeneralTrash, IconUser } from '@curity-ui-kit/icons';
 import { Button } from '../../shared/ui/Button';
 import { Section } from '@/shared/ui/section/Section';
 

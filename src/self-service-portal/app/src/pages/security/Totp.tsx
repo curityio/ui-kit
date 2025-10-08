@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconAuthenticatorTotp } from '@icons';
+import { IconAuthenticatorTotp } from '@curity-ui-kit/icons';
 import { DataTable, PageHeader } from '../../shared/ui';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';

@@ -1,6 +1,6 @@
 import React, { JSX, useEffect, useRef, useState } from 'react';
 import { Button } from '../Button';
-import { IconGeneralEdit } from '@icons';
+import { IconGeneralEdit } from '@curity-ui-kit/icons';
 import { useOutsideClick } from '@shared/hooks/useOutsideClick';
 import { useTranslation } from 'react-i18next';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';

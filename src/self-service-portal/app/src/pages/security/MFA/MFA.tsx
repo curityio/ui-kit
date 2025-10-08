@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconActionMultiFactor } from '@icons';
+import { IconActionMultiFactor } from '@curity-ui-kit/icons';
 import { Button, PageHeader } from '@shared/ui';
 import { useAuth } from '@auth/data-access/AuthProvider';
 import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API.ts';

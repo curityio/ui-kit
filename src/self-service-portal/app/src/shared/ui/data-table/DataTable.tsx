@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@icons';
+import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@curity-ui-kit/icons';
 import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
 import { Column } from './typings';
 import { EmptyState } from '../EmptyState';
