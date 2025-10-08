@@ -209,7 +209,7 @@ button.button-social.button-instagram .icon,
 
 button.button-social.button-twitter .icon,
 .button-social.button-twitter .icon {
-  background-color: var(--authenticator-x-color);
+  background-color: var(--authenticator-twitter-color);
 }
 
 button.button-social.button-linkedin .icon,
