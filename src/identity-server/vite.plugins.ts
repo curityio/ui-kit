@@ -71,7 +71,7 @@ export function createSharedPlugins(): PluginOption[] {
         sequential: true,
         order: "post",
         handler() {
-          const stylesJsPath = path.join(OUTPUT_DIR, "assets/js/styles.js");
+          const stylesJsPath = path.join(OUTPUT_DIR, "webroot/assets/js/styles.js");
           if (fs.existsSync(stylesJsPath)) {
             fs.unlinkSync(stylesJsPath);
             console.log(
