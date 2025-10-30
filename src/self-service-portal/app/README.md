@@ -260,7 +260,7 @@ We use a subset of our internal package `@curity-internal/ui-icons-react`. Since
 Import icons like this:
 
 ```jsx
-import { IconToken } from '@icons';
+import { IconToken } from '@curity-ui-kit/icons';
 ```
 
 If there are any icons missing we will update them accordingly.

@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconFacilitiesEmail, IconFacilitiesSms, IconGeneralLocation } from '@icons';
+import { IconFacilitiesEmail, IconFacilitiesSms, IconGeneralLocation } from '@curity-ui-kit/icons';
 import { Section } from '@/shared/ui/section/Section';
 import { Account } from '@/shared/data-access/API';
 import { List } from '@/shared/ui';

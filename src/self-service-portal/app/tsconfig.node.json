@@ -24,8 +24,7 @@
       "@auth/*": ["src/auth/*"],
       "@shared/*": ["src/shared/*"],
       "@styles/*": ["src/styles/*"],
-      "@util/*": ["src/util/*"],
-      "@icons": ["../../common/icons"],
+      "@util/*": ["src/util/*"]
     }
   },
   "include": [

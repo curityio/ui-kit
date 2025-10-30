@@ -1,6 +1,6 @@
 import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA';
 import { RegistrableFactor, RegisteredFactor } from '@/shared/data-access/API';
-import { IconFacilitiesEmail, IconFacilitiesSms, IconAuthenticatorTotp, IconAuthenticatorPasskeys } from '@icons';
+import { IconFacilitiesEmail, IconFacilitiesSms, IconAuthenticatorTotp, IconAuthenticatorPasskeys } from '@curity-ui-kit/icons';
 import { t } from 'i18next';
 
 export interface AuthFactorTypeProps {

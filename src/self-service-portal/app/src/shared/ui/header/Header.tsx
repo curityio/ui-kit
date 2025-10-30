@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralKebabMenu, IconVciCredentialHome } from '@icons';
+import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity-ui-kit/icons';
 import { Link } from 'react-router';
 import { useEffect } from 'react';
 import { useAuth } from '@/auth/data-access/AuthProvider';

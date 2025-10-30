@@ -1,60 +1,12 @@
-/*
- * Copyright (C) 2025 Curity AB. All rights reserved.
- *
- * The contents of this file are the property of Curity AB.
- * You may not copy or use this file, in either source code
- * or executable form, except in compliance with terms
- * set by Curity AB.
- *
- * For further information, please contact Curity AB.
- */
-
-/* Theme variables */
-/* 1. Page */
-/* The main page that contains the login well. */
 :root {
-  --page-background-image-url: none;
-  --page-background-image-gradient: none;
-  --page-background-position: center center;
-  --page-background-repeat: no-repeat;
-  --page-background-size: cover;
-  --page-background-color: #f3f5f7;
-  --page-background-color-dark: var(--color-primary-dark);
-  --page-powered-by-display: flex; /* Set to none to hide */
-
-  /* 2 Well */
-  /* The main area with the forms */
-
-  --well-border-color: transparent;
-  --well-background-color: white;
-  --well-border-radius: 26px;
-  --well-border-style: solid;
-  --well-border-width: 1px;
-  --well-box-shadow: rgb(0 0 0 / 5%) 0 6px 24px 0, rgb(0 0 0 / 8%) 0 0 0 1px;
-
-  /* 3 Login symbol */
-
-  --login-symbol-display: block; /* Set to none to hide */
-  --login-symbol-size: 180px;
-  --login-symbol-margin-top: 2rem;
-  --login-symbol-margin-bottom: 2rem;
-  --login-symbol-border-radius: 50%;
-
-  /* 4 Login logo */
-
-  --login-logo-display: block; /* Set to none to hide */
-  --login-logo-max-width: 200px;
-  --login-logo-max-height: 40px;
-
-  /* 5. Colors */
-
   --color-text: #737373;
   --color-heading: #262c3d;
   --color-light: white;
   --color-primary: #323c53;
   --color-primary-dark: #262c3d;
-  --color-primary-medium: #212737;
+  --color-primary-medium: #3c4764;
   --color-primary-light: #7e89a8;
+  --color-tertiary: #f2eb80;
   --color-success: #57c75c;
   --color-info: #62818f;
   --color-danger: #ca2e2b;
@@ -66,18 +18,15 @@
   --color-grey-light: #ccc;
   --color-grey-subtle: #f6f6f6;
 
-  /* 6. Forms */
-
   --form-label-color: #666;
   --form-label-line-height: 2;
   --form-label-font-size: calc(var(--type-base-size) * 0.85);
+  --form-field-color: black;
   --form-field-disabled-background-color: rgb(0 0 0 / 12.5%);
   --form-field-disabled-opacity: 0.5;
   --form-field-readonly-background-color: rgb(0 0 0 / 12.5%);
-  --form-field-color: black;
-  --form-field-color-dark: black;
   --form-field-background-color: white;
-  --form-field-background-color-dark: white;
+  --form-field-background-color-dark: var(--color-primary-dark);
   --form-field-placeholder-color: rgb(141 141 141);
   --form-field-border-color: rgb(207 217 224);
   --form-field-box-shadow: none;
@@ -98,36 +47,25 @@
   --form-field-caret-color: var(--color-primary);
   --form-field-font-size: var(--type-base-size);
 
-  /* 7. Typography */
-  /* The font stacks can be native system fonts, or web fonts. If web fonts is used the fonts need to be setup in the css using @font-face */
-
-  --type-sans: "Roboto-Regular", system, -apple-system, "Roboto", "Segoe UI",
-    "Lucida Grande", sans-serif;
-  --type-sans-bold: "Roboto-Bold", system, -apple-system, "Roboto", "Segoe UI",
-    "Lucida Grande", sans-serif;
+  --type-sans: 'Roboto-Regular', system, -apple-system, 'Roboto', 'Segoe UI',
+    'Lucida Grande', sans-serif;
   --type-weight: normal;
-  --type-weight-medium: "Roboto-Medium", system, -apple-system, "Roboto", "Segoe UI",
-    "Lucida Grande", sans-serif;
-  --type-weight-bold: "Roboto-Bold", system, -apple-system, "Roboto", "Segoe UI",
-    "Lucida Grande", sans-serif;
-  --type-mono: "SF Mono", consolas, monaco, "Courier New", courier, monospace;
+  --type-sans-bold: 'Roboto-Medium', system, -apple-system, 'Roboto',
+    'Segoe UI', 'Lucida Grande', sans-serif;
+  --type-sans-extra-bold: 'Roboto-Bold', Roboto, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --type-weight-bold: normal;
+  --type-mono: 'SF Mono', consolas, monaco, 'Courier New', courier, monospace;
   --type-line-height: 1.5;
   --type-base-size: 1rem;
-
-  /* 8. Spacing */
-  /* Space between elements and components. Can be relative units like rem, ems but also pixels (px) */
 
   --space-1: 0.5rem;
   --space-2: calc(var(--space-1) * 2);
   --space-3: calc(var(--space-1) * 4);
   --space-4: calc(var(--space-1) * 8);
 
-  /* 9. Progress bar */
-
   --progress-bar-height: 6px;
   --progress-bar-border-radius: 6px;
-
-  /* 10. Buttons */
 
   --button-padding-y: 0.5rem;
   --button-padding-x: 0.75rem;
@@ -137,8 +75,6 @@
   --button-border-color: var(--color-primary);
   --button-background-color: var(--color-primary);
   --button-background-color-hover: var(--color-primary-dark);
-
-  /* 11 Authenticator colors */
 
   --authenticator-google-color: #4285f4;
   --authenticator-pingfederate-color: #bc1f27;
@@ -152,11 +88,10 @@
   --authenticator-linkedin-color: #0077b5;
   --authenticator-sms-color: #70b29c;
   --authenticator-html-form-color: #626c87;
-  --authenticator-saml-color: #c32527;
-  --authenticator-saml2-color: #c32527;
+  --authenticator-saml-color: #666;
   --authenticator-totp-color: #4682b4;
   --authenticator-github-color: #333;
-  --authenticator-x-color: #0f1419;
+  --authenticator-twitter-color: #1da1f2;
   --authenticator-bankid-color: #235971;
   --authenticator-dropbox-color: #007ee5;
   --authenticator-aws-color: #f90;
@@ -176,26 +111,14 @@
   --authenticator-social-single-color: var(--color-primary);
   --authenticator-username-color: var(--color-primary);
   --authenticator-netidaccess-os-color: #000;
-  --authenticator-passkeys-color: #626c87;
-  --authenticator-openid-wallet-color: #f2f2f2;
-
-  /* 12 Alerts */
 
   --alert-border-radius: 8px;
   --alert-border-style: solid;
   --alert-border-width: 1px;
   --alert-border-color: #cfd9e0;
 
-  /* 13 Done checkmark */
-
   --done-checkmark-container-size: 100px;
   --done-checkmark-size: 80px;
   --done-checkmark-line-color: var(--color-success);
   --done-checkmark-circle-color: var(--color-success);
-
-  /* 14 Self Service Portal */
-  --self-service-portal-login-sidebar-image-display: flex;
-  --self-service-portal-login-sidebar-background-color: #262c3d;
-  --self-service-portal-sidebar-background-color: white;
-  --self-service-portal-main-background-color: white;
 }

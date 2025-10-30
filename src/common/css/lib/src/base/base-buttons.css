@@ -8,42 +8,41 @@
  *
  * For further information, please contact Curity AB.
  */
-
-.btn,
 .button {
-  --y-tiny: 0.65;
+  --y-tiny: 0.75;
   --x-tiny: 1;
-
   --y-small: 0.85;
   --x-small: 1;
-
-  --y-medium: 1.2;
+  --y-medium: 1.15;
   --x-medium: 1.5;
-
   --y-large: 1.25;
   --x-large: 1.75;
-
   --y-default: var(--y-medium);
   --x-default: var(--x-medium);
 
+  align-items: center;
   background-color: var(--button-background-color);
-  color: white;
   border: none;
   border-radius: var(--button-border-radius);
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   font-family: var(--type-sans-bold);
   font-size: var(--button-font-size);
-  -webkit-font-smalloothing: antialiased;
+  -webkit-font-smoothing: antialiased;
   font-weight: var(--type-weight-bold);
-  min-height: 44px;
-  padding-block-start: calc(var(--button-padding-y) * var(--y-default));
-  padding-block-end: calc(var(--button-padding-y) * var(--y-default));
-  padding-inline-start: calc(var(--button-padding-x) * var(--x-default));
-  padding-inline-end: calc(var(--button-padding-x) * var(--x-default));
-    transition: all 200ms;
+  gap: var(--space-1);
+  justify-content: center;
+
+  transition:
+    background-color 200ms,
+    transform 200ms,
+    color 200ms,
+    box-shadow 200ms,
+    border-color 200ms;
+}
+
+button svg {
+  display: block;
 }
 
 .button:hover {
@@ -56,6 +55,14 @@
   border-color: var(--form-field-border-color-focus);
   box-shadow: var(--form-field-box-shadow-focus);
   outline: none;
+}
+
+.button:focus-visible {
+  outline: var(
+    --form-field-outline-focus-visible,
+    2px solid var(--color-primary)
+  );
+  outline-offset: 2px;
 }
 
 .login-well.form-transparent {
@@ -81,7 +88,6 @@
   color: white;
 }
 
-input[type="submit"][value="Cancel"],
 .button-primary-outline {
   background-color: transparent;
   border: 1px solid var(--button-border-color);
@@ -170,7 +176,6 @@ input[type="submit"][value="Cancel"],
   color: white;
 }
 
-a.button-tiny,
 .button-tiny {
   font-size: calc(var(--button-font-size) * var(--y-tiny));
   min-height: 24px;
@@ -180,7 +185,6 @@ a.button-tiny,
   padding-inline-end: calc(var(--button-padding-x) * var(--x-tiny));
 }
 
-a.button-small,
 .button-small {
   font-size: calc(var(--button-font-size) * var(--y-small));
   min-height: 34px;
@@ -190,7 +194,6 @@ a.button-small,
   padding-inline-end: calc(var(--button-padding-x) * var(--x-small));
 }
 
-a.button-medium,
 .button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
@@ -200,7 +203,6 @@ a.button-medium,
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
 }
 
-a.button-large,
 .button-large {
   font-size: calc(var(--button-font-size) * var(--y-large));
   min-height: 58px;
@@ -208,12 +210,6 @@ a.button-large,
   padding-block-end: calc(var(--button-padding-y) * var(--y-large));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-large));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-large));
-}
-
-.button-social {
-  padding-inline-start: 80px;
-  text-align: left;
-  justify-content: flex-start;
 }
 
 .button-white {
@@ -262,7 +258,6 @@ a.button-transparent:hover,
   background-color: transparent;
 }
 
-input[type='submit'].btn,
 .button-fullwidth {
   text-align: center;
   width: 100%;

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Dialog.module.css';
 import { Button } from '@/shared/ui/Button';
-import { IconGeneralClose } from '@icons';
+import { IconGeneralClose } from '@curity-ui-kit/icons';
 
 export interface CurityDialogProps {
   isOpen: boolean;

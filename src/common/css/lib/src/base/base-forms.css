@@ -22,7 +22,6 @@
 /* -------------------------------------------------------------------
 Base fields
 ------------------------------------------------------------------- */
-.field-light,
 .field {
   background-color: var(--form-field-background-color);
   border-color: var(--form-field-border-color);
@@ -39,12 +38,10 @@ Base fields
     background-color 200ms;
 }
 
-.field-light:hover,
 .field:hover {
   border-color: var(--form-field-border-color-hover);
 }
 
-.field-light:focus,
 .field:focus {
   border-color: var(--form-field-border-color-focus);
   box-shadow: var(--form-field-box-shadow-focus);

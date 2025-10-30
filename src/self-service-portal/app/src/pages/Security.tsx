@@ -16,7 +16,7 @@ import {
   IconFacilitiesSms,
   IconGeneralArrowForward,
   IconGeneralLock,
-} from '@icons';
+} from '@curity-ui-kit/icons';
 
 import { ROUTE_PATHS } from '@/routes';
 import { List, ListCell, ListRow, PageHeader } from '@shared/ui';
