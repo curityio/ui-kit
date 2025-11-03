@@ -83,14 +83,7 @@
 
     <button type="submit" class="button button-fullwidth $!button_color mt2">#message(
         "authenticator.html-form.authenticate.view.authenticate")</button>
-
-#if ($_showRememberMe)
-      <div class="form-field flex flex-center mt1">
-        <input class="mr1" type="checkbox" id="rememberMe" name="rememberMe" value="true" checked />
-        <label for="rememberMe">#message("authenticator.html-form.authenticate.view.remember-me")</label>
-    </div>
-#end
-
+#parse("fragments/remember-me")
     <div class="mt3 clearfix">
         <div class="center py2 login-actions">
             <a href="$_authUrl/forgot-password">#message(

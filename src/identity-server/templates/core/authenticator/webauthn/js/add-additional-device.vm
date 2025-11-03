@@ -16,9 +16,8 @@
         $("#waitingDiv").showElement();
         $("#registerDiv, #alertWrapper").hideElement();
 
-        webauthnJSON.create($_json)
+        createPublicKeyCredential($_json)
                 .then(response => {
-                    delete response["rawId"];
                     $("input[name='json']").val(JSON.stringify(response));
                     $("#additionalDeviceForm").submit();
                 }).catch(handleError);

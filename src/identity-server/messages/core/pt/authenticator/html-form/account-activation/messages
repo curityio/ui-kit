@@ -31,3 +31,12 @@ view.newToken.button=Enviar novo e-mail de ativação
 view.newTokenSent.h1=Um novo e-mail de ativação foi enviado
 view.newTokenSent.p1=Um e-mail com um link de ativação foi enviado a você.
 view.button=Ativar
+
+otp.view.enter-otp=Digite o código OTP
+otp.view.resend-otp-button=Enviar um novo e-mail de ativação
+otp.view.success.email-sent=Um e-mail com uma senha de uso único foi enviado para você.
+otp.view.success.spam-folder=Se você não recebeu um e-mail, verifique sua pasta de spam.
+otp.error.incorrect-code=Código incorreto ou expirado. Por favor, tente de novo.
+otp.info.code-resent=Um novo e-mail de ativação foi enviado
+
+error.too-many-attempts=Número máximo de tentativas excedido. Você pode tentar novamente mais tarde.

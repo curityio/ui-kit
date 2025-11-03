@@ -11,15 +11,15 @@
 
 #parse("fragments/jquery")
 
-<script src="$!_staticResourceRootPath/assets/js/lib/webauthn-json.js"></script>
-
 <script $!nonceAttr>
     const webAuthnErrors = {
         NOT_ALLOWED: "NotAllowedError",
         ABORTED: "AbortError"
     }
 
-    const isWebauthnSupported = typeof PublicKeyCredential !== "undefined";
+    const isWebauthnSupported = typeof PublicKeyCredential !== "undefined" &&
+            typeof PublicKeyCredential.parseCreationOptionsFromJSON !== "undefined" &&
+            typeof PublicKeyCredential.parseRequestOptionsFromJSON !== "undefined";
 
     // Chrome and Chromium also has "Safari" in the user agent
     const requiresUserInteraction = navigator.userAgent.indexOf("Safari") > -1 &&
@@ -31,6 +31,20 @@
         } catch (e) {
             return false;
         }
+    }
+
+    const createPublicKeyCredential = async (optionsJson) => {
+        const options = PublicKeyCredential.parseCreationOptionsFromJSON(optionsJson.publicKey);
+        const credential = await navigator.credentials.create({publicKey: options});
+        const credentialJson = credential.toJSON();
+        delete credentialJson["rawId"];
+        return credentialJson;
+    }
+
+    const getPublicKeyCredential = async (optionsJson) => {
+        const options = PublicKeyCredential.parseRequestOptionsFromJSON(optionsJson.publicKey);
+        const credential = await navigator.credentials.get({publicKey: options});
+        return credential.toJSON();
     }
 
     $.fn.showElement = function() {

@@ -1,7 +1,6 @@
 import { StartVerifyPasskeyByAccountIdMutation } from '@/shared/data-access/API';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { FetchResult, useMutation } from '@apollo/client';
-import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
 
 export const useVerifyPasskey = () => {
   const [
@@ -23,9 +22,9 @@ export const useVerifyPasskey = () => {
       },
     })
       .then(parseCredentialOptions)
-      .then(async ({ state, credentialOptionsParsed }) => {
-        const credential = await create(credentialOptionsParsed);
-        const credentialBase64String = btoa(JSON.stringify(credential));
+      .then(async ({ state, credentialOptions }) => {
+        const credential = await navigator.credentials.create(credentialOptions);
+        const credentialBase64String = btoa(JSON.stringify((credential as PublicKeyCredential).toJSON()));
 
         return completeVerifyPasskeyByAccountId({
           variables: {
@@ -59,7 +58,9 @@ const parseCredentialOptions = (verificationStartResponse: FetchResult<StartVeri
     verificationStartResponse!.data!.startVerifyPasskeyByAccountId!.credentialOptionsJson!;
   const credentialResponseJsonDecodedString = atob(credentialResponseJsonEncoded);
   const credentialOptionsJson = JSON.parse(credentialResponseJsonDecodedString);
-  const credentialOptionsParsed = parseCreationOptionsFromJSON(credentialOptionsJson);
+  const credentialOptions = {
+      publicKey: PublicKeyCredential.parseCreationOptionsFromJSON(credentialOptionsJson.publicKey)
+  };
 
-  return { state, credentialOptionsParsed };
+  return { state, credentialOptions };
 };

@@ -31,8 +31,8 @@
  * For more information about using the Velocity templating language, refer to
  * http://velocity.apache.org/engine/devel/user-guide.html.
  *#
-<link rel="icon" type="image/png" href="$_staticResourceRootPath/assets/images/favicon.png" sizes="32x32">
-<link rel="apple-touch-icon" href="$_staticResourceRootPath/assets/images/favicon-touch.png">
+<link rel="icon" type="image/png" href="$favicon_path">
+<link rel="apple-touch-icon" href="$favicon_path">
 
 #if ( !$_disableAntiClickjackingScript )
     <style id="antiClickjack" $!nonceAttr>body{display:none !important;}</style>

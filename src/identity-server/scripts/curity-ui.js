@@ -211,64 +211,6 @@ module.exports = function () {
       }
   };
 
-  var _deviceFlow = function() {
-
-      // Disable ex. Chrome Autofill on these inputs
-    $('.field-enter-usercode').attr('autocomplete','off');
-
-    // Listen for keydown on inputs.
-    // Cache the input fields
-    const $fields = $('.field-enter-usercode');
-
-    // Listen for keydown and input events
-    $fields.on('input keydown', function (event) {
-        const $current = $(this);
-        const index = $fields.index($current);
-        const key = event.key;
-
-        // On input: Move to next field if current has a value and key is not Tab or Backspace
-        if (event.type === 'input' && key !== 'Tab' && key !== 'Backspace') {
-            if ($current.val()) {
-                $current.addClass('field-enter-usercode-success');
-                const $next = $fields.eq(index + 1);
-                if ($next.length) {
-                    $next.trigger('focus').trigger('touchstart');
-                }
-            }
-        }
-
-        // On Backspace key: move to previous field if current is empty
-        if (event.type === 'keydown' && key === 'Backspace' && !$current.val()) {
-                const $prev = $fields.eq(index - 1);
-                if ($prev.length) {
-                $prev.trigger('focus').trigger('touchstart');
-            }
-        }
-
-        // If last field is filled in, enable the submit button
-        if (index === $fields.length - 1 && $current.val()) {
-            const $submit = $('input[type="submit"]');
-            $submit.prop('disabled', false).addClass('button-success');
-        }
-    });
-
-    // Validate empty fields on blur
-    $('.field-enter-usercode').on('blur', function () {
-        const $field = $(this);
-
-        if (!$field.val().trim()) {
-            $field
-            .addClass('field-enter-usercode-error')
-            .attr('aria-invalid', 'true')
-        } else {
-            $field
-            .removeClass('field-enter-usercode-error')
-            .removeAttr('aria-invalid')
-        }
-    });
-
-  };
-
   // Namespace for input validation helpers
   const validation = function () {
     function debounce(func, timeout = 300) {
@@ -507,18 +449,72 @@ module.exports = function () {
     };
   }();
 
+    /**
+     * Set a flag in localStorage to remember a user decision regarding whether to enable
+     * non-essential cookies.
+     *
+     * This flag may be set automatically by a user interface element by using the
+     * {@link bindNonEssentialCookiesTo} function.
+     *
+     * @param enable boolean representing the user's decision
+     */
+    function setEnableNonEssentialCookies(enable) {
+        if (typeof enable === 'boolean') {
+            localStorage.setItem('curityui-enable-non-essential-cookies', enable ? '1' : '0');
+        } else {
+            throw Error('setEnableNonEssentialCookies expects a boolean but got: ' + enable);
+        }
+    }
+
+    /**
+     * Get the user's decision regarding enabling non-essential cookies.
+     *
+     * If the user has not explicitly made a decision, the returned value will be null.
+     * Otherwise, a boolean value is returned.
+     *
+     * @returns {null|boolean} the user's decision, if known
+     */
+    function isNonEssentialCookiesEnabled() {
+        var localStorageValue = localStorage.getItem('curityui-enable-non-essential-cookies');
+        if (localStorageValue) {
+            return localStorageValue === '1';
+        }
+        // no explicit decision has been made
+        return null;
+    }
+
+    /**
+     * Bind the non-essential cookies flag to the "checked" attribute of the given element.
+     *
+     * See also {@link isNonEssentialCookiesEnabled}.
+     *
+     * @param element HTML element to bind to (must have the "checked" attribute)
+     */
+    function bindNonEssentialCookiesTo(element) {
+        if (!element) return;
+        var isEnabled = isNonEssentialCookiesEnabled();
+        if (isEnabled !== null) {
+            element.checked = isEnabled;
+        }
+        element.onchange = function () {
+            setEnableNonEssentialCookies(element.checked);
+        };
+    }
+
   var init = function () {
     _updateProgress();
     _assignPasswordStrength();
     _passwordRevealer();
     _qrTimer();
     _qrEnlarge()
-    _deviceFlow();
   }
   init();
 
   return {
     setProgress: setProgress,
-    validation: validation
+    validation: validation,
+    setEnableNonEssentialCookies: setEnableNonEssentialCookies,
+    isNonEssentialCookiesEnabled: isNonEssentialCookiesEnabled,
+    bindNonEssentialCookiesTo: bindNonEssentialCookiesTo,
   };
 }();

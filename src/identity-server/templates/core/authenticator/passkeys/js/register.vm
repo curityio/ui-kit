@@ -22,8 +22,7 @@
         $("#waitingDiv").showElement();
         $("#registerDiv, #retryRegistration, #alertWrapper").hideElement();
 
-        webauthnJSON.create($!_credentialCreationOptionsJson).then(response => {
-            delete response["rawId"];
+        createPublicKeyCredential($!_credentialCreationOptionsJson).then(response => {
             $("#registrationForm input[name='credential_json']").val(JSON.stringify(response));
             $("#registrationForm").submit();
         }).catch(e => handleError(e, isUserInteraction));
