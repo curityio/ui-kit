@@ -25,3 +25,12 @@ view.newTokenSent.h1=A new activation email has been sent
 view.newTokenSent.p1=An email with an activation link has been sent to you.
 
 view.button=Activate
+
+otp.view.enter-otp=Enter one time password
+otp.view.resend-otp-button=Send a new activation email
+otp.view.success.email-sent=An email with a one time password has been sent to you.
+otp.view.success.spam-folder=If you did not receive an email, check your spam folder.
+otp.error.incorrect-code=Incorrect or expired code. Please try again.
+otp.info.code-resent=A new activation email has been sent
+
+error.too-many-attempts=Too many attempts. You may try again later.

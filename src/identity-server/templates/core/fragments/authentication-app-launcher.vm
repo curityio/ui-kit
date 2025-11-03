@@ -109,6 +109,7 @@
             }
 
             document.forms["cancel"].onsubmit = stopFunction;
+            $('#qr-time-extend').click(() => { stopFunction(); return true; })
         }
 
         if (isAndroid || isIos9Plus) {

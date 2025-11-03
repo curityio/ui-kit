@@ -56,13 +56,14 @@
             </div>
         #end
 
+        #set($otpFieldName = "otp")
+        #set($otpInputLength = $_otpLength)
+        #parse("fragments/otp-input")
 
-        <div class="form-field">
-            <label for="userName" class="$!_errorClass">#message("authenticator.sms.enter-otp.view.enter-otp")</label>
-            <input type="text" name="otp" id="otp" class="block full-width mb1 field-light" required autofocus>
-            <button type="submit" class="button button-fullwidth button-primary">#message("authenticator.sms.enter-otp.view.verify")</button>
-            <i class="form-field-icon icon ion-grid"></i>
-        </div>
+        <button type="submit" disabled
+        class="button button-medium button-primary button-fullwidth">
+        #message('authenticator.sms.enter-otp.view.verify')
+        </button>
     #end
 
 

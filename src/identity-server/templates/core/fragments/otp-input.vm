@@ -1,0 +1,187 @@
+#*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+##
+## OTP (One-Time Password) Configuration Parameters
+##
+## $otpFieldName
+##   - The `name` attribute used when sending the OTP value to the server.
+##   - SMS: always "otp"
+##   - TOTP:
+##       * "otp" when authenticating
+##       * "totp" when registering
+##   - OAuth Device Code Flow: "userCode"
+##
+## $otpInputLength
+##   - Defines the number of input boxes to render.
+##   - Typically comes from $_totpLength (server-side configuration).
+##   - Common value: 6 (standard TOTP length).
+##
+## $otpInputFieldCharacterSet
+##   - Determines allowed character types in the input.
+##   - "alphanumeric": allows letters and digits (used only in OAuth device flow views: oauth/enter-usercode.vm).
+##   - Otherwise: restricted to digits only
+##   - In OAuth device flow, inputs may be pre-filled via the `user_code` query parameter.
+##
+
+
+ <div class="center">
+
+    <div class="enter-usercode-wrapper mb2">
+
+        #foreach($i in [1..$otpInputLength])
+            <input type="text" #if(!$otpInputFieldCharacterSet.equals("alphanumeric"))pattern="[0-9]" inputMode="numeric"#end class="field-light field-enter-usercode $!$errorClass"
+                   required maxlength="1"
+                   #if($i == 1)autofocus#end id="userCode-$i">
+        #end
+    </div>
+
+    <input type="text" name="$!otpFieldName" id="userCodeHidden" hidden>
+
+</div>
+
+<script type="text/javascript" $!nonceAttr async>
+    class OTPInput {
+        constructor() {
+            this.inputs = document.querySelectorAll('.field-enter-usercode');
+            this.form = this.inputs[0].closest('form');
+            this.submitBtn = this.form.querySelector('[type="submit"]');
+            this.init();
+        }
+
+        init() {
+            this.inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => this.handleInput(e, index));
+                input.addEventListener('keydown', (e) => this.handleKeydown(e, index));
+                input.addEventListener('paste', (e) => this.handlePaste(e));
+                input.addEventListener('focus', (e) => this.handleFocus(e));
+            });
+
+            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
+
+        handleInput(e, index) {
+            const value = e.target.value;
+
+            /* Only allow numbers if the pattern attribute for numbers only + numeric input mode is used, i.e SMS and TOTP.
+            OAuth Device flow allows for both numeric and alphanumeric */
+            if (e.target.hasAttribute('pattern') && e.target.getAttribute('inputMode') === 'numeric') {
+                if (!/^\d*$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+            }
+
+            // Update visual state
+            this.updateInputState(e.target, value);
+
+            // Move to next input if value entered
+            if (value && index < this.inputs.length - 1) {
+                this.inputs[index + 1].focus();
+            }
+
+            this.updateSubmitButton();
+        }
+
+        handleKeydown(e, index) {
+            // Handle backspace
+            if (e.key === 'Backspace') {
+                if (!e.target.value && index > 0) {
+                    this.inputs[index - 1].focus();
+                    this.inputs[index - 1].value = '';
+                    this.updateInputState(this.inputs[index - 1], '');
+                } else if (e.target.value) {
+                    e.target.value = '';
+                    this.updateInputState(e.target, '');
+                }
+                this.updateSubmitButton();
+            }
+        }
+
+        handlePaste(e) {
+            e.preventDefault();
+            const pastedData = e.clipboardData.getData('text').replace(/\D/g, '');
+
+            if (pastedData.length === this.inputs.length) {
+                this.inputs.forEach((input, index) => {
+                    input.value = pastedData[index] || '';
+                    this.updateInputState(input, input.value);
+                });
+                this.inputs[this.inputs.length - 1].focus();
+                this.updateSubmitButton();
+            }
+        }
+
+        handleFocus(e) {
+            e.target.select();
+        }
+
+        updateInputState(input, value) {
+            if (value) {
+                input.classList.add('field-enter-usercode-filled');
+            } else {
+                input.classList.remove('field-enter-usercode-filled');
+            }
+        }
+
+        updateSubmitButton() {
+            const allFilled = Array.from(this.inputs).every(input => input.value);
+            this.submitBtn.disabled = !allFilled;
+
+            // Add or remove button-success class based on whether all inputs are filled
+            if (allFilled) {
+                this.submitBtn.focus();
+                this.submitBtn.classList.add('button-success');
+            } else {
+                this.submitBtn.classList.remove('button-success');
+            }
+        }
+
+        handleSubmit(e) {
+            e.preventDefault();
+
+            const otpCode = Array.from(this.inputs)
+            .map(input => input.value)
+            .join('');
+
+            // Create or update a hidden input field to store the complete OTP value
+            const hiddenInput = document.getElementById('userCodeHidden');
+            hiddenInput.value = otpCode;
+
+            // Submit the form
+            this.form.submit();
+        }
+
+        // Pre-fill fields from URL parameter
+        fillFromURLParam(paramName) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramValue = urlParams.get(paramName);
+
+            if (paramValue) {
+                const valueChars = paramValue.split('');
+                this.inputs.forEach((input, index) => {
+                    if (index < valueChars.length) {
+                        input.value = valueChars[index];
+                        this.updateInputState(input, input.value);
+                    }
+                });
+
+                this.updateSubmitButton();
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const otpInput = new OTPInput();
+
+        otpInput.fillFromURLParam('user_code');
+    });
+    </script>

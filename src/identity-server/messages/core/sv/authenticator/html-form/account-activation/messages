@@ -26,3 +26,12 @@ view.newTokenSent.p1=Ett mail med instruktioner för hur du verifierar ditt kont
 view.newPassword=Ange ett lösenord
 
 view.button=Aktivera
+
+otp.view.enter-otp=Skriv in engångskoden som du fått via mail
+otp.view.resend-otp-button=Skicka ett nytt bekräftelsemail
+otp.view.success.email-sent=Ett mail med ett engångslösenord har skickats till dig.
+otp.view.success.spam-folder=Om du inte har fått ett mail, kontrollerar din skräppost.
+otp.error.incorrect-code=Koden är felaktig eller har gått ut. Försök igen.
+otp.info.code-resent=Ett nytt bekräftelsemail har skickats
+
+error.too-many-attempts=För många försök. Du måste vänta ett tag innan du kan försöka igen.

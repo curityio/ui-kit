@@ -53,7 +53,7 @@
         </form>
     </div>
     <div class="col-12 px1">
-        <form method="POST" name="setup-confirm" class="no-padding">
+        <form method="POST" name="setup-cancel" class="no-padding">
             <input type="hidden" name="cancel" value="true"/>
             <input type="submit" value="#message("${_templatePrefix}.setup-confirm.view.cancel")" class="button button-fullwidth button-primary-outline"/>
         </form>

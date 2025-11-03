@@ -55,6 +55,9 @@
             let cancelFunction = poller.start();
             $("form[name='cancel']").submit(cancelFunction);
 
+            ## Cancel poller on click on Extend link
+            $('#qr-time-extend').click(() => { cancelFunction(); return true;})
+
             #if($!bankidNeverAutoStart)
                 logger.debug("Not launching the app per configuration.");
             #elseif($!_skipAutoLaunch)

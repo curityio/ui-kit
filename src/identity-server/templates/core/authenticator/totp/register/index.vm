@@ -112,12 +112,7 @@
 
     </div>
     <div id="enter-totp" class="$step2Class">
-        <div class="form-field">
-            <label class="$!_errorClass">#message("authenticator.totp.register.view.totp")</label>
-            <input type="text" name="totp" id="totp" class="block full-width mb1 field-light $!_errorClass"
-                   required value="" autocapitalize="none">
-            <i class="form-field-icon icon ion-grid"></i>
-        </div>
+
 ##        Uncomment this if you want the user to set the expiration time of the device he is registering
 ##        Any value set in the configuration of the authenticator overrides this
 ##        The time should be posted in seconds in the backend so either make the necessary calculations
@@ -130,7 +125,11 @@
 ##            <i class="form-field-icon icon ion-clock"></i>
 ##        </div>
 
-        <button type="submit" class="button button-fullwidth button-primary">#message(
+        #set($otpFieldName = "totp")
+        #set($otpInputLength = $_totpLength)
+        #parse("fragments/otp-input")
+
+        <button type="submit" disabled class="button button-fullwidth button-primary">#message(
                 "authenticator.totp.register.view.register")</button>
     </div>
 

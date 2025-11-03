@@ -101,6 +101,15 @@
 #end
 
 #*
+  Favicon path. Favicons can now be uploaded in the Admin UI on System / Look and Feel.
+*#
+#if ($_configured_favicon_path)
+    #set ($favicon_path = $_configured_favicon_path)
+#else
+    #set ($favicon_path = $!_staticResourceRootPath + '/assets/images/favicon.png')
+#end
+
+#*
   Show Powered by Curity?
   true or false
 *#

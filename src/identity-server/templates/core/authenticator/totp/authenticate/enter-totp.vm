@@ -38,16 +38,16 @@
 #define($_body)
 <form action="$_action" method="post" autocomplete="off">
 
-    <h1 class="center">#message("authenticator.totp.authenticate.view.enter-totp.title1")</h1>
+<h1 class="center">#message("authenticator.totp.authenticate.view.enter-totp.title1")</h1>
 
-    <div class="form-field">
-        <label>#message("authenticator.totp.authenticate.view.enter-totp")</label>
-        <input type="text" name="otp" id="otp" class="block full-width mb1 field-light" required autofocus>
-        <i class="form-field-icon icon ion-grid"></i>
-    </div>
+#set($otpFieldName = "otp")
+#set($otpInputLength = $_totpLength)
+#parse("fragments/otp-input")
 
-        <button type="submit" class="button button-fullwidth button-primary">#message(
-            "authenticator.totp.authenticate.view.verify")</button>
+<button type="submit" disabled
+        class="button button-fullwidth button-primary">
+        #message("authenticator.totp.authenticate.view.verify")
+</button>
 
 ## This can be enabled seperatly in each of the authenticators that use this template. Some may
 ## allow registration during login while other don't. As a best practice, create two different

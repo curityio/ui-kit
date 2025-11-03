@@ -1,0 +1,42 @@
+#*
+* Copyright (C) 2025 Curity AB. All rights reserved.
+*
+* The contents of this file are the property of Curity AB.
+* You may not copy or use this file, in either source code
+* or executable form, except in compliance with terms
+* set by Curity AB.
+*
+* For further information, please contact Curity AB.
+*#
+
+#set($title = "#message('authenticator.html-form.account-activation.meta.title')")
+
+#define ($_body)
+    <div class="center">
+        <h1 class="mt0">#message("${_templatePrefix}.page.title")</h1>
+        <p class="mb0">#message("${_templatePrefix}.otp.view.success.email-sent")</p>
+        <p class="mt0">
+            <small>#message("${_templatePrefix}.otp.view.success.spam-folder")</small>
+        </p>
+    </div>
+    <form id="activate" name="activate" method="post" class="no-bottom-padding">
+        <div class="form-field">
+            <h3>#message("${_templatePrefix}.otp.view.enter-otp")</h3>
+            #set($otpFieldName = "otp")
+            #set($otpInputLength = 6)
+            #parse("fragments/otp-input")
+        </div>
+        <button type="submit" id="activate" class="button button-fullwidth button-primary">
+            #message("${_templatePrefix}.view.button")
+        </button>
+    </form>
+    <form id="resend" name="resend" method="post" class="no-top-padding">
+        <input type="hidden" name="resend" />
+        <button type="submit" id="resend" class="button button-fullwidth
+                button-secondary button-info">
+            #message("${_templatePrefix}.otp.view.resend-otp-button")
+        </button>
+    </form>
+#end
+
+#parse("layouts/default")

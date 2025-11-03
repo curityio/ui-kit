@@ -83,7 +83,7 @@
         $("#alertWrapper, #authenticateDiv, #usernameForm").hideElement();
         $("#waitingDiv").showElement();
 
-        webauthnJSON.get(assertionRequest)
+        getPublicKeyCredential(assertionRequest)
                 .then(async function (response) {
                     let form = $("#assertionForm");
                     form.find("input[name='json']").val(JSON.stringify(response));

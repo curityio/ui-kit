@@ -1,0 +1,13 @@
+#if ($_showRememberMe)
+<div class="form-field flex flex-center flex-gap-1 remember-me-container">
+    <input type="checkbox" id="rememberMe" name="rememberMe" value="true" checked/>
+    <label for="rememberMe">#message("${_templatePrefix}.view.remember-me")</label>
+</div>
+<!-- The "Remember Me" flag enables "isNonEssentialCookiesEnabled", as that requires non-essential cookies. -->
+<script type="text/javascript" $!nonceAttr async>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rememberMeElement = document.getElementById('rememberMe');
+        curityui.bindNonEssentialCookiesTo(rememberMeElement);
+    });
+</script>
+#end

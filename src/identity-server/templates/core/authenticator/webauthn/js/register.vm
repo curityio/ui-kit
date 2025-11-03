@@ -29,8 +29,7 @@
     const registerDevice = (request, responseFormInputName) => {
         $("#waitingDiv").showElement();
         $("#registerDiv, #retryRegistration, #alertWrapper").hideElement();
-        webauthnJSON.create(request).then(response => {
-            delete response["rawId"];
+        createPublicKeyCredential(request).then(response => {
             $("#registrationForm input[name='" + responseFormInputName + "']").val(JSON.stringify(response));
             $("#registrationForm").submit();
         }).catch(handleError);
