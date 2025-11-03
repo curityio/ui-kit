@@ -29,7 +29,6 @@
     "@curity-ui-kit/css": "^1.0.0",
     "@curity-ui-kit/icons": "^1.0.0",
     "@curity/token-handler-js-assistant": "^1.2.2",
-    "@github/webauthn-json": "^2.1.1",
     "@reach/dialog": "^0.18.0",
     "graphql": "^16.10.0",
     "i18next": "^24.2.2",
@@ -39,7 +38,7 @@
     "react-hot-toast": "^2.5.2",
     "react-i18next": "^15.4.1",
     "react-qr-code": "^2.0.15",
-    "react-router": "^7.0.2",
+    "react-router": "^7.8.0",
     "react-verification-input": "^4.2.2"
   },
   "devDependencies": {

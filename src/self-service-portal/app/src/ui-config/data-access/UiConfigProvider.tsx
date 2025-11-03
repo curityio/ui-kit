@@ -10,6 +10,7 @@ import {
   UserManagementResources,
 } from '@/ui-config/typings';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getLocaleFromURI } from '@/util.ts';
 
 export interface UiConfigProviderProps {
   children: React.ReactNode;
@@ -54,7 +55,14 @@ export const useUiConfig = () => {
 };
 
 async function resolveConfig(bootstrapConfig: BootstrapUiConfig): Promise<UiConfig> {
-  const uiConfigMetadataResponse = await fetch(`${bootstrapConfig.PATHS.BACKEND}${bootstrapConfig.PATHS.METADATA}`, {
+  const localeParam = getLocaleFromURI();
+  let requestURI = `${bootstrapConfig.PATHS.BACKEND}${bootstrapConfig.PATHS.METADATA}`;
+
+  if (localeParam) {
+    requestURI += `?${localeParam}`;
+  }
+
+  const uiConfigMetadataResponse = await fetch(requestURI, {
     credentials: 'include',
   });
 

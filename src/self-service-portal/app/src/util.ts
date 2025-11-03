@@ -70,4 +70,17 @@ const appToastConfig = {
   },
 };
 
-export { getProfileImageColor, getUserInitial, appToastConfig };
+const getLocaleFromURI = (): string => {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const localeParamName = 'ui_locales';
+
+  const params = new URLSearchParams(window.location.search);
+  const uiLocales = params.get(localeParamName);
+
+  return uiLocales ? `${localeParamName}=${uiLocales}` : '';
+};
+
+export { getProfileImageColor, getUserInitial, getLocaleFromURI, appToastConfig };
