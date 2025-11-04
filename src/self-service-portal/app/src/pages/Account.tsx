@@ -19,7 +19,7 @@ import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { IconUserProfile } from '@/shared/components/icons';
 import { useTranslation } from 'react-i18next';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
-import { UI_CONFIG_RESOURCES, UI_CONFIG_OPERATIONS } from '@/ui-config/typings';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { Spinner } from '@/shared/ui/Spinner';
 import { Outlet } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -44,6 +44,8 @@ export const Account = () => {
   const [familyName, setFamilyName] = useState('');
 
   useEffect(() => {
+    // TODO IS-10689
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setGivenName(account?.name?.givenName || '');
     setFamilyName(account?.name?.familyName || '');
   }, [account?.name?.givenName, account?.name?.familyName]);

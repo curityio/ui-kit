@@ -90,16 +90,16 @@ This project uses [GraphQL Codegen](https://the-guild.dev/graphql/codegen/docs/g
 
 Steps:
 
-0. If the GraphQL schemas have changed in the `identity-server`:
-   0.1. In the `admin-ui` run `npm run download-graphql-api-schemas` to download the current `identity-server`'s graphql schemas to `curity-web-ui/graphql-apis`.
-   0.2. Copy them and replace the existing ones in this project (e.g. `shared/data-access/API/user-management/schemas/user_management_api.graphqls`).
-1. Write the queries in `src/shared/data-access/API/[API_NAME]/[API_NAME]-queries.graphql` (e.g. [User Management Queries](src/shared/data-access/API/user-management/user-management-queries.graphqls)).
-2. Write the mutations in `src/shared/data-access/API/[API_NAME]/[API_NAME]-mutations.graphql` (e.g. [User Management Mutations](src/shared/data-access/API/user-management/user-management-mutations.graphqls)).
-3. In case you write fragments, place them in `src/shared/data-access/API/[API_NAME]/[API_NAME]-fragments.graphql` (e.g. [User Management Fragments](src/shared/data-access/API/user-management/user-management-fragments.graphqls)).
-4. Run the command `npm run generate-graphql-typings-queries-and-mutations`.
-5. Add the generated query and mutation documents to the API map in `src/shared/data-access/API/[API_NAME]/api.ts` (e.g. [User Management API Map](src/shared/data-access/API/user-management/api.ts))
-6. Add generic error messages for the new operations if the BE errors for them are not meaningful (e.g. [User Management Error Messages](src/shared/data-access/API/user-management/USER_MANAGEMENT_ERROR_MESSAGES.ts))
-7. Use the generated typings, queries and mutations:
+1. If the GraphQL schemas have changed in the `identity-server`:
+   1. In the `admin-ui` run `npm run download-graphql-api-schemas` to download the current `identity-server`'s graphql schemas to `curity-web-ui/graphql-apis`.
+   2. Copy them and replace the existing ones in this project (e.g. `shared/data-access/API/user-management/schemas/user_management_api.graphqls`).
+2. Write the queries in `src/shared/data-access/API/[API_NAME]/[API_NAME]-queries.graphql` (e.g. [User Management Queries](src/shared/data-access/API/user-management/user-management-queries.graphqls)).
+3. Write the mutations in `src/shared/data-access/API/[API_NAME]/[API_NAME]-mutations.graphql` (e.g. [User Management Mutations](src/shared/data-access/API/user-management/user-management-mutations.graphqls)).
+4. In case you write fragments, place them in `src/shared/data-access/API/[API_NAME]/[API_NAME]-fragments.graphql` (e.g. [User Management Fragments](src/shared/data-access/API/user-management/user-management-fragments.graphqls)).
+5. Run the command `npm run generate-graphql-typings-queries-and-mutations`.
+6. Add the generated query and mutation documents to the API map in `src/shared/data-access/API/[API_NAME]/api.ts` (e.g. [User Management API Map](src/shared/data-access/API/user-management/api.ts))
+7. Add generic error messages for the new operations if the BE errors for them are not meaningful (e.g. [User Management Error Messages](src/shared/data-access/API/user-management/USER_MANAGEMENT_ERROR_MESSAGES.ts))
+8. Use the generated typings, queries and mutations:
 
 ```typescript
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
@@ -110,7 +110,7 @@ export const Account = () => {
     variables: { userName: 'test' },
   });
 
-  ...
+  //...
 };
 ```
 
@@ -161,15 +161,15 @@ The [UiConfigIfRoute](/src/ui-config/feature/UiConfigIfRoute.tsx) component allo
 
 ```tsx
 {
-    path: USSP_ROUTE_PATHS.ACCOUNT,
-    title: 'Account',
+    path: USSP_ROUTE_PATHS.ACCOUNT;
+    title: 'Account';
     element: (
       <UiConfigIfRoute>
         <Account />
       </UiConfigIfRoute>
-    ),
-    resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS],
-  },
+    );
+    resources: [UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME, UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS]
+}
 ```
 
 Explanation:
@@ -177,7 +177,7 @@ Explanation:
 - The `USSP_ROUTE_PATHS.ACCOUNT` route is linked to the `name` and `address` resources (`UI_CONFIG_RESOURCES.USER_MANAGEMENT_NAME`, `UI_CONFIG_RESOURCES.USER_MANAGEMENT_ADDRESS`).
 - Since the `UiConfig` allows the `read` operation for both resources, users can access this route.
 
-When a required operation is not permitted for some/all of the specified resources, `UiConfigIfRoute` redirects users to the [FeatureNotAvailable](/src/shared/ui/FeatureNotAvailable.tsx) component.
+When a required operation is not permitted for some/all the specified resources, `UiConfigIfRoute` redirects users to the [FeatureNotAvailable](/src/shared/ui/FeatureNotAvailable.tsx) component.
 
 ##### UiConfigIf
 
@@ -216,7 +216,7 @@ Explanation:
 
 ##### EditableContent
 
-The [EditableContent](/src/shared/ui/EditableContent/EditableContent.tsx) displays an edit button besides the value that allows editing it when clicked. It accepts the `uiConfigResources` and the `uiConfigAllowedOperations` props that are passed down to the internal `UiConfigIf` component to manage wether the value can be read and edited.
+The [EditableContent](/src/shared/ui/EditableContent/EditableContent.tsx) displays an edit button besides the value that allows editing it when clicked. It accepts the `uiConfigResources` and the `uiConfigAllowedOperations` props that are passed down to the internal `UiConfigIf` component to manage whether the value can be read and edited.
 
 ```tsx
 <EditableContent
@@ -255,12 +255,12 @@ The Curity Self Service Portal employs a robust error-handling mechanism to ensu
 
 ### UI Icons
 
-We use a subset of our internal package `@curity-internal/ui-icons-react`. Since Self Service Portal will be a product we ship we can't use the internal package, hosted on Nexus and only available for Curity Developers to install. Instead local icon components are used, located in `src/packages`.
+We use a subset of our internal package `@curity-internal/ui-icons-react`. Since Self Service Portal will be a product we ship we can't use the internal package, hosted on Nexus and only available for Curity Developers to install. Instead, local icon components are used, located in `src/packages`.
 
 Import icons like this:
 
 ```jsx
-import { IconToken } from '@curity-ui-kit/icons';
+import { IconToken } from '@icons';
 ```
 
 If there are any icons missing we will update them accordingly.

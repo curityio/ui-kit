@@ -33,6 +33,5 @@
       "@curity-ui-kit/css/*": ["./src/packages/css/*"]
     }
   },
-  "include": [
-    "src", "cypress/**/*.ts"]
+  "include": ["src"]
 }
