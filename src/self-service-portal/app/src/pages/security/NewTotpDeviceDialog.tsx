@@ -21,7 +21,6 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClose }: NewTotpDevic
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [totpAlias, setTotpAlias] = useState('');
-  const [showNewTotpDeviceDialog, setShowNewTotpDeviceDialog] = useState<boolean>(false);
   const [
     startVerifyTotpDeviceByAccountId,
     { data: verificationStartData, loading: verificationStartLoading, error: verificationStartError },
@@ -40,10 +39,7 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClose }: NewTotpDevic
 
   useEffect(() => {
     if (isOpen) {
-      setShowNewTotpDeviceDialog(true);
       inputRef.current?.focus();
-    } else {
-      setShowNewTotpDeviceDialog(false);
     }
   }, [isOpen]);
 
@@ -86,12 +82,12 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClose }: NewTotpDevic
     const graphQLError = verificationStartError?.graphQLErrors?.[0];
     const isLocalizedValidationError = graphQLError?.extensions?.classification === 'localized-validation-error';
     return isLocalizedValidationError
-      ? graphQLError?.message ?? ''
+      ? (graphQLError?.message ?? '')
       : t(GRAPHQL_API_ERROR_MESSAGES.startVerifyTotpDeviceByAccountId);
   };
 
   return (
-    showNewTotpDeviceDialog && (
+    isOpen && (
       <Dialog
         isOpen={true}
         title={t('security.otp-authenticators.creation')}

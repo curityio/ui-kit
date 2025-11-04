@@ -6,7 +6,6 @@ import {
   HttpLink,
   InMemoryCache,
   NextLink,
-  NormalizedCacheObject,
   Operation,
 } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
@@ -22,15 +21,14 @@ import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
 import { UiConfig } from '@/ui-config/typings';
 import i18n from 'i18next';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
-
-let grahpQLAPIClient: ApolloClient<NormalizedCacheObject>;
+import { useMemo } from 'react';
 
 export function GraphQLAPIProvider({ children }: GraphQLAPIProviderProps) {
   const uiConfig = useUiConfig();
 
-  grahpQLAPIClient = buildGraphQLClient(uiConfig);
+  const graphQLAPIClient = useMemo(() => buildGraphQLClient(uiConfig), [uiConfig]);
 
-  return <ApolloProvider client={grahpQLAPIClient}>{children ? children : <Outlet />}</ApolloProvider>;
+  return <ApolloProvider client={graphQLAPIClient}>{children ? children : <Outlet />}</ApolloProvider>;
 }
 
 const buildGraphQLClient = (uiConfig: UiConfig) => {

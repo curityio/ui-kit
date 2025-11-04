@@ -8,6 +8,9 @@ const config: CodegenConfig = {
   generates: {
     'src/shared/data-access/API/graphql-codegen-typings-queries-and-mutations/': {
       preset: 'client',
+      presetConfig: {
+        fragmentMasking: false,
+      },
       plugins: [],
     },
   },

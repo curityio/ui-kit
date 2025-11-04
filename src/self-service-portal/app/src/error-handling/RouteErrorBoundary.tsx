@@ -26,7 +26,7 @@ const RouteErrorBoundaryFallback = ({ error, resetErrorBoundary }: FallbackProps
   const errorMessage = isAppBootstrappingError ? error?.message : `${t('Failed to load')} ${pageTitle} ${t('page')}`;
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
 
     if (isResettingErrorBoundary) {
       timer = setTimeout(() => {

@@ -29,6 +29,8 @@ export const Layout = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     if (isSidebarOpen) {
+      // TODO IS-10689
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSidebarOpen(false);
     }
   }, [location]);

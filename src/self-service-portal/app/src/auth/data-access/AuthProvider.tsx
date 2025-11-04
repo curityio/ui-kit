@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 let authContextAPI: AuthContextType | undefined;
 
 /*
- * Expose the auth context API to be used outside of the render context, like inside
+ * Expose the auth context API to be used outside the render context, like inside
  * the GraphQL onError link, a fetch interceptor, or outside a component tree.
  * Otherwise, use the useAuth hook.
  */
@@ -57,18 +57,22 @@ export function AuthProvider() {
   }, [uiConfig]);
   const oauthClientHasBeenInitialized = session !== undefined;
 
-  const configureOAuthAgentClient = useCallback(async () => {
-    try {
-      if (!sessionInitialized) {
-        sessionInitialized = true;
+  useEffect(() => {
+    const initializeSession = async () => {
+      try {
+        if (!sessionInitialized) {
+          sessionInitialized = true;
 
-        const sessionResponse = await oauthClient.onPageLoad(location.href);
+          const sessionResponse = await oauthClient.onPageLoad(location.href);
 
-        setSession(sessionResponse);
+          setSession(sessionResponse);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
+    };
+
+    initializeSession();
   }, [oauthClient]);
 
   const startLogin = async () => {
@@ -108,23 +112,24 @@ export function AuthProvider() {
     }
   };
 
+  const authProviderValue = useMemo(
+    () => ({
+      startLogin,
+      endLogin,
+      refresh,
+      logout,
+      session,
+    }),
+    [startLogin, endLogin, refresh, logout, session]
+  );
+
   useEffect(() => {
-    configureOAuthAgentClient();
-  }, [configureOAuthAgentClient, refresh]);
+    authContextAPI = authProviderValue;
+  }, [authProviderValue]);
 
   if (!oauthClientHasBeenInitialized) {
     return <Spinner width={48} height={48} mode="fullscreen" />;
   }
-
-  const authProviderValue = {
-    startLogin,
-    endLogin,
-    refresh,
-    logout,
-    session,
-  };
-
-  authContextAPI = authProviderValue;
 
   return (
     <AuthContext.Provider value={authProviderValue}>{oauthClientHasBeenInitialized && <Outlet />}</AuthContext.Provider>
