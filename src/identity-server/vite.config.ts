@@ -56,7 +56,7 @@ export default defineConfig(({ mode }) => {
       ...shared,
       build: {
         ...shared.build,
-        emptyOutDir: true,
+        emptyOutDir: false,
         rollupOptions: {
           ...shared.build.rollupOptions,
           input: { styles: path.resolve(__dirname, "styles/index.js") },
