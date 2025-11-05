@@ -16,7 +16,8 @@
   "scripts": {
     "start:ussp": "npm run start --workspace=src/self-service-portal/app",
     "start:lwa": "npm run start --workspace=src/login-web-app/app",
-    "start:identity-server": "npm run start --workspace=src/identity-server/app",
+    "start:identity-server": "npm run start --workspace=src/identity-server",
+    "build:identity-server": "npm run build --workspace=src/identity-server",
     "build:ussp": "npm run build --workspace=src/self-service-portal/app",
     "build:lwa": "npm run build --workspace=src/login-web-app/app",
     "build:all": "npm run build -ws"
