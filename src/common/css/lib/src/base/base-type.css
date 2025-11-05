@@ -50,6 +50,12 @@ h6 {
   margin-bottom: var(--space-2);
   margin-top: var(--space-2);
   text-rendering: optimizelegibility;
+  font-family: var(--type-sans-medium);
+}
+
+
+:is(h1, h2) {
+  font-family: var(--type-sans-bold);
 }
 
 .type-extra-bold {
