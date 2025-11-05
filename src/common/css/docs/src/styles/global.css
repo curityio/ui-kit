@@ -1,7 +1,5 @@
 :root {
   --sidebarWidth: 380px;
-  --type-sans: 'Roboto-Regular', sans-serif;
-  --type-sans-extra-bold: 'Roboto-Medium', sans-serif;
   --shiki-dark-bg: #24292e;
 }
 
@@ -20,6 +18,13 @@
 }
 
 @font-face {
+  font-family: Roboto-Bold;
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/Roboto-Bold.woff2') format('woff2');
+}
+
+@font-face {
   font-display: swap;
   font-family: Roboto-Mono;
   font-weight: normal;
@@ -28,7 +33,6 @@
 
 :where(h1, h2, h3, h4) {
   text-wrap: balance;
-  font-family: var(--type-weight-bold);
 }
 
 .main {
