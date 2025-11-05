@@ -194,6 +194,8 @@ button svg {
   padding-inline-end: calc(var(--button-padding-x) * var(--x-small));
 }
 
+button[type="submit"]:not(.button-medium):not(.button-small):not(.button-large),
+:is(.button-social):not(.button-medium):not(.button-small):not(.button-large),
 .button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
