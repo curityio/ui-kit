@@ -20,6 +20,8 @@
     "build:identity-server": "npm run build --workspace=src/identity-server",
     "build:ussp": "npm run build --workspace=src/self-service-portal/app",
     "build:lwa": "npm run build --workspace=src/login-web-app/app",
+    "build:css": "npm run build --workspace=src/common/css",
+    "build:icons": "npm run build --workspace=src/common/icons",
     "build:all": "npm run build -ws"
   },
   "devDependencies": {
