@@ -80,11 +80,20 @@ export default defineConfig(({ mode }) => {
       build: {
         ...shared.build,
         emptyOutDir: false,
-        lib: {
-          entry: path.resolve(__dirname, "scripts/curity-ui.js"),
-          name: "curityui",
-          formats: ["iife"],
-          fileName: () => "webroot/assets/js/curity-ui.js",
+        minify: 'esbuild',
+        rollupOptions: {
+          ...shared.build.rollupOptions,
+          input: {
+            'curity-ui': path.resolve(__dirname, "scripts/curity-ui.js"),
+          },
+          output: {
+            entryFileNames: "webroot/assets/js/[name].js",
+            format: "es",
+            intro: '',
+            outro: '',
+          },
+          external: ["jQuery"],
+          treeshake: false,
         },
       },
     };
