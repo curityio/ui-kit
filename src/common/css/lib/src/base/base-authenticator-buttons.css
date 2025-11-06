@@ -22,7 +22,6 @@ a.button-social,
   border-width: var(--form-field-border-width);
   color: var(--color-heading);
   margin: 0;
-  padding-left: 80px;
   text-align: left;
   transition:
     background-color 200ms,
@@ -30,6 +29,22 @@ a.button-social,
     color 200ms,
     box-shadow 200ms,
     border-color 200ms;
+}
+
+:is(.button-social) {
+  --icon-width: 60px;
+
+  font-size: calc(var(--button-font-size) * var(--y-medium));
+  min-height: 44px;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
+  padding-inline-start: calc(
+    var(--button-padding-x) * var(--x-medium) + var(--icon-width)
+  );
+  text-align: left;
+  justify-content: flex-start;
+  overflow-wrap: anywhere;
 }
 
 button[type='submit'].button-social .icon,
