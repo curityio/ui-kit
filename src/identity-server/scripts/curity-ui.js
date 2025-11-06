@@ -21,7 +21,7 @@
 /**
  *
  */
-var curityui = (function () {
+module.exports = (function () {
   var $ = jQuery;
 
   var _isInt = function (value) {
