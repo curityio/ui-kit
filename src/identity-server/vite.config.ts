@@ -77,23 +77,39 @@ export default defineConfig(({ mode }) => {
   if (mode === "ui") {
     return {
       ...shared,
+      plugins: [
+        ...shared.plugins,
+        {
+          name: "wrap-commonjs-as-iife",
+          generateBundle(_, bundle) {
+            for (const fileName in bundle) {
+              const chunk = bundle[fileName];
+              if (chunk.type === "chunk" && fileName.includes("curity-ui")) {
+                chunk.code = chunk.code
+                  .replace(/^\(function\(\)\{/, "var curityui=(function(){")
+                  .replace("module.exports=", "return ");
+              }
+            }
+          },
+        },
+      ],
       build: {
         ...shared.build,
         emptyOutDir: false,
-        minify: 'esbuild',
+        lib: {
+          entry: path.resolve(__dirname, "scripts/curity-ui.js"),
+          name: "curityui",
+          formats: ["iife"],
+          fileName: () => "webroot/assets/js/curity-ui.js",
+        },
         rollupOptions: {
           ...shared.build.rollupOptions,
-          input: {
-            'curity-ui': path.resolve(__dirname, "scripts/curity-ui.js"),
-          },
-          output: {
-            entryFileNames: "webroot/assets/js/[name].js",
-            format: "es",
-            intro: '',
-            outro: '',
-          },
           external: ["jQuery"],
-          treeshake: false,
+          output: {
+            globals: {
+              jQuery: "jQuery",
+            },
+          },
         },
       },
     };
