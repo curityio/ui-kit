@@ -124,6 +124,9 @@ Login well
 }
 
 .login-well.login-well-errors .alert-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
 	padding-bottom: 0;
 }
 
