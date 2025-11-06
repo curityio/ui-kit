@@ -9,14 +9,18 @@
  * For further information, please contact Curity AB.
  */
 .button {
-  --y-tiny: 0.75;
+  --y-tiny: 0.65;
   --x-tiny: 1;
+
   --y-small: 0.85;
   --x-small: 1;
-  --y-medium: 1.15;
+
+  --y-medium: 1.2;
   --x-medium: 1.5;
+
   --y-large: 1.25;
   --x-large: 1.75;
+
   --y-default: var(--y-medium);
   --x-default: var(--x-medium);
 
@@ -32,6 +36,13 @@
   font-weight: var(--type-weight-bold);
   gap: var(--space-1);
   justify-content: center;
+
+  min-height: 44px;
+  height: fit-content;
+  padding-block-start: calc(var(--button-padding-y) * var(--y-default));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-default));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-default));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-default));
 
   transition:
     background-color 200ms,
@@ -188,17 +199,17 @@ button svg {
 .button-small {
   font-size: calc(var(--button-font-size) * var(--y-small));
   min-height: 34px;
-  padding-block-start: calc(var(--button-padding-y) * var(--y-small));
-  padding-block-end: calc(var(--button-padding-y) * var(--y-small));
-  padding-inline-start: calc(var(--button-padding-x) * var(--x-small));
-  padding-inline-end: calc(var(--button-padding-x) * var(--x-small));
+  padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
+  padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
+  padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
+  padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
 }
 
-[type="submit"] {
+[type='submit'] {
   margin-block-start: var(--space-2);
 }
 
-[type="submit"]:not(.button-medium):not(.button-small):not(.button-large),
+[type='submit']:not(.button-medium):not(.button-small):not(.button-large),
 .button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
@@ -206,6 +217,10 @@ button svg {
   padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
+
+  &:is([type='submit']) {
+    color: white;
+  }
 }
 
 .button-large {

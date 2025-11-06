@@ -104,8 +104,8 @@
   --progress-bar-height: 6px;
   --progress-bar-border-radius: 6px;
 
-  --button-padding-y: 0.6rem;
-  --button-padding-x: 1rem;
+  --button-padding-y: 0.5rem;
+  --button-padding-x: 0.75rem;
   --button-border-radius: 8px;
   --button-font-size: calc(var(--type-base-size));
   --button-color: var(--color-primary);
