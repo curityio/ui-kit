@@ -145,14 +145,14 @@ fieldset {
 /* -------------------------------------------------------------------
 Password revealer
 ------------------------------------------------------------------- */
-/* .form-password-reveal-form {
+.form-password-reveal-form {
   position: relative;
   input {
     padding-right: 42px;
   }
-} */
-/* TODO: Fix eye icon revealer */
-/* .form-password-reveal-form-icon {
+}
+
+.form-password-reveal-form-icon {
   background-image: url("../images/eye.svg");
   background-repeat: no-repeat;
   background-size: 100%;
@@ -170,7 +170,7 @@ Password revealer
   &.active {
     background-image: url("../images/eye-hide.svg");
   }
-} */
+}
 
 /* Placeholders */
 ::placeholder {
