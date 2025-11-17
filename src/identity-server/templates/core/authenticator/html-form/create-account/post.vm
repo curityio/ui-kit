@@ -35,19 +35,31 @@
 ## The title of this page can be overridden by setting the $title variable here to a resource string or the actual value
 ##set($title = "")
 
-#set ($page_symbol = $page_symbol_done)
+#if(!$_errors)
+    #set ($page_symbol = $page_symbol_done)
+#end
 
 #define($_body)
     <div class="area center">
 
         <h1>#message("authenticator.html-form.create-account.view.success.success")</h1>
 
-        <p>#message("authenticator.html-form.create-account.$!{_activationMessage}")</p>
+        #if($_activationMessage)
+            <p>#message("authenticator.html-form.create-account.$!{_activationMessage}")</p>
+        #end
 
         #if($_activationMessageAdditionalInfo)
         <p>
             <small>#message("authenticator.html-form.create-account.$!{_activationMessageAdditionalInfo}")</small>
         </p>
+        #end
+
+        #if($_resendAction)
+            <form id="resend-form" name="resend-form" method="post" class="no-top-padding" action="$_resendAction">
+                <button type="submit" id="resend-button" class="button-primary">
+                    #message("authenticator.html-form.create-account.view.success.button.resend-activation-link")
+                </button>
+            </form>
         #end
 
         #parse("fragments/auto-login")

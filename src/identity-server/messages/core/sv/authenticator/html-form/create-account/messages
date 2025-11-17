@@ -15,10 +15,11 @@ view.button=Skapa konto
 view.terms=Jag godkänner villkoren
 view.success.further-instructions=Vidare instruktioner har skickats till din e-postadress
 view.success.success=Ditt konto har skapats!
-view.success.verify=Ett mail med instruktioner för hur du verifierar ditt konto har skickats till den e-postadress du angav.
+view.success.verify=Ett mail med instruktioner för hur du verifierar ditt konto har skickats till din e-postadress.
 view.success.no-activation=Du kan nu gå vidare till inloggningen
 view.success.spam-folder=Om du inte har fått ett mail, kontrollera spam-korgen.
 view.success.return-to-login=Gå tillbaka till inloggningen
+view.success.button.resend-activation-link=Skicka nytt bekräftelsemail
 
 error.duplicateAccountCheckFailed=Ett oväntat fel har uppstått
 error.validation.firstName.required=Du måste ange ditt förnamn
