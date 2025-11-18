@@ -85,8 +85,9 @@ export default defineConfig(({ mode }) => {
             for (const fileName in bundle) {
               const chunk = bundle[fileName];
               if (chunk.type === "chunk" && fileName.includes("curity-ui")) {
+                // Vite's lib mode with CommonJS source produces:
                 chunk.code = chunk.code
-                  .replace(/^\(function\(\)\{/, "var curityui=(function(){")
+                  .replace(/^\(function\(\)\{\"use strict\";/, "var curityui=(function(){")
                   .replace("module.exports=", "return ");
               }
             }
