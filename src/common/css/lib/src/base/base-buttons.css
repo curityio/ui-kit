@@ -209,7 +209,7 @@ button svg {
   margin-block-start: var(--space-2);
 }
 
-[type='submit']:not(.button-medium):not(.button-small):not(.button-large),
+[type='submit']:not(.button-medium):not(.button-small):not(.button-tiny):not(.button-small):not(.button-large):not(.button-social):not(.button-link),
 .button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
