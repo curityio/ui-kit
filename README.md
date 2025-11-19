@@ -2,9 +2,7 @@
 
 Customize the public facing styles and templates to fit your needs.
 
-🚩 Work In Progress
-
-Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Self Service Portal, Login Web App, Template System, and Styles
+Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Self Service Portal, Login Web App, Curity Identity Server Templates, Curity CSS, and Curity UI Icons React.
 
 ## Prerequisites
 - Java v22 or later
@@ -54,9 +52,8 @@ npm start:all
 To start projects individually, run:
 
 - `npm start:ussp` to start the Self Service Portal
-- `npm start:login` to start the Login Web App,
-- `npm start:templates` - to start the Template System
-- `npm start:styles` - to start the Styles
+- `npm start:lwa` to start the Login Web App,
+- `npm start:identity-server` - to start the Curity Identity Server Templates
 
 ## Build
 
@@ -68,11 +65,11 @@ npm run build:all
 
 To build projects individually, run:
 
+- `npm run build:identity-server` to build the Identity Server Templates
 - `npm run build:ussp` to build the Self Service Portal
-- `npm run build:login` to build the Login Web App,
-- `npm run build:templates` - to build the Template System
-- `npm run build:messages` - to build Messages
-- `npm run build:styles` - to build the Styles
+- `npm run build:lwa` to build the Login Web App
+- `npm run build:css` to build the CSS
+- `npm run build:icons` to build the Icons
 
 
 ## Deploy
