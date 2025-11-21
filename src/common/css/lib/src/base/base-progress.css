@@ -53,3 +53,29 @@ Progress bars
 div.progress .progress-danger {
   background-color: var(--color-danger);
 }
+
+progress {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 250px;
+    height: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-grey-subtle);
+    overflow: hidden;
+  }
+
+  progress::-webkit-progress-bar {
+    background-color: var(--color-grey-subtle);
+    border-radius: 10px;
+  }
+
+  progress::-webkit-progress-value {
+    background-color: var(--color-spot);
+    border-radius: 10px;
+  }
+
+  progress::-moz-progress-bar {
+    background-color: var(--color-spot);
+    border-radius: 10px;
+  }
