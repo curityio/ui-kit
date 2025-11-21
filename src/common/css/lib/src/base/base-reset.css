@@ -53,6 +53,9 @@ html {
   text-size-adjust: 100%;
 }
 
+[type='button'],
+[type='reset'],
+[type='submit'],
 button {
   appearance: button;
 }
