@@ -21,6 +21,7 @@ import "./css/login-waiting.css";
 import "./css/login-well.css";
 import "./css/opt-in-mfa.css";
 import "./css/recipient.css";
+import "./css/recovery-codes.css";
 import "./css/roboto-font.css";
 import "./css/spinner.css";
 import "./css/well.css";
