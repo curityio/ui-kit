@@ -8,13 +8,14 @@
   "scripts": {
     "prestart": "npm run build --workspace @curity-ui-kit/css",
     "start": "vite --open",
-    "prebuild": "npm run build --workspace @curity-ui-kit/icons || true",
+    "prebuild": "npm run build --workspace @curity-ui-kit/icons @curity-ui-kit/css || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
     "tsBuild:watch": "tsc -b -w",
     "lint": "eslint .",
     "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
     "preview": "vite preview",
+    "previewer": "vite --open --config vite-previewer.config.ts",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "e2e": "cypress run --headless --browser chrome --e2e",
@@ -64,11 +65,17 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.4.0",
     "jsdom": "^27.0.1",
+    "msw": "^2.12.2",
     "stylelint-config-standard": "^39.0.1",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",
     "vite": "^7.1.12",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.1"
+  },
+  "msw": {
+    "workerDirectory": [
+      "Public"
+    ]
   }
 }
