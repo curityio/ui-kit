@@ -43,3 +43,33 @@
 .login-actions a:hover {
 	text-decoration: underline;
 }
+
+/* -------------------------------------------------------------------
+Password revealer
+------------------------------------------------------------------- */
+.form-password-reveal-form {
+  position: relative;
+
+  :is(input) {
+    padding-right: 42px;
+  }
+}
+
+.form-password-reveal-form-icon {
+	background-image: url('/assets/images/eye.svg');
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	cursor: pointer;
+	display: inline-block;
+	height: 20px;
+	position: absolute;
+	right: 0.5rem;
+	top: calc(var(--form-field-height) * 0.95);
+	transition: opacity 200ms ease;
+	vertical-align: middle;
+	width: 20px;
+
+	&.active {
+		background-image: url('/assets/images/eye-hide.svg');
+	}
+}
