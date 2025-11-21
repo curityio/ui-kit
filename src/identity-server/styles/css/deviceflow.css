@@ -33,7 +33,8 @@ input[type="text"].field-enter-usercode {
   background-clip: padding-box;
 }
 
-@media (min-width: 600px) { /* replace with your $breakpoint-sm */
+@media (min-width: 600px) {
+  /* replace with your $breakpoint-sm */
   input[type="text"].field-enter-usercode {
     width: 40px;
     height: 50px;
@@ -76,7 +77,8 @@ input[type="text"].field-enter-usercode-success:focus {
   background-color: #333;
 }
 
-@media (min-width: 600px) { /* replace with your $breakpoint-sm */
+@media (min-width: 600px) {
+  /* replace with your $breakpoint-sm */
   .field-enter-usercode-separator {
     width: 20px;
     display: inline-block;
@@ -133,5 +135,28 @@ input[type="submit"][disabled] {
 @media (min-width: 40em) {
   .confirm-device-text {
     font-size: 2rem;
+  }
+}
+
+/* QR Codes */
+img#autostartTokenQr,
+img[alt*="barcode"] {
+  margin: 0 auto;
+  display: block;
+  width: 250px;
+}
+
+/* QR code is larger when clicked */
+#trigger-fullscreen:focus {
+  box-shadow: none;
+}
+
+img.qr-enlarge {
+  min-width: 100%;
+}
+
+@media (min-width: 40em) {
+  img.qr-enlarge {
+    min-width: 400px;
   }
 }
