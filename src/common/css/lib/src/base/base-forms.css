@@ -142,37 +142,6 @@ fieldset {
   padding: var(--space-2);
 }
 
-/* -------------------------------------------------------------------
-Password revealer
-------------------------------------------------------------------- */
-.form-password-reveal-form {
-  position: relative;
-
-  :is(input) {
-    padding-right: 42px;
-  }
-}
-
-.form-password-reveal-form-icon {
-  background-image: url('data:image/svg+xml,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M46.32,128S76,68.59,128,68.59,209.68,128,209.68,128,180,187.41,128,187.41,46.32,128,46.32,128Z" style="fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 14px;"></path><circle cx="128" cy="128" r="22.28" style="fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 14px;"></circle></svg>');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-size: 20px 20px;
-  cursor: pointer;
-  display: inline-block;
-  height: 20px;
-  position: absolute;
-  right: 0.5rem;
-  top: calc(var(--form-field-height) * 0.95);
-  transition: opacity 200ms ease;
-  vertical-align: middle;
-  width: 20px;
-
-  &.active {
-    background-image: url('data:image/svg+xml,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M44.48,124.51S74.19,65.1,126.17,65.1s81.68,59.41,81.68,59.41-29.7,59.41-81.68,59.41S44.48,124.51,44.48,124.51Z" style="fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 14px;"></path><circle cx="126.17" cy="124.51" r="22.28" style="fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 14px;"></circle><line x1="56.2" y1="54.54" x2="196.14" y2="194.48" style="fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 14px;"></line></svg>');
-  }
-}
-
 /* Placeholders */
 ::placeholder {
   color: var(--form-field-placeholder-color);
@@ -235,4 +204,40 @@ input:-webkit-autofill:focus {
 
 input[data-autocompleted] {
   background-color: transparent !important;
+}
+
+/* Details */
+
+details {
+  border: 1px solid var(--color-grey-light);
+  border-radius: var(--form-field-border-radius);
+  margin-bottom:var(--space-2);
+  padding: var(--space-2) var(--space-2) 0;
+}
+
+details,
+details p {
+  color: var(--color-text);
+}
+
+.login-well details p {
+  text-align: left;
+}
+
+summary {
+  cursor: pointer;
+  margin: calc(var(--space-2) * -1) calc(var(--space-2) * -1) 0;
+  padding: var(--space-2);
+}
+
+details[open]::details-content {
+  padding: 0.75em;
+}
+
+details[open] ul {
+  list-style-position: inside;
+}
+
+details[open] summary {
+  margin-bottom: 0.75em;
 }
