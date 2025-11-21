@@ -24,7 +24,7 @@
 <div class="area">
     <h3>#message("${_templatePrefix}.recovery-codes-reset.view.title")</h3>
     <p>#message("${_templatePrefix}.recovery-codes-reset.view.sub-title")</p>
-    
+
     <div class="backup-codes">
         <ul class="list-reset m0 px2 py3">
         #foreach($_recoveryCode in $_recoveryCodes)
@@ -33,7 +33,7 @@
         </ul>
     </div>
         <div class="flex mt1" style="justify-content: flex-end">
-        <button class="button button-tiny button-link" onclick="window.print();">
+        <button class="button button-tiny button-link button-print-recovery-codes">
             <i class="icon ion-ios-printer-outline inlineicon"></i>#message("${_templatePrefix}.recovery-codes-reset.view.print")
         </button>
     </div>
@@ -57,6 +57,17 @@
         </form>
     </div>
 </div>
+
+<script $!nonceAttr>
+    document.addEventListener("DOMContentLoaded", function () {
+        const printButton = document.querySelector('.button-print-recovery-codes')
+        if(printButton) {
+            printButton.addEventListener('click', event => {
+                window.print();
+            })
+        }
+    })
+</script>
 
 #end
 
