@@ -71,7 +71,7 @@
   line-height: 0;
   padding: 1.5rem;
   position: absolute;
-  text-shadow: 0 0 0 white;
+  /* text-shadow: 0 0 0 white; */
   top: 0;
   width: 30px;
 }
@@ -97,25 +97,90 @@
 }
 
 /* Icons */
-
-.alert-warning::before {
-  background-color: var(--color-warning);
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>');
-}
-
-.alert-danger::before {
-  background-color: var(--color-danger);
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>');
-}
-
 .alert-success::before {
   background-color: var(--color-success);
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M20 6 9 17l-5-5"/></svg>');
+}
+
+.alert-success::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  display: inline-block;
+  transform: rotate(45deg);
+  height: 16px;
+  width: 8px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
 }
 
 .alert-info::before {
   background-color: var(--color-info);
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>');
+}
+
+.alert-info::after {
+  content: '!';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.alert-warning::before {
+  background-color: var(--color-warning);
+}
+
+.alert-warning::after {
+  content: '!';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.alert-danger::before {
+  background-color: var(--color-danger);
+}
+
+.alert-danger::after {
+  content: '✕';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
 }
 
 /* Dark skin */
