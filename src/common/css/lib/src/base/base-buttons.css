@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 .button {
-  --y-tiny: 0.65;
+  --y-tiny: 0.75;
   --x-tiny: 1;
 
   --y-small: 0.85;
@@ -209,7 +209,7 @@ button svg {
   margin-block-start: var(--space-2);
 }
 
-[type='submit']:not(.button-medium):not(.button-small):not(.button-tiny):not(.button-small):not(.button-large):not(.button-social):not(.button-link),
+[type='submit']:not(.button-medium):not(.button-small):not(.button-tiny):not(.button-small):not(.button-large):not(.button-social):not(.button-link):not(.button-primary-outline),
 .button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
