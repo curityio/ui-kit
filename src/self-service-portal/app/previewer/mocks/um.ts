@@ -32,7 +32,21 @@ const account = {
             "type": 'l',
             "__typename": "Address"
         }
-    ]
+    ],
+    linkedAccounts: [
+        {
+            "value": "testuser@network.y",
+            "domain": "network.y",
+            "created": 1763744400,
+            "__typename": "LinkedAccount"
+        },
+        {
+            "value": "testuser@social.io",
+            "domain": "social.io",
+            "created": 1763658000,
+            "__typename": "LinkedAccount"
+        }
+    ],
 };
 const optIn = {
     state: false, factorsIn: [], factorsOut: [
@@ -168,20 +182,7 @@ export const um = [
                             "__typename": "Device"
                         }
                     ],
-                    "linkedAccounts": [
-                        {
-                            "value": "testuser@network.y",
-                            "domain": "network.y",
-                            "created": 1763744400,
-                            "__typename": "LinkedAccount"
-                        },
-                        {
-                            "value": "testuser@social.io",
-                            "domain": "social.io",
-                            "created": 1763658000,
-                            "__typename": "LinkedAccount"
-                        }
-                    ],
+                    "linkedAccounts": account.linkedAccounts,
                     "mfaOptIn": {
                         "registeredFactors": {
                             "factors": optIn.state ? optIn.factorsIn : [],
@@ -629,7 +630,17 @@ export const um = [
                 }
             ]
         };
-        return HttpResponse.json((variables.input.totp === '123456') ? success : failure);
+        if (variables.input.totp === '123456') {
+            const factor = optIn.factorsOut.find(
+                f => f.acr === 'urn:se:curity:authentication:totp:totp-optin-mfa'
+            );
+            if (factor) {
+                factor.hasDevices = true;
+            }
+            return HttpResponse.json(success);
+        }
+        return HttpResponse.json(failure);
+
     }),
     umEndpoint.mutation('deleteDeviceFromAccountByAccountId', () => {
         return HttpResponse.json({
@@ -654,6 +665,12 @@ export const um = [
         })
     }),
     umEndpoint.mutation('completeVerifyPasskeyByAccountId', () => {
+        const factor = optIn.factorsOut.find(
+            f => f.acr === 'urn:se:curity:authentication:passkeys:passkeys-optin-mfa'
+        );
+        if (factor) {
+            factor.hasDevices = true;
+        }
         return HttpResponse.json({
             "data": {
                 "completeVerifyPasskeyByAccountId": {
@@ -664,7 +681,7 @@ export const um = [
         })
     }),
 
-    umEndpoint.mutation('startOptInMfaSetupByAccountId', ({variables}) => {
+    umEndpoint.mutation('startOptInMfaSetupByAccountId', ({ variables }) => {
         variables?.input?.factors.forEach((factor: { acr: string }) => {
             let index = optIn.factorsOut.findIndex(f => f.acr === factor.acr);
             if (index !== -1) {
@@ -953,6 +970,118 @@ export const um = [
                         "dynamicClients": []
                     },
                     "__typename": "CompleteOptInMfaSetupByAccountIdPayload"
+                }
+            }
+        })
+    }),
+    umEndpoint.mutation('addOptInMfaFactorToAccountByAccountId', ({ variables }) => {
+        let index = optIn.factorsOut.findIndex(f => f.acr === variables.input.acr);
+        optIn.factorsIn.push(optIn.factorsOut[index]);
+        optIn.factorsOut.splice(index, 1);
+        return HttpResponse.json({
+            "data": {
+                "addOptInMfaFactorToAccountByAccountId": {
+                    "added": true,
+                    "__typename": "AddOptInMfaFactorToAccountByAccountIdPayload"
+                }
+            }
+        })
+    }),
+    umEndpoint.mutation('deleteOptInMfaFactorFromAccountByAccountId', ({ variables }) => {
+        let index = optIn.factorsIn.findIndex(f => f.acr === variables.input.acr);
+        optIn.factorsOut.push(optIn.factorsIn[index]);
+        optIn.factorsIn.splice(index, 1);
+        return HttpResponse.json({
+            "data": {
+                "deleteOptInMfaFactorFromAccountByAccountId": {
+                    "deleted": true,
+                    "__typename": "DeleteOptInMfaFactorFromAccountByAccountIdPayload"
+                }
+            }
+        })
+    }),
+
+    umEndpoint.mutation('startOptInMfaResetRecoveryCodesByAccountId', () => {
+        return HttpResponse.json({
+            "data": {
+                "startOptInMfaResetRecoveryCodesByAccountId": {
+                    "recoveryCodes": [
+                        {
+                            "value": "00000010",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000011",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000012",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000013",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000014",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000015",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000016",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000017",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000018",
+                            "__typename": "OptInMfaRecoveryCode"
+                        },
+                        {
+                            "value": "00000019",
+                            "__typename": "OptInMfaRecoveryCode"
+                        }
+                    ],
+                    "state": "0pR9kgDyPRea1dt53I1t5oHUF3W4d2vA",
+                    "__typename": "StartOptInMfaResetRecoveryCodesByAccountIdPayload"
+                }
+            }
+        })
+    }),
+    umEndpoint.mutation('completeOptInMfaResetRecoveryCodesByAccountId', () => {
+        return HttpResponse.json({
+            "data": {
+            }
+        })
+    }),
+    umEndpoint.mutation('resetOptInMfaStateByAccountId', () => {
+        optIn.factorsIn.forEach(factor => {optIn.factorsOut.push(factor);});
+        optIn.factorsIn = [];
+        optIn.state = false;
+        return HttpResponse.json({
+            "data": {
+                "resetOptInMfaStateByAccountId": {
+                    "deleted": true,
+                    "__typename": "ResetOptInMfaStateByAccountIdPayload"
+                }
+            }
+        })
+    }),
+
+    umEndpoint.mutation('deleteLinkFromAccountByAccountId', ({ variables }) => {
+        account.linkedAccounts = account.linkedAccounts.filter(la =>
+            la.value !== variables.input.linkedAccount.value
+            && la.domain !== variables.input.linkedAccount.domain);
+        return HttpResponse.json({
+            "data": {
+                "deleteLinkFromAccountByAccountId": {
+                    "deleted": true,
+                    "__typename": "DeleteLinkFromAccountByAccountIdPayload"
                 }
             }
         })
