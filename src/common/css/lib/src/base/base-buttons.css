@@ -8,6 +8,7 @@
  *
  * For further information, please contact Curity AB.
  */
+ .btn,
 .button {
   --y-tiny: 0.75;
   --x-tiny: 1;
@@ -87,12 +88,15 @@ button svg {
   color: white;
 }
 
+.btn,
 .button-primary {
   background-color: var(--button-background-color);
   border: 1px solid var(--button-border-color);
   color: white;
 }
 
+.btn-hover:hover,
+.btn-hover:active,
 .button-primary:hover,
 .button-primary:active {
   background-color: var(--button-background-color-hover);
@@ -278,6 +282,7 @@ a.button-transparent:hover,
   background-color: transparent;
 }
 
+.btn,
 .button-fullwidth {
   text-align: center;
   width: 100%;

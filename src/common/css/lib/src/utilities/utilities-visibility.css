@@ -54,6 +54,7 @@
   display: none !important;
 }
 
+.hidden,
 .hide {
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;
