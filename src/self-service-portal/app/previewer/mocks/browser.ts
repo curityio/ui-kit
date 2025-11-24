@@ -10,8 +10,8 @@
  */
 
 import { setupWorker } from 'msw/browser'
-import { common } from './common.ts'
+import { api } from './api.ts'
 import { um } from './um.ts'
 import { ga } from './ga.ts'
 
-export const mockWorker = setupWorker(...common, ...um, ...ga)
+export const mockWorker = setupWorker(...api, ...um, ...ga)
