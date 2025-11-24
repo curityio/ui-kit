@@ -95,6 +95,10 @@ Login well
 	padding-right: 1rem;
 }
 
+.login-well .area button {
+	margin-top: var(--space-2);
+}
+
 @media (min-width: 576px) {
 	.login-well:not(.login-well-info) form:not(.no-bottom-padding),
 	.login-well:not(.login-well-info) .area:not(.no-bottom-padding) {

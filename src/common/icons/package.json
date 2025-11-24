@@ -15,7 +15,6 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "build:ssp": "BUILD_VARIANT=ssp rollup -c",
     "clean": "rm -rf dist && rm -rf dist-ssp && rm -rf src-ssp"
   },
   "devDependencies": {
