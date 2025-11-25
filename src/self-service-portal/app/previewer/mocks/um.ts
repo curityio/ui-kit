@@ -47,43 +47,45 @@ const account = {
             "__typename": "LinkedAccount"
         }
     ],
-};
-const optIn = {
-    state: false, factorsIn: [], factorsOut: [
-        {
-            "acr": "urn:se:curity:authentication:sms:sms-optin-mfa",
-            "description": "SMS authentication code",
-            "expectedUserName": "testuser",
-            "changedAt": 1763711375,
-            "type": "sms",
-            "hasDevices": false,
-            "__typename": "RegisteredFactor"
-        },
-        {
-            "acr": "urn:se:curity:authentication:email:email-optin-mfa",
-            "description": "Email authentication code",
-            "expectedUserName": "testuser",
-            "changedAt": 1763711375,
-            "type": "email",
-            "hasDevices": false,
-            "__typename": "RegistrableFactor"
-        },
-        {
-            "acr": "urn:se:curity:authentication:passkeys:passkeys-optin-mfa",
-            "description": "Passkey",
-            "expectedUserName": "testuser",
-            "type": "passkeys",
-            "hasDevices": false,
-            "__typename": "RegistrableFactor"
-        },
-        {
-            "acr": "urn:se:curity:authentication:totp:totp-optin-mfa",
-            "description": "OTP authenticator app",
-            "type": "totp",
-            "hasDevices": false,
-            "__typename": "RegistrableFactor"
-        }
-    ]
+    optIn: {
+        state: false,
+        factorsIn: [],
+        factorsOut: [
+            {
+                "acr": "urn:se:curity:authentication:sms:sms-optin-mfa",
+                "description": "SMS authentication code",
+                "expectedUserName": "testuser",
+                "changedAt": 1763711375,
+                "type": "sms",
+                "hasDevices": false,
+                "__typename": "RegisteredFactor"
+            },
+            {
+                "acr": "urn:se:curity:authentication:email:email-optin-mfa",
+                "description": "Email authentication code",
+                "expectedUserName": "testuser",
+                "changedAt": 1763711375,
+                "type": "email",
+                "hasDevices": false,
+                "__typename": "RegistrableFactor"
+            },
+            {
+                "acr": "urn:se:curity:authentication:passkeys:passkeys-optin-mfa",
+                "description": "Passkey",
+                "expectedUserName": "testuser",
+                "type": "passkeys",
+                "hasDevices": false,
+                "__typename": "RegistrableFactor"
+            },
+            {
+                "acr": "urn:se:curity:authentication:totp:totp-optin-mfa",
+                "description": "OTP authenticator app",
+                "type": "totp",
+                "hasDevices": false,
+                "__typename": "RegistrableFactor"
+            }
+        ]
+    }
 };
 
 export const um = [
@@ -185,11 +187,11 @@ export const um = [
                     "linkedAccounts": account.linkedAccounts,
                     "mfaOptIn": {
                         "registeredFactors": {
-                            "factors": optIn.state ? optIn.factorsIn : [],
+                            "factors": account.optIn.state ? account.optIn.factorsIn : [],
                             "__typename": "RegisteredFactors"
                         },
                         "registrableFactors": {
-                            "factors": optIn.factorsOut,
+                            "factors": account.optIn.factorsOut,
                             "__typename": "RegistrableFactors"
                         },
                         "preferences": null,
@@ -258,7 +260,6 @@ export const um = [
         })
     }),
     umEndpoint.mutation('updateAccountById', ({variables}) => {
-        console.log('Update account called', variables.input.fields.addresses);
         account.addresses = variables.input.fields.addresses || account.addresses;
         return HttpResponse.json({
             "data": {
@@ -371,11 +372,11 @@ export const um = [
                         ],
                         "mfaOptIn": {
                             "registeredFactors": {
-                                "factors": optIn.state ? optIn.factorsIn : [],
+                                "factors": account.optIn.state ? account.optIn.factorsIn : [],
                                 "__typename": "RegisteredFactors"
                             },
                             "registrableFactors": {
-                                "factors": optIn.factorsOut,
+                                "factors": account.optIn.factorsOut,
                                 "__typename": "RegistrableFactors"
                             },
                             "preferences": null,
@@ -490,7 +491,7 @@ export const um = [
         };
         if (variables.input.otp === '123456') {
             account.phone.verified = 'verified';
-            const factor = optIn.factorsOut.find(
+            const factor = account.optIn.factorsOut.find(
                 f => f.acr === 'urn:se:curity:authentication:sms:sms-optin-mfa'
             );
             if (factor) {
@@ -557,7 +558,7 @@ export const um = [
         };
         if (variables.input.otp === '123456') {
             account.email.verified = 'verified';
-            const factor = optIn.factorsOut.find(
+            const factor = account.optIn.factorsOut.find(
                 f => f.acr === 'urn:se:curity:authentication:email:email-optin-mfa'
             );
             if (factor) {
@@ -631,7 +632,7 @@ export const um = [
             ]
         };
         if (variables.input.totp === '123456') {
-            const factor = optIn.factorsOut.find(
+            const factor = account.optIn.factorsOut.find(
                 f => f.acr === 'urn:se:curity:authentication:totp:totp-optin-mfa'
             );
             if (factor) {
@@ -665,7 +666,7 @@ export const um = [
         })
     }),
     umEndpoint.mutation('completeVerifyPasskeyByAccountId', () => {
-        const factor = optIn.factorsOut.find(
+        const factor = account.optIn.factorsOut.find(
             f => f.acr === 'urn:se:curity:authentication:passkeys:passkeys-optin-mfa'
         );
         if (factor) {
@@ -683,16 +684,16 @@ export const um = [
 
     umEndpoint.mutation('startOptInMfaSetupByAccountId', ({ variables }) => {
         variables?.input?.factors.forEach((factor: { acr: string }) => {
-            let index = optIn.factorsOut.findIndex(f => f.acr === factor.acr);
+            let index = account.optIn.factorsOut.findIndex(f => f.acr === factor.acr);
             if (index !== -1) {
-                optIn.factorsIn.push(optIn.factorsOut[index]);
-                optIn.factorsOut.splice(index, 1);
+                account.optIn.factorsIn.push(account.optIn.factorsOut[index]);
+                account.optIn.factorsOut.splice(index, 1);
             }
         });
         return HttpResponse.json({
             "data": {
                 "startOptInMfaSetupByAccountId": {
-                    "factors": optIn.factorsIn,
+                    "factors": account.optIn.factorsIn,
                     "recoveryCodes": [
                         {
                             "value": "00000001",
@@ -742,7 +743,7 @@ export const um = [
         })
     }),
     umEndpoint.mutation('completeOptInMfaSetupByAccountId', () => {
-        optIn.state = true;
+        account.optIn.state = true;
         return HttpResponse.json({
             "data": {
                 "completeOptInMfaSetupByAccountId": {
@@ -871,7 +872,7 @@ export const um = [
                         ],
                         "mfaOptIn": {
                             "registeredFactors": {
-                                "factors": optIn.factorsIn,
+                                "factors": account.optIn.factorsIn,
                                 "__typename": "RegisteredFactors"
                             },
                             "registrableFactors": {
@@ -975,9 +976,9 @@ export const um = [
         })
     }),
     umEndpoint.mutation('addOptInMfaFactorToAccountByAccountId', ({ variables }) => {
-        let index = optIn.factorsOut.findIndex(f => f.acr === variables.input.acr);
-        optIn.factorsIn.push(optIn.factorsOut[index]);
-        optIn.factorsOut.splice(index, 1);
+        let index = account.optIn.factorsOut.findIndex(f => f.acr === variables.input.acr);
+        account.optIn.factorsIn.push(account.optIn.factorsOut[index]);
+        account.optIn.factorsOut.splice(index, 1);
         return HttpResponse.json({
             "data": {
                 "addOptInMfaFactorToAccountByAccountId": {
@@ -988,9 +989,9 @@ export const um = [
         })
     }),
     umEndpoint.mutation('deleteOptInMfaFactorFromAccountByAccountId', ({ variables }) => {
-        let index = optIn.factorsIn.findIndex(f => f.acr === variables.input.acr);
-        optIn.factorsOut.push(optIn.factorsIn[index]);
-        optIn.factorsIn.splice(index, 1);
+        let index = account.optIn.factorsIn.findIndex(f => f.acr === variables.input.acr);
+        account.optIn.factorsOut.push(account.optIn.factorsIn[index]);
+        account.optIn.factorsIn.splice(index, 1);
         return HttpResponse.json({
             "data": {
                 "deleteOptInMfaFactorFromAccountByAccountId": {
@@ -1060,9 +1061,9 @@ export const um = [
         })
     }),
     umEndpoint.mutation('resetOptInMfaStateByAccountId', () => {
-        optIn.factorsIn.forEach(factor => {optIn.factorsOut.push(factor);});
-        optIn.factorsIn = [];
-        optIn.state = false;
+        account.optIn.factorsIn.forEach(factor => {account.optIn.factorsOut.push(factor);});
+        account.optIn.factorsIn = [];
+        account.optIn.state = false;
         return HttpResponse.json({
             "data": {
                 "resetOptInMfaStateByAccountId": {
