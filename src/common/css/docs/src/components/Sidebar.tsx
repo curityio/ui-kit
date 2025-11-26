@@ -33,7 +33,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ pages }) => {
   // Scroll to active link on mount or when currentPath changes
   useEffect(() => {
     if (activeLinkRef.current) {
-      activeLinkRef.current.scrollIntoView({ block: 'center', behavior: 'instant' });
+      const element = activeLinkRef.current;
+      const parent = element.closest('.sidebar');
+
+      if (parent) {
+        const elementRect = element.getBoundingClientRect();
+        const parentRect = parent.getBoundingClientRect();
+
+        // Only scroll if the element is not fully visible
+        const isVisible =
+          elementRect.top >= parentRect.top &&
+          elementRect.bottom <= parentRect.bottom;
+
+        if (!isVisible) {
+          element.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      }
     }
   }, [currentPath]);
 
@@ -48,6 +63,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ pages }) => {
     const folderStructure: { [key: string]: { name: string; pages: any[] } } = {};
 
     pages.forEach((page) => {
+      // Safety check: ensure page.file exists
+      if (!page.file) return;
+
       const folderPath = page.file.replace(/.*\/(.*?)\/[^/]+$/, '$1');
       const folderName = folderPath.split('/').pop();
 

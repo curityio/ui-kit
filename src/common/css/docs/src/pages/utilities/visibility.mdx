@@ -5,6 +5,104 @@ description: "Usage on how to use Visibility"
 updatedAt: "August 08 2022"
 ---
 
-Hi from Visibility
+# Visibility Utilities
 
-<div className="alert alert-info">This is yet to be written</div>
+Control the visibility and display of elements across different screen sizes.
+
+## Available Classes
+
+### Responsive Show
+
+Show elements only at specific breakpoints. Hidden by default, becomes visible at the specified breakpoint.
+
+- `.sm-show` - Hidden by default, displays as block at 40em (small screens) and up
+- `.md-show` - Hidden by default, displays as block at 52em (medium screens) and up
+- `.lg-show` - Hidden by default, displays as block at 64em (large screens) and up
+
+### Responsive Hide
+
+Hide elements at specific breakpoints.
+
+- `.sm-hide` - Hidden on small screens (40em+)
+- `.md-hide` - Hidden on medium screens (52em+)
+- `.lg-hide` - Hidden on large screens (64em+)
+
+### Display Control
+
+- `.display-none` - Completely removes element from display (`display: none !important`)
+
+### Accessibility-Friendly Hidden
+
+These classes hide elements visually while keeping them accessible to screen readers.
+
+#### `.hidden` / `.hide`
+Hides the element visually but keeps it in the document flow for accessibility:
+```css
+clip: rect(1px, 1px, 1px, 1px);
+height: 1px;
+overflow: hidden;
+position: absolute !important;
+width: 1px;
+```
+
+#### `.visuallyhidden`
+Alternative approach to hide content visually while maintaining accessibility:
+```css
+border: 0;
+clip: rect(0 0 0 0);
+height: 1px;
+margin: -1px;
+overflow: hidden;
+padding: 0;
+position: absolute;
+width: 1px;
+```
+
+## Breakpoints
+
+- **Small (sm):** 40em (640px)
+- **Medium (md):** 52em (832px)
+- **Large (lg):** 64em (1024px)
+
+## Usage Examples
+
+```html
+<!-- Show only on mobile -->
+<div class="sm-hide">Visible on mobile only</div>
+
+<!-- Show only on desktop -->
+<div class="sm-show">Hidden on mobile, visible on desktop</div>
+
+<!-- Hide element completely -->
+<div class="display-none">Not displayed</div>
+
+<!-- Screen reader only content -->
+<span class="visuallyhidden">This text is only for screen readers</span>
+
+<!-- Responsive pattern -->
+<nav class="md-hide">Mobile navigation</nav>
+<nav class="md-show">Desktop navigation</nav>
+```
+
+## Use Cases
+
+### Mobile-First Design
+```html
+<!-- Default mobile content, hide on larger screens -->
+<button class="md-hide">☰ Menu</button>
+```
+
+### Desktop-Only Content
+```html
+<!-- Only show on medium screens and up -->
+<aside class="md-show">Desktop sidebar</aside>
+```
+
+### Accessible Labels
+```html
+<!-- Visible label for screen readers -->
+<button>
+  <span class="visuallyhidden">Close</span>
+  <span aria-hidden="true">×</span>
+</button>
+```

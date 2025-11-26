@@ -5,38 +5,25 @@ description: "Usage on how to install and use the library"
 updatedAt: "August 08 2022"
 ---
 
-# Getting Started
-
-## Login
-
-The package is published in the Curity npm registry. You need to authenticate to be able to install it.
-
-```shell
-curity-cli login
-```
-
-You need to install `curity-cli` from Kandji.
-
-## Install
-
-Create a `.npmrc` in the project root
-
-```shell
-registry=https://hub.curityio.net/repository/curity-npm-group/
-```
-
-### Install the package as a dependency
-
-```shell
-npm install @curity-internal/css
-```
+# Install and Usage
 
 ## How to use the CSS library
 
 In most modern JS tooling and frameworks or when using a separate bundler, you can import the CSS directly from `node_modules` like this:
 
 ```js
-import "@curity-internal/css/dist/index.css";
+import "@curity-ui-kit/css/lib/dist/index.css";
 ```
 
-You can also just reference this file in HTML `<link>` tag.
+You can also just reference this file in a HTML `<link>` tag.
+
+
+## Install this package in an external projects
+
+It is possible to install the package outside of this repository, using GitHub Packages.
+
+```shell
+npm install @curityio/ui-kit/css
+```
+
+[Read more](https://github.com/curityio/UI-Kit/pkgs/npm/ui-kit)

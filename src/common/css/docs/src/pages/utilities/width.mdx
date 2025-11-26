@@ -5,6 +5,89 @@ description: "Usage on how to use Width"
 updatedAt: "August 08 2022"
 ---
 
-Hi from Width
+# Width Utilities
 
-<div className="alert alert-info">This is yet to be written</div>
+Width utility classes for controlling the width and max-width of elements.
+
+## Available Classes
+
+### Content-Based Width
+
+- `.w-maxcontent` - Width sized to maximum content (`width: max-content`)
+- `.w-mincontent` - Width sized to minimum content (`width: min-content`)
+
+### Fixed Width
+
+Set a fixed width on an element using the `w-{n}` classes. Each increment adds 1rem plus 0.5rem base.
+
+**Pattern:** `.w-{n}` where n ranges from 1 to 40
+
+- `.w-1` - width: 1.5rem
+- `.w-2` - width: 2.5rem
+- `.w-3` - width: 3.5rem
+- `.w-4` - width: 4.5rem
+- `.w-5` - width: 5.5rem
+- ...continues through...
+- `.w-40` - width: 40.5rem
+
+### Max Width
+
+Set a maximum width on an element using the `mw-{n}` classes. Each increment adds 1rem plus 0.5rem base.
+
+**Pattern:** `.mw-{n}` where n ranges from 1 to 40
+
+- `.mw-1` - max-width: 1.5rem
+- `.mw-2` - max-width: 2.5rem
+- `.mw-3` - max-width: 3.5rem
+- `.mw-4` - max-width: 4.5rem
+- `.mw-5` - max-width: 5.5rem
+- ...continues through...
+- `.mw-40` - max-width: 40.5rem
+
+## Usage Examples
+
+```html
+<!-- Fixed width of 10.5rem -->
+<div class="w-10">Fixed width content</div>
+
+<!-- Max width of 30.5rem -->
+<div class="mw-30">Flexible content with max width constraint</div>
+
+<!-- Content-based width -->
+<button class="w-maxcontent">Button sized to content</button>
+
+<!-- Combining with other utilities -->
+<div class="mw-20 mx-auto">
+  Centered content with max width
+</div>
+```
+
+## Calculation Formula
+
+The width value is calculated as: `{n} + 0.5` rem
+
+For example:
+- `w-1` = 1 + 0.5 = 1.5rem
+- `w-10` = 10 + 0.5 = 10.5rem
+- `w-40` = 40 + 0.5 = 40.5rem
+
+## Common Use Cases
+
+### Constrain Content Width
+```html
+<article class="mw-35 mx-auto">
+  <p>Readable text content with optimal line length</p>
+</article>
+```
+
+### Fixed Size Elements
+```html
+<img class="w-20" src="avatar.jpg" alt="Avatar">
+```
+
+### Content-Aware Buttons
+```html
+<button class="w-maxcontent px-2">
+  Save Changes
+</button>
+```

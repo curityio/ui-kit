@@ -5,6 +5,173 @@ description: "Usage on how to use Borderradius"
 updatedAt: "August 08 2022"
 ---
 
-Hi from Borderradius
+# Border Radius Utilities
 
-<div className="alert alert-info">This is yet to be written</div>
+Utility classes for controlling the border radius of elements, with fine-grained control over individual corners.
+
+## Available Classes
+
+### All Corners
+
+Apply border radius to all four corners:
+
+- `.br-1` - border-radius: 1px
+- `.br-2` - border-radius: 2px
+- `.br-3` - border-radius: 3px
+- `.br-4` - border-radius: 4px
+- `.br-5` - border-radius: 5px
+- `.br-6` - border-radius: 6px
+- `.br-7` - border-radius: 7px
+- `.br-8` - border-radius: 8px
+
+### Top Corners
+
+Apply border radius to both top corners:
+
+- `.br-t-{n}` - Top left and top right corners
+  - Example: `.br-t-4` applies 4px radius to both top corners
+
+### Bottom Corners
+
+Apply border radius to both bottom corners:
+
+- `.br-b-{n}` - Bottom left and bottom right corners
+  - Example: `.br-b-4` applies 4px radius to both bottom corners
+
+### Individual Corners
+
+Apply border radius to a specific corner:
+
+**Top Left**
+- `.br-t-l-{n}` - Top left corner only
+  - Example: `.br-t-l-4` applies 4px radius to top left
+
+**Top Right**
+- `.br-t-r-{n}` - Top right corner only
+  - Example: `.br-t-r-4` applies 4px radius to top right
+
+**Bottom Right**
+- `.br-b-r-{n}` - Bottom right corner only
+  - Example: `.br-b-r-4` applies 4px radius to bottom right
+
+**Bottom Left**
+- `.br-b-l-{n}` - Bottom left corner only
+  - Example: `.br-b-l-4` applies 4px radius to bottom left
+
+Where `{n}` can be: 1, 2, 3, 4, 5, 6, 7, or 8
+
+## Usage Examples
+
+### Basic Rounded Elements
+
+```html
+<!-- Subtle rounded corners -->
+<div class="br-2 bg-light-grey p-3">
+  Slightly rounded card
+</div>
+
+<!-- Standard rounded corners -->
+<button class="br-4 bg-primary white p-2">
+  Rounded Button
+</button>
+
+<!-- More pronounced rounding -->
+<div class="br-8 bg-white p-4">
+  Highly rounded card
+</div>
+```
+
+### Directional Rounding
+
+```html
+<!-- Rounded top only (useful for cards) -->
+<div class="br-t-6 bg-primary white p-3">
+  Card header with rounded top
+</div>
+
+<!-- Rounded bottom only -->
+<div class="br-b-6 bg-light-grey p-3">
+  Card footer with rounded bottom
+</div>
+```
+
+### Individual Corner Control
+
+```html
+<!-- Asymmetric design -->
+<div class="br-t-l-8 br-b-r-8 bg-primary-spot p-4">
+  Diagonal rounded corners
+</div>
+
+<!-- Tab-like appearance -->
+<div class="br-t-l-4 br-t-r-4 bg-white p-2">
+  Tab element
+</div>
+```
+
+## Common Patterns
+
+### Card Component
+```html
+<div class="br-6 bg-white p-4">
+  <h3>Card Title</h3>
+  <p>Card content with rounded corners</p>
+</div>
+```
+
+### Stacked Elements
+```html
+<!-- Top element -->
+<div class="br-t-4 bg-primary white p-3">
+  Header
+</div>
+
+<!-- Middle element (no rounding) -->
+<div class="bg-white p-3">
+  Content
+</div>
+
+<!-- Bottom element -->
+<div class="br-b-4 bg-light-grey p-3">
+  Footer
+</div>
+```
+
+### Button Group
+```html
+<div class="flex">
+  <button class="br-t-l-4 br-b-l-4 bg-primary white p-2">First</button>
+  <button class="bg-primary white p-2">Middle</button>
+  <button class="br-t-r-4 br-b-r-4 bg-primary white p-2">Last</button>
+</div>
+```
+
+### Modal or Dialog
+```html
+<div class="br-8 bg-white p-4">
+  <h2>Modal Title</h2>
+  <p>Modal content with highly rounded corners</p>
+  <button class="br-4">Close</button>
+</div>
+```
+
+### Image with Rounded Corners
+```html
+<img src="photo.jpg" alt="Photo" class="br-6" style="width: 100%;">
+```
+
+## Design Guidelines
+
+- **br-2 to br-4**: Subtle rounding for buttons, inputs, and small elements
+- **br-5 to br-6**: Standard rounding for cards and containers
+- **br-7 to br-8**: Pronounced rounding for modals, dialogs, or featured elements
+- Use directional classes (`.br-t-*`, `.br-b-*`) for connected elements like tabs or stacked cards
+- Use individual corner classes for creative asymmetric designs
+
+## Tips
+
+- Combine with background colors for better visual effect
+- Use consistent border radius values across similar components
+- Larger border radius values work better on larger elements
+- Consider using directional classes when elements are stacked or connected
+- Individual corner classes are useful for unique design patterns like diagonal layouts

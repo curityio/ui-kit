@@ -5,80 +5,247 @@ description: 'Usage on how to use Animations'
 updatedAt: 'August 08 2022'
 ---
 
-# Animation classes
+# Animation Utilities
 
-Ther is a couple of utility classes for animations.
+Utility classes for controlling transition timing functions (easing curves) to create smooth, natural animations. All easing functions are available as both CSS custom properties and utility classes.
+
+## Available Easing Functions
+
+### Ease In (Slow start, fast end)
+
+Animations that start slowly and accelerate:
+
+- `.ease-in-quad` - Quadratic ease in
+- `.ease-in-cubic` - Cubic ease in
+- `.ease-in-quart` - Quartic ease in (more pronounced)
+- `.ease-in-quint` - Quintic ease in (even more pronounced)
+- `.ease-in-expo` - Exponential ease in (very dramatic)
+- `.ease-in-circ` - Circular ease in
+
+### Ease Out (Fast start, slow end)
+
+Animations that start quickly and decelerate:
+
+- `.ease-out-quad` - Quadratic ease out
+- `.ease-out-cubic` - Cubic ease out
+- `.ease-out-quart` - Quartic ease out (more pronounced)
+- `.ease-out-quint` - Quintic ease out (even more pronounced)
+- `.ease-out-expo` - Exponential ease out (very dramatic)
+- `.ease-out-circ` - Circular ease out
+
+### Ease In-Out (Slow start and end)
+
+Animations that start slowly, accelerate in the middle, then slow down:
+
+- `.ease-in-out-quad` - Quadratic ease in-out
+- `.ease-in-out-cubic` - Cubic ease in-out
+- `.ease-in-out-quart` - Quartic ease in-out (more pronounced)
+- `.ease-in-out-quint` - Quintic ease in-out (even more pronounced)
+- `.ease-in-out-expo` - Exponential ease in-out (very dramatic)
+- `.ease-in-out-circ` - Circular ease in-out
+
+## CSS Custom Properties
+
+All easing functions are also available as CSS variables:
 
 ```css
-.ease-in-quad {
-  transition-timing-function: var(--ease-in-quad);
+--ease-in-quad, --ease-in-cubic, --ease-in-quart, --ease-in-quint, --ease-in-expo, --ease-in-circ
+--ease-out-quad, --ease-out-cubic, --ease-out-quart, --ease-out-quint, --ease-out-expo, --ease-out-circ
+--ease-in-out-quad, --ease-in-out-cubic, --ease-in-out-quart, --ease-in-out-quint, --ease-in-out-expo, --ease-in-out-circ
+```
+
+## Usage Examples
+
+### Using Utility Classes
+
+```html
+<!-- Button with ease-out hover effect -->
+<button class="ease-out-cubic" style="transition: transform 0.3s;">
+  Hover Me
+</button>
+
+<!-- Card with ease-in-out scaling -->
+<div class="ease-in-out-quart" style="transition: all 0.4s;">
+  Card content
+</div>
+
+<!-- Smooth slide-in menu -->
+<nav class="ease-out-expo" style="transition: transform 0.5s;">
+  Navigation
+</nav>
+```
+
+### Using CSS Variables
+
+```css
+/* In your custom CSS */
+.my-element {
+  transition: opacity 0.3s var(--ease-out-cubic);
 }
 
-.ease-in-cubic {
-  transition-timing-function: var(--ease-in-cubic);
-}
-
-.ease-in-quart {
-  transition-timing-function: var(--ease-in-quart);
-}
-
-.ease-in-quint {
-  transition-timing-function: var(--ease-in-quint);
-}
-
-.ease-in-expo {
-  transition-timing-function: var(--ease-in-expo);
-}
-
-.ease-in-circ {
-  transition-timing-function: var(--ease-in-circ);
-}
-
-.ease-out-quad {
-  transition-timing-function: var(--ease-out-quad);
-}
-
-.ease-out-cubic {
-  transition-timing-function: var(--ease-out-cubic);
-}
-
-.ease-out-quart {
-  transition-timing-function: var(--ease-out-quart);
-}
-
-.ease-out-quint {
-  transition-timing-function: var(--ease-out-quint);
-}
-
-.ease-out-expo {
-  transition-timing-function: var(--ease-out-expo);
-}
-
-.ease-out-circ {
-  transition-timing-function: var(--ease-out-circ);
-}
-
-.ease-in-out-quad {
-  transition-timing-function: var(--ease-in-out-quad);
-}
-
-.ease-in-out-cubic {
-  transition-timing-function: var(--ease-in-out-cubic);
-}
-
-.ease-in-out-quart {
-  transition-timing-function: var(--ease-in-out-quart);
-}
-
-.ease-in-out-quint {
-  transition-timing-function: var(--ease-in-out-quint);
-}
-
-.ease-in-out-expo {
-  transition-timing-function: var(--ease-in-out-expo);
-}
-
-.ease-in-out-circ {
-  transition-timing-function: var(--ease-in-out-circ);
+.my-button {
+  transition:
+    transform 0.2s var(--ease-out-quad),
+    background-color 0.3s var(--ease-in-out-cubic);
 }
 ```
+
+### Interactive Examples
+
+```html
+<!-- Subtle button hover -->
+<button
+  class="ease-out-quad bg-primary white p-2 br-4"
+  style="transition: transform 0.2s, box-shadow 0.2s;">
+  Click Me
+</button>
+
+<!-- Smooth dropdown -->
+<div
+  class="ease-out-quart"
+  style="transition: max-height 0.3s, opacity 0.3s;">
+  Dropdown content
+</div>
+
+<!-- Dramatic modal entrance -->
+<div
+  class="ease-out-expo"
+  style="transition: transform 0.5s, opacity 0.5s;">
+  Modal content
+</div>
+```
+
+## When to Use Each Type
+
+### Ease In
+**Best for:** Elements exiting or disappearing
+- Fading out dialogs
+- Collapsing menus
+- Hiding notifications
+
+```html
+<div class="ease-in-cubic" style="transition: opacity 0.3s;">
+  Disappearing element
+</div>
+```
+
+### Ease Out
+**Best for:** Elements entering or appearing (Most commonly used)
+- Dropdown menus opening
+- Tooltips appearing
+- Button hover effects
+- Modal dialogs entering
+
+```html
+<div class="ease-out-cubic" style="transition: transform 0.3s;">
+  Appearing element
+</div>
+```
+
+### Ease In-Out
+**Best for:** Elements moving within the viewport
+- Sliding panels
+- Smooth scrolling
+- Position changes
+
+```html
+<div class="ease-in-out-quart" style="transition: left 0.4s;">
+  Sliding element
+</div>
+```
+
+## Intensity Guide
+
+- **Quad/Cubic**: Subtle, natural motion (recommended for most UI)
+- **Quart/Quint**: More pronounced, noticeable motion
+- **Expo**: Very dramatic, attention-grabbing motion
+- **Circ**: Circular motion, smooth and organic
+
+## Common Patterns
+
+### Button Hover Effect
+```html
+<style>
+.custom-button {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.custom-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+</style>
+
+<button class="custom-button ease-out-quad bg-primary white p-3 br-4">
+  Hover Me
+</button>
+```
+
+### Smooth Accordion
+```html
+<style>
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+.accordion-content.open {
+  max-height: 500px;
+}
+</style>
+
+<div class="accordion-content ease-out-quart">
+  Hidden content
+</div>
+```
+
+### Fade In Animation
+```html
+<style>
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.fade-in.visible {
+  opacity: 1;
+}
+</style>
+
+<div class="fade-in ease-out-cubic">
+  Content that fades in
+</div>
+```
+
+### Modal Dialog
+```html
+<style>
+.modal {
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.modal.open {
+  transform: scale(1);
+  opacity: 1;
+}
+</style>
+
+<div class="modal ease-out-cubic">
+  Modal content
+</div>
+```
+
+## Best Practices
+
+1. **Keep it subtle**: For most UI elements, use quad or cubic easing
+2. **Match the context**: Use ease-out for entering elements, ease-in for exiting
+3. **Consider duration**: Shorter animations (0.2-0.3s) work well with subtle easing; longer animations (0.4-0.6s) can use more dramatic easing
+4. **Be consistent**: Use the same easing functions for similar interactions throughout your app
+5. **Test performance**: Very dramatic easing (expo) should be used sparingly
+
+## Tips
+
+- Start with `.ease-out-cubic` for most animations - it's versatile and feels natural
+- Use `.ease-out-quad` for quick, subtle interactions like button hovers
+- Reserve `.ease-out-expo` and `.ease-in-expo` for special, attention-grabbing animations
+- Combine multiple properties with different easings for complex effects
+- Always specify a transition duration - the easing class only controls the timing function

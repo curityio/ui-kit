@@ -270,3 +270,5 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,jetbrains+all,react,node
 
 .DS_Store
+
+.astro

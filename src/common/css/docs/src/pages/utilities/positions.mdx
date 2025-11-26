@@ -5,4 +5,106 @@ description: "Usage on how to use Positions"
 updatedAt: "August 08 2022"
 ---
 
-Hi from Positions
+# Position Utilities
+
+Utility classes for controlling the CSS position property of elements.
+
+## Available Classes
+
+- `.relative` - Position relative (`position: relative`)
+- `.absolute` - Position absolute (`position: absolute`)
+- `.fixed` - Position fixed (`position: fixed`)
+- `.sticky` - Position sticky (`position: sticky`)
+
+## Usage Examples
+
+### Relative Positioning
+
+Use `.relative` to position an element relative to its normal position. Often used as a container for absolutely positioned children.
+
+```html
+<div class="relative">
+  <div class="absolute" style="top: 0; right: 0;">
+    Absolutely positioned child
+  </div>
+</div>
+```
+
+### Absolute Positioning
+
+Use `.absolute` to remove an element from the document flow and position it relative to its nearest positioned ancestor.
+
+```html
+<div class="relative">
+  <img src="image.jpg" alt="Image">
+  <div class="absolute" style="bottom: 1rem; right: 1rem;">
+    Overlay content
+  </div>
+</div>
+```
+
+### Fixed Positioning
+
+Use `.fixed` to position an element relative to the viewport. It stays in place even when scrolling.
+
+```html
+<header class="fixed" style="top: 0; left: 0; right: 0;">
+  Fixed navigation bar
+</header>
+```
+
+### Sticky Positioning
+
+Use `.sticky` to toggle between relative and fixed positioning based on scroll position.
+
+```html
+<nav class="sticky" style="top: 0;">
+  Sticky navigation that stays at top when scrolling
+</nav>
+```
+
+## Common Patterns
+
+### Overlay
+```html
+<div class="relative">
+  <img src="background.jpg" alt="Background">
+  <div class="absolute" style="inset: 0; background: rgba(0,0,0,0.5);">
+    <div class="flex flex-center" style="height: 100%;">
+      <h2>Overlay Text</h2>
+    </div>
+  </div>
+</div>
+```
+
+### Sticky Header
+```html
+<header class="sticky" style="top: 0; z-index: 100;">
+  <nav>Navigation content</nav>
+</header>
+```
+
+### Notification Badge
+```html
+<div class="relative">
+  <button>Notifications</button>
+  <span class="absolute" style="top: -0.5rem; right: -0.5rem;">
+    3
+  </span>
+</div>
+```
+
+### Fixed Footer
+```html
+<footer class="fixed" style="bottom: 0; left: 0; right: 0;">
+  Footer content
+</footer>
+```
+
+## Tips
+
+- **Relative**: Use as a positioning context for absolute children
+- **Absolute**: Remember to set at least one of `top`, `right`, `bottom`, or `left`
+- **Fixed**: Consider z-index when layering fixed elements
+- **Sticky**: Requires at least one of `top`, `right`, `bottom`, or `left` to work
+- Always combine position utilities with appropriate spacing utilities (top, left, right, bottom)

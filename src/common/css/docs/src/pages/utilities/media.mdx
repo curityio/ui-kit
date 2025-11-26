@@ -5,6 +5,103 @@ description: "Usage on how to use Media"
 updatedAt: "August 08 2022"
 ---
 
-Hi from Media
+# Media Utilities
 
-<div className="alert alert-info">This is yet to be written</div>
+Utility classes for controlling how media elements (images, videos) are resized to fit their containers using the `object-fit` property.
+
+## Available Classes
+
+- `.ofc` - Object fit cover (`object-fit: cover`)
+- `.oft` - Object fit contain (`object-fit: contain`)
+- `.off` - Object fit fill (`object-fit: fill`)
+
+## Class Descriptions
+
+### `.ofc` (Object Fit Cover)
+
+The media maintains its aspect ratio while filling the entire container. Parts of the media may be cropped if the aspect ratio doesn't match the container.
+
+**Use when:** You want to fill a container completely without distortion, and cropping is acceptable.
+
+```html
+<img src="image.jpg" alt="Hero image" class="ofc" style="width: 100%; height: 400px;">
+```
+
+### `.oft` (Object Fit Contain)
+
+The media is scaled to maintain its aspect ratio while fitting within the container. The entire media is visible, but there may be empty space in the container.
+
+**Use when:** You want to ensure the entire image is visible without cropping.
+
+```html
+<img src="product.jpg" alt="Product" class="oft" style="width: 300px; height: 300px;">
+```
+
+### `.off` (Object Fit Fill)
+
+The media is stretched to fill the container, which may cause distortion if aspect ratios don't match.
+
+**Use when:** You need to fill the container exactly and aspect ratio preservation is not important.
+
+```html
+<img src="banner.jpg" alt="Banner" class="off" style="width: 100%; height: 200px;">
+```
+
+## Visual Comparison
+
+```html
+<!-- Cover: Fills container, may crop -->
+<div style="width: 300px; height: 200px; overflow: hidden;">
+  <img src="landscape.jpg" class="ofc" style="width: 100%; height: 100%;">
+</div>
+
+<!-- Contain: Entire image visible, may have empty space -->
+<div style="width: 300px; height: 200px; background: #f0f0f0;">
+  <img src="landscape.jpg" class="oft" style="width: 100%; height: 100%;">
+</div>
+
+<!-- Fill: Stretches to fill, may distort -->
+<div style="width: 300px; height: 200px;">
+  <img src="landscape.jpg" class="off" style="width: 100%; height: 100%;">
+</div>
+```
+
+## Common Use Cases
+
+### Hero Image (Cover)
+```html
+<header style="height: 500px; overflow: hidden;">
+  <img src="hero.jpg" alt="Hero" class="ofc" style="width: 100%; height: 100%;">
+</header>
+```
+
+### Product Gallery (Contain)
+```html
+<div class="grid-container" columns="3" gap="2">
+  <img src="product1.jpg" class="oft" style="width: 100%; height: 250px;">
+  <img src="product2.jpg" class="oft" style="width: 100%; height: 250px;">
+  <img src="product3.jpg" class="oft" style="width: 100%; height: 250px;">
+</div>
+```
+
+### Avatar/Profile Picture (Cover)
+```html
+<div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden;">
+  <img src="avatar.jpg" alt="Avatar" class="ofc" style="width: 100%; height: 100%;">
+</div>
+```
+
+### Video Element
+```html
+<video class="ofc" style="width: 100%; height: 400px;" autoplay loop muted>
+  <source src="background.mp4" type="video/mp4">
+</video>
+```
+
+## Tips
+
+- Always set explicit width and height on the container for `object-fit` to work properly
+- **Cover** is best for hero images and backgrounds where cropping is acceptable
+- **Contain** is best for product images and logos where the full image must be visible
+- **Fill** should be used sparingly as it can distort images
+- Consider combining with `object-position` CSS property for fine-tuning cropped areas

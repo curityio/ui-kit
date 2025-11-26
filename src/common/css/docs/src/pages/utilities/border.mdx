@@ -5,91 +5,203 @@ description: "Usage on how to use Border"
 updatedAt: "August 08 2022"
 ---
 
-## Border
+# Border Utilities
 
-The `border` utility is used to add border to an element. It can be used to add border to all sides or to a specific side of an element.
+Utility classes for adding borders to elements with semantic colors from the Curity design system.
 
-<div class="border-light br-8 p1">
-  This div has a light border around all sides.
-</div>
+## Available Classes
 
-<div class="border-bottom-light br-8 p1">
-  This div has a light border only at the bottom.
-</div>
+### All Sides Border
 
-<div class="border-top-light br-8 p1">
-  This div has a light border only at the top.
-</div>
+Apply a 1px solid border to all sides:
 
-<div class="border-left-light br-8 p1">
-  This div has a light border only on the left side.
-</div>
+**Neutral**
+- `.border-light` - Light grey border (`var(--color-grey-light)`)
 
-<div class="border-right-light br-8 p1">
-  This div has a light border only on the right side.
-</div>
+**Brand**
+- `.border-primary` - Primary brand color border (`var(--color-primary)`)
+- `.border-spot` - Spot/accent color border (`var(--color-spot)`)
 
-<div class="border-primary br-8 p1">
-  This div has a primary color border around all sides.
-</div>
+**State Colors**
+- `.border-success` - Success/green border (`var(--color-success)`)
+- `.border-error` - Error/danger red border (`var(--color-danger)`)
+- `.border-warning` - Warning/yellow border (`var(--color-warning)`)
 
-<div class="border-spot br-8 p1">
-  This div has a spot color border around all sides.
-</div>
+### Directional Borders (Light Grey Only)
 
-<div class="border-success br-8 p1">
-  This div has a success color border around all sides.
-</div>
+Apply a 1px solid light grey border to specific sides:
 
-<div class="border-error br-8 p1">
-  This div has an error color border around all sides.
-</div>
+- `.border-bottom-light` - Bottom border only
+- `.border-top-light` - Top border only
+- `.border-left-light` - Left border only
+- `.border-right-light` - Right border only
 
-<div class="border-warning br-8 p1">
-  This div has a warning color border around all sides.
-</div>
+## Usage Examples
 
+### Basic Borders
 
 ```html
-<div class="border-light">
-  This div has a light border around all sides.
+<!-- Light grey border around element -->
+<div class="border-light p-3">
+  Content with light border
 </div>
 
-<div class="border-bottom-light">
-  This div has a light border only at the bottom.
+<!-- Primary brand border -->
+<div class="border-primary p-3">
+  Content with primary brand border
 </div>
 
-<div class="border-top-light">
-  This div has a light border only at the top.
+<!-- Spot/accent border -->
+<div class="border-spot p-3">
+  Highlighted content with spot color
 </div>
-
-<div class="border-left-light">
-  This div has a light border only on the left side.
-</div>
-
-<div class="border-right-light">
-  This div has a light border only on the right side.
-</div>
-
-<div class="border-primary">
-  This div has a primary color border around all sides.
-</div>
-
-<div class="border-spot">
-  This div has a spot color border around all sides.
-</div>
-
-<div class="border-success">
-  This div has a success color border around all sides.
-</div>
-
-<div class="border-error">
-  This div has an error color border around all sides.
-</div>
-
-<div class="border-warning">
-  This div has a warning color border around all sides.
-</div>
-
-
 ```
+
+### State Borders
+
+```html
+<!-- Success border -->
+<div class="border-success p-3">
+  ✓ Operation completed successfully
+</div>
+
+<!-- Error border -->
+<div class="border-error p-3">
+  ✗ Error: Please check your input
+</div>
+
+<!-- Warning border -->
+<div class="border-warning p-3">
+  ⚠ Warning: This action cannot be undone
+</div>
+```
+
+### Directional Borders
+
+```html
+<!-- Bottom border separator -->
+<div class="border-bottom-light p-2">
+  List item with bottom separator
+</div>
+
+<!-- Top border -->
+<footer class="border-top-light p-3">
+  Footer with top border
+</footer>
+
+<!-- Left border accent -->
+<blockquote class="border-left-light pl-3">
+  "Quote with left border accent"
+</blockquote>
+
+<!-- Right border -->
+<aside class="border-right-light pr-3">
+  Sidebar with right border
+</aside>
+```
+
+## Common Patterns
+
+### Card with Border
+```html
+<div class="border-light br-4 p-4">
+  <h3>Card Title</h3>
+  <p>Card content with light border and rounded corners</p>
+</div>
+```
+
+### List with Separators
+```html
+<ul class="list-reset">
+  <li class="border-bottom-light p-2">Item 1</li>
+  <li class="border-bottom-light p-2">Item 2</li>
+  <li class="border-bottom-light p-2">Item 3</li>
+  <li class="p-2">Item 4 (no border)</li>
+</ul>
+```
+
+### Alert Messages
+```html
+<!-- Success alert -->
+<div class="border-success bg-light-grey p-3 br-4">
+  <strong>Success!</strong> Your changes have been saved.
+</div>
+
+<!-- Error alert -->
+<div class="border-error bg-light-grey p-3 br-4">
+  <strong>Error!</strong> Unable to process request.
+</div>
+
+<!-- Warning alert -->
+<div class="border-warning bg-light-grey p-3 br-4">
+  <strong>Warning!</strong> This action requires confirmation.
+</div>
+```
+
+### Section Dividers
+```html
+<section class="p-4">
+  <h2>Section 1</h2>
+  <p>Content here</p>
+</section>
+
+<section class="border-top-light p-4">
+  <h2>Section 2</h2>
+  <p>Content here</p>
+</section>
+```
+
+### Highlighted Card
+```html
+<div class="border-spot br-6 p-4">
+  <h3>Featured Content</h3>
+  <p>This card is highlighted with the spot color border</p>
+</div>
+```
+
+### Form Fields with State
+```html
+<!-- Success state -->
+<input type="text" class="border-success p-2 br-3" value="valid@email.com">
+
+<!-- Error state -->
+<input type="text" class="border-error p-2 br-3" value="invalid">
+
+<!-- Warning state -->
+<input type="text" class="border-warning p-2 br-3" value="check this">
+```
+
+### Navigation with Border
+```html
+<nav class="border-bottom-light">
+  <ul class="flex list-reset p-2">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+```
+
+## Design Guidelines
+
+### Border Colors
+- **Light Grey**: Default choice for subtle separators and neutral borders
+- **Primary**: Use sparingly for brand emphasis
+- **Spot**: For highlighted or featured content
+- **Success**: Positive feedback, successful operations
+- **Error**: Errors, validation failures, critical issues
+- **Warning**: Cautions, important notices
+
+### Directional Borders
+- **Bottom**: Most common for separators and dividers
+- **Top**: Section headers, footers
+- **Left**: Blockquotes, sidebars, accents
+- **Right**: Sidebars, secondary content
+
+## Tips
+
+- Combine with border radius classes (`.br-*`) for rounded borders
+- Use with padding classes (`.p-*`) for proper spacing
+- State colors (success, error, warning) should match their semantic meaning
+- Directional borders are lighter weight than full borders
+- Consider using `.border-light` as a default and state colors for feedback
