@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
     "preview": "vite preview",
-    "previewer": "vite --open --config vite-previewer.config.ts",
+    "previewer": "vite --open --config vite-previewer.config.ts --mode previewer",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "e2e": "cypress run --headless --browser chrome --e2e",
