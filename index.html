@@ -10,6 +10,8 @@
         --color-primary-dark: #262c3d;
         --header-height: 50px;
         --color-tertiary: #f2eb80;
+        --type-bold: "Roboto-Bold", roboto, -apple-system, blinkmacsystemfont,
+          "Segoe UI", helvetica, arial, sans-serif;
       }
 
       header {
@@ -36,7 +38,35 @@
 
         span {
           display: inline-flex;
+          white-space: nowrap;
         }
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        text-wrap: balance;
+        font-family: var(--type-bold);
+        line-height: 1.2;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: clamp(1.25rem, 9vmin, 2.25rem);
+      }
+
+      h2 {
+        font-size: clamp(1.15rem, 9vmin, 1.5rem);
+      }
+
+      h3 {
+        font-size: clamp(1.1rem, 9vmin, 1.25rem);
+      }
+
+      h4 {
+        font-size: clamp(1rem, 9vmin, 1rem);
       }
 
       body,
@@ -48,7 +78,11 @@
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Helvetica, Arial, sans-serif;
-        background-color: #f4f4f4;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
       }
 
       .container {
@@ -61,99 +95,272 @@
         padding: 2rem;
       }
 
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--color-primary);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      a {
+        color: #d859a1;
+      }
+
+      main {
+        display: none;
+      }
+
       .card-container {
         display: flex;
         gap: 2rem;
         justify-content: center;
+        margin-block-end: 2rem;
+        flex-wrap: wrap;
       }
 
       .card {
         background: white;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f2f2f2;
         padding: 2rem;
         width: 100%;
+        max-width: 500px;
         transition: transform 0.2s;
-        text-decoration: none;
-        color: inherit;
         display: flex;
         flex-direction: column;
         align-items: center;
       }
 
-			.card:hover {
+      @media (max-width: 768px) {
+        .card-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .card {
+          max-width: 100%;
+        }
+      }
+
+      .card:hover {
         transform: translateY(-5px);
       }
 
-			.card h2 {
+      .card h2 {
         margin-top: 0;
         color: #333;
       }
 
-			.card p {
+      .card p {
         color: #666;
         line-height: 1.5;
+        /* text-align: center; */
       }
 
-			code {
-				border-radius: 1rem;
-				padding: .5rem;
-				display: inline-block;
-				background-color: #f6f6f6
-			}
+      .card a {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 0.5rem;
+      }
+
+      .card a:hover {
+        text-decoration: underline;
+      }
+
+      .card-link {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid var(--color-primary);
+        border-radius: 8px;
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 1rem;
+        transition: all 0.2s;
+      }
+
+      .card-link:hover {
+        background-color: var(--color-primary);
+        color: white;
+        text-decoration: none;
+      }
+
+      .commands {
+        margin-top: 1.5rem;
+        width: 100%;
+        text-align: left;
+        border-top: 1px solid #eee;
+        padding-top: 1rem;
+      }
+
+      .commands code {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        color: #444;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        width: fit-content;
+      }
+
+      .status {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #28a745;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #28a745;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      footer {
+        padding: 2rem;
+      }
     </style>
   </head>
   <body>
     <header>
       <a role="presentation" href="/">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 182.57 36.33"
-          class="h-1"
-          width="120"
-          height="24"
-        >
-          <path
-            fill="#fff"
-            d="M49.9 23.04l-.56.57a15.93 15.93 0 01-10.93 5 10 10 0 01-10.34-10.4c0-6 4.24-10.39 10.09-10.39a16.67 16.67 0 0110.22 4l.56.49 5.61-5.86-.63-.54A25.78 25.78 0 0037.56 0a18.44 18.44 0 00-15.37 7.68H11.84l-.6 5.09h8.5a17.9 17.9 0 00-.59 2.86H6.45l-.61 5.08h13.31a18.56 18.56 0 00.57 2.86H.61L0 28.66h22.14c3.29 4.74 8.9 7.68 15.67 7.68A25.41 25.41 0 0055 29.41l.59-.56z"
-          ></path>
-          <path
-            fill="#fff"
-            d="M5.01 15.62H1.26l-.6 5.09H4.4l.61-5.09zM84.84 22.39a13.31 13.31 0 01-9.06 3.66c-5.92 0-9.82-4.23-9.82-9.47a9.36 9.36 0 019.68-9.44 13.66 13.66 0 018.61 3.11l-2.41 2.56A9.55 9.55 0 0076 10.52a5.82 5.82 0 00-5.92 6.09 5.87 5.87 0 006.06 6.08 9.19 9.19 0 006.25-2.83zm19.44-14.71v11.41c0 4.45-3.44 7-8.16 7s-8.11-2.51-8.11-7V7.68h3.93v11.41c0 2.35 1.88 3.6 4.18 3.6s4.23-1.25 4.23-3.6V7.68zm5.29 17.82V7.68h9.88a7 7 0 015.39 1.94 5.36 5.36 0 011.47 3.69 5.47 5.47 0 01-3.6 5l4.13 7.19h-4.47l-3.6-6.55h-5.3v6.55zm3.9-14.51v4.66h6.37a2.38 2.38 0 002.48-2.34 2.17 2.17 0 00-.63-1.56 2.66 2.66 0 00-2.13-.76zm17.37 14.51V7.68h3.91V25.5zm7.44-17.82h16.81v3.39h-6.44V25.5h-3.91V11.07h-6.46zm35.69 0l-7.07 9.69v8.13h-3.93v-8.13l-7.13-9.69h4.85l4.34 6.2 4.32-6.2zm.94-.35a4 4 0 011.12-2.86 3.74 3.74 0 015.43 0 4 4 0 011.11 2.86 4 4 0 01-1.12 2.92 3.72 3.72 0 01-5.42 0 4 4 0 01-1.12-2.92zm.65 0a3.39 3.39 0 00.93 2.42 3 3 0 002.26 1 3 3 0 002.24-1 3.37 3.37 0 00.93-2.41 3.34 3.34 0 00-.93-2.4 3 3 0 00-2.24-1 3 3 0 00-2.26 1 3.34 3.34 0 00-.93 2.39zm2.4.41v1.82h-.8V4.97h1.51a2.06 2.06 0 011.29.36 1.21 1.21 0 01.46 1 1 1 0 01-.17.59 1.38 1.38 0 01-.52.42 1 1 0 01.51.43 1.35 1.35 0 01.16.69v.7a.77.77 0 00.08.29v.08h-.83a1.08 1.08 0 01-.06-.33v-.74a.8.8 0 00-.18-.57.83.83 0 00-.6-.18zm0-.7h.82a1.12 1.12 0 00.6-.18.55.55 0 00.25-.47.68.68 0 00-.22-.56 1.34 1.34 0 00-.74-.15h-.71z"
-          ></path>
-        </svg>
+        <img
+          src=" src/identity-server/images/curity-logo-white.svg"
+          alt="Curity Logo"
+        />
         <span>Curity UI Kit</span>
       </a>
     </header>
 
     <div class="container">
-			<div class="intro">
-
-				<h1>Welcome to Curity UI Kit</h1>
-				<p>UI Kit is where you can customize the look and feel of your applications.</p>
-			</div>
-      <div class="card-container">
-        <a href="http://localhost:3000/listing" class="card" target="_blank">
-          <h2>Identity Server</h2>
-          <p>
-            Preview and customize authentication templates and styles for the
-            Curity Identity Server.
-          </p>
-          <p>
-            <span>View <code>http://localhost:3000/listing</code> →</span>
-          </p>
-        </a>
-        <a href="https://localhost:5173" class="card" target="_blank">
-          <h2>Self Service Portal</h2>
-          <p>
-            Manage your account, security settings, and access in the Self
-            Service Portal.
-          </p>
-          <p>
-            <span>View <code>https://localhost:5173</code> →</span>
-          </p>
-        </a>
+      <div class="intro">
+        <img
+          src="./src/common/assets/images/ui-kit-start.jpg"
+          alt="Curity Logo"
+        />
+        <h1>Welcome to Curity UI Kit</h1>
+        <p>
+          UI Kit is where you can customize the look and feel of your
+          applications.
+        </p>
       </div>
     </div>
+
+    <div id="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Starting development servers...</p>
+    </div>
+
+    <main id="main">
+      <div class="container">
+        <div id="cards" class="card-container">
+          <div class="card">
+            <h2>Identity Server</h2>
+            <p>
+              Preview and customize authentication templates and styles for the
+              Curity Identity Server.
+            </p>
+            <a
+              class="card-link"
+              href="http://localhost:3000/listing"
+              target="_blank"
+              >View http://localhost:3000/listing →</a
+            >
+            <div class="commands">
+              <h3>Useful Commands</h3>
+              <code>npm install</code>
+              <code>npm run start:identity-server</code>
+              <code>npm run build:identity-server</code>
+            </div>
+            <div class="status">
+              <span class="status-dot"></span>
+              <span>Dev server running</span>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Self Service Portal</h2>
+            <p>
+              Manage your account, security settings, and access in the Self
+              Service Portal.
+            </p>
+            <a class="card-link" href="https://localhost:5173" target="_blank"
+              >View https://localhost:5173 →</a
+            >
+            <div class="commands">
+              <h3>Useful Commands</h3>
+              <code>npm install</code>
+              <code>npm run start:ussp</code>
+              <code>npm run build:ussp</code>
+            </div>
+            <div class="status">
+              <span class="status-dot"></span>
+              <span>Dev server running</span>
+            </div>
+          </div>
+        </div>
+
+        <footer>
+          <h4>Prerequisites</h4>
+          <p>Node.js v22+</p>
+
+          <h4>Read more</h4>
+          <ul>
+            <li>
+              <a
+                target="_blank"
+                href="https://curity.io/resources/getting-started/"
+                >Getting Started with Curity</a
+              >
+            </li>
+          </ul>
+        </footer>
+      </div>
+    </main>
+
+    <script>
+      setTimeout(() => {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("main").style.display = "block";
+      }, 2000);
+    </script>
   </body>
 </html>
