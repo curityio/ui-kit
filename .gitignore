@@ -9,6 +9,9 @@ lerna-debug.log*
 
 node_modules
 dist
+!src/common/css/lib/dist
+src/common/css/lib/dist/*
+!src/common/css/lib/dist/index.css
 *.local
 
 # Editor directories and files
