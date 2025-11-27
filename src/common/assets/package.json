@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Curity AB",
   "license": "//TODO: Add license",
-  "description": "//TODO: Add description",
+  "description": "Common assets for Curity UI Kit",
   "type": "module",
   "private": true
 }
