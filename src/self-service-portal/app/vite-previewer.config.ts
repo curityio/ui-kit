@@ -13,8 +13,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import path from 'path';
 
-const myPlugin = () => ({
-    name: 'my-plugin',
+const previewerPlugin = () => ({
+    name: 'previewer-plugin',
     configureServer(server) {
         server.middlewares.use((req, res, next) => {
             if(req.url.startsWith('/previewer/') && !req.url.includes('.')) {
@@ -41,7 +41,7 @@ export default defineConfig({
       '@util': path.resolve(__dirname, './src/util'),
     },
   },
-  plugins: [react(), myPlugin()],
+  plugins: [react(), previewerPlugin()],
   test: {
     globals: true, // Enables global `describe`, `it`, etc.
     environment: 'jsdom', // Simulates a browser environment

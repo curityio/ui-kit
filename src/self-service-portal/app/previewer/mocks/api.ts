@@ -108,6 +108,7 @@ export const api = [
             "is_logged_in": loggedIn,
         })
     }),
+    // this short-circuits the authorization flow by returning a "start URL" that is equivalent to the "end URL".
     http.post('http://localhost/apps/self-service-portal/api/login/start', () => {
         return HttpResponse.json({
             "authorization_url": "/previewer?iss=anonymous&code=1234567890&state=foobar&session_state=123.4567890",

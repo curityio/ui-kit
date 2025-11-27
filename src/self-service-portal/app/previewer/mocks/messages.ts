@@ -70,7 +70,7 @@ function detectLanguage(): string {
 // 1) Load all properties files for all languages
 const allModules = import.meta.glob<string>(
     '../../../messages/*/apps/self-service-portal/*.properties',
-    { as: 'raw', eager: true }
+    { query: '?raw', import: 'default', eager: true }
 );
 
 // 2) Build a map from language -> merged messages
