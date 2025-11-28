@@ -24,7 +24,4 @@ export default defineConfig({
     environment: 'jsdom', // Simulates a browser environment
     setupFiles: './setupTests.ts',
   },
-  optimizeDeps: {
-    exclude: ['@curity-internal/css'],
-  },
 });
