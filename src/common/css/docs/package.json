@@ -1,7 +1,7 @@
 {
-  "name": "docs",
-  "type": "module",
+  "name": "@curity-ui-kit/css-docs",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "astro dev --host --open",

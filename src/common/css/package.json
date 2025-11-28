@@ -3,16 +3,12 @@
   "version": "1.0.0",
   "description": "Curity CSS library",
   "main": "index.js",
-  "workspaces": [
-    "lib/*",
-    "docs/*"
-  ],
   "scripts": {
-    "start:docs": "npm start --prefix docs",
-    "start:lib": "npm start --prefix lib",
+    "start:docs": "npm start --workspace=src/common/css/docs",
+    "start:lib": "npm start --workspace=src/common/css/lib",
     "start": "npm-run-all -p start-docs start-lib",
-    "build:docs": "npm run build --prefix docs",
-    "build:lib": "npm run build --prefix lib",
+    "build:docs": "npm run build --workspace=src/common/css/docs",
+    "build:lib": "npm run build --workspace=src/common/css/lib",
     "build:all": "npm-run-all -s build:lib build:docs",
     "build": "npm run build:lib"
   },

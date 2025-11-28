@@ -8,11 +8,11 @@
   },
   "scripts": {
     "java": "node previewer",
-    "prestart": "npm run build",
     "clean": "rm -rf build",
     "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
     "start": "concurrently --kill-others \" npm run java\" \" npm run dev\"",
-    "prebuild": "npm run clean && npm run build --workspace @curity-ui-kit/css",
+    "prestart": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true && npm run build",
+    "prebuild": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
     "build:styles": "vite build --mode styles",
     "build:ui": "vite build --mode ui",
     "build": "npm run build:styles && npm run build:ui",

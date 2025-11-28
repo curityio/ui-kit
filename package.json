@@ -8,6 +8,8 @@
     "src/common/assets",
     "src/common/components",
     "src/common/css",
+    "src/common/css/lib",
+    "src/common/css/docs",
     "src/common/icons",
     "src/identity-server",
     "src/self-service-portal/app",
