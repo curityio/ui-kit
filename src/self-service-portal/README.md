@@ -1,6 +1,6 @@
 # Self-Service Portal
 
-This project contains the Self-Service Portal (SSP) component of the Curity UI Kit.  
+This project contains Self-Service Portal (SSP) component of Curity UI Kit.  
 The SSP is a customizable web application that allows end-users to manage their profiles, passwords, and other self-service functionalities.
 
 ## Usage
@@ -23,7 +23,7 @@ cd app
 npm start
 ```
 
-This will launch a local development server where you can preview and test your customizations to the SSP.
+This will launch a local development server where you can preview and test your customizations.
 
 ### Customising Translations
 
@@ -49,9 +49,9 @@ directory on the Identity Server depending on usage or not of the template areas
 More on the localization in Identity Server can be found in the documentation:
 [Identity Server - Localizing Resources](https://curity.io/docs/idsvr/latest/developer-guide/front-end-development/localization.html).
 
-### Customising Look&feel
+### Customising Look & Feel
 
-The easiest way how to customise the look&fell of the SSP is to use the Identity Server Admin UI Theme Builder 
+The easiest way how to customise the look and feel of the SSP is to use the Identity Server Admin UI Theme Builder 
 and the template areas.  
 For more information, see 
 [Identity Server Admin UI Theme Builder](https://curity.io/docs/idsvr/latest/developer-guide/front-end-development/settings-and-theme.html).
