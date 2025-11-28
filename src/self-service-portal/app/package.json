@@ -7,7 +7,7 @@
   },
   "scripts": {
     "prestart": "npm run build --workspace @curity-ui-kit/css",
-    "start": "vite --open",
+    "start": "vite",
     "prebuild": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
     "preview": "vite preview",
-    "previewer": "vite --open /previewer --config vite-previewer.config.ts --mode previewer",
+    "previewer": "vite /previewer --config vite-previewer.config.ts --mode previewer",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "e2e": "cypress run --headless --browser chrome --e2e",
