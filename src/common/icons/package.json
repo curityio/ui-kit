@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Curity UI Icons React",
   "author": "Curity AB",
-  "license": "UNLICENSED",
+  "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.js",
   "exports": {

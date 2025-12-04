@@ -2,6 +2,8 @@
   "name": "@curity-ui-kit/identity-server",
   "author": "Curity",
   "version": "1.6.0",
+  "private": true,
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=20.16.0",
     "npm": ">=10.8.1"

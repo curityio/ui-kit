@@ -4,6 +4,7 @@
   "description": "Monorepo for Self Service Portal, Login Web App, Template System, and Styles",
   "author": "Curity AB",
   "private": true,
+  "license": "Apache-2.0",
   "workspaces": [
     "src/common/assets",
     "src/common/components",
