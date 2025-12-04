@@ -20,7 +20,7 @@ The Previewer is a standalone application that allows developers to test and cus
 It provides a local development server with hot-reloading capabilities for rapid iteration.
 It's backend part is mocked to simulate interactions with the Identity Server.
 
-to start the Preview run the following command:
+To start the Preview run the following command:
 
 ```shell
 npm start
