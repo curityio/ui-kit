@@ -5,9 +5,9 @@ The SSP is a customizable web application that allows end-users to manage their 
 
 ## Usage
 
-1. [Previewer](#customising-translations)
+1. [Previewer](#self-service-portal-previewer)
 2. [Customising Translations](#customising-translations)
-3. [Customising Look&fell](#customising-lookfeel)
+3. [Customising Look&feel](#customising-look--feel)
 4. [Extending SSP Application](#extending-ssp-application)
 
 ### Self-Service Portal Previewer
@@ -40,9 +40,10 @@ To register a new language in the Identity Server, a folder with the desired lan
 
 The changes made to the translation files will be reflected on-the-fly in the SSP Previewer.
 
-To deploy the custom translations to a production environment copy the modified files to the 
-- `${IDSVR_HOME}/usr/share/messages/overrides/{language}/apps/self-service-portal` or 
-- `${IDSVR_HOME}/usr/share/messages/template-areas/{template-area}/{language}/apps/self-service-portal` 
+To deploy the custom translations to a production environment, copy the modified files to one 
+of the following directories on the Identity Server: 
+- `${IDSVR_HOME}/usr/share/messages/overrides/{language}/apps/self-service-portal` (for global overrides)
+- `${IDSVR_HOME}/usr/share/messages/template-areas/{template-area}/{language}/apps/self-service-portal` (when using template areas)
 
 directory on the Identity Server depending on usage or not of the template areas.
 
@@ -56,15 +57,15 @@ and the template areas.
 For more information, see 
 [Identity Server Admin UI Theme Builder](https://curity.io/docs/idsvr/latest/developer-guide/front-end-development/settings-and-theme.html).
 
-If you want to do more advanced customisations, you can modify the styles, components by extending the SSP Application
-and extending the rendering template.
+For more advanced customisations, you can modify the styles and components by extending the SSP Application
+and customizing the rendering template.
 
-The velocity template used to render the SSP Application on the Identity Server side is located in the following directory:
+The Velocity template used to render the SSP Application on the Identity Server is located at:
 `templates/apps/self-service-portal/index.vm`.
 
-Edited versions of the template can be deployed to the following directories on the Identity Server:
-- `${IDSVR_HOME}/usr/share/templates/overrides/apps/self-service-portal/index.vm` or
-- `${IDSVR_HOME}/usr/share/templates/template-areas/{template-area}/apps/self-service-portal/index.vm`
+Edited versions of the template can be deployed to one of the following directories on the Identity Server:
+- `${IDSVR_HOME}/usr/share/templates/overrides/apps/self-service-portal/index.vm` (for global overrides)
+- `${IDSVR_HOME}/usr/share/templates/template-areas/{template-area}/apps/self-service-portal/index.vm` (when using template areas)
 
 depending on usage or not of the template areas.
 
