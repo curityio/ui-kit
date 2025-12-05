@@ -46,7 +46,7 @@ export function createSharedPlugins(): PluginOption[] {
         },
         {
           src: normalizePath(
-            path.resolve(__dirname, "../common/css/lib/src/curity-theme.css")
+            path.resolve(__dirname, "../common/css/lib/src/!(main|curity-application).css")
           ),
           dest: "webroot/assets/css",
         },

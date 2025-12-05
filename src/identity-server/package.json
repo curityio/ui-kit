@@ -18,7 +18,8 @@
     "build": "npm run build:styles && npm run build:ui",
     "watch:styles": "vite build --watch --mode styles",
     "watch:ui": "vite build --watch --mode ui",
-    "dev": "concurrently \"npm run watch:styles\" \"npm run watch:ui\""
+    "watch:css-lib": "npm run watch --workspace @curity-ui-kit/css-lib",
+    "dev": "concurrently \"npm run watch:styles\" \"npm run watch:ui\" \"npm run watch:css-lib\""
   },
   "dependencies": {
     "jquery": "3.5.1"
