@@ -1,5 +1,5 @@
 import { getFormattedDate } from '@shared/utils/date.ts';
-import { IconGeneralLockUnlocked } from '@curity-ui-kit/icons';
+import { IconGeneralLockUnlocked } from '@curity/ui-kit-icons';
 import { useTranslation } from 'react-i18next';
 import { Alert } from '@shared/ui/Alert';
 

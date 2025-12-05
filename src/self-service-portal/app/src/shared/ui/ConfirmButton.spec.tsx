@@ -12,7 +12,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ConfirmButton } from '@/shared/ui/ConfirmButton';
-import { IconGeneralClose } from '@curity-ui-kit/icons';
+import { IconGeneralClose } from '@curity/ui-kit-icons';
 
 describe('ConfirmButton', () => {
   it('opens dialog when clicked', () => {

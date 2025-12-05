@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconAuthenticatorPasskeys } from '@curity-ui-kit/icons';
+import { IconAuthenticatorPasskeys } from '@curity/ui-kit-icons';
 import { DataTable, PageHeader } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { Column } from '@/shared/ui/data-table/typings';

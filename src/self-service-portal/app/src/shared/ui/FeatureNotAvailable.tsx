@@ -1,5 +1,5 @@
 import { PageHeader } from '@/shared/ui';
-import { IconGeneralArrowBack, IconGeneralEyeHide } from '@curity-ui-kit/icons';
+import { IconGeneralArrowBack, IconGeneralEyeHide } from '@curity/ui-kit-icons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 

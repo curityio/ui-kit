@@ -10,7 +10,7 @@
  */
 
 import { useTranslation } from 'react-i18next';
-import { IconActionAutoLinkAccount } from '@curity-ui-kit/icons';
+import { IconActionAutoLinkAccount } from '@curity/ui-kit-icons';
 import { DataTable, PageHeader } from '@/shared/ui';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';

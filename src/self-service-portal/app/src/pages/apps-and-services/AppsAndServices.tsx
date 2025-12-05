@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconAuthenticatorDefault, IconGeneralArrowForward, IconUserDataSources } from '@curity-ui-kit/icons';
+import { IconAuthenticatorDefault, IconGeneralArrowForward, IconUserDataSources } from '@curity/ui-kit-icons';
 import { List, ListCell, ListRow, PageHeader } from '../../shared/ui';
 import { Section } from '@/shared/ui/section/Section';
 import { useAuth } from '@/auth/data-access/AuthProvider';

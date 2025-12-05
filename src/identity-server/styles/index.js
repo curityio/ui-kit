@@ -1,5 +1,5 @@
 /* Curity CSS */
-import "@curity-ui-kit/css/lib/dist/index.css";
+import "@curity/ui-kit-css/lib/dist/index.css";
 
 /* Application styles */
 import "./css/account-linking.css";
