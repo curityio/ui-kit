@@ -19,10 +19,9 @@ var envFileName = "./environment";
 var curityInstallationDir = undefined;
 var additionalAssetsRoot = undefined;
 var buildBase = "build";
-var curityBuildBase = buildBase + "/curity";
-var webRootBuildBase = curityBuildBase + "/webroot";
-var templateBuildBase = curityBuildBase + "/templates";
-var messagesBuildBase = curityBuildBase + "/messages";
+var webRootBuildBase = buildBase + "/webroot";
+var templateBuildBase = buildBase + "/templates";
+var messagesBuildBase = buildBase + "/messages";
 
 // Check if an environment file is present.
 if (fs.existsSync(envFileName)) {
@@ -50,7 +49,7 @@ module.exports = {
 
     //Curity
     curity : {
-      dist : curityBuildBase,
+      dist : buildBase,
       webroot : webRootBuildBase,
       additionalAssetsRoot: additionalAssetsRoot,
 

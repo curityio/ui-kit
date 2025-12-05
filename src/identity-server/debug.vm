@@ -4,8 +4,8 @@
     Debug and test Velocity templates
 
     Usage:
-    1. Place this file in src/curity/templates/overrides/debug.vm
-    1. Open src/curity/templates/overrides/settings.vm
+    1. Place this file in templates/overrides/debug.vm
+    1. Open templates/overrides/settings.vm
     2. Add #parse("debug")
 
 *#
