@@ -9,8 +9,8 @@
   },
   "scripts": {
     "prestart": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
-    "start": "vite --open /previewer --config vite-previewer.config.ts --mode previewer",
-    "dev": "vite --open",
+    "start": "vite /previewer --config vite-previewer.config.ts --mode previewer",
+    "dev": "vite open",
     "prebuild": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
