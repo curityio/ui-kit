@@ -37,7 +37,7 @@ function watch(config) {
 
     browsersync.init({
         proxy: "127.0.0.1:8080/listing",
-        open: "local"
+        open: false
     });
 
     function watchResource(path) {
