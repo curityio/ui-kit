@@ -5,6 +5,60 @@ description: "Usage on how to use Height"
 updatedAt: "August 08 2022"
 ---
 
-Hi from Height
+# Height Utilities
 
-<div className="alert alert-info">This is yet to be written</div>
+Height utility classes for controlling the height and max-height of elements.
+
+## Available Classes
+
+### Fixed Height
+
+Set a fixed height on an element using the `h-{n}` classes. Each increment adds 1rem plus 0.5rem base.
+
+**Pattern:** `.h-{n}` where n ranges from 1 to 40
+
+- `.h-1` - height: 1.5rem
+- `.h-2` - height: 2.5rem
+- `.h-3` - height: 3.5rem
+- `.h-4` - height: 4.5rem
+- `.h-5` - height: 5.5rem
+- ...continues through...
+- `.h-40` - height: 40.5rem
+
+### Max Height
+
+Set a maximum height on an element using the `mh-{n}` classes. Each increment adds 1rem plus 0.5rem base.
+
+**Pattern:** `.mh-{n}` where n ranges from 1 to 40
+
+- `.mh-1` - max-height: 1.5rem
+- `.mh-2` - max-height: 2.5rem
+- `.mh-3` - max-height: 3.5rem
+- `.mh-4` - max-height: 4.5rem
+- `.mh-5` - max-height: 5.5rem
+- ...continues through...
+- `.mh-40` - max-height: 40.5rem
+
+## Usage Examples
+
+```html
+<!-- Fixed height of 5.5rem -->
+<div class="h-5">Content with fixed height</div>
+
+<!-- Max height of 10.5rem -->
+<div class="mh-10">Content with max height constraint</div>
+
+<!-- Combining with other utilities -->
+<div class="h-20 overflow-auto">
+  Scrollable content with fixed height
+</div>
+```
+
+## Calculation Formula
+
+The height value is calculated as: `{n} + 0.5` rem
+
+For example:
+- `h-1` = 1 + 0.5 = 1.5rem
+- `h-10` = 10 + 0.5 = 10.5rem
+- `h-40` = 40 + 0.5 = 40.5rem

@@ -5,41 +5,163 @@ description: "Usage on how to use Alert"
 updatedAt: "August 08 2022"
 ---
 
-import { IconGeneralClose } from '@curity-internal/ui-icons-react';
+# Alert Component
 
-# Alert
+Alert components provide contextual feedback messages for user actions with built-in icons and semantic colors.
 
-<div class="alert alert-danger">
-	<p class="m0">Something went wrong etc</p>
-</div>
-<div class="alert alert-danger">
-	<p class="m0">Something went wrong with button</p>
-	<button className="button button-tiny button-danger-outline"><IconGeneralClose width={18} height={18}/></button>
-</div>
-<div class="alert alert-warning">
-	<p class="m0">Some warning</p>
-</div>
-<div class="alert alert-success">
-	<p class="m0">Some text</p>
-</div>
-<div class="alert alert-info">
-	<p class="m0">Some text that is important to show here. Learn more about this thing in our Docs <a href="https://curity.io/docs">View Docs</a></p>
+## Available Classes
 
-</div>
+### Container
 
+- `.alert-wrapper` - Wrapper container with responsive padding (1rem on mobile, 2.5rem horizontal on 40em+)
+
+### Base Alert
+
+- `.alert` - Base alert component with flexbox layout, borders, and icon placeholder
+
+### Alert Types
+
+- `.alert-success` - Success alert with green border and checkmark icon
+- `.alert-info` - Info alert with blue border and "!" icon
+- `.alert-warning` - Warning alert with yellow/orange border and "!" icon
+- `.alert-danger` - Danger/error alert with red border and "✕" icon
+
+## Usage Examples
+
+### Success Alert
+
+<div class="alert alert-success">Operation completed successfully!</div>
 
 ```html
-<div class="alert alert-danger">
-	<p class="m0">Something went wrong etc</p>
+<div class="alert alert-success">Operation completed successfully!</div>
+```
+
+### Info Alert
+
+<div class="alert alert-info">Please note this important information.</div>
+
+```html
+<div class="alert alert-info">Please note this important information.</div>
+```
+
+### Warning Alert
+
+<div class="alert alert-warning">Warning: This action cannot be undone.</div>
+
+```html
+<div class="alert alert-warning">Warning: This action cannot be undone.</div>
+```
+
+### Danger Alert
+
+<div class="alert alert-danger">Error: Unable to complete the operation.</div>
+
+```html
+<div class="alert alert-danger">Error: Unable to complete the operation.</div>
+```
+
+### Multiple Alerts with Wrapper
+
+<div class="alert-wrapper">
+  <div class="alert alert-success mt2">Your profile has been updated successfully.</div>
+  <div class="alert alert-info mt2">Your session will expire in 5 minutes.</div>
+  <div class="alert alert-warning mt2">Maintenance scheduled for tonight at 11 PM EST.</div>
 </div>
-<div class="alert alert-warning">
-	<p class="m0">Some warning</p>
+
+```html
+<div class="alert-wrapper">
+  <div class="alert alert-success mt2">Your profile has been updated successfully.</div>
+  <div class="alert alert-info mt2">Your session will expire in 5 minutes.</div>
+  <div class="alert alert-warning mt2">Maintenance scheduled for tonight at 11 PM EST.</div>
 </div>
-<div class="alert alert-success">
-	<p class="m0">Some text</p>
-</div>
-<div class="alert alert-info">
-	<p class="m0">Some text that is important to show here. Learn more about this thing in our Docs</p>
-	<a href="https://curity.io/docs">View Docs</a>
-</div>
-	```
+```
+
+## Features
+
+### Built-in Icons
+
+Each alert type includes an automatically generated icon using CSS pseudo-elements:
+
+- **Success**: Checkmark (✓)
+- **Info**: Exclamation mark (!) in a circle
+- **Warning**: Exclamation mark (!) in a circle
+- **Danger**: Cross mark (✕) in a circle
+
+### Responsive Design
+
+The alert wrapper automatically adjusts padding:
+- Mobile: 1rem padding on all sides
+- Desktop (40em+): 2.5rem horizontal padding
+
+### Semantic Colors
+
+Uses CSS custom properties for consistent theming:
+- `--color-success` - Green for success
+- `--color-info` - Blue for information
+- `--color-warning` - Yellow/orange for warnings
+- `--color-danger` - Red for errors
+
+## Dark Mode Support
+
+Alerts automatically adapt to dark mode when used within `.body-dark .form-transparent` contexts, adjusting borders and text colors for better visibility.
+
+## Styling Details
+
+- **Min-width**: 30em
+- **Max-width**: 100%
+- **Border radius**: 2px (configurable via `--alert-border-radius`)
+- **Font size**: 0.8rem
+- **Icon size**: 1.5rem
+- **Left padding**: 60px (to accommodate icon)
+
+## Common Patterns
+
+### Form Validation Feedback
+
+```html
+<form>
+  <div class="alert alert-danger">Please correct the errors below.</div>
+  <!-- form fields -->
+</form>
+```
+
+### Success Confirmation
+
+```html
+<div class="alert alert-success">Your profile has been updated successfully.</div>
+```
+
+### Information Notice
+
+```html
+<div class="alert alert-info">Your session will expire in 5 minutes.</div>
+```
+
+### Critical Warning
+
+```html
+<div class="alert alert-warning">Maintenance scheduled for tonight at 11 PM EST.</div>
+```
+
+## Best Practices
+
+1. **Use semantic types**: Choose the alert type that matches the message context
+   - Success: Confirmations, successful operations
+   - Info: Helpful information, tips
+   - Warning: Cautions, important notices
+   - Danger: Errors, critical issues
+
+2. **Keep messages concise**: Alert text should be brief and actionable
+
+3. **Use wrapper for multiple alerts**: When displaying multiple alerts, wrap them in `.alert-wrapper` for consistent spacing
+
+4. **Position wisely**: Place alerts near the relevant content or at the top of forms
+
+5. **Consider dismissibility**: For non-critical alerts, consider adding a close button
+
+## Accessibility
+
+- Alerts use semantic colors with sufficient contrast
+- Icons provide visual reinforcement of message type
+- Text is readable at 0.8rem font size
+- Works with screen readers (consider adding `role="alert"` for dynamic alerts)

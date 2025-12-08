@@ -9,22 +9,25 @@
     "src/common/assets",
     "src/common/components",
     "src/common/css",
+    "src/common/css/lib",
+    "src/common/css/docs",
     "src/common/icons",
     "src/identity-server",
     "src/self-service-portal/app",
     "src/login-web-app"
   ],
   "scripts": {
-    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"sleep 3 && open index.html\"",
+    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"npm run start:css\" \"sleep 3 && open index.html\"",
     "start:ussp": "npm run start --workspace=src/self-service-portal/app",
     "start:lwa": "npm run start --workspace=src/login-web-app/app",
+    "start:css": "npm run start --workspace=src/common/css",
     "start:identity-server": "npm run start --workspace=src/identity-server",
     "build:identity-server": "npm run build --workspace=src/identity-server",
     "build:ussp": "npm run build --workspace=src/self-service-portal/app",
     "build:lwa": "npm run build --workspace=src/login-web-app/app",
     "build:css": "npm run build --workspace=src/common/css",
     "build:icons": "npm run build --workspace=src/common/icons",
-    "build:all": "npm run build -ws"
+    "build:all": "npm run build -ws --if-present"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

@@ -1,6 +1,6 @@
 {
-  "name": "@curity-ui-kit/css",
-  "version": "0.6.6",
+  "name": "@curity-ui-kit/css-lib",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "license": "Apache-2.0",
@@ -13,6 +13,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
+    "watch": "vite build --watch",
+    "postwatch": "mkdir -p ../../identity-server/build/curity/webroot/assets/css && cp src/!(main|curity-application).css ../../identity-server/build/curity/webroot/assets/css/",
     "format": "npx prettier --write ./src/**/*.css",
     "preview": "vite preview",
     "lint": "stylelint ./src/**/**/*.css",
