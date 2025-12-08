@@ -56,7 +56,7 @@
 
         #if($_resendAction)
             <form id="resend-form" name="resend-form" method="post" class="no-top-padding" action="$_resendAction">
-                <button type="submit" id="resend-button" class="button button-primary button-fullwidth">
+                <button type="submit" id="resend-button" class="button-primary">
                     #message("authenticator.html-form.create-account.view.success.button.resend-activation-link")
                 </button>
             </form>

@@ -18,8 +18,8 @@ export type Scalars = {
    * The fields used for filtering.
    *
    * Depending on server configuration, this may be an enum with the following variants:
-   *   * STARTS_WITH - always present
-   *   * ENDS_WITH   - only for Data Sources that support it
+   * * STARTS_WITH - always present
+   * * ENDS_WITH   - only for Data Sources that support it
    */
   FilterType: { input: any; output: any; }
   /** Long is a 64-bit integer number. */
@@ -29,8 +29,8 @@ export type Scalars = {
   /**
    * Sorting fields are not available in all Data Sources.
    * When available, Sorting is an input Object with the following fields:
-   *   * sortBy: SortAttribute
-   *   * sortOrder: SortOrder!
+   * * sortBy: SortAttribute
+   * * sortOrder: SortOrder!
    */
   Sorting: { input: any; output: any; }
 };
@@ -560,6 +560,8 @@ export type CredentialRuleDescriptor = {
 export type DeleteAccountByIdInput = {
   /** The ID of the account to delete. */
   accountId: Scalars['String']['input'];
+  /** Delete account links */
+  deleteAccountLinks?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Result of the `DeleteAccountById` mutation. */
@@ -569,6 +571,8 @@ export type DeleteAccountByIdPayload = {
   account?: Maybe<Account>;
   /** `true` if the account was successfully deleted. */
   deleted: Scalars['Boolean']['output'];
+  /** `true` if the account links were successfully deleted. */
+  deletedAccountLinks?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** Input to the `deleteBucketByUserName` mutation. */

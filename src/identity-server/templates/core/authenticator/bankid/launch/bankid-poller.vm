@@ -14,6 +14,7 @@
 #set($rfa13 = "authenticator.bankid.service.rfa13")
 #set($rfa14 = "authenticator.bankid.service.rfa14")
 #set($rfa15 = "authenticator.bankid.service.rfa15")
+#set($rfa21 = "authenticator.bankid.service.rfa21")
 #set($rfa23 = "authenticator.bankid.service.rfa23")
 
 #if ( !$_maxWaitTime )
@@ -32,6 +33,7 @@
             "rfa13": "#message($rfa13)",
             "rfa14": "#message($rfa14)",
             "rfa15": "#message($rfa15)",
+            "rfa21": "#message($rfa21)",
             "rfa23": "#message($rfa23)"
         };
 

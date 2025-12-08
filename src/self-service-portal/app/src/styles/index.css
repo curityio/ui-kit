@@ -189,28 +189,41 @@ svg {
   }
 }
 
-/* Recovery Codes Print styles */
+/* Print styles */
 @media print {
-  body * {
-    visibility: hidden;
+  * {
+    visibility: hidden !important;
+    margin: 0;
+    padding: 0;
   }
 
-  [data-testid='mfa-recovery-codes'] h2,
-  [data-testid='mfa-recovery-codes'] p,
+  /* Recovery Codes Print - only show the list */
   [data-testid='mfa-recovery-codes-list'],
   [data-testid='mfa-recovery-codes-list'] * {
-    visibility: visible;
+    visibility: visible !important;
+  }
+
+  [data-testid='mfa-recovery-codes-list'] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 20mm !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  body,
+  html,
+  #root {
+    position: static !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
   }
 
   @page {
     size: A4;
-    margin: 12mm;
-  }
-
-  html,
-  body {
-    height: calc(297mm - 24mm);
-    overflow: hidden;
+    margin: 0;
   }
 }
 

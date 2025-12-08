@@ -43,8 +43,8 @@ enum SortOrder {
 """
 Sorting fields are not available in all Data Sources.
 When available, Sorting is an input Object with the following fields:
-  * sortBy: SortAttribute
-  * sortOrder: SortOrder!
+* sortBy: SortAttribute
+* sortOrder: SortOrder!
 """
 scalar Sorting
 
@@ -174,8 +174,8 @@ enum FilterAttribute {
 The fields used for filtering.
 
 Depending on server configuration, this may be an enum with the following variants:
-  * STARTS_WITH - always present
-  * ENDS_WITH   - only for Data Sources that support it
+* STARTS_WITH - always present
+* ENDS_WITH   - only for Data Sources that support it
 """
 scalar FilterType
 
@@ -1070,6 +1070,10 @@ input DeleteAccountByIdInput {
   The ID of the account to delete.
   """
   accountId: String! @Size(min: 1, max: 128)
+  """
+  Delete account links
+  """
+  deleteAccountLinks: Boolean
 }
 
 """
@@ -1084,6 +1088,10 @@ type DeleteAccountByIdPayload {
   Account.
   """
   account: Account
+  """
+  `true` if the account links were successfully deleted.
+  """
+  deletedAccountLinks: Boolean
 }
 
 ### mutation deleteLinkFromAccountByAccountId types
