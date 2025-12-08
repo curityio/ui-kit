@@ -2,6 +2,7 @@
   "name": "@curity-ui-kit/css",
   "version": "1.0.0",
   "description": "Curity CSS library",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "prestart": "npm run build:lib",
@@ -14,7 +15,7 @@
     "build": "npm run build:lib"
   },
   "author": "Curity",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "npm-run-all": "^4.1.5"
   }

@@ -18,7 +18,7 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 import fs from "fs";
 import { normalizePath, type PluginOption } from "vite";
 
-const OUTPUT_DIR = path.resolve(__dirname, "build/curity/");
+const OUTPUT_DIR = path.resolve(__dirname, "build/");
 
 export function createSharedPlugins(): PluginOption[] {
   return [

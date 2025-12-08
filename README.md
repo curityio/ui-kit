@@ -2,10 +2,10 @@
 
 Customize the public facing styles and templates to fit your needs.
 
-Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Self Service Portal, Login Web App, Curity Identity Server Templates, Curity CSS, and Curity UI Icons React.
+Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Curity Identity Server Templates, Self Service Portal, Login Web App,  Curity CSS, and Curity UI Icons React.
 
 ## Prerequisites
-- Java v22 or later
+- Java v21 or later
 - Node.js
 
 ## Setup

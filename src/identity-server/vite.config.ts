@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import path from "path";
 import { createSharedPlugins } from "./vite.plugins";
 
-const OUTPUT_DIR = path.resolve(__dirname, "build/curity/");
+const OUTPUT_DIR = path.resolve(__dirname, "build/");
 
 const shouldSilence = (msg: string) =>
   msg.includes("didn't resolve at build time") &&

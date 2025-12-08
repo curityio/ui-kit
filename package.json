@@ -4,6 +4,7 @@
   "description": "Monorepo for Self Service Portal, Login Web App, Template System, and Styles",
   "author": "Curity AB",
   "private": true,
+  "license": "Apache-2.0",
   "workspaces": [
     "src/common/assets",
     "src/common/components",
@@ -16,6 +17,7 @@
     "src/login-web-app"
   ],
   "scripts": {
+    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"sleep 3 && open index.html\"",
     "start:ussp": "npm run start --workspace=src/self-service-portal/app",
     "start:lwa": "npm run start --workspace=src/login-web-app/app",
     "start:identity-server": "npm run start --workspace=src/identity-server",
