@@ -1,8 +1,10 @@
 {
   "name": "@curity-ui-kit/css-docs",
+  "description": "Documentation for Curity CSS",
   "version": "1.0.0",
   "type": "module",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "astro dev --host --open",
     "start": "astro dev",
