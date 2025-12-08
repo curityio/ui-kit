@@ -28,9 +28,11 @@ const previewerPlugin = () => ({
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
+  cacheDir: path.resolve(__dirname, 'node_modules/.vite'),
   server: {
     host: true,
-    open: '/previewer',
+    open: false,
+    port: 5173,
   },
   resolve: {
     alias: {
