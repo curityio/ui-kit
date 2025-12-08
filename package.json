@@ -17,9 +17,10 @@
     "src/login-web-app"
   ],
   "scripts": {
-    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"sleep 3 && open index.html\"",
+    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"npm run start:css\" \"sleep 3 && open index.html\"",
     "start:ussp": "npm run start --workspace=src/self-service-portal/app",
     "start:lwa": "npm run start --workspace=src/login-web-app/app",
+    "start:css": "npm run start --workspace=src/common/css",
     "start:identity-server": "npm run start --workspace=src/identity-server",
     "build:identity-server": "npm run build --workspace=src/identity-server",
     "build:ussp": "npm run build --workspace=src/self-service-portal/app",
