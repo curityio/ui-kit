@@ -52,11 +52,8 @@
         <h3 id="visibleSignData">
             <pre>$!_visibleSigningData</pre>
         </h3>
-        <p class="h4 mb4 semibold center" id="startupAttemptMessage">#message("${_templatePrefix}.view.title")</p>
+        <p class="h4 mb4 semibold center" id="message"></p>
         <p/>
-        <div class="manuallink pb0 display-none">
-            <a id="startBankIdApp" class="button button-light-grey button-small" href="">#message("${_templatePrefix}.view.sign")</a>
-        </div>
         <h1 id="qrCode" class="center header">
             #message("${_templatePrefix}.view.scan-qrcode")
         </h1>
@@ -110,6 +107,9 @@
             </ul>
             <p class="left-align">#message("${_templatePrefix}.view.qr.screen-reader.outro")</p>
         </details>
+    </div>
+    <div class="manuallink pb0 display-none mb2">
+        <a id="startBankIdApp" class="button button-light-grey button-fullwidth" href="">#message("${_templatePrefix}.view.sign")</a>
     </div>
     <div class="manuallink pb0 display-none">
         <button id="cancelButton" type="button" class="button button-fullwidth button-danger-outline">

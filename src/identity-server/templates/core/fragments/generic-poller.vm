@@ -47,6 +47,7 @@
 #set($rfa13 = "$!{keyPrefix}.rfa13")
 #set($rfa14 = "$!{keyPrefix}.rfa14")
 #set($rfa15 = "$!{keyPrefix}.rfa15")
+#set($rfa21 = "$!{keyPrefix}.rfa21")
 #set($rfa23 = "$!{keyPrefix}.rfa23")
 
 #if ( !$_maxWaitTime )
@@ -65,6 +66,7 @@
         "$rfa13": "#message($rfa13)",
         "$rfa14": "#message($rfa14)",
         "$rfa15": "#message($rfa15)",
+        "$rfa21": "#message($rfa21)",
         "$rfa23": "#message($rfa23)"
     };
 
