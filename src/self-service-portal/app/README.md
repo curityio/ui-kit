@@ -16,7 +16,7 @@ npm install
 
 ## Previewer
 
-The Previewer is a standalone application that allows developers to test and customize the SSP without needing to deploy the Identity Server backed environment. 
+The Previewer is a standalone application that allows developers to test and customize the SSP without needing to deploy the Identity Server backed environment.
 It provides a local development server with hot-reloading capabilities for rapid iteration.
 It's backend part is mocked to simulate interactions with the Identity Server.
 
@@ -26,9 +26,11 @@ To start the Preview run the following command:
 npm start
 ```
 
+Open your browser and navigate to `http://localhost:5173/previewer` to access the Previewer.
+
 ## Development
 To develop and test the application against a real Identity Server instance, you need to set up a development environment:
-1. Configure an Identity Server instance with the Self-Service Portal enabled. 
+1. Configure an Identity Server instance with the Self-Service Portal enabled.
    Follow the instructions in the [Identity Server documentation](https://curity.io/docs/idsvr/latest/application-service-admin-guide/applications/self-service-portal.html) to set up the SSP.
 2. Copy the `.env-example` to e.g. `.env.local` and update the environment variables to point to your Identity Server instance and configure other settings as needed.
 3. Start the development server with the following command:
@@ -65,7 +67,7 @@ There are two options how to take the SSP application into use:
 1. Copy the contents of the `dist/assets` directory to the Identity Server under the following path:
    `${IDSVR_HOME}/usr/share/webroot/assets/apps/self-service-portal/`
 2. In case the html template needs to be customized, check the parent README.md for instructions.
-3. Create a Self-Service Portal Application in the Identity Server. 
+3. Create a Self-Service Portal Application in the Identity Server.
    Follow the instructions in the [Identity Server documentation](https://curity.io/docs/idsvr/latest/application-service-admin-guide/applications/self-service-portal.html) to set up the SSP.
 4. Copy the `.env-example` to e.g. `.env` and update the [environment variables](#environment-file) to point to your Identity Server instance and configure other settings as needed.
 5. The Identity Server will serve the SSP application under the path which can be found from the Admin UI.
@@ -75,12 +77,12 @@ There are two options how to take the SSP application into use:
 In the standalone deployment scenario, the SSP application is hosted separately from the Identity Server.
 
 It's important to ensure that the Self-Service Portal and the Identity Server are configured to be under the same site domain
-to allow proper cookie sharing for authentication and session management.  
+to allow proper cookie sharing for authentication and session management.
 [Definition of same site](https://developer.mozilla.org/en-US/docs/Glossary/Site)
 
 1. Deploy the contents of the `dist` directory to your web server or hosting environment.
 2. Create a Self-Service Portal Application in the Identity Server.
 3. Set the web server URL to the Self-Service Portal Application.
 4. Copy the `.env-example` to e.g. `.env` and update the [environment variables](#environment-file) to point to your Identity Server instance and configure other settings as needed.
-5. Ensure that the Self-Service Portal and the Identity Server are configured to be under the same site domain to allow proper cookie sharing for authentication and session management. 
+5. Ensure that the Self-Service Portal and the Identity Server are configured to be under the same site domain to allow proper cookie sharing for authentication and session management.
    It's convenient to use a reverse proxy in front of both applications to achieve this.
