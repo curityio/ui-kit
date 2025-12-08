@@ -9,20 +9,21 @@
  * For further information, please contact Curity AB.
  */
 
-import { useMutation, useQuery } from '@apollo/client';
-import { ContactInfo } from '../components/account/ContactInfo';
-import { ProfileDetails } from '../components/account/ProfileDetails';
-import { PageHeader } from '@/shared/ui/page-header/PageHeader';
 import { useAuth } from '@/auth/data-access/AuthProvider';
+import { ContactInfo } from '@/components/account/ContactInfo';
+import { ProfileDetails } from '@/components/account/ProfileDetails';
+import { AccountDelete } from '@/pages/account/feature/AccountDelete';
+import { IconUserProfile } from '@/shared/components/icons';
 import { AccountUpdateFields } from '@/shared/data-access/API';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
-import { IconUserProfile } from '@/shared/components/icons';
-import { useTranslation } from 'react-i18next';
+import { PageHeader } from '@/shared/ui/page-header/PageHeader';
+import { Spinner } from '@/shared/ui/Spinner';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
-import { Spinner } from '@/shared/ui/Spinner';
-import { Outlet } from 'react-router';
+import { useMutation, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Outlet } from 'react-router';
 
 export const Account = () => {
   const { t } = useTranslation();
@@ -108,6 +109,12 @@ export const Account = () => {
             displayWithPartialResourcePermissions={true}
           >
             <ContactInfo account={account} />
+          </UiConfigIf>
+          <UiConfigIf
+            resources={[UI_CONFIG_RESOURCES.USER_MANAGEMENT_ACCOUNT]}
+            allowedOperations={[UI_CONFIG_OPERATIONS.DELETE]}
+          >
+            <AccountDelete id={account?.id ?? null} username={account?.userName ?? null} />
           </UiConfigIf>
         </>
       )}

@@ -18,6 +18,7 @@ export enum UI_CONFIG_RESOURCE_GROUPS {
 }
 
 export enum UI_CONFIG_RESOURCES {
+  USER_MANAGEMENT_ACCOUNT = 'userManagement.account',
   USER_MANAGEMENT_NAME = 'userManagement.name',
   USER_MANAGEMENT_ADDRESS = 'userManagement.address',
   USER_MANAGEMENT_PHONE_NUMBER = 'userManagement.phoneNumber',
