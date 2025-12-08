@@ -2,12 +2,15 @@
   "name": "@curity-ui-kit/self-service-portal",
   "version": "0.0.0-SNAPSHOT-1",
   "type": "module",
+  "private": true,
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
     "prestart": "npm run build --workspace @curity-ui-kit/css",
-    "start": "vite",
+    "start": "vite --open /previewer --config vite-previewer.config.ts --mode previewer",
+    "dev": "vite --open",
     "prebuild": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
@@ -15,16 +18,9 @@
     "lint": "eslint .",
     "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
     "preview": "vite preview",
-    "previewer": "vite /previewer --config vite-previewer.config.ts --mode previewer",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "e2e": "cypress run --headless --browser chrome --e2e",
-    "generate-graphql-typings-queries-and-mutations": "graphql-codegen --config graphql-codegen-config.ts --verbose",
-    "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
-    "setup-idsvr": "./setup-idsvr.sh"
-  },
-  "publishConfig": {
-    "registry": "https://hub.curityio.net/repository/curity-npm-registry/"
+    "generate-graphql-typings-queries-and-mutations": "graphql-codegen --config graphql-codegen-config.ts --verbose"
   },
   "files": [
     "dist"
