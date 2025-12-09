@@ -34,7 +34,7 @@ NC='\033[0m' # No Color
 if [ -z "$IDSVR_HOME" ]; then
     echo -e "${RED}Error: IDSVR_HOME environment variable is not set${NC}"
     echo "Please set IDSVR_HOME to point to your Identity Server installation directory"
-    echo "Example: export IDSVR_HOME=/path/to/idsvr"
+    echo "Example: export IDSVR_HOME=/path/to/idsvr/dist"
     exit 1
 fi
 
