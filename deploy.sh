@@ -35,7 +35,7 @@ if [ ! -d "$IDSVR_HOME" ]; then
     exit 1
 fi
 
-echo -e "${GREEN}Starting deployment to: $IDSVR_HOME/dist/usr/share${NC}"
+echo -e "${GREEN}Starting deployment to: $IDSVR_HOME/usr/share${NC}"
 echo ""
 
 # Function to copy files with feedback
@@ -61,19 +61,19 @@ echo "================================================"
 # Identity Server - Assets (CSS, Fonts, Images, JS)
 copy_with_feedback \
     "src/identity-server/build/webroot" \
-    "$IDSVR_HOME/dist/usr/share/" \
+    "$IDSVR_HOME/usr/share/" \
     "Identity Server Assets (CSS, Fonts, Images, JS)"
 
 # Identity Server - Templates
 copy_with_feedback \
     "src/identity-server/build/templates" \
-    "$IDSVR_HOME/dist/usr/share/" \
+    "$IDSVR_HOME/usr/share/" \
     "Identity Server Templates"
 
 # Identity Server - Messages
 copy_with_feedback \
     "src/identity-server/build/messages" \
-    "$IDSVR_HOME/dist/usr/share/" \
+    "$IDSVR_HOME/usr/share/" \
     "Identity Server Messages"
 
 echo ""
@@ -88,8 +88,8 @@ if [ ! -d "src/self-service-portal/app/dist" ]; then
 else
     # Deploy to global overrides
     echo -e "${YELLOW}Deploying Self Service Portal to global overrides...${NC}"
-    USSP_TEMPLATE_PATH="$IDSVR_HOME/dist/usr/share/templates/overrides/apps/self-service-portal"
-    USSP_MESSAGES_BASE="$IDSVR_HOME/dist/usr/share/messages/overrides"
+    USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/overrides/apps/self-service-portal"
+    USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/overrides"
 
     mkdir -p "$USSP_TEMPLATE_PATH"
     cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
@@ -110,14 +110,14 @@ else
     fi
 
     # Check if template areas exist and deploy there too
-    if [ -d "$IDSVR_HOME/dist/usr/share/templates/template-areas" ]; then
+    if [ -d "$IDSVR_HOME/usr/share/templates/template-areas" ]; then
         echo ""
         echo -e "${YELLOW}Deploying Self Service Portal to template areas...${NC}"
-        for template_area_dir in "$IDSVR_HOME/dist/usr/share/templates/template-areas"/*/; do
+        for template_area_dir in "$IDSVR_HOME/usr/share/templates/template-areas"/*/; do
             if [ -d "$template_area_dir" ]; then
                 template_area=$(basename "$template_area_dir")
-                USSP_TEMPLATE_PATH="$IDSVR_HOME/dist/usr/share/templates/template-areas/$template_area/apps/self-service-portal"
-                USSP_MESSAGES_BASE="$IDSVR_HOME/dist/usr/share/messages/template-areas/$template_area"
+                USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/template-areas/$template_area/apps/self-service-portal"
+                USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/template-areas/$template_area"
 
                 mkdir -p "$USSP_TEMPLATE_PATH"
                 cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
