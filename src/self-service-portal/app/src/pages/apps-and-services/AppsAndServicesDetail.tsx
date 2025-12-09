@@ -5,7 +5,7 @@ import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { Button } from '@/shared/ui';
 import { Section } from '@/shared/ui/section/Section';
 import { useMutation, useQuery } from '@apollo/client';
-import { IconAuthenticatorDefault, IconGeneralTrash } from '@curity-ui-kit/icons';
+import { IconAuthenticatorDefault, IconGeneralTrash } from '@curity/ui-kit-icons';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';

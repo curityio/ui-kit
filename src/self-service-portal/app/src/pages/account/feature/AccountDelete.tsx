@@ -13,7 +13,7 @@ import { ConfirmButton } from '@/shared/ui/ConfirmButton';
 import { Section } from '@/shared/ui/section/Section';
 import { useMutation } from '@apollo/client';
 import { useAuth } from '@auth/data-access/AuthProvider.tsx';
-import { IconGeneralTrash } from '@curity-ui-kit/icons';
+import { IconGeneralTrash } from '@curity/ui-kit-icons';
 import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API.ts';
 import { useState } from 'react';
 import toast from 'react-hot-toast';

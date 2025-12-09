@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralLocation } from '@curity-ui-kit/icons';
+import { IconGeneralLocation } from '@curity/ui-kit-icons';
 import { useState, useMemo } from 'react';
 import { Button, DataTable, PageHeader } from '@/shared/ui';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';

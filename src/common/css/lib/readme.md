@@ -11,7 +11,7 @@ Curity CSS s our CSS base and utility classes to style everything that lives ins
 Import
 
 ```js
-import "@curity-ui-kit/css/lib/dist/index.css";
+import "@curity/ui-kit-css-lib/dist/index.css";
 ```
 
 [Read the Docs](src/common/css/docs/readme.md)

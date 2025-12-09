@@ -10,7 +10,7 @@
  */
 
 import { EmptyStateIcon } from '@/shared/ui/icons/EmptyStateIcon';
-import { IconGeneralPlus } from '@curity-ui-kit/icons';
+import { IconGeneralPlus } from '@curity/ui-kit-icons';
 import { useTranslation } from 'react-i18next';
 
 interface EmptyStateProps {

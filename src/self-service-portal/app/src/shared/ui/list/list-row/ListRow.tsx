@@ -12,7 +12,7 @@
 import { HTMLAttributes, JSX } from 'react';
 import { ListItem } from '../list-item.model';
 import { ListCell } from '../..';
-import { IconGeneralArrowForward, IconGeneralTrash } from '@curity-ui-kit/icons';
+import { IconGeneralArrowForward, IconGeneralTrash } from '@curity/ui-kit-icons';
 import { Button } from '../../Button';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';

@@ -29,8 +29,8 @@
       "@shared/*": ["./src/shared/*"],
       "@styles/*": ["./src/styles/*"],
       "@util/*": ["./src/util/*"],
-      "@curity-ui-kit/icons/*": ["./src/packages/icons/*"],
-      "@curity-ui-kit/css/*": ["./src/packages/css/*"]
+      "@curity/ui-kit-icons/*": ["./src/packages/icons/*"],
+      "@curity/ui-kit-css/*": ["./src/packages/css/*"]
     }
   },
   "include": ["src"]

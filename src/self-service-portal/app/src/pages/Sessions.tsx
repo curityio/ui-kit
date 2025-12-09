@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralArrowForward, IconToken } from '@curity-ui-kit/icons';
+import { IconGeneralArrowForward, IconToken } from '@curity/ui-kit-icons';
 import { Button, DataTable, PageHeader } from '../shared/ui';
 import { useTranslation } from 'react-i18next';
 import { Column } from '@/shared/ui/data-table/typings';

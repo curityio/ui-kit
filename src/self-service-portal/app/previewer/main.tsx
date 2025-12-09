@@ -14,7 +14,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from '../src/App';
 import { mockWorker } from './mocks/browser';
 
-import '@curity-ui-kit/css/lib/dist/index.css';
+import '@curity/ui-kit-css/lib/dist/index.css';
 import '../src/styles/index.css';
 import '../src/styles/app-layout.css';
 

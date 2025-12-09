@@ -14,7 +14,7 @@ import { PageHeader } from '@/shared/ui/page-header/PageHeader';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useTranslation } from 'react-i18next';
-import { IconCapabilityResourceOwnerPasswordCredentials } from '@curity-ui-kit/icons';
+import { IconCapabilityResourceOwnerPasswordCredentials } from '@curity/ui-kit-icons';
 import { Section } from '@/shared/ui/section/Section';
 import { useState } from 'react';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
