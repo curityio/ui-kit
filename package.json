@@ -27,7 +27,7 @@
     "build:lwa": "npm run build --workspace=src/login-web-app/app",
     "build:css": "npm run build --workspace=src/common/css",
     "build:icons": "npm run build --workspace=src/common/icons",
-    "build:all": "npm run build -ws --if-present"
+    "build": "npm run build -ws --if-present"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
