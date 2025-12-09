@@ -79,4 +79,45 @@ To build projects individually, run:
 
 ## Deploy
 
-Once built, the build artifacts can be moved to the Curity Identity Server.
+To deploy build artifacts (assets, templates, and messages) to a production environment, use the `deploy.sh` script.
+
+### Prerequisites
+
+1. Set the `IDSVR_HOME` environment variable to your Identity Server installation directory:
+   ```shell
+   export IDSVR_HOME=/path/to/idsvr/dist
+   ```
+
+2. Build the projects before deploying:
+   ```shell
+   npm run build
+   ```
+
+### Deployment Options
+
+**Deploy to overrides (default):**
+```shell
+./deploy.sh
+```
+This deploys:
+- Identity Server assets, templates, and messages
+- Self Service Portal to `templates/overrides` and `messages/overrides`
+
+**Deploy to a specific template area:**
+```shell
+./deploy.sh my-template-area
+```
+This deploys:
+- Identity Server assets, templates, and messages
+- Self Service Portal only to the specified template area (not to overrides)
+
+### What Gets Deployed
+
+**Identity Server:**
+- Assets (CSS, Fonts, Images, JS) → `${IDSVR_HOME}/usr/share/webroot`
+- Templates → `${IDSVR_HOME}/usr/share/templates`
+- Messages → `${IDSVR_HOME}/usr/share/messages`
+
+**Self Service Portal:**
+- Templates → `${IDSVR_HOME}/usr/share/templates/overrides/apps/self-service-portal` or `template-areas/{area}/apps/self-service-portal`
+- Messages → `${IDSVR_HOME}/usr/share/messages/overrides/{language}/apps/self-service-portal` or `template-areas/{area}/{language}/apps/self-service-portal`

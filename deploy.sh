@@ -10,10 +10,19 @@
 # - Run the build process before deploying: npm run build
 #
 # Usage:
-#   ./deploy.sh
+#   ./deploy.sh [template-area-name]
+#
+#   Without arguments: Deploys to overrides only
+#   With template-area-name: Deploys only to the specified template area (not to overrides)
 #
 
 set -e
+
+# Parse arguments
+TEMPLATE_AREA=""
+if [ $# -gt 0 ]; then
+    TEMPLATE_AREA="$1"
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -86,60 +95,59 @@ if [ ! -d "src/self-service-portal/app/dist" ]; then
     echo -e "${YELLOW}⚠ Self Service Portal build not found. Skipping USSP deployment.${NC}"
     echo -e "${YELLOW}  Run 'npm run build:ussp' first if you want to deploy the Self Service Portal.${NC}"
 else
-    # Deploy to global overrides
-    echo -e "${YELLOW}Deploying Self Service Portal to global overrides...${NC}"
-    USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/overrides/apps/self-service-portal"
-    USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/overrides"
+    if [ -n "$TEMPLATE_AREA" ]; then
+        # Deploy to specific template area only
+        echo -e "${YELLOW}Deploying Self Service Portal to template area: $TEMPLATE_AREA${NC}"
 
-    mkdir -p "$USSP_TEMPLATE_PATH"
-    cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
-    cp -r src/self-service-portal/app/dist/assets "$USSP_TEMPLATE_PATH/" 2>/dev/null || true
-    echo -e "${GREEN}✓ Self Service Portal Templates deployed to global overrides${NC}"
+        USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/template-areas/$TEMPLATE_AREA/apps/self-service-portal"
+        USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/template-areas/$TEMPLATE_AREA"
 
-    # Deploy USSP Messages for global overrides
-    if [ -d "src/self-service-portal/messages" ]; then
-        for lang_dir in src/self-service-portal/messages/*/; do
-            if [ -d "$lang_dir" ]; then
-                lang=$(basename "$lang_dir")
-                dest_dir="$USSP_MESSAGES_BASE/$lang/apps/self-service-portal"
-                mkdir -p "$dest_dir"
-                cp -r "$lang_dir"* "$dest_dir/"
-                echo -e "${GREEN}✓ Self Service Portal Messages ($lang) deployed to global overrides${NC}"
-            fi
-        done
-    fi
+        # Check if template area exists
+        if [ ! -d "$IDSVR_HOME/usr/share/templates/template-areas/$TEMPLATE_AREA" ]; then
+            echo -e "${RED}Error: Template area '$TEMPLATE_AREA' does not exist in $IDSVR_HOME/usr/share/templates/template-areas/${NC}"
+            exit 1
+        fi
 
-    # Check if template areas exist and deploy there too
-    if [ -d "$IDSVR_HOME/usr/share/templates/template-areas" ]; then
-        echo ""
-        echo -e "${YELLOW}Deploying Self Service Portal to template areas...${NC}"
-        for template_area_dir in "$IDSVR_HOME/usr/share/templates/template-areas"/*/; do
-            if [ -d "$template_area_dir" ]; then
-                template_area=$(basename "$template_area_dir")
-                USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/template-areas/$template_area/apps/self-service-portal"
-                USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/template-areas/$template_area"
+        mkdir -p "$USSP_TEMPLATE_PATH"
+        cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
+        cp -r src/self-service-portal/app/dist/assets "$USSP_TEMPLATE_PATH/" 2>/dev/null || true
+        echo -e "${GREEN}✓ Self Service Portal Templates deployed to template area: $TEMPLATE_AREA${NC}"
 
-                mkdir -p "$USSP_TEMPLATE_PATH"
-                cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
-                cp -r src/self-service-portal/app/dist/assets "$USSP_TEMPLATE_PATH/" 2>/dev/null || true
-                echo -e "${GREEN}✓ Self Service Portal Templates deployed to template area: $template_area${NC}"
-
-                # Deploy messages for this template area
-                if [ -d "src/self-service-portal/messages" ]; then
-                    for lang_dir in src/self-service-portal/messages/*/; do
-                        if [ -d "$lang_dir" ]; then
-                            lang=$(basename "$lang_dir")
-                            dest_dir="$USSP_MESSAGES_BASE/$lang/apps/self-service-portal"
-                            mkdir -p "$dest_dir"
-                            cp -r "$lang_dir"* "$dest_dir/"
-                        fi
-                    done
-                    echo -e "${GREEN}✓ Self Service Portal Messages deployed to template area: $template_area${NC}"
+        # Deploy USSP Messages for this template area
+        if [ -d "src/self-service-portal/messages" ]; then
+            for lang_dir in src/self-service-portal/messages/*/; do
+                if [ -d "$lang_dir" ]; then
+                    lang=$(basename "$lang_dir")
+                    dest_dir="$USSP_MESSAGES_BASE/$lang/apps/self-service-portal"
+                    mkdir -p "$dest_dir"
+                    cp -r "$lang_dir"* "$dest_dir/"
+                    echo -e "${GREEN}✓ Self Service Portal Messages ($lang) deployed to template area: $TEMPLATE_AREA${NC}"
                 fi
-            fi
-        done
+            done
+        fi
     else
-        echo -e "${YELLOW}⚠ No template areas found${NC}"
+        # Deploy to overrides only
+        echo -e "${YELLOW}Deploying Self Service Portal to overrides...${NC}"
+        USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/overrides/apps/self-service-portal"
+        USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/overrides"
+
+        mkdir -p "$USSP_TEMPLATE_PATH"
+        cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
+        cp -r src/self-service-portal/app/dist/assets "$USSP_TEMPLATE_PATH/" 2>/dev/null || true
+        echo -e "${GREEN}✓ Self Service Portal Templates deployed to overrides${NC}"
+
+        # Deploy USSP Messages for overrides
+        if [ -d "src/self-service-portal/messages" ]; then
+            for lang_dir in src/self-service-portal/messages/*/; do
+                if [ -d "$lang_dir" ]; then
+                    lang=$(basename "$lang_dir")
+                    dest_dir="$USSP_MESSAGES_BASE/$lang/apps/self-service-portal"
+                    mkdir -p "$dest_dir"
+                    cp -r "$lang_dir"* "$dest_dir/"
+                    echo -e "${GREEN}✓ Self Service Portal Messages ($lang) deployed to overrides${NC}"
+                fi
+            done
+        fi
     fi
 fi
 
