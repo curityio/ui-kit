@@ -51,8 +51,8 @@ npm start
 
 Then you can access the projects at:
 
-- Curity Identity Server Templates: [http://localhost:3002](http://localhost:3000)
-- Self Service Portal: [http://localhost:3000](http://localhost:5173/previewer)
+- Curity Identity Server Templates: [http://localhost:3000](http://localhost:3000)
+- Self Service Portal: [http://localhost:5173/previewer](http://localhost:5173/previewer)
 
 To start projects individually, run:
 
