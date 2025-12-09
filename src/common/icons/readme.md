@@ -20,7 +20,7 @@ npm install @curityio/ui-kit/icons
 Import icons like this
 
 ```js
-import { IconGeneralClose } from '@curity-ui-kit/icons';
+import { IconGeneralClose } from '@curity/ui-kit-icons';
 ```
 
 Use an icon like this

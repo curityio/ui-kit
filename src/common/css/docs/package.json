@@ -1,5 +1,5 @@
 {
-  "name": "@curity-ui-kit/css-docs",
+  "name": "@curity/ui-kit-css-docs",
   "description": "Documentation for Curity CSS",
   "version": "1.0.0",
   "type": "module",
@@ -17,8 +17,8 @@
     "@astrojs/mdx": "^4.3.12",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "^4.4.2",
-    "@curity-ui-kit/css": "*",
-    "@curity-ui-kit/icons": "*",
+    "@curity/ui-kit-css": "*",
+    "@curity/ui-kit-icons": "*",
     "astro": "^5.16.1",
     "mdast-util-to-string": "3.2.0",
     "react": "19.1.0",

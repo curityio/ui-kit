@@ -8,10 +8,10 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "prestart": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
+    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
     "start": "vite --config vite-previewer.config.ts --mode previewer",
     "dev": "vite open",
-    "prebuild": "npm run build --workspace @curity-ui-kit/icons --workspace @curity-ui-kit/css || true",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
     "tsBuild:watch": "tsc -b -w",
