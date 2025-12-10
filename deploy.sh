@@ -126,15 +126,15 @@ else
             done
         fi
     else
-        # Deploy to overrides only
-        echo -e "${YELLOW}Deploying Self Service Portal to overrides...${NC}"
+        # Deploy to overrides
+        echo -e "${YELLOW}Deploying Self Service Portal templates and messages to overrides...${NC}"
         USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/overrides/apps/self-service-portal"
         USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/overrides"
 
         mkdir -p "$USSP_TEMPLATE_PATH"
         cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
         cp -r src/self-service-portal/app/dist/assets "$USSP_TEMPLATE_PATH/" 2>/dev/null || true
-        echo -e "${GREEN}✓ Self Service Portal Templates deployed to overrides${NC}"
+        echo -e "${GREEN}✓ Self Service Portal Templates assets and templates deployed to overrides${NC}"
 
         # Deploy USSP Messages for overrides
         if [ -d "src/self-service-portal/messages" ]; then
