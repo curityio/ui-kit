@@ -84,17 +84,10 @@ function watch(config) {
  * Start java
  */
 function startJava(config) {
-    console.log("java cmd: " + config.javaCmd);
-    console.log("java args: " + config.javaArgs.join(' '));
+    console.log("proc cmd: " + config.procCmd);
+    console.log("proc args: " + config.procArgs.join(' '));
 
-    var javaPreviewer = spawn(config.javaCmd, config.javaArgs, {
-            stdio: [
-                0, // Use parent's stdin for child
-                fs.openSync('java.out', 'w'),
-                1 // Use parent's stdout for childs stderr
-            ]
-        }
-    );
+    var javaPreviewer = spawn(config.procCmd, config.procArgs);
 
     process.on('exit', function () {
         console.log('Killing java process');
@@ -109,12 +102,12 @@ function startJava(config) {
     console.log("Spawned Java server: " + javaPreviewer.pid);
 
     console.log("Preview server acting on:");
-    console.log("  Static Root           : " + config.staticRoot);
-    console.log("  Template Root         : " + config.templateRoot);
-    console.log("  Message Root          : " + config.messageRoot);
+    console.log("  Static Root           : " + config['static-root']);
+    console.log("  Template Root         : " + config['template-root']);
+    console.log("  Message Root          : " + config['message-root']);
 
     if ('additionalStaticRoot' in config) {
-        console.log("  Additional static root: " + config.additionalStaticRoot);
+        console.log("  Additional static root: " + config['additional-static-root']);
     }
 }
 
@@ -138,65 +131,50 @@ function getClasspath(uiBuilderLibs) {
  */
 function prepareSettings(optionsOrArgv) {
     var config = {};
-    const programClass = "se.curity.templates.preview.App";
 
     var uiBuilderHome = __dirname + "/../../lib";
 
-    var javaArgs = [];
+    var procArgs = [];
 
-    javaArgs.push("-classpath");
-    javaArgs.push(getClasspath(uiBuilderHome));
-    javaArgs.push(programClass);
-
-    if (optionsOrArgv['idsvr-home'] !== undefined) {
-        config['idsvrHome'] = optionsOrArgv['idsvr-home']
-    }
-
-    if (config.idsvrHome !== undefined) {
-        javaArgs.push('-i');
-        javaArgs.push(config['idsvrHome']);
-        config['javaCmd'] = config.idsvrHome + '/lib/java/jre/bin/java';
+    if (optionsOrArgv['port'] !== undefined) {
+        procArgs.push("-p");
+        procArgs.push(optionsOrArgv['port']);
     } else {
-        config['javaCmd'] = 'java';
-    }
-
-    if (optionsOrArgv['additional-static-root'] !== undefined) {
-        config['additionalStaticRoot'] = optionsOrArgv['additional-static-root'];
-        javaArgs.push('-a');
-        javaArgs.push(config['additionalStaticRoot'])
+        throw "Port must be specified";
     }
 
     if (optionsOrArgv['template-root'] !== undefined) {
-        config['templateRoot'] = optionsOrArgv['template-root']
-    } else if (config.idsvrHome !== undefined) {
-        config['templateRoot'] = config.idsvrHome + "/usr/share/templates";
-    }
-    if (config.templateRoot !== undefined) {
-        javaArgs.push('-t');
-        javaArgs.push(config['templateRoot']);
+        procArgs.push('-t');
+        procArgs.push(optionsOrArgv['template-root']);
+    } else {
+        throw "Template root must be specified";
     }
 
     if (optionsOrArgv['message-root'] !== undefined) {
-        config['messageRoot'] = optionsOrArgv['message-root']
-    } else if (config.idsvrHome !== undefined) {
-        config['messageRoot'] = config.idsvrHome + "/usr/share/messages";
-    }
-    if (config.messageRoot !== undefined) {
-        javaArgs.push('-m');
-        javaArgs.push(config['messageRoot']);
+        procArgs.push('-m');
+        procArgs.push(optionsOrArgv['message-root']);
+    } else {
+        throw "Message root must be specified";
     }
 
     if (optionsOrArgv['static-root'] !== undefined) {
-        config['staticRoot'] = optionsOrArgv['static-root']
-    } else if (config.idsvrHome !== undefined) {
-        config['staticRoot'] = config.idsvrHome + "/usr/share/webroot";
-    }
-    if (config.staticRoot !== undefined) {
-        javaArgs.push('-s');
-        javaArgs.push(config['staticRoot']);
+        procArgs.push('--static-root');
+        procArgs.push(optionsOrArgv['static-root']);
+    } else {
+        throw "Static root must be specified";
     }
 
-    config['javaArgs'] = javaArgs;
+    if (optionsOrArgv['additional-static-root'] !== undefined) {
+        procArgs.push('-a');
+        procArgs.push(optionsOrArgv['additional-static-root'])
+    }
+
+    if (optionsOrArgv['exec-path'] !== undefined) {
+        config['procCmd'] = optionsOrArgv['exec-path'];
+    } else {
+        throw "Exec path must be specified";
+    }
+    config['procArgs'] = procArgs;
     return config;
 }
 
@@ -209,12 +187,11 @@ function init() {
     var settings = {
         'template-root' : paths.curity.templates.base,
         'message-root' : paths.curity.messages.base,
-        'static-root' : paths.curity.webroot
+        'static-root' : paths.curity.webroot,
+        'exec-path': '../../lib/run-ui-kit-server.sh',
+        'port': 8080,
     };
 
-    if (paths.idsvr.installDir !== undefined) {
-        settings['idsvr-home'] = paths.idsvr.installDir
-    }
     if (paths.curity.additionalAssetsRoot !== undefined) {
         settings['additional-static-root'] = paths.curity.additionalAssetsRoot
     }
