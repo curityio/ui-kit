@@ -1,7 +1,7 @@
 {
   "name": "curity-ui-kit",
   "version": "1.0.0",
-  "description": "Monorepo for Curity Identity Server Templates, Self Service Portal, Login Web App,  Curity CSS, and Curity UI Icons React",
+  "description": "Monorepo for Curity Identity Server Templates, Self Service Portal, Login Web App, Curity CSS, Curity UI Icons React, and Curity React Component Library.",
   "author": "Curity AB",
   "private": true,
   "license": "Apache-2.0",
@@ -14,7 +14,7 @@
   },
   "workspaces": [
     "src/common/assets",
-    "src/common/components",
+    "src/common/component-library",
     "src/common/css",
     "src/common/css/lib",
     "src/common/css/docs",
