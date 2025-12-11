@@ -24,7 +24,7 @@
     "src/login-web-app"
   ],
   "scripts": {
-    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"npm run start:css\" \"sleep 3 && open index.html\"",
+    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ssp\" \"npm run start:css\" \"sleep 3 && open index.html\"",
     "start:ssp": "npm run -w src/self-service-portal/app start",
     "start:lwa": "npm run -w src/login-web-app/app start",
     "start:css": "npm run -w src/common/css start",
