@@ -1,10 +1,17 @@
 {
   "name": "curity-ui-kit",
   "version": "1.0.0",
-  "description": "Monorepo for Self Service Portal, Login Web App, Template System, and Styles",
+  "description": "Monorepo for Curity Identity Server Templates, Self Service Portal, Login Web App,  Curity CSS, and Curity UI Icons React",
   "author": "Curity AB",
   "private": true,
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/curityio/ui-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/curityio/ui-kit/issues"
+  },
   "workspaces": [
     "src/common/assets",
     "src/common/components",
@@ -17,16 +24,16 @@
     "src/login-web-app"
   ],
   "scripts": {
-    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ussp\" \"npm run start:css\" \"sleep 3 && open index.html\"",
-    "start:ussp": "npm run start --workspace=src/self-service-portal/app",
-    "start:lwa": "npm run start --workspace=src/login-web-app/app",
-    "start:css": "npm run start --workspace=src/common/css",
-    "start:identity-server": "npm run start --workspace=src/identity-server",
-    "build:identity-server": "npm run build --workspace=src/identity-server",
-    "build:ussp": "npm run build --workspace=src/self-service-portal/app",
-    "build:lwa": "npm run build --workspace=src/login-web-app/app",
-    "build:css": "npm run build --workspace=src/common/css",
-    "build:icons": "npm run build --workspace=src/common/icons",
+    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ssp\" \"npm run start:css\" \"sleep 3 && open index.html\"",
+    "start:ssp": "npm run -w src/self-service-portal/app start",
+    "start:lwa": "npm run -w src/login-web-app/app start",
+    "start:css": "npm run -w src/common/css start",
+    "start:identity-server": "npm run -w src/identity-server start",
+    "build:identity-server": "npm run -w src/identity-server build",
+    "build:ssp": "npm run -w src/self-service-portal/app build",
+    "build:lwa": "npm run -w src/login-web-app/app build",
+    "build:css": "npm run -w src/common/css build",
+    "build:icons": "npm run -w src/common/icons build",
     "build": "npm run build -ws --if-present"
   },
   "devDependencies": {
