@@ -10,17 +10,26 @@
  */
 
 import extract from 'extract-zip';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 async function main() {
+    const libFolder = '../../lib/';
+    const zipFile = 'ui-kit-runtime.zip';
+    const presenceFile = 'run-ui-kit-server.sh';
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    const source = path.resolve(__dirname, '../../lib/ui-kit-runtime-darwin-arm64-1.0.0.zip');
-    const target = path.resolve(__dirname, '../../lib/');
+    const source = path.resolve(__dirname, libFolder + zipFile);
+    const target = path.resolve(__dirname, libFolder);
+    const presence = path.join(target, presenceFile);
 
-    if (!source) {
-        console.error('Usage: node scripts/unzip.js <archive.zip> [dest]');
+    if (fs.existsSync(presence)) {
+        console.log('UI Kit runtime already unzipped. Skipping...');
+        return;
+    }
+    if (!fs.existsSync(source)) {
+        console.error('ui-kit-runtime.zip file does not exist:', source);
         process.exit(1);
     }
 

@@ -13,7 +13,7 @@
     "clean": "rm -rf build",
     "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
     "start": "concurrently --kill-others \" npm run java\" \" npm run dev\"",
-    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css || true",
+    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css && npm run unzip-libs || true",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css || true",
     "build:styles": "vite build --mode styles",
     "build:ui": "vite build --mode ui",
@@ -24,15 +24,15 @@
     "predev": "npm run build --workspace @curity/ui-kit-css-lib",
     "dev": "npm run watch:css-lib & sleep 2 && concurrently \"npm run watch:styles\" \"npm run watch:ui\"",
     "unzip-libs": "node unzip-libs.js",
-    "clean-libs": "rm -rf ../../lib/*"
+    "clean-libs": "rm -rf ../../lib"
   },
   "dependencies": {
-    "extract-zip": "^2.0.1",
     "jquery": "3.5.1"
   },
   "devDependencies": {
     "browser-sync": "^3.0.2",
     "concurrently": "^8.2.2",
+    "extract-zip": "^2.0.1",
     "node-env-file": "^0.1.8",
     "vite": "^7.1.5",
     "vite-plugin-static-copy": "^3.1.2"
