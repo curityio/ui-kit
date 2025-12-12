@@ -11,10 +11,9 @@
 
 import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@curity/ui-kit-icons';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
-import { Button, toUiKitTranslation } from '@curity/ui-kit-component-library';
+import { Button, ConfirmButton, EmptyState, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Column } from './typings';
 import { useTranslation } from 'react-i18next';
-import { ConfirmButton, EmptyState } from '@curity/ui-kit-component-library';
 import { SearchField } from '@/shared/ui/search-field/SearchField';
 import { useState } from 'react';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
@@ -52,7 +51,7 @@ export const DataTable = <T,>({
   'data-testid': testId,
 }: DataTableProps<T>) => {
   const { t } = useTranslation();
-  const toUiKitT = toUiKitTranslation(t);
+  const uiKitT = toUiKitTranslation(t);
   const [searchQuery, setSearchQuery] = useState('');
 
   const defaultRender = (value: unknown) => {
@@ -147,7 +146,7 @@ export const DataTable = <T,>({
                               dialogMessage={t('confirm-delete')}
                               onConfirm={() => onRowDelete?.(row)}
                               aria-label={t('delete-item')}
-                              t={toUiKitT}
+                              t={uiKitT}
                               icon={<IconGeneralTrash width={18} height={18} data-testid="data-table-delete-button" />}
                             />
                           </UiConfigIf>
@@ -165,7 +164,7 @@ export const DataTable = <T,>({
                 className="center"
                 data-testid="data-table-cell-empty-state"
               >
-                <EmptyState heading={emptyStateHeading} text={emptyStateText} t={toUiKitT} />
+                <EmptyState heading={emptyStateHeading} text={emptyStateText} t={uiKitT} />
               </TableCell>
             </TableRow>
           )}

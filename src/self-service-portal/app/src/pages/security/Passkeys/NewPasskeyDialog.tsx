@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog } from '@/shared/ui/dialog/Dialog';
+import { Dialog, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Input } from '@/shared/ui/input/Input';
 import { useTranslation } from 'react-i18next';
 import { useVerifyPasskey } from './useVerifyPasskey';
@@ -13,6 +13,7 @@ interface NewPasskeyDialogProps {
 
 export const NewPasskeyDialog = ({ isOpen, accountId, refetchAccount, onClose }: NewPasskeyDialogProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const [alias, setAlias] = useState('');
   const { verifyPasskey } = useVerifyPasskey();
 
@@ -41,6 +42,7 @@ export const NewPasskeyDialog = ({ isOpen, accountId, refetchAccount, onClose }:
       cancelButtonText={t('cancel')}
       cancelButtonCallback={resetAliasAndCloseDialog}
       data-testid="new-passkey-dialog"
+      t={uiKitT}
     >
       <Input
         name="alias"

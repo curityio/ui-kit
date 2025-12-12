@@ -5,7 +5,7 @@ import { Column } from '@/shared/ui/data-table/typings';
 import { getFormattedDate } from '@/shared/utils/date';
 import { t } from 'i18next';
 import { AuthFactorType } from '../ui/AuthFactorType';
-import { UI_CONFIG_RESOURCES, UI_CONFIG_OPERATIONS } from '@/ui-config/typings';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 export interface MFARegisteredAuthenticationFactorListProps {
@@ -17,7 +17,7 @@ export const MFARegisteredAuthenticationFactorList = ({
   factors,
   factorDisabled,
 }: MFARegisteredAuthenticationFactorListProps) => {
-  const toUiKitT = toUiKitTranslation(t);
+  const uiKitT = toUiKitTranslation(t);
   const registeredAuthFactorsTableColumns: Column<RegisteredFactor>[] = [
     { key: 'type', label: t('type'), customRender: factor => <AuthFactorType registrableFactor={factor} /> },
     {
@@ -35,7 +35,7 @@ export const MFARegisteredAuthenticationFactorList = ({
       >
         <ConfirmButton
           className="button-tiny button-primary-outline"
-          dialogConfig={{ title: t('security.multi-factor-authentication.disable-method'), t: toUiKitT }}
+          dialogConfig={{ title: t('security.multi-factor-authentication.disable-method'), t: uiKitT }}
           dialogMessage={t('security.multi-factor-authentication.confirm-disable', {
             factorName: authFactor.type?.toUpperCase(),
           })}
@@ -43,7 +43,7 @@ export const MFARegisteredAuthenticationFactorList = ({
           title={t('security.multi-factor-authentication.disable')}
           onConfirm={() => factorDisabled(authFactor)}
           disabled={factors?.length < 2}
-          t={toUiKitT}
+          t={uiKitT}
         />
       </UiConfigIf>
     ) : null;

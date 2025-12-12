@@ -24,7 +24,7 @@ export interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { t } = useTranslation();
-  const toUiKitT = toUiKitTranslation(t);
+  const uiKitT = toUiKitTranslation(t);
   const pageTitle = usePageTitle();
   const authContext = useAuth();
 
@@ -48,7 +48,7 @@ export const Layout = ({ children }: LayoutProps) => {
         toggleSidebar={toggleSidebar}
         isSidebarOpen={isSidebarOpen}
         isLoggedIn={!!authContext?.session?.isLoggedIn}
-        t={toUiKitT}
+        t={uiKitT}
         userName={authContext?.session?.idTokenClaims?.sub}
         pageTitle={pageTitle}
         onSignOut={authContext.logout}

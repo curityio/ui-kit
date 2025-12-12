@@ -6,9 +6,8 @@ import {
   StringMultiValuedValue,
 } from '@shared/data-access/API';
 import { useState } from 'react';
-import { Alert } from '@curity/ui-kit-component-library';
+import { Alert, Button, Dialog, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { IconGeneralCheckmarkCircled } from '@curity/ui-kit-icons';
-import { Dialog } from '@shared/ui/dialog/Dialog';
 import { ApolloError, useMutation } from '@apollo/client';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings.ts';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
@@ -18,7 +17,6 @@ import { MFARegisteredAuthenticationFactorList } from '@/pages/security/MFA/feat
 import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { MFARecoveryCodes } from '@/pages/security/MFA/ui/MFARecoveryCodes';
-import { Button } from '@curity/ui-kit-component-library';
 import toast from 'react-hot-toast';
 
 interface MFAOptedInStateProps {
@@ -43,6 +41,7 @@ export const MFAOptedInState = ({
   deleteOptInMfaFactorError,
 }: MFAOptedInStateProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
 
   const [showResetMFADialog, setShowResetMFADialog] = useState<boolean>(false);
   const [showReplaceRecoveryCodesDialog, setShowReplaceRecoveryCodesDialog] = useState<boolean>(false);
@@ -210,6 +209,7 @@ export const MFAOptedInState = ({
       </UiConfigIf>
       {showReplaceRecoveryCodesDialog && (
         <Dialog
+          t={uiKitT}
           isOpen={true}
           title={t('security.multi-factor-authentication.replace-recovery-title')}
           showActionButton={true}
@@ -224,6 +224,7 @@ export const MFAOptedInState = ({
       )}
       {showResetMFADialog && (
         <Dialog
+          t={uiKitT}
           isOpen={true}
           title={t('security.multi-factor-authentication.reset')}
           showActionButton={true}

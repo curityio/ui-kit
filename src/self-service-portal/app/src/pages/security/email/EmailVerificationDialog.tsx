@@ -9,10 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { Dialog } from '@/shared/ui/dialog/Dialog';
-import { Spinner, SuccessCheckmark } from '@curity/ui-kit-component-library';
+import { Dialog, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useMutation } from '@apollo/client';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from '@/shared/ui/OtpInput';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
@@ -33,6 +32,7 @@ export const EmailVerificationDialog = ({
   onEmailListChange,
 }: Props) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const [emailVerificationState, setEmailVerificationState] = useState('');
   const [otpDigits, setOtpDigits] = useState('');
   const [startVerifyEmailAddressByAccountId, { data: verificationStartData, loading: verificationStartLoading }] =
@@ -154,6 +154,7 @@ export const EmailVerificationDialog = ({
       actionButtonText={getActionButtonText()}
       actionButtonCallback={handleActionButtonClick}
       closeCallback={onClose}
+      t={uiKitT}
     >
       {isDialogLoading && (
         <div className="flex flex-column flex-center flex-gap-2">

@@ -10,15 +10,14 @@
  */
 
 import { IconGeneralLocation } from '@curity/ui-kit-icons';
-import { useState, useMemo } from 'react';
-import { toUiKitTranslation, Button, PageHeader } from '@curity/ui-kit-component-library';
+import { useMemo, useState } from 'react';
+import { Button, Dialog, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { DataTable } from '@/shared/ui';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useMutation, useQuery } from '@apollo/client';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { AddressInput } from '@/shared/data-access/API';
 import { Input } from '@/shared/ui/input/Input';
-import { Dialog } from '@/shared/ui/dialog/Dialog';
 import { Column } from '@/shared/ui/data-table/typings';
 import { Address as AddressType } from '@/shared/data-access/API/graphql-codegen-typings-queries-and-mutations/graphql';
 import { useTranslation } from 'react-i18next';
@@ -172,6 +171,7 @@ export const Address = () => {
 
       {showNewAddressDialog && (
         <Dialog
+          t={uiKitT}
           isOpen={true}
           title={t('account.address')}
           showActionButton={true}

@@ -1,10 +1,8 @@
 import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
-import { Alert } from '@curity/ui-kit-component-library';
-import { Dialog } from '@/shared/ui/dialog/Dialog';
+import { Alert, Dialog, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Input } from '@/shared/ui/input/Input';
 import { OtpInput } from '@/shared/ui/OtpInput';
-import { Spinner, SuccessCheckmark } from '@curity/ui-kit-component-library';
 import { useMutation } from '@apollo/client';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +16,7 @@ interface NewTotpDeviceDialogProps {
 
 export const NewTotpDeviceDialog = ({ isOpen, accountId, onClose }: NewTotpDeviceDialogProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const inputRef = useRef<HTMLInputElement>(null);
   const [totpAlias, setTotpAlias] = useState('');
   const [
@@ -99,6 +98,7 @@ export const NewTotpDeviceDialog = ({ isOpen, accountId, onClose }: NewTotpDevic
         cancelButtonCallback={onClose}
         closeCallback={onClose}
         closeDialogOnActionButtonClick={false}
+        t={uiKitT}
       >
         {isDialogLoading && (
           <div className="flex flex-center flex-column justify-center">

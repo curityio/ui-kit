@@ -9,11 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { Alert } from '@curity/ui-kit-component-library';
-import { Dialog } from '@/shared/ui/dialog/Dialog';
-import { Spinner, SuccessCheckmark } from '@curity/ui-kit-component-library';
+import { Alert, Dialog, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useMutation } from '@apollo/client';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from '../../../shared/ui/OtpInput';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
@@ -35,6 +33,7 @@ export const PhoneNumberVerificationDialog = ({
   onPhoneNumberListChange,
 }: Props) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const inputRef = useRef<HTMLInputElement>(null);
   const [phoneNumber, setPhoneNumber] = useState(phoneNumberForOtpVerification ?? '');
   const [phoneNumberVerificationState, setPhoneNumberVerificationState] = useState('');
@@ -210,6 +209,7 @@ export const PhoneNumberVerificationDialog = ({
 
   return (
     <Dialog
+      t={uiKitT}
       isOpen={true}
       title={t('account.phone.verification')}
       subTitle={getDialogSubtitle()}

@@ -26,7 +26,7 @@ interface AccountDeleteProps {
 
 export const AccountDelete = ({ id, username }: AccountDeleteProps) => {
   const { t } = useTranslation();
-  const toUiKitT = toUiKitTranslation(t);
+  const uiKitT = toUiKitTranslation(t);
   const [isDeleteConfirmed, setIsDeleteConfirmed] = useState(false);
   const [deleteAccountById] = useMutation(GRAPHQL_API.USER_MANAGEMENT.MUTATIONS.deleteAccountById);
   const authContext = useAuth();
@@ -62,11 +62,11 @@ export const AccountDelete = ({ id, username }: AccountDeleteProps) => {
           className="button-small button-danger-outline"
           icon={<IconGeneralTrash width={18} height={18} />}
           title={t('account.delete')}
-          t={toUiKitT}
+          t={uiKitT}
           onConfirm={deleteUserAccount}
           onCancel={() => setIsDeleteConfirmed(false)}
           dialogConfig={{
-            t: toUiKitT,
+            t: uiKitT,
             title: t('account.delete'),
             subTitle: t('account.delete.title'),
             actionButtonText: t('account.delete'),

@@ -24,7 +24,7 @@ import { SearchField } from '@/shared/ui/search-field/SearchField';
 
 export const AppsAndServices = () => {
   const { t } = useTranslation();
-  const toUiKitT = toUiKitTranslation(t);
+  const uiKitT = toUiKitTranslation(t);
   const { session } = useAuth();
   const { data: appsResponse } = useQuery(GRAPHQL_API.GRANTED_AUTHORIZATION.QUERIES.getGrantedAuthorizationsByOwner, {
     variables: { owner: session?.idTokenClaims?.sub, first: 100000 },
@@ -89,7 +89,7 @@ export const AppsAndServices = () => {
         {appResultsFiltered?.length ? (
           appList(appResultsFiltered)
         ) : (
-          <EmptyState heading={t('apps-and-services.not-found')} t={toUiKitT} />
+          <EmptyState heading={t('apps-and-services.not-found')} t={uiKitT} />
         )}
       </Section>
     </>
