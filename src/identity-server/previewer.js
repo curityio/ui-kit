@@ -136,6 +136,11 @@ function prepareSettings(optionsOrArgv) {
 
     var procArgs = [];
 
+    if (optionsOrArgv['idsvr-home'] !== undefined) {
+        procArgs.push('-i');
+        procArgs.push(optionsOrArgv['idsvr-home']);
+    }
+
     if (optionsOrArgv['port'] !== undefined) {
         procArgs.push("-p");
         procArgs.push(optionsOrArgv['port']);
@@ -158,7 +163,7 @@ function prepareSettings(optionsOrArgv) {
     }
 
     if (optionsOrArgv['static-root'] !== undefined) {
-        procArgs.push('--static-root');
+        procArgs.push('-s');
         procArgs.push(optionsOrArgv['static-root']);
     } else {
         throw "Static root must be specified";
@@ -177,7 +182,6 @@ function prepareSettings(optionsOrArgv) {
     config['procArgs'] = procArgs;
     return config;
 }
-
 
 /**
  * Init and start
