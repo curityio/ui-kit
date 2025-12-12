@@ -3,8 +3,7 @@ import { useLocation } from 'react-router';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/shared/utils/useRouteTitle';
-import { Alert } from '@/shared/ui/Alert';
-import { Button } from '@curity/ui-kit-component-library';
+import { Alert, Button } from '@curity/ui-kit-component-library';
 import { Spinner } from '@/shared/ui/Spinner';
 
 export const RouteErrorBoundary = ({ children }: { children: React.ReactNode }) => {

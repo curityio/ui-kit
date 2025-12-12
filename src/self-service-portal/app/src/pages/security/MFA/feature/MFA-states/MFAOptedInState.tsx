@@ -6,7 +6,7 @@ import {
   StringMultiValuedValue,
 } from '@shared/data-access/API';
 import { useState } from 'react';
-import { Alert } from '@shared/ui/Alert';
+import { Alert } from '@curity/ui-kit-component-library';
 import { IconGeneralCheckmarkCircled } from '@curity/ui-kit-icons';
 import { Dialog } from '@shared/ui/dialog/Dialog';
 import { ApolloError, useMutation } from '@apollo/client';

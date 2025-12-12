@@ -18,10 +18,9 @@ import { IconCapabilityResourceOwnerPasswordCredentials } from '@curity/ui-kit-i
 import { Section } from '@/shared/ui/section/Section';
 import { useState } from 'react';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
-import { Alert } from '@/shared/ui/Alert';
 import { PasswordPolicy } from '@/pages/Password/feature/PasswordPolicy';
 import { PasswordInput } from '@/pages/Password/ui/PasswordInput';
-import { Button } from '@curity/ui-kit-component-library';
+import { Alert, Button } from '@curity/ui-kit-component-library';
 import toast from 'react-hot-toast';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';

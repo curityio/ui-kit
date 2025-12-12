@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Alert } from '@/shared/ui/Alert';
+import { Alert } from '@curity/ui-kit-component-library';
 import { Dialog } from '@/shared/ui/dialog/Dialog';
 import { Spinner } from '@/shared/ui/Spinner';
 import { SuccessCheckmark } from '@/shared/ui/SuccessCheckmark';

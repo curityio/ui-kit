@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Alert } from '@/shared/ui/Alert';
+import { Alert } from '@curity/ui-kit-component-library';
 import { DISABLE_PASSWORD_ATTRIBUTES } from '@/shared/utils/disable-password-managers';
 import { useTranslation } from 'react-i18next';
 import VerificationInput, { VerificationInputProps } from 'react-verification-input';

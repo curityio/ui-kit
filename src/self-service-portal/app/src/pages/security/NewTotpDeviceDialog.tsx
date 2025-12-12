@@ -1,6 +1,6 @@
 import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
-import { Alert } from '@/shared/ui/Alert';
+import { Alert } from '@curity/ui-kit-component-library';
 import { Dialog } from '@/shared/ui/dialog/Dialog';
 import { Input } from '@/shared/ui/input/Input';
 import { OtpInput } from '@/shared/ui/OtpInput';

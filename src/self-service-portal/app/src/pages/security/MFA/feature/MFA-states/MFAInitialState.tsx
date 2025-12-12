@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Alert } from '@shared/ui/Alert';
+import { Alert } from '@curity/ui-kit-component-library';
 
 export interface MFAInitialStateProps {
   children?: React.ReactNode;

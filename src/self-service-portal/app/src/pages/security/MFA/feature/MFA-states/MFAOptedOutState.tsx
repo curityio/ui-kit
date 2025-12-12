@@ -1,7 +1,7 @@
 import { getFormattedDate } from '@shared/utils/date.ts';
 import { IconGeneralLockUnlocked } from '@curity/ui-kit-icons';
 import { useTranslation } from 'react-i18next';
-import { Alert } from '@shared/ui/Alert';
+import { Alert } from '@curity/ui-kit-component-library';
 
 interface MFAOptedOutStateProps {
   optOutAt: number;
