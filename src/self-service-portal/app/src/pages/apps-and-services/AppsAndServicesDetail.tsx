@@ -2,7 +2,7 @@ import { useAuth } from '@/auth/data-access/AuthProvider';
 import { AppsAndServicesDetailList } from '@/pages/apps-and-services/AppsAndServicesDetailList';
 import { ROUTE_PATHS } from '@/routes';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
-import { Button } from '@/shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
 import { Section } from '@/shared/ui/section/Section';
 import { useMutation, useQuery } from '@apollo/client';
 import { IconAuthenticatorDefault, IconGeneralTrash } from '@curity/ui-kit-icons';

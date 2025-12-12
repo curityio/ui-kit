@@ -13,7 +13,7 @@ import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icon
 import { Link } from 'react-router';
 import { useEffect } from 'react';
 import { useAuth } from '@/auth/data-access/AuthProvider';
-import { Button } from '../Button';
+import { Button } from '@curity/ui-kit-component-library';
 import classes from './header.module.css';
 import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/shared/utils/useRouteTitle';

@@ -1,4 +1,4 @@
-import { Button } from '@shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { Account, RegistrableFactor, StringMultiValuedValue } from '@/shared/data-access/API';
 import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';

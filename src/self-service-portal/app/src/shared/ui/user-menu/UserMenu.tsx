@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { IconGeneralChevron, IconGeneralLock } from '@curity/ui-kit-icons';
-import { Button } from '@shared/ui/Button';
+import { Button } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import styles from './user-menu.module.css';
 

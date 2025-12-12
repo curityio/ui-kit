@@ -21,7 +21,7 @@ import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { Alert } from '@/shared/ui/Alert';
 import { PasswordPolicy } from '@/pages/Password/feature/PasswordPolicy';
 import { PasswordInput } from '@/pages/Password/ui/PasswordInput';
-import { Button } from '@/shared/ui/Button';
+import { Button } from '@curity/ui-kit-component-library';
 import toast from 'react-hot-toast';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';

@@ -11,7 +11,8 @@
 
 import { IconGeneralLocation } from '@curity/ui-kit-icons';
 import { useState, useMemo } from 'react';
-import { Button, DataTable, PageHeader } from '@/shared/ui';
+import { toUiKitTranslation, Button, PageHeader } from '@curity/ui-kit-component-library';
+import { DataTable } from '@/shared/ui';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useMutation, useQuery } from '@apollo/client';
 import { useAuth } from '@/auth/data-access/AuthProvider';
@@ -27,6 +28,7 @@ import countriesData from '@/shared/data/countries.json';
 
 export const Address = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const [addressSearch, setAddressSearch] = useState('');
   const initialFormData: AddressInput = {
     country: null,
@@ -132,6 +134,7 @@ export const Address = () => {
         description={t('account.address.description')}
         icon={<IconGeneralLocation width={128} height={128} />}
         data-testid="address-page-header"
+        t={uiKitT}
       />
 
       <DataTable

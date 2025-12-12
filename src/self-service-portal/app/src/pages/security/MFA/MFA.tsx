@@ -10,7 +10,8 @@
  */
 
 import { IconActionMultiFactor } from '@curity/ui-kit-icons';
-import { Button, PageHeader } from '@shared/ui';
+import { PageHeader } from '@shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
 import { useAuth } from '@auth/data-access/AuthProvider';
 import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API.ts';
 import { useMutation, useQuery } from '@apollo/client';

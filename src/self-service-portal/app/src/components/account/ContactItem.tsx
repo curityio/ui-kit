@@ -1,4 +1,5 @@
-import { Button, ListCell, ListRow } from '@/shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
+import { ListCell, ListRow } from '@/shared/ui';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { IconGeneralArrowForward } from '@curity/ui-kit-icons';

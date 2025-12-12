@@ -11,7 +11,7 @@
 
 import { ZoomIcon } from '../../components/icons/ZoomIcon';
 import { IconGeneralDownload, IconGeneralEdit, IconGeneralTrash, IconUser } from '@curity/ui-kit-icons';
-import { Button } from '../../shared/ui/Button';
+import { Button } from '@curity/ui-kit-component-library';
 import { Section } from '@/shared/ui/section/Section';
 
 export const Details = () => {

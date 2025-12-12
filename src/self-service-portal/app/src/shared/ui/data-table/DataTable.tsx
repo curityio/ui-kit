@@ -10,7 +10,8 @@
  */
 
 import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@curity/ui-kit-icons';
-import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
+import { Button } from '@curity/ui-kit-component-library';
 import { Column } from './typings';
 import { EmptyState } from '../EmptyState';
 import { useTranslation } from 'react-i18next';

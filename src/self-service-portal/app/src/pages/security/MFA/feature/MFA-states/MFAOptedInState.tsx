@@ -18,7 +18,7 @@ import { MFARegisteredAuthenticationFactorList } from '@/pages/security/MFA/feat
 import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { MFARecoveryCodes } from '@/pages/security/MFA/ui/MFARecoveryCodes';
-import { Button } from '@/shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
 import toast from 'react-hot-toast';
 
 interface MFAOptedInStateProps {

@@ -10,7 +10,8 @@
  */
 
 import { IconGeneralArrowForward, IconToken } from '@curity/ui-kit-icons';
-import { Button, DataTable, PageHeader } from '../shared/ui';
+import { DataTable, PageHeader } from '../shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { Column } from '@/shared/ui/data-table/typings';
 

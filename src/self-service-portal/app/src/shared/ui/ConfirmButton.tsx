@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Button } from '@/shared/ui/Button';
+import { Button } from '@curity/ui-kit-component-library';
 import { Dialog, DialogConfig } from '@/shared/ui/dialog/Dialog';
 import { ButtonHTMLAttributes, ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -7,7 +7,8 @@ import {
   RegistrableFactor,
   StringMultiValuedValue,
 } from '@/shared/data-access/API';
-import { DataTable, Button } from '@/shared/ui';
+import { DataTable } from '@/shared/ui';
+import { Button } from '@curity/ui-kit-component-library';
 import { Column } from '@/shared/ui/data-table/typings';
 import { Toggle } from '@/shared/ui/toggle/Toggle';
 import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';

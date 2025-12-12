@@ -1,5 +1,5 @@
 import React, { JSX, useEffect, useRef, useState } from 'react';
-import { Button } from '../Button';
+import { Button } from '@curity/ui-kit-component-library';
 import { IconGeneralEdit } from '@curity/ui-kit-icons';
 import { useOutsideClick } from '@shared/hooks/useOutsideClick';
 import { useTranslation } from 'react-i18next';
