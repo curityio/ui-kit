@@ -245,6 +245,12 @@
         background-color: #28a745;
       }
 
+      .button-loading-active {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       @keyframes pulse {
         0%,
         100% {
@@ -305,6 +311,7 @@
               href="http://localhost:3000/listing"
               target="_blank"
               class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
+              aria-disabled="true"
             >
               <span>View http://localhost:3000/listing →</span>
             </a>
@@ -333,6 +340,7 @@
               href="http://localhost:5173/previewer"
               target="_blank"
               class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
+              aria-disabled="true"
             >
               <span>View http://localhost:5173/previewer →</span>
             </a>
@@ -461,11 +469,13 @@
 
         if (isReady) {
           button.classList.remove("button-loading-active");
+          button.removeAttribute("aria-disabled");
           status.classList.add("running");
           statusText.textContent = "Dev server running";
         } else {
           // Timeout - mark as failed
           button.classList.remove("button-loading-active");
+          button.removeAttribute("aria-disabled");
           statusText.textContent = "Dev server not responding";
         }
       });
