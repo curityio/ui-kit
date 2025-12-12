@@ -1,6 +1,6 @@
 import { BOOTSTRAP_UI_CONFIG, BootstrapUiConfig } from '@/BOOTSTRAP_UI_CONFIG';
 import { setupI18nTranslations } from '@/i18n/setup-translations';
-import { Spinner } from '@/shared/ui/Spinner';
+import { Spinner } from '@curity/ui-kit-component-library';
 import {
   GrantedAuthorizationsResources,
   UI_CONFIG_OPERATIONS,

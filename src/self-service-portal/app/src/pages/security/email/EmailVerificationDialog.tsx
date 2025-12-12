@@ -10,8 +10,7 @@
  */
 
 import { Dialog } from '@/shared/ui/dialog/Dialog';
-import { Spinner } from '@/shared/ui/Spinner';
-import { SuccessCheckmark } from '@/shared/ui/SuccessCheckmark';
+import { Spinner, SuccessCheckmark } from '@curity/ui-kit-component-library';
 import { useMutation } from '@apollo/client';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

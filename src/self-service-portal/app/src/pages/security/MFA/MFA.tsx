@@ -32,7 +32,7 @@ import { EmailVerificationDialog } from '@/pages/security/email/EmailVerificatio
 import { PhoneNumberVerificationDialog } from '@/pages/security/phone/PhoneNumberVerificationDialog';
 import { NewTotpDeviceDialog } from '@/pages/security/NewTotpDeviceDialog';
 import { MFARecoveryCodes } from '@/pages/security/MFA/ui/MFARecoveryCodes';
-import { Spinner } from '@/shared/ui/Spinner';
+import { Spinner } from '@curity/ui-kit-component-library';
 import { MFASetupInitialState } from './feature/MFA-states/MFASetupInitialState';
 import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';
 import { ProgressSteps } from '@/shared/ui/progress-steps/ProgressSteps';

@@ -17,7 +17,7 @@ import { IconUserProfile } from '@/shared/components/icons';
 import { AccountUpdateFields } from '@/shared/data-access/API';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { PageHeader } from '@/shared/ui/page-header/PageHeader';
-import { Spinner } from '@/shared/ui/Spinner';
+import { Spinner } from '@curity/ui-kit-component-library';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { useMutation, useQuery } from '@apollo/client';

@@ -19,7 +19,7 @@ import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useQuery, useMutation } from '@apollo/client';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
-import { Spinner } from '@/shared/ui/Spinner';
+import { Spinner } from '@curity/ui-kit-component-library';
 import { NewPasskeyDialog } from './NewPasskeyDialog';
 import { getFormattedDate } from '@shared/utils/date.ts';
 

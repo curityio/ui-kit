@@ -14,7 +14,7 @@ import { AuthContextType } from '../utils/typings.ts';
 import { OAuthAgentClient } from '@curity/token-handler-js-assistant';
 import { EndLoginRequest, SessionResponse } from '@curity/token-handler-js-assistant/lib/types';
 import { Outlet, useNavigate } from 'react-router';
-import { Spinner } from '@/shared/ui/Spinner';
+import { Spinner } from '@curity/ui-kit-component-library';
 import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
