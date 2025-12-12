@@ -1,6 +1,6 @@
 import { RegisteredFactor } from '@/shared/data-access/API';
 import { DataTable } from '@/shared/ui';
-import { ConfirmButton } from '@/shared/ui/ConfirmButton';
+import { ConfirmButton, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Column } from '@/shared/ui/data-table/typings';
 import { getFormattedDate } from '@/shared/utils/date';
 import { t } from 'i18next';
@@ -17,6 +17,7 @@ export const MFARegisteredAuthenticationFactorList = ({
   factors,
   factorDisabled,
 }: MFARegisteredAuthenticationFactorListProps) => {
+  const toUiKitT = toUiKitTranslation(t);
   const registeredAuthFactorsTableColumns: Column<RegisteredFactor>[] = [
     { key: 'type', label: t('type'), customRender: factor => <AuthFactorType registrableFactor={factor} /> },
     {
@@ -34,7 +35,7 @@ export const MFARegisteredAuthenticationFactorList = ({
       >
         <ConfirmButton
           className="button-tiny button-primary-outline"
-          dialogConfig={{ title: t('security.multi-factor-authentication.disable-method') }}
+          dialogConfig={{ title: t('security.multi-factor-authentication.disable-method'), t: toUiKitT }}
           dialogMessage={t('security.multi-factor-authentication.confirm-disable', {
             factorName: authFactor.type?.toUpperCase(),
           })}
@@ -42,6 +43,7 @@ export const MFARegisteredAuthenticationFactorList = ({
           title={t('security.multi-factor-authentication.disable')}
           onConfirm={() => factorDisabled(authFactor)}
           disabled={factors?.length < 2}
+          t={toUiKitT}
         />
       </UiConfigIf>
     ) : null;

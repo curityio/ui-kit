@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { ConfirmButton } from '@/shared/ui/ConfirmButton';
+import { ConfirmButton, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Section } from '@/shared/ui/section/Section';
 import { useMutation } from '@apollo/client';
 import { useAuth } from '@auth/data-access/AuthProvider.tsx';
@@ -26,6 +26,7 @@ interface AccountDeleteProps {
 
 export const AccountDelete = ({ id, username }: AccountDeleteProps) => {
   const { t } = useTranslation();
+  const toUiKitT = toUiKitTranslation(t);
   const [isDeleteConfirmed, setIsDeleteConfirmed] = useState(false);
   const [deleteAccountById] = useMutation(GRAPHQL_API.USER_MANAGEMENT.MUTATIONS.deleteAccountById);
   const authContext = useAuth();
@@ -61,9 +62,11 @@ export const AccountDelete = ({ id, username }: AccountDeleteProps) => {
           className="button-small button-danger-outline"
           icon={<IconGeneralTrash width={18} height={18} />}
           title={t('account.delete')}
+          t={toUiKitT}
           onConfirm={deleteUserAccount}
           onCancel={() => setIsDeleteConfirmed(false)}
           dialogConfig={{
+            t: toUiKitT,
             title: t('account.delete'),
             subTitle: t('account.delete.title'),
             actionButtonText: t('account.delete'),
