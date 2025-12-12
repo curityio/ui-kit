@@ -9,10 +9,13 @@
  * For further information, please contact Curity AB.
  */
 
-import { Header } from '@/shared/ui/header/Header';
+import { Header, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Sidebar } from './sidebar/Sidebar';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { usePageTitle } from '@shared/utils/useRouteTitle.tsx';
+import { useAuth } from '@auth/data-access/AuthProvider.tsx';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -20,6 +23,10 @@ export interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { t } = useTranslation();
+  const toUiKitT = toUiKitTranslation(t);
+  const pageTitle = usePageTitle();
+  const authContext = useAuth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -37,7 +44,15 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <>
-      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <Header
+        toggleSidebar={toggleSidebar}
+        isSidebarOpen={isSidebarOpen}
+        isLoggedIn={!!authContext?.session?.isLoggedIn}
+        t={toUiKitT}
+        userName={authContext?.session?.idTokenClaims?.sub}
+        pageTitle={pageTitle}
+        onSignOut={authContext.logout}
+      />
       <div className={`app-container ${isSidebarOpen && 'app-container-sidebar-open'}`}>
         <Sidebar />
         <main>{children}</main>
