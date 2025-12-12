@@ -12,7 +12,7 @@
 import { Section } from '@/shared/ui/section/Section';
 import { AccountUpdateFields } from '@/shared/data-access/API';
 import { ChangeEvent } from 'react';
-import { Input } from '@/shared/ui/input/Input';
+import { Input } from '@curity/ui-kit-component-library';
 import { EditableContent } from '@shared/ui/EditableContent/EditableContent';
 import { useTranslation } from 'react-i18next';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Dialog, toUiKitTranslation } from '@curity/ui-kit-component-library';
-import { Input } from '@/shared/ui/input/Input';
+import { Dialog, Input, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { useVerifyPasskey } from './useVerifyPasskey';
 

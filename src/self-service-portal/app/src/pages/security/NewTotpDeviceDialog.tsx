@@ -1,7 +1,6 @@
 import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
-import { Alert, Dialog, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
-import { Input } from '@/shared/ui/input/Input';
+import { Alert, Dialog, Input, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { OtpInput } from '@/shared/ui/OtpInput';
 import { useMutation } from '@apollo/client';
 import { useEffect, useRef, useState } from 'react';

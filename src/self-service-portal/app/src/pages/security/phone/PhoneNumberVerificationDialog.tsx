@@ -9,13 +9,12 @@
  * For further information, please contact Curity AB.
  */
 
-import { Alert, Dialog, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
+import { Alert, Dialog, Input, Spinner, SuccessCheckmark, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useMutation } from '@apollo/client';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { OtpInput } from '../../../shared/ui/OtpInput';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
-import { Input } from '@/shared/ui/input/Input';
 import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
 
 type Props = {
