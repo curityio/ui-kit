@@ -224,15 +224,31 @@
         align-items: center;
         gap: 0.5rem;
         font-size: 0.85rem;
+        color: #007bff;
+        transition: color 0.3s ease;
+      }
+
+      .status.running {
         color: #28a745;
       }
 
       .status-dot {
         width: 8px;
         height: 8px;
-        background-color: #28a745;
+        background-color: #007bff;
         border-radius: 50%;
         animation: pulse 2s ease-in-out infinite;
+        transition: background-color 0.3s ease;
+      }
+
+      .status.running .status-dot {
+        background-color: #28a745;
+      }
+
+      .button-loading-active {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
       }
 
       @keyframes pulse {
@@ -292,11 +308,13 @@
               Curity Identity Server.
             </p>
             <a
-              class="button button-medium w100 button-primary-outline mt2"
               href="http://localhost:3000/listing"
               target="_blank"
-              >View http://localhost:3000/listing →</a
+              class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
+              aria-disabled="true"
             >
+              <span>View http://localhost:3000/listing →</span>
+            </a>
             <div class="commands">
               <h3>Useful Commands</h3>
               <code>npm install</code>
@@ -308,9 +326,10 @@
               data-tooltip="Note: It may take a few seconds for the preview server to be ready"
             >
               <span class="status-dot"></span>
-              <span>Dev server running</span>
+              <span>Dev server loading</span>
             </div>
           </div>
+
           <div class="card">
             <h2>Self Service Portal</h2>
             <p>
@@ -318,11 +337,13 @@
               Service Portal.
             </p>
             <a
-              class="button button-medium w100 button-primary-outline mt2"
               href="http://localhost:5173/previewer"
               target="_blank"
-              >View http://localhost:5173/previewer →</a
+              class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
+              aria-disabled="true"
             >
+              <span>View http://localhost:5173/previewer →</span>
+            </a>
             <div class="commands">
               <h3>Useful Commands</h3>
               <code>npm install</code>
@@ -334,7 +355,7 @@
               data-tooltip="Note: It may take a few seconds for the preview server to be ready"
             >
               <span class="status-dot"></span>
-              <span>Dev server running</span>
+              <span>Dev server loading...</span>
             </div>
           </div>
         </div>
@@ -400,5 +421,64 @@
         </footer>
       </div>
     </main>
+
+    <script>
+      const services = [
+        {
+          url: "http://localhost:3000/listing",
+          cardIndex: 0,
+        },
+        {
+          url: "http://localhost:5173/previewer",
+          cardIndex: 1,
+        },
+      ];
+
+      async function checkService(url) {
+        try {
+          const response = await fetch(url, {
+            method: "HEAD",
+            mode: "no-cors",
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      async function waitForService(url, maxAttempts = 60, interval = 1000) {
+        for (let i = 0; i < maxAttempts; i++) {
+          const isReady = await checkService(url);
+          if (isReady) {
+            return true;
+          }
+          await new Promise((resolve) => setTimeout(resolve, interval));
+        }
+        return false;
+      }
+
+      // Initialize service checks
+      services.forEach(async (service) => {
+        const cards = document.querySelectorAll(".card");
+        const card = cards[service.cardIndex];
+        const button = card.querySelector(".button-loading-active");
+        const status = card.querySelector(".status");
+        const statusText = status.querySelector("span:last-child");
+
+        const isReady = await waitForService(service.url);
+
+        if (isReady) {
+          button.classList.remove("button-loading-active");
+          button.removeAttribute("aria-disabled");
+          status.classList.add("running");
+          statusText.textContent = "Dev server running";
+        } else {
+          // Timeout - mark as failed
+          button.classList.remove("button-loading-active");
+          button.removeAttribute("aria-disabled");
+          statusText.textContent = "Dev server not responding";
+        }
+      });
+    </script>
   </body>
 </html>

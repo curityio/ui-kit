@@ -23,6 +23,8 @@ cd app
 npm start
 ```
 
+Then open your web browser and navigate to [http://localhost:5173/previewer](http://localhost:5173/previewer).
+
 This will launch a local development server where you can preview and test your customizations.
 
 ### Customising Translations
