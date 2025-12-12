@@ -23,7 +23,7 @@
     "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib",
     "predev": "npm run build --workspace @curity/ui-kit-css-lib",
     "dev": "npm run watch:css-lib & sleep 2 && concurrently \"npm run watch:styles\" \"npm run watch:ui\"",
-    "unzip-libs": "node unzip-libs.js",
+    "unzip-libs": "node unzip-libs.mjs",
     "clean-libs": "rm -rf ../../lib"
   },
   "dependencies": {
