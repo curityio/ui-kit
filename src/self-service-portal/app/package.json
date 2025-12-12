@@ -8,10 +8,10 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
+    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
     "start": "vite --config vite-previewer.config.ts --mode previewer",
     "dev": "vite open",
-    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
     "tsBuild:watch": "tsc -b -w",
@@ -29,6 +29,7 @@
     "@apollo/client": "^3.12.3",
     "@curity/ui-kit-css": "^1.0.0",
     "@curity/ui-kit-icons": "^1.0.0",
+    "@curity/ui-kit-component-library": "^1.0.0",
     "@curity/token-handler-js-assistant": "^1.2.2",
     "@reach/dialog": "^0.18.0",
     "graphql": "^16.11.0",

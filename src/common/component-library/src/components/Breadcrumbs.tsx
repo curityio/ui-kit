@@ -1,4 +1,4 @@
-import { SlashDivider } from '@components/Divider';
+import { SlashDivider } from '@components/SlashDivider';
 import { NavLink, useLocation } from 'react-router';
 
 interface BreadcrumbsProps {

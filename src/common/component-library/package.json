@@ -6,6 +6,16 @@
   "private": true,
   "license": "Apache-2.0",
   "type": "module",
+  "main": "./dist/component-library.umd.cjs",
+  "module": "./dist/component-library.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/component-library.js",
+      "require": "./dist/component-library.umd.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -22,6 +32,10 @@
     "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
     "preview": "vite preview",
     "test": "vitest"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "dependencies": {
     "@curity/ui-kit-css": "^1.0.0",
@@ -49,6 +63,7 @@
     "typescript-eslint": "^8.18.0",
     "vite": "^7.1.12",
     "vite-tsconfig-paths": "^5.1.4",
+    "vite-plugin-dts": "^3.0.0",
     "vitest": "^4.0.1"
   }
 }

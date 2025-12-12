@@ -1,24 +1,33 @@
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
-import path from 'path';
-import basicSsl from '@vitejs/plugin-basic-ssl';
+import dts from 'vite-plugin-dts';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { resolve } from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
-  server: {
-    host: true,
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    dts({
+      insertTypesEntry: true,
+      tsconfigPath: './tsconfig.app.json',
+      rollupTypes: true,
+    }),
+  ],
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'src/index.ts'),
+      name: 'CurityComponentLibrary',
+      fileName: 'component-library',
     },
-  },
-  plugins: [react(), basicSsl()],
-  test: {
-    globals: true, // Enables global `describe`, `it`, etc.
-    environment: 'jsdom', // Simulates a browser environment
-    setupFiles: './setupTests.ts',
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
+    },
   },
 });
