@@ -13,9 +13,8 @@ import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
 import { Button, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Column } from './typings';
-import { EmptyState } from '../EmptyState';
 import { useTranslation } from 'react-i18next';
-import { ConfirmButton } from '@curity/ui-kit-component-library';
+import { ConfirmButton, EmptyState } from '@curity/ui-kit-component-library';
 import { SearchField } from '@/shared/ui/search-field/SearchField';
 import { useState } from 'react';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
@@ -166,7 +165,7 @@ export const DataTable = <T,>({
                 className="center"
                 data-testid="data-table-cell-empty-state"
               >
-                <EmptyState heading={emptyStateHeading} text={emptyStateText} />
+                <EmptyState heading={emptyStateHeading} text={emptyStateText} t={toUiKitT} />
               </TableCell>
             </TableRow>
           )}

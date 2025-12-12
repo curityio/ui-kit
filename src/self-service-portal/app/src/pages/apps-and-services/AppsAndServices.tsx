@@ -18,12 +18,13 @@ import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { AuthorizedOAuthClient } from '@/shared/data-access/API';
-import { EmptyState } from '@/shared/ui/EmptyState';
+import { EmptyState, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { SearchField } from '@/shared/ui/search-field/SearchField';
 
 export const AppsAndServices = () => {
   const { t } = useTranslation();
+  const toUiKitT = toUiKitTranslation(t);
   const { session } = useAuth();
   const { data: appsResponse } = useQuery(GRAPHQL_API.GRANTED_AUTHORIZATION.QUERIES.getGrantedAuthorizationsByOwner, {
     variables: { owner: session?.idTokenClaims?.sub, first: 100000 },
@@ -88,7 +89,7 @@ export const AppsAndServices = () => {
         {appResultsFiltered?.length ? (
           appList(appResultsFiltered)
         ) : (
-          <EmptyState heading={t('apps-and-services.not-found')} />
+          <EmptyState heading={t('apps-and-services.not-found')} t={toUiKitT} />
         )}
       </Section>
     </>
