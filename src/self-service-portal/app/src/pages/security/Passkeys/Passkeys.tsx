@@ -10,21 +10,22 @@
  */
 
 import { IconAuthenticatorPasskeys } from '@curity/ui-kit-icons';
-import { DataTable, PageHeader } from '@/shared/ui';
+import { DataTable } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { Column } from '@/shared/ui/data-table/typings';
 import { useState } from 'react';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
-import { Spinner } from '@curity/ui-kit-component-library';
+import { PageHeader, Spinner, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { NewPasskeyDialog } from './NewPasskeyDialog';
 import { getFormattedDate } from '@shared/utils/date.ts';
 
 export const Passkeys = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const { session } = useAuth();
   const [search, setSearch] = useState('');
   const [showNewPasskeyDialog, setShowNewPasskeyDialog] = useState(false);
@@ -106,6 +107,7 @@ export const Passkeys = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('security.passkeys.title')}
         description={t('security.passkeys.description')}
         icon={<IconAuthenticatorPasskeys width={128} height={128} />}

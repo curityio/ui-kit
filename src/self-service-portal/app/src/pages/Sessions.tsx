@@ -10,8 +10,8 @@
  */
 
 import { IconGeneralArrowForward, IconToken } from '@curity/ui-kit-icons';
-import { DataTable, PageHeader } from '../shared/ui';
-import { Button } from '@curity/ui-kit-component-library';
+import { DataTable } from '../shared/ui';
+import { Button, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { Column } from '@/shared/ui/data-table/typings';
 
@@ -28,6 +28,7 @@ type Session = {
 
 export const Sessions = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
 
   const data: Session[] = [
     {
@@ -82,6 +83,7 @@ export const Sessions = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('session.title')}
         description={t('session.description')}
         icon={<IconToken width={128} height={128} />}

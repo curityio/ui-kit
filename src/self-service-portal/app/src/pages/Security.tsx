@@ -19,7 +19,7 @@ import {
 } from '@curity/ui-kit-icons';
 
 import { ROUTE_PATHS } from '@/routes';
-import { List, ListCell, ListRow, PageHeader } from '@shared/ui';
+import { List, ListCell, ListRow } from '@shared/ui';
 import { Section } from '@/shared/ui/section/Section';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +30,7 @@ import { Account, DEVICE_TYPES } from '@shared/data-access/API';
 import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 
 interface SecuritySectionConfig {
   name: string;
@@ -42,6 +43,7 @@ interface SecuritySectionConfig {
 
 export const Security = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const { session } = useAuth();
   const { data: accountResponse } = useQuery(GRAPHQL_API.USER_MANAGEMENT.QUERIES.getAccountByUserName, {
     variables: { userName: session?.idTokenClaims?.sub },
@@ -132,6 +134,7 @@ export const Security = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('security.title')}
         description={t('security.description')}
         icon={<IconGeneralLock width={128} height={128} />}

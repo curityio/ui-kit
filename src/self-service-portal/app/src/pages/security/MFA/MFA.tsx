@@ -10,8 +10,7 @@
  */
 
 import { IconActionMultiFactor } from '@curity/ui-kit-icons';
-import { PageHeader } from '@shared/ui';
-import { Button } from '@curity/ui-kit-component-library';
+import { Button, PageHeader, Spinner, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useAuth } from '@auth/data-access/AuthProvider';
 import { GRAPHQL_API } from '@shared/data-access/API/GRAPHQL_API.ts';
 import { useMutation, useQuery } from '@apollo/client';
@@ -32,7 +31,6 @@ import { EmailVerificationDialog } from '@/pages/security/email/EmailVerificatio
 import { PhoneNumberVerificationDialog } from '@/pages/security/phone/PhoneNumberVerificationDialog';
 import { NewTotpDeviceDialog } from '@/pages/security/NewTotpDeviceDialog';
 import { MFARecoveryCodes } from '@/pages/security/MFA/ui/MFARecoveryCodes';
-import { Spinner } from '@curity/ui-kit-component-library';
 import { MFASetupInitialState } from './feature/MFA-states/MFASetupInitialState';
 import { MFARegistrableAuthenticationFactorList } from '@/pages/security/MFA/feature/MFARegistrableAuthenticationFactorList';
 import { ProgressSteps } from '@/shared/ui/progress-steps/ProgressSteps';
@@ -59,6 +57,7 @@ export enum MFA_STATES {
 export const MFA = () => {
   const { session } = useAuth();
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const [currentMFAState, setCurrentMFAState] = useState(MFA_STATES.INITIAL);
   const {
     data: getAccountByUserNameData,
@@ -290,6 +289,7 @@ export const MFA = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('security.multi-factor-authentication.title')}
         description={t('security.multi-factor-authentication.description')}
         icon={<IconActionMultiFactor width={128} height={128} />}

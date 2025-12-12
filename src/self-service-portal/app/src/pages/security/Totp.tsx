@@ -10,7 +10,8 @@
  */
 
 import { IconAuthenticatorTotp } from '@curity/ui-kit-icons';
-import { DataTable, PageHeader } from '../../shared/ui';
+import { PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
+import { DataTable } from '../../shared/ui';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
@@ -24,6 +25,7 @@ import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 
 export const Totp = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const [isNewTotpDeviceDialogOpen, setIsNewTotpDeviceDialogOpen] = useState(false);
   const [search, setSearch] = useState('');
   const { session } = useAuth();
@@ -70,6 +72,7 @@ export const Totp = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('security.otp-authenticators.title')}
         description={t('security.otp-authenticators.description')}
         icon={<IconAuthenticatorTotp width={128} height={128} data-testid="page-header-icon" />}

@@ -10,7 +10,7 @@
  */
 
 import { useMutation, useQuery } from '@apollo/client';
-import { PageHeader } from '@/shared/ui/page-header/PageHeader';
+import { Alert, Button, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,6 @@ import { useState } from 'react';
 import { GraphQLFormattedError } from 'graphql/error/GraphQLError';
 import { PasswordPolicy } from '@/pages/Password/feature/PasswordPolicy';
 import { PasswordInput } from '@/pages/Password/ui/PasswordInput';
-import { Alert, Button } from '@curity/ui-kit-component-library';
 import toast from 'react-hot-toast';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
@@ -34,6 +33,7 @@ interface PasswordUpdateBEValidationError extends GraphQLFormattedError {
 
 export const Password = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const { session } = useAuth();
   const userName = session?.idTokenClaims?.sub;
   const [passwordUpdateValue, setPasswordUpdateValue] = useState('');
@@ -98,6 +98,7 @@ export const Password = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('security.password.title')}
         description={t('security.password.description')}
         icon={<IconCapabilityResourceOwnerPasswordCredentials width={128} height={128} />}

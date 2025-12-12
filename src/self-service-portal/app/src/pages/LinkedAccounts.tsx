@@ -11,7 +11,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { IconActionAutoLinkAccount } from '@curity/ui-kit-icons';
-import { DataTable, PageHeader } from '@/shared/ui';
+import { DataTable } from '@/shared/ui';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { useMutation, useQuery } from '@apollo/client';
@@ -19,9 +19,11 @@ import { LinkedAccount } from '@/shared/data-access/API';
 import { Column } from '@/shared/ui/data-table/typings';
 import { getFormattedDate } from '@shared/utils/date.ts';
 import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 
 export const LinkedAccounts = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const linkedAccountsTableColumns: Column<LinkedAccount>[] = [
     { key: 'value', label: t('linked-accounts.foreign-account-username') },
     { key: 'domain', label: t('linked-accounts.foreign-account-domain') },
@@ -62,6 +64,7 @@ export const LinkedAccounts = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('linked-accounts.title')}
         description={t('linked-accounts.description')}
         icon={<IconActionAutoLinkAccount width={128} height={128} />}

@@ -10,7 +10,7 @@
  */
 
 import { IconAuthenticatorDefault, IconGeneralArrowForward, IconUserDataSources } from '@curity/ui-kit-icons';
-import { List, ListCell, ListRow, PageHeader } from '../../shared/ui';
+import { List, ListCell, ListRow } from '../../shared/ui';
 import { Section } from '@/shared/ui/section/Section';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Link } from 'react-router';
@@ -18,7 +18,7 @@ import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { AuthorizedOAuthClient } from '@/shared/data-access/API';
-import { EmptyState, toUiKitTranslation } from '@curity/ui-kit-component-library';
+import { EmptyState, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { SearchField } from '@/shared/ui/search-field/SearchField';
 
@@ -65,6 +65,7 @@ export const AppsAndServices = () => {
   return (
     <>
       <PageHeader
+        t={uiKitT}
         title={t('apps-and-services.title')}
         description={t('apps-and-services.description')}
         icon={<IconUserDataSources width={128} height={128} data-testid="page-header-icon" />}

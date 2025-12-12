@@ -1,14 +1,16 @@
-import { PageHeader } from '@/shared/ui';
+import { PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { IconGeneralArrowBack, IconGeneralEyeHide } from '@curity/ui-kit-icons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
 export const FeatureNotAvailable = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
 
   return (
     <div className="flex flex-center justify-center flex-column py4" data-testid="feature-not-available">
       <PageHeader
+        t={uiKitT}
         title={t('feature-not-available')}
         description={t('feature-missing')}
         icon={<IconGeneralEyeHide width={128} height={128} />}
