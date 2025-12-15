@@ -62,6 +62,7 @@ You can also pass props like this
 - `IconGeneralClose`
 - `IconGeneralDownload`
 - `IconGeneralEdit`
+- `IconGeneralEmptyStateIcon`
 - `IconGeneralEyeHide`
 - `IconGeneralKebabMenu`
 - `IconGeneralLocation`

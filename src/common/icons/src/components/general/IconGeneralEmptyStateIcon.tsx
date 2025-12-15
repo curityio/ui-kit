@@ -1,14 +1,15 @@
-interface EmptyStateIconProps {
-  width?: string;
-  height?: string;
+import { SVGProps } from 'react';
+
+interface SvgIconGeneralEmptyStateIconProps extends SVGProps<SVGSVGElement> {
   ariaLabel?: string;
 }
 
-export const EmptyStateIcon = ({
+const SvgIconGeneralEmptyStateIcon = ({
   width = '100%',
   height = '100%',
   ariaLabel = 'Empty state icon',
-}: EmptyStateIconProps) => (
+  ...props
+}: SvgIconGeneralEmptyStateIconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 375.38 250.76"
@@ -16,6 +17,7 @@ export const EmptyStateIcon = ({
     height={height}
     role="img"
     aria-label={ariaLabel}
+    {...props}
   >
     <g opacity="0.1">
       <rect
@@ -99,3 +101,5 @@ export const EmptyStateIcon = ({
     </g>
   </svg>
 );
+
+export default SvgIconGeneralEmptyStateIcon;
