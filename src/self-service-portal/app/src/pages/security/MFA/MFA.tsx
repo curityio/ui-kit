@@ -341,6 +341,7 @@ export const MFA = () => {
   );
 };
 
+// TODO: Consider refactoring to use getMFAState helper function
 const getCurrentMFAState = (
   currentMFAState: MFA_STATES,
   optInMfaData?: OptinMfa | null,
