@@ -5,7 +5,6 @@ Customize the look and feel of your applications.
 Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Curity Identity Server Templates, Self Service Portal, Login Web App,  Curity CSS, and Curity UI Icons React.
 
 ## Prerequisites
-- Java v21 or later
 - Node.js (version as specified in the `.nvmrc` file)
 
 ## Setup
