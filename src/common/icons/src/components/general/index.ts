@@ -14,3 +14,4 @@ export { default as IconGeneralPlane } from './IconGeneralPlane';
 export { default as IconGeneralPlus } from './IconGeneralPlus';
 export { default as IconGeneralTrash } from './IconGeneralTrash';
 export { default as IconGeneralWarning } from './IconGeneralWarning';
+export { default as IconGeneralEmptyStateIcon } from './IconGeneralEmptyStateIcon';
