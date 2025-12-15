@@ -21,11 +21,12 @@ export default defineConfig({
       fileName: 'component-library',
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'react-router'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react-router': 'ReactRouter',
         },
       },
     },
