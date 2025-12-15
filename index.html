@@ -8,7 +8,7 @@
       type="image/svg+xml"
       href="./src/common/assets/images/favicon.png"
     />
-    <link rel="stylesheet" href="./src/common/css/lib/dist/index.css" />
+    <link rel="stylesheet" href="./src/common/css/lib/src/curity-theme.css" />
     <title>Curity UI Kit</title>
     <style>
       :root {
@@ -194,7 +194,79 @@
       .card p {
         color: #666;
         line-height: 1.5;
-        /* text-align: center; */
+      }
+
+      .button {
+        --y-tiny: 0.75;
+        --x-tiny: 1;
+
+        --y-small: 0.85;
+        --x-small: 1;
+
+        --y-medium: 1.2;
+        --x-medium: 1.5;
+
+        --y-large: 1.25;
+        --x-large: 1.75;
+
+        --y-default: var(--y-medium);
+        --x-default: var(--x-medium);
+
+        align-items: center;
+        background-color: var(--button-background-color);
+        border: none;
+        border-radius: var(--button-border-radius);
+        cursor: pointer;
+        display: inline-flex;
+        font-family: var(--type-sans-bold);
+        font-size: var(--button-font-size);
+        -webkit-font-smoothing: antialiased;
+        font-weight: var(--type-weight-bold);
+        gap: var(--space-1);
+        justify-content: center;
+
+        min-height: 44px;
+        height: fit-content;
+        padding-block-start: calc(var(--button-padding-y) * var(--y-default));
+        padding-block-end: calc(var(--button-padding-y) * var(--y-default));
+        padding-inline-start: calc(var(--button-padding-x) * var(--x-default));
+        padding-inline-end: calc(var(--button-padding-x) * var(--x-default));
+
+        transition:
+          background-color 200ms,
+          transform 200ms,
+          color 200ms,
+          box-shadow 200ms,
+          border-color 200ms;
+      }
+
+      a:is(.button) {
+        text-decoration: none;
+      }
+
+      .button-primary-outline {
+        background-color: transparent;
+        border: 1px solid var(--button-border-color);
+        color: var(--button-color);
+      }
+
+      .button-primary-outline:hover,
+      .button-primary-outline:active {
+        background-color: var(--button-color);
+        color: white;
+      }
+
+      .button-medium {
+        font-size: calc(var(--button-font-size) * var(--y-medium));
+        min-height: 44px;
+        padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
+        padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
+        padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
+        padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
+
+        &:is([type="submit"]) {
+          color: white;
+        }
       }
 
       .commands {
@@ -400,7 +472,7 @@
           />
 
           <h3>Prerequisites</h3>
-          <p>Java 21+ and Node.js v22+</p>
+          <p>Node.js (version as specified in the `.nvmrc` file)</p>
           <h4>Read more</h4>
           <ul>
             <li>
