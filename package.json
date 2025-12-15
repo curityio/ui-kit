@@ -34,7 +34,8 @@
     "build:lwa": "npm run -w src/login-web-app/app build",
     "build:css": "npm run -w src/common/css build",
     "build:icons": "npm run -w src/common/icons build",
-    "build": "npm run build -ws --if-present"
+    "build": "npm run build -ws --if-present",
+    "clean": "npm run clean -ws --if-present"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
