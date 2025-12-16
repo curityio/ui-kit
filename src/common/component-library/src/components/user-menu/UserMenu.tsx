@@ -1,14 +1,14 @@
-import { TranslationFunction } from '@/types/util.type.ts';
-import { Button } from '@components/Button';
+import { Button } from '@curity/ui-kit-component-library';
 import { IconGeneralChevron, IconGeneralLock } from '@curity/ui-kit-icons';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type UserMenuProps = {
   username?: string;
   onSignOut: () => void;
-  t: TranslationFunction;
 };
-export const UserMenu = ({ username, onSignOut, t }: UserMenuProps) => {
+export const UserMenu = ({ username, onSignOut }: UserMenuProps) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const menuContainerRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -51,7 +51,7 @@ export const UserMenu = ({ username, onSignOut, t }: UserMenuProps) => {
         aria-controls="user-dropdown-menu"
         data-testid="user-menu-button"
       >
-        <span className={`user-menu-username`}>{username}</span>
+        <span className="user-menu-username">{username}</span>
         <span className={`user-menu-chevron ${isOpen ? 'user-menu-chevron-open' : ''}`}>
           <IconGeneralChevron width={16} height={16} aria-hidden="true" />
         </span>
@@ -59,7 +59,7 @@ export const UserMenu = ({ username, onSignOut, t }: UserMenuProps) => {
       {isOpen && (
         <div
           id="user-dropdown-menu"
-          className={`flex flex-column flex-gap-0 br-8 user-menu ${isOpen ? 'user-menu-open' : ''}`}
+          className={`flex flex-column flex-gap-0 br-8 user-menu ${isOpen ? `user-menu-open` : ''}`}
           role="menu"
           tabIndex={-1}
         >
