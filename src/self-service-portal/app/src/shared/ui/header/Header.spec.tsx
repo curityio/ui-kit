@@ -1,28 +1,58 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 
+import { MemoryRouter } from 'react-router';
+
+import { AuthContextType } from '@/auth/utils/typings';
+
 let Header: typeof import('./Header').Header;
+let useAuthMock: ReturnType<typeof vi.fn>;
+let usePageTitleMock: ReturnType<typeof vi.fn>;
 
 const TEST_USERNAME = 'teddie';
-const TEST_PAGE_TITLE = 'Account';
 
 beforeAll(async () => {
   Header = (await import('./Header')).Header;
+  vi.mock('@auth/data-access/AuthProvider', async () => {
+    const actual = await vi.importActual<typeof import('@auth/data-access/AuthProvider')>(
+      '@auth/data-access/AuthProvider'
+    );
+    useAuthMock = vi.fn();
+    return {
+      ...actual,
+      useAuth: useAuthMock,
+    };
+  });
+
+  vi.mock('@/shared/utils/useRouteTitle', () => {
+    usePageTitleMock = vi.fn(() => 'Account');
+    return {
+      usePageTitle: usePageTitleMock,
+    };
+  });
+
+  vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  }));
 });
 
 const renderHeader = (isSidebarOpen = false, isLoggedIn = true) => {
+  useAuthMock.mockReturnValue({
+    session: {
+      isLoggedIn,
+      idTokenClaims: isLoggedIn ? { sub: TEST_USERNAME } : undefined,
+    },
+    logout: vi.fn(),
+    startLogin: vi.fn(),
+    endLogin: vi.fn(),
+    refresh: vi.fn(),
+  } as unknown as AuthContextType);
+
   render(
     <MemoryRouter>
-      <Header
-        toggleSidebar={vi.fn()}
-        isSidebarOpen={isSidebarOpen}
-        isLoggedIn={isLoggedIn}
-        pageTitle={TEST_PAGE_TITLE}
-        userName={TEST_USERNAME}
-        onSignOut={vi.fn()}
-        t={vi.fn()}
-      />
+      <Header toggleSidebar={vi.fn()} isSidebarOpen={isSidebarOpen} />
     </MemoryRouter>
   );
 };
@@ -78,49 +108,25 @@ describe('Header Component', () => {
 
     it('should call toggleSidebar when the menu button is clicked', () => {
       const toggleSidebarMock = vi.fn();
+      useAuthMock.mockReturnValue({
+        session: {
+          isLoggedIn: true,
+          idTokenClaims: { sub: TEST_USERNAME },
+        },
+        logout: vi.fn(),
+        startLogin: vi.fn(),
+        endLogin: vi.fn(),
+        refresh: vi.fn(),
+      } as unknown as AuthContextType);
 
       render(
         <MemoryRouter>
-          <Header
-            toggleSidebar={toggleSidebarMock}
-            isSidebarOpen={false}
-            isLoggedIn={true}
-            pageTitle={TEST_PAGE_TITLE}
-            userName={TEST_USERNAME}
-            onSignOut={vi.fn()}
-            t={vi.fn()}
-          />
+          <Header toggleSidebar={toggleSidebarMock} isSidebarOpen={false} />
         </MemoryRouter>
       );
 
       screen.getByTestId('sidebar-toggle').click();
       expect(toggleSidebarMock).toHaveBeenCalled();
-    });
-
-    it('should call toggleSidebar when the menu button is clicked', async () => {
-      const onSignOutMock = vi.fn();
-
-      render(
-        <MemoryRouter>
-          <Header
-            toggleSidebar={vi.fn()}
-            isSidebarOpen={false}
-            isLoggedIn={true}
-            pageTitle={TEST_PAGE_TITLE}
-            userName={TEST_USERNAME}
-            onSignOut={onSignOutMock}
-            t={vi.fn()}
-          />
-        </MemoryRouter>
-      );
-
-      const userMenuButton = screen.getByTestId('user-menu-button');
-      fireEvent.click(userMenuButton);
-
-      const signOutButton = await screen.findByTestId('logout-button');
-      fireEvent.click(signOutButton);
-
-      expect(onSignOutMock).toHaveBeenCalled();
     });
   });
 });

@@ -9,8 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { List, ListRow } from '@/shared/ui';
-import { Button } from '@curity/ui-kit-component-library';
+import { Button, List, ListRow, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 
 export interface RecoveryCodesProps {
@@ -19,6 +18,7 @@ export interface RecoveryCodesProps {
 
 export const MFARecoveryCodes = ({ codes }: RecoveryCodesProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
 
   const handlePrint = () => {
     window.print();
@@ -43,7 +43,7 @@ export const MFARecoveryCodes = ({ codes }: RecoveryCodesProps) => {
       <p>{t('security.multi-factor-authentication.keep-recovery-note')}</p>
       <List className="m0 px2 py3 grid-container" md-columns="2" data-testid="mfa-recovery-codes-list">
         {codes.map((code, index) => (
-          <ListRow key={index}>
+          <ListRow t={uiKitT} key={index}>
             <code className="bg-white h4" data-testid="mfa-recovery-codes-list-code">
               {code}
             </code>

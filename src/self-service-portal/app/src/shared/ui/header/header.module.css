@@ -1,0 +1,28 @@
+.header {
+  height: var(--header-height);
+  top: 0;
+  left: 0;
+  border-bottom: 1px solid var(--color-grey-light);
+  position: fixed;
+  background-color: white;
+  z-index: 2;
+  width: max-content;
+  white-space: nowrap;
+  width: 100%
+}
+
+@media (width >=64em) {
+  .header button[aria-controls='sidebar-navigation'] {
+    display: none;
+  }
+}
+
+.header a {
+  --color-link: black;
+  --color-link-hover: black;
+}
+
+.header button,
+.header svg {
+  flex-shrink: 0;
+}

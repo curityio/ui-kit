@@ -12,37 +12,30 @@
 import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icons';
 import { Link } from 'react-router';
 import { useEffect } from 'react';
-import { Button } from '../Button';
-import { Breadcrumbs } from '@components/Breadcrumbs';
+import { useAuth } from '@/auth/data-access/AuthProvider';
+import { Breadcrumbs, Button } from '@curity/ui-kit-component-library';
+import classes from './header.module.css';
+import { useTranslation } from 'react-i18next';
+import { usePageTitle } from '@/shared/utils/useRouteTitle';
 import { UserMenu } from '../user-menu/UserMenu';
-import { TranslationFunction } from '@/types/util.type.ts';
 
 interface HeaderProps {
-  isSidebarOpen: boolean;
-  isLoggedIn: boolean;
-  pageTitle: string;
-  userName: string;
   toggleSidebar: () => void;
-  onSignOut: () => void;
-  t: TranslationFunction;
+  isSidebarOpen: boolean;
 }
 
-export const Header = ({
-  toggleSidebar,
-  isSidebarOpen,
-  pageTitle,
-  onSignOut,
-  isLoggedIn,
-  userName,
-  t,
-}: HeaderProps) => {
+export const Header = ({ toggleSidebar, isSidebarOpen }: HeaderProps) => {
+  const { t } = useTranslation();
+  const pageTitle = usePageTitle();
+  const authContext = useAuth();
+
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle, t]);
 
   return (
     <header
-      className="header px2 flex flex-center flex-gap-1 justify-between w100"
+      className={`${classes.header} px2 flex flex-center flex-gap-1 justify-between w100`}
       role="banner"
       aria-label={`${t('header')}`}
     >
@@ -54,7 +47,9 @@ export const Header = ({
       </div>
 
       <div className="flex flex-center flex-gap-1 nowrap">
-        {isLoggedIn && <UserMenu username={userName} onSignOut={onSignOut} t={t} />}
+        {authContext?.session?.isLoggedIn && (
+          <UserMenu username={authContext?.session?.idTokenClaims?.sub} onSignOut={authContext.logout} />
+        )}
 
         <Button
           icon={<IconGeneralKebabMenu width={24} height={24} />}
