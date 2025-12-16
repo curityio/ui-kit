@@ -1,5 +1,5 @@
-import { AuthorizedScope, AuthorizedClaim } from '@/shared/data-access/API';
-import { List, ListRow, ListCell } from '@/shared/ui';
+import { AuthorizedClaim, AuthorizedScope } from '@/shared/data-access/API';
+import { List, ListCell, ListRow, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 
 interface AppsAndServicesDetailListProps {
@@ -8,12 +8,13 @@ interface AppsAndServicesDetailListProps {
 
 export const AppsAndServicesDetailList = ({ collection, ...props }: AppsAndServicesDetailListProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
 
   return (
     <List {...props}>
       {collection?.length ? (
         collection.map((element, index) => (
-          <ListRow key={index} className="flex flex-gap-3">
+          <ListRow t={uiKitT} key={index} className="flex flex-gap-3">
             <ListCell>
               <h3>{element.localizedName || element.name}</h3>
             </ListCell>
@@ -21,7 +22,7 @@ export const AppsAndServicesDetailList = ({ collection, ...props }: AppsAndServi
           </ListRow>
         ))
       ) : (
-        <ListRow>
+        <ListRow t={uiKitT}>
           <ListCell>{t('No results found')}</ListCell>
         </ListRow>
       )}

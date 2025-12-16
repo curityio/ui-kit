@@ -1,5 +1,4 @@
-import { Button } from '@curity/ui-kit-component-library';
-import { ListCell, ListRow } from '@/shared/ui';
+import { Button, ListCell, ListRow, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { IconGeneralArrowForward } from '@curity/ui-kit-icons';
@@ -20,6 +19,7 @@ interface ContactItemProps {
 
 export const ContactItem = ({ title, icon, collection, link, account, onVerify, onChange }: ContactItemProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const deviceToShow = getPrimaryOrFirstDevice(account?.[collection] as StringMultiValuedValue[]);
   const deviceToShowIsVerified = deviceToShow?.type === 'verified';
 
@@ -114,7 +114,7 @@ export const ContactItem = ({ title, icon, collection, link, account, onVerify, 
   };
 
   return (
-    <ListRow>
+    <ListRow t={uiKitT}>
       <ListCell className="flex flex-center flex-gap-1 flex-30">
         {icon}
         <label>{title}</label>

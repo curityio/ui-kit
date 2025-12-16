@@ -10,7 +10,6 @@
  */
 
 import { IconAuthenticatorDefault, IconGeneralArrowForward, IconUserDataSources } from '@curity/ui-kit-icons';
-import { List, ListCell, ListRow } from '../../shared/ui';
 import { Section } from '@/shared/ui/section/Section';
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { Link } from 'react-router';
@@ -18,7 +17,7 @@ import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { AuthorizedOAuthClient } from '@/shared/data-access/API';
-import { EmptyState, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
+import { EmptyState, List, ListCell, ListRow, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
 import { SearchField } from '@/shared/ui/search-field/SearchField';
 
@@ -40,7 +39,7 @@ export const AppsAndServices = () => {
       <List data-testid="apps-and-services-list">
         {appList?.map((item, index) => (
           <Link to={item.id} key={index}>
-            <ListRow className="flex flex-center justify-between flex-gap-2 w100 button-transparent p2">
+            <ListRow t={uiKitT} className="flex flex-center justify-between flex-gap-2 w100 button-transparent p2">
               <ListCell>
                 {item?.logoUri ? (
                   <img src={item.logoUri} alt={item.id} className="block w-3 h-3" />

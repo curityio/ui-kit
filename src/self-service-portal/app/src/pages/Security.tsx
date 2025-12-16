@@ -19,7 +19,6 @@ import {
 } from '@curity/ui-kit-icons';
 
 import { ROUTE_PATHS } from '@/routes';
-import { List, ListCell, ListRow } from '@shared/ui';
 import { Section } from '@/shared/ui/section/Section';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +31,7 @@ import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { getMFAState } from '@/pages/security/MFA/utils/getMFAState';
 import { MFA_STATES } from '@/pages/security/MFA/MFA';
-import { PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
+import { List, ListCell, ListRow, PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 
 interface SecuritySectionConfig {
   name: string;
@@ -151,6 +150,7 @@ export const Security = () => {
             <UiConfigIf key={index} resources={section.resources} allowedOperations={[UI_CONFIG_OPERATIONS.READ]}>
               <Link to={`/${section?.link}`} key={index}>
                 <ListRow
+                  t={uiKitT}
                   key={index}
                   className="sm-flex flex-center justify-between flex-gap-2 w100 button-transparent p2"
                   data-testid={`security-${section?.testId}-list-row`}

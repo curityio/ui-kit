@@ -12,13 +12,12 @@
 import { IconFacilitiesEmail, IconFacilitiesSms, IconGeneralLocation } from '@curity/ui-kit-icons';
 import { Section } from '@/shared/ui/section/Section';
 import { Account } from '@/shared/data-access/API';
-import { List } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { EmailVerificationDialog } from '@/pages/security/email/EmailVerificationDialog';
 import { GRAPHQL_API } from '@/shared/data-access/API/GRAPHQL_API';
 import { useQuery } from '@apollo/client';
 import { useAuth } from '@/auth/data-access/AuthProvider';
-import { Spinner } from '@curity/ui-kit-component-library';
+import { List, Spinner } from '@curity/ui-kit-component-library';
 import { useState } from 'react';
 import { PhoneNumberVerificationDialog } from '@/pages/security/phone/PhoneNumberVerificationDialog';
 import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';

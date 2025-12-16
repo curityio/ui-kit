@@ -1,5 +1,5 @@
 import { AUTHENTICATED_ROUTES, USSPRouteConfig } from '@/routes';
-import { List, ListCell, ListRow } from '@/shared/ui';
+import { List, ListCell, ListRow, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { NavLink } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
@@ -7,6 +7,7 @@ import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 
 export const Sidebar = () => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
 
   const sidebarItems = AUTHENTICATED_ROUTES.filter(route => !!route.sidebarTitle);
 
@@ -20,7 +21,7 @@ export const Sidebar = () => {
             allowedOperations={[UI_CONFIG_OPERATIONS.READ]}
             displayWithPartialResourcePermissions={true}
           >
-            <ListRow key={index} className="block" role="treeitem" aria-expanded="true">
+            <ListRow t={uiKitT} key={index} className="block" role="treeitem" aria-expanded="true">
               <ListCell className="block">
                 <NavLink
                   to={item.path!}
@@ -50,7 +51,7 @@ export const Sidebar = () => {
                               : [UI_CONFIG_OPERATIONS.READ]
                           }
                         >
-                          <ListRow key={childIndex} role="treeitem">
+                          <ListRow t={uiKitT} key={childIndex} role="treeitem">
                             <ListCell className="block w100">
                               <NavLink
                                 to={`${item.path!}/${childItem.path!}`}
