@@ -31,7 +31,7 @@ Open your browser and navigate to `http://localhost:5173/previewer` to access th
 ## Development
 To develop and test the application against a real Identity Server instance, you need to set up a development environment:
 1. Configure an Identity Server instance with the Self-Service Portal enabled.
-   Follow the instructions in the [Identity Server documentation](https://curity.io/docs/idsvr/latest/application-service-admin-guide/applications/self-service-portal.html) to set up the SSP.
+   Follow the instructions in the [Identity Server documentation](https://curity.io/docs/identity-server/profiles/application-profile/applications/user-self-service-application/) to set up the SSP.
 2. Copy the `.env-example` to e.g. `.env.local` and update the environment variables to point to your Identity Server instance and configure other settings as needed.
 3. Start the development server with the following command:
 
