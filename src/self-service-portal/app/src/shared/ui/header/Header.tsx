@@ -9,14 +9,13 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icons';
-import { Link } from 'react-router';
-import { useEffect } from 'react';
 import { useAuth } from '@/auth/data-access/AuthProvider';
-import { Breadcrumbs, Button } from '@curity/ui-kit-component-library';
-import classes from './header.module.css';
-import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/shared/utils/useRouteTitle';
+import { Breadcrumbs, Button } from '@curity/ui-kit-component-library';
+import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icons';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { UserMenu } from '../user-menu/UserMenu';
 
 interface HeaderProps {
@@ -35,7 +34,7 @@ export const Header = ({ toggleSidebar, isSidebarOpen }: HeaderProps) => {
 
   return (
     <header
-      className={`${classes.header} px2 flex flex-center flex-gap-1 justify-between w100`}
+      className="header px2 flex flex-center flex-gap-1 justify-between w100"
       role="banner"
       aria-label={`${t('header')}`}
     >
