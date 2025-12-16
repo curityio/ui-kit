@@ -1,14 +1,14 @@
-import { Button } from '@curity/ui-kit-component-library';
+import { Button } from '@components/Button';
 import { IconGeneralChevron, IconGeneralLock } from '@curity/ui-kit-icons';
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { TranslationFunction } from '@/types/util.type.ts';
 
 type UserMenuProps = {
   username?: string;
   onSignOut: () => void;
+  t: TranslationFunction;
 };
-export const UserMenu = ({ username, onSignOut }: UserMenuProps) => {
-  const { t } = useTranslation();
+export const UserMenu = ({ username, onSignOut, t }: UserMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuContainerRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
