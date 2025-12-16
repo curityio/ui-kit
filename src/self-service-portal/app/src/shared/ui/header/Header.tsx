@@ -11,12 +11,11 @@
 
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { usePageTitle } from '@/shared/utils/useRouteTitle';
-import { Breadcrumbs, Button } from '@curity/ui-kit-component-library';
+import { Breadcrumbs, Button, UserMenu } from '@curity/ui-kit-component-library';
 import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icons';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { UserMenu } from '../user-menu/UserMenu';
 
 interface HeaderProps {
   toggleSidebar: () => void;
