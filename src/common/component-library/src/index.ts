@@ -11,7 +11,6 @@ export { Spinner } from './components/Spinner';
 export { SuccessCheckmark } from './components/SuccessCheckmark';
 export { Dialog } from './components/dialog/Dialog';
 export { Header } from './components/header/Header';
-export { EmptyStateIcon } from './components/icons/EmptyStateIcon';
 export { Input } from './components/input/Input';
 export { List } from './components/list/list/List';
 export { ListCell } from './components/list/list-cell/ListCell';
