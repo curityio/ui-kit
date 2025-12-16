@@ -30,6 +30,8 @@ import { Account, DEVICE_TYPES } from '@shared/data-access/API';
 import { getPrimaryOrFirstDevice } from '@/shared/utils/get-primary-or-first-device';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
 import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { getMFAState } from '@/pages/security/MFA/utils/getMFAState';
+import { MFA_STATES } from '@/pages/security/MFA/MFA';
 import { PageHeader, toUiKitTranslation } from '@curity/ui-kit-component-library';
 
 interface SecuritySectionConfig {
@@ -83,8 +85,9 @@ export const Security = () => {
     }
   };
 
-  const getMFAMessage = (account: Account | null | undefined) =>
-    account?.mfaOptIn && !account?.mfaOptIn.preferences
+  const currentMFAState = getMFAState(account?.mfaOptIn);
+  const MFAMessage =
+    currentMFAState === MFA_STATES.OPTED_IN
       ? t('security.multi-factor-authentication.on')
       : t('security.multi-factor-authentication.inactive');
 
@@ -123,7 +126,7 @@ export const Security = () => {
     },
     {
       name: t('security.multi-factor-authentication.title'),
-      message: getMFAMessage(account),
+      message: MFAMessage,
       icon: IconGeneralLock,
       link: `${ROUTE_PATHS.SECURITY}/${ROUTE_PATHS.SECURITY_MFA}`,
       testId: 'mfa',

@@ -20,7 +20,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "generate-graphql-typings-queries-and-mutations": "graphql-codegen --config graphql-codegen-config.ts --verbose"
+    "generate-graphql-typings-queries-and-mutations": "graphql-codegen --config graphql-codegen-config.ts --verbose",
+    "clean": "rm -rf ./dist"
   },
   "files": [
     "dist"

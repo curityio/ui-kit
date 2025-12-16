@@ -9,8 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { EmptyStateIcon } from '@components/icons/EmptyStateIcon';
-import { IconGeneralPlus } from '@curity/ui-kit-icons';
+import { IconGeneralPlus, IconGeneralEmptyStateIcon } from '@curity/ui-kit-icons';
 import { TranslationFunction } from '@/types/util.type.ts';
 
 interface EmptyStateProps {
@@ -25,7 +24,7 @@ export const EmptyState = ({ text, heading, action, callToAction, t }: EmptyStat
   return (
     <section className="center" role="region" aria-labelledby="empty-state-heading" data-testid="empty-state">
       <div className="center">
-        <EmptyStateIcon width="300" height="300" ariaLabel={t('empty-state-icon')} />
+        <IconGeneralEmptyStateIcon width="300" height="300" ariaLabel={t('empty-state-icon')} />
       </div>
       <h2 id="empty-state-heading" className="mt0">
         {heading}

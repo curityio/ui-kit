@@ -20,6 +20,7 @@ declare module '@icons' {
   export { default as IconGeneralLocation } from './@icons/components/general/IconGeneralLocation';
   export { default as IconGeneralLock } from './@icons/components/general/IconGeneralLock';
   export { default as IconGeneralLockUnlocked } from './@icons/components/general/IconGeneralLockUnlocked';
+  export { default as IconGeneralEmptyStateIcon } from './@icons/components/general/IconGeneralEmptyStateIcon';
   export { default as IconGeneralPlane } from './@icons/components/general/IconGeneralPlane';
   export { default as IconGeneralPlus } from './@icons/components/general/IconGeneralPlus';
   export { default as IconGeneralTrash } from './@icons/components/general/IconGeneralTrash';
