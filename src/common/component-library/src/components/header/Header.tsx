@@ -13,7 +13,6 @@ import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icon
 import { Link } from 'react-router';
 import { useEffect } from 'react';
 import { Button } from '../Button';
-import classes from './header.module.css';
 import { Breadcrumbs } from '@components/Breadcrumbs';
 import { UserMenu } from '../user-menu/UserMenu';
 import { TranslationFunction } from '@/types/util.type.ts';
@@ -43,7 +42,7 @@ export const Header = ({
 
   return (
     <header
-      className={`${classes.header} px2 flex flex-center flex-gap-1 justify-between w100`}
+      className="header px2 flex flex-center flex-gap-1 justify-between w100"
       role="banner"
       aria-label={`${t('header')}`}
     >
