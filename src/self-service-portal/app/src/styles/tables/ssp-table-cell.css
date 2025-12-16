@@ -1,4 +1,4 @@
-.table-cell {
+td {
 	padding: var(--space-2);
 	border: none;
 	word-wrap: break-word;
@@ -6,7 +6,7 @@
 	hyphens: auto;
 }
 
-.table-cell button {
+td button {
 	white-space: nowrap;
 	flex-wrap: nowrap;
 	flex-shrink: 0;

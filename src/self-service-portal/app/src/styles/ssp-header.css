@@ -8,6 +8,7 @@
   z-index: 2;
   width: max-content;
   white-space: nowrap;
+  width: 100%
 }
 
 @media (width >=64em) {

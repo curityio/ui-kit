@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { IconGeneralChevron, IconGeneralLock } from '@curity/ui-kit-icons';
 import { Button } from '@curity/ui-kit-component-library';
 import { useTranslation } from 'react-i18next';
-import styles from './user-menu.module.css';
 
 type UserMenuProps = {
   username?: string;
@@ -52,20 +51,19 @@ export const UserMenu = ({ username, onSignOut }: UserMenuProps) => {
         aria-controls="user-dropdown-menu"
         data-testid="user-menu-button"
       >
-        <span className={`${styles['user-menu-username']}`}>{username}</span>
-        <span className={`${styles['user-menu-chevron']} ${isOpen ? styles['user-menu-chevron-open'] : ''}`}>
+        <span className="user-menu-username">{username}</span>
+        <span className={`user-menu-chevron ${isOpen ? 'user-menu-chevron-open' : ''}`}>
           <IconGeneralChevron width={16} height={16} aria-hidden="true" />
         </span>
       </Button>
       {isOpen && (
         <div
           id="user-dropdown-menu"
-          className={`flex flex-column flex-gap-0 br-8 ${styles['user-menu']} ${
-            isOpen ? styles['user-menu-open'] : ''
-          }`}
+          className={`flex flex-column flex-gap-0 br-8 user-menu ${isOpen ? 'user-menu-open' : ''}`}
           role="menu"
           tabIndex={-1}
         >
+          {isOpen && 'isopen'}
           <Button
             icon={<IconGeneralLock width={24} height={24} aria-hidden="true" />}
             title={t('sign-out')}
