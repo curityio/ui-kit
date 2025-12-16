@@ -14,6 +14,10 @@ export default defineConfig({
       rollupTypes: true,
     }),
   ],
+  server: {
+    open: false,
+    port: 5175,
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
