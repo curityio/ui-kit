@@ -18,6 +18,6 @@ export { PageHeader } from './components/page-header/PageHeader';
 export { ProgressSteps } from './components/progress-steps/ProgressSteps';
 export { SearchField } from './components/search-field/SearchField';
 export { Section } from './components/section/Section';
-export { Table } from './components/table/Table';
+export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/table/Table';
 export { Toggle } from './components/toggle/Toggle';
 export { UserMenu } from './components/user-menu/UserMenu';

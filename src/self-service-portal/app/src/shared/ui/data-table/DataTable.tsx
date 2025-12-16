@@ -9,15 +9,25 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@curity/ui-kit-icons';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '..';
-import { Button, ConfirmButton, EmptyState, toUiKitTranslation } from '@curity/ui-kit-component-library';
-import { Column } from './typings';
-import { useTranslation } from 'react-i18next';
 import { SearchField } from '@/shared/ui/search-field/SearchField';
-import { useState } from 'react';
-import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
 import { UiConfigIf } from '@/ui-config/feature/UiConfigIf';
+import { UI_CONFIG_OPERATIONS, UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import {
+  Button,
+  ConfirmButton,
+  EmptyState,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  toUiKitTranslation,
+} from '@curity/ui-kit-component-library';
+import { IconGeneralCheckmarkCircled, IconGeneralPlus, IconGeneralTrash } from '@curity/ui-kit-icons';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Column } from './typings';
 
 interface DataTableProps<T> {
   columns: Column<T>[];
