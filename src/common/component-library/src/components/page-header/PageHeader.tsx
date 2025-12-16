@@ -9,9 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
+import { TranslationFunction } from '@/types/util.type.ts';
 import { JSX } from 'react';
 import classes from './page-header.module.css';
-import { TranslationFunction } from '@/types/util.type.ts';
 
 interface PageHeaderProps {
   title: string;

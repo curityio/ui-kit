@@ -1,9 +1,9 @@
-import { Dialog as ReachDialog, DialogProps } from '@reach/dialog';
-import { ReactNode } from 'react';
-import styles from './Dialog.module.css';
+import { TranslationFunction } from '@/types/util.type.ts';
 import { Button } from '@components/Button';
 import { IconGeneralClose } from '@curity/ui-kit-icons';
-import { TranslationFunction } from '@/types/util.type.ts';
+import { DialogProps, Dialog as ReachDialog } from '@reach/dialog';
+import { ReactNode } from 'react';
+import styles from './Dialog.module.css';
 
 export interface CurityDialogProps {
   isOpen: boolean;

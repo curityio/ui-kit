@@ -14,7 +14,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/component-library.js",
       "require": "./dist/component-library.umd.cjs"
-    }
+    },
+    "./dist/component-library.css": "./dist/component-library.css"
   },
   "files": [
     "dist"

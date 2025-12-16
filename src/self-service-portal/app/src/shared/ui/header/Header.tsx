@@ -11,11 +11,12 @@
 
 import { useAuth } from '@/auth/data-access/AuthProvider';
 import { usePageTitle } from '@/shared/utils/useRouteTitle';
-import { Breadcrumbs, Button, UserMenu } from '@curity/ui-kit-component-library';
+import { Breadcrumbs, Button, toUiKitTranslation, UserMenu } from '@curity/ui-kit-component-library';
 import { IconGeneralKebabMenu, IconVciCredentialHome } from '@curity/ui-kit-icons';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import styles from './header.module.css';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -24,6 +25,7 @@ interface HeaderProps {
 
 export const Header = ({ toggleSidebar, isSidebarOpen }: HeaderProps) => {
   const { t } = useTranslation();
+  const uiKitT = toUiKitTranslation(t);
   const pageTitle = usePageTitle();
   const authContext = useAuth();
 
@@ -33,7 +35,7 @@ export const Header = ({ toggleSidebar, isSidebarOpen }: HeaderProps) => {
 
   return (
     <header
-      className="header px2 flex flex-center flex-gap-1 justify-between w100"
+      className={`${styles.header} px2 flex flex-center flex-gap-1 justify-between w100`}
       role="banner"
       aria-label={`${t('header')}`}
     >
@@ -46,7 +48,7 @@ export const Header = ({ toggleSidebar, isSidebarOpen }: HeaderProps) => {
 
       <div className="flex flex-center flex-gap-1 nowrap">
         {authContext?.session?.isLoggedIn && (
-          <UserMenu username={authContext?.session?.idTokenClaims?.sub} onSignOut={authContext.logout} />
+          <UserMenu username={authContext?.session?.idTokenClaims?.sub} onSignOut={authContext.logout} t={uiKitT} />
         )}
 
         <Button

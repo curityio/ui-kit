@@ -10,9 +10,10 @@
  */
 
 import { Header } from '@/shared/ui/header/Header';
-import { Sidebar } from './sidebar/Sidebar';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import styles from './layout.module.css';
+import { Sidebar } from './sidebar/Sidebar';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -38,7 +39,7 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-      <div className={`app-container ${isSidebarOpen && 'app-container-sidebar-open'}`}>
+      <div className={`${styles['app-container']} ${isSidebarOpen && styles['app-container-sidebar-open']}`}>
         <Sidebar />
         <main>{children}</main>
       </div>

@@ -10,6 +10,7 @@
  */
 
 import { ReactNode } from 'react';
+import styles from './table.module.css';
 
 interface TableProps {
   children: ReactNode;
@@ -18,8 +19,8 @@ interface TableProps {
 
 // Base Table
 export const Table = ({ children, className }: TableProps) => (
-  <div className="table-scroller">
-    <table className={` ${className || ''}`} data-testid="table">
+  <div className={styles['table-scroller']}>
+    <table className={`${styles.table} ${className || ''}`} data-testid="table">
       {children}
     </table>
   </div>
@@ -31,17 +32,21 @@ export const TableHeader = ({ children, className }: TableProps) => (
 );
 
 // Table Row
-export const TableRow = ({ children, className }: TableProps) => <tr className={` ${className || ''}`}>{children}</tr>;
+export const TableRow = ({ children, className }: TableProps) => (
+  <tr className={`${styles['table-row']} ${className || ''}`}>{children}</tr>
+);
 
 // Table Head (for column headers)
-export const TableHead = ({ children, className }: TableProps) => <th className={`${className || ''}`}>{children}</th>;
+export const TableHead = ({ children, className }: TableProps) => (
+  <th className={`${styles['table-header']} ${className || ''}`}>{children}</th>
+);
 
 // Table Body
 export const TableBody = ({ children, className }: TableProps) => <tbody className={className || ''}>{children}</tbody>;
 
 // Table Cell
 export const TableCell = ({ children, className, ...props }: TableProps) => (
-  <td className={`${className || ''}`} {...props}>
+  <td className={`${styles['table-cell']} ${className || ''}`} {...props}>
     {children}
   </td>
 );

@@ -1,0 +1,85 @@
+.table-scroller {
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (width >=40em) {
+  .table-scroller {
+    overflow-x: unset;
+  }
+}
+
+.table {
+  --border-color: #dedede;
+  --border-radius: 8px;
+
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+  margin-top: 0;
+  margin-bottom: 16px;
+  border-spacing: 0;
+  border-collapse: inherit;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  table-layout: unset;
+  max-width: unset;
+  width: max-content;
+}
+
+@media (width >=40em) {
+  .table {
+    width: 100%;
+    table-layout: fixed;
+    width: 100%;
+  }
+}
+
+.table-header {
+  padding: var(--space-2);
+  border: none;
+  font-size: smaller;
+  background-color: var(--color-grey-subtle);
+  text-align: left;
+  font-family: var(--type-bold);
+  font-size: clamp(0.75rem, 2vmin, 0.75rem);
+  letter-spacing: 0.15em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.table-header:first-child {
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: 0;
+}
+
+.table-header:last-child {
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: 0;
+}
+
+.table-row:last-child .table-cell:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+.table-row:last-child .table-cell:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.table-row:not(:has([aria-labelledby="empty-state-heading"])):hover .table-cell {
+  background-color: color-mix(in srgb, var(--color-grey-light), white 80%);
+}
+
+.table-cell {
+  padding: var(--space-2);
+  border: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.table-cell button {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
