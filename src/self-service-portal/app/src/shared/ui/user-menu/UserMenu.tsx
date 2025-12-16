@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import { IconGeneralChevron, IconGeneralLock } from '@curity/ui-kit-icons';
 import { Button } from '@curity/ui-kit-component-library';
+import { IconGeneralChevron, IconGeneralLock } from '@curity/ui-kit-icons';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type UserMenuProps = {
@@ -59,7 +59,7 @@ export const UserMenu = ({ username, onSignOut }: UserMenuProps) => {
       {isOpen && (
         <div
           id="user-dropdown-menu"
-          className={`flex flex-column flex-gap-0 br-8 user-menu ${isOpen ? 'user-menu-open' : ''}`}
+          className={`flex flex-column flex-gap-0 br-8 user-menu ${isOpen ? `user-menu-open` : ''}`}
           role="menu"
           tabIndex={-1}
         >
