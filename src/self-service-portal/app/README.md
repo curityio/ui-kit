@@ -43,10 +43,13 @@ npm run dev
 ```env
 VITE_APP_APP_BASE_PATH= //SPA base path, e.g.: /
 VITE_APP_BFF_BASE_URL= // IDSVR base path, e.g.: https://localhost:8443
-VITE_APP_METADATA_PATH= //IDSVR ssp api path, e.g.: /apps/self-service-portal/api/.well-known
+VITE_APP_METADATA_PATH= //IDSVR ssp api path, e.g.: /apps/{self-service-portal-app-id}/api/.well-known
 VITE_THEME_LOGO= // base64 encoded logo image
 VITE_THEME_INTRO_IMG= // base64 encoded intro image
 ```
+
+`{self-service-portal-app-id}` - should be replaced with the actual application ID of the Self-Service Portal
+application created in the Identity Server Admin UI under "Profiles -> {Application Profile} -> Applications".
 
 ## Build
 
