@@ -45,7 +45,6 @@ export const Account = () => {
   const [familyName, setFamilyName] = useState('');
 
   useEffect(() => {
-    // TODO IS-10689
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setGivenName(account?.name?.givenName || '');
     setFamilyName(account?.name?.familyName || '');

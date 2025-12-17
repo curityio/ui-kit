@@ -88,7 +88,6 @@ export const MFA = () => {
   useEffect(() => {
     const MFAStateUpdate: MFA_STATES = getCurrentMFAState(currentMFAState, optInMfaData, startOptInMfaSetupData);
 
-    // TODO IS-10689
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentMFAState(MFAStateUpdate);
   }, [getAccountByUserNameData, startOptInMfaSetupData, completeOptInMfaSetupData]);

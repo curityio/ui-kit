@@ -30,7 +30,6 @@ export const EditableContent = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useOutsideClick(inputRef, () => {
-    // TODO IS-10689
     // eslint-disable-next-line react-hooks/immutability
     if (inputRef.current && document.activeElement !== inputRef.current) handleCancel();
   });
