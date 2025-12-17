@@ -13,7 +13,7 @@ The Curity React Component Library is a collection of reusable UI components des
 
 ## Installation
 
-This is installed default when you install the `@curity/ui-kit` package. You can also install it separately in your React project:
+This is installed by default when you install the `@curity/ui-kit` package. You can also install it separately in your React project:
 
 ```bash
 npm install @curity/ui-kit-component-library
@@ -153,7 +153,9 @@ src/
 ### Internal Dependencies
 - `@curity/ui-kit-css` - Base CSS styles
 - `@curity/ui-kit-icons` - Icon library
+- `react`
 - `react-router` - Routing support
+- `@reach/dialog` - Dialog support
 
 ## Browser Support
 
