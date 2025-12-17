@@ -47,7 +47,7 @@
     <meta property="og:url" content="https://curity.io" />
     <meta
             property="og:image"
-            content="https://curity.io/images/identity-management-for-apis-apps-and-websites-og.jpg"
+            content="https://curity.io/images/start/identity-management-for-apps-apis-and-ai.jpg"
     />
     <meta property="og:description" content="Curity Self Service Portal" />
     <meta property="og:site_name" content="Curity Self Service Portal" />
@@ -58,7 +58,7 @@
     <meta name="twitter:description" content="Curity Self Service Portal" />
     <meta
             name="twitter:image"
-            content="https://curity.io/images/identity-management-for-apis-apps-and-websites-og.jpg"
+            content="https://curity.io/images/start/identity-management-for-apps-apis-and-ai.jpg"
     />
     <script>
         window.__CONFIG__ = {
