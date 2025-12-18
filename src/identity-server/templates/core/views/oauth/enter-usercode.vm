@@ -1,0 +1,33 @@
+#*
+ * Copyright (C) 2017 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+#set ($page_symbol = $page_symbol_authenticate_desktop)
+
+#define($_body)
+
+<form method="post" class="center">
+
+    <h1>#message("views.oauth.enter-user-code")</h1>
+    <p>#message("views.oauth.enter-user-code-description")</p>
+
+    #set($otpInputFieldCharacterSet = "alphanumeric")
+    #set($otpFieldName = "userCode")
+    #set($otpInputLength = $_userCodeLength)
+    #parse("fragments/otp-input")
+
+    <input type="submit" disabled class="button button-medium button-primary button-fullwidth" value='#message("views.oauth.enter-user-code-submit")' tabindex="$tabindex" $!disabled>
+
+</form>
+
+#end
+
+
+#parse("layouts/default")

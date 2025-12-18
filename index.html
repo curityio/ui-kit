@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="./src/common/assets/images/favicon.png"
+    />
+    <link rel="stylesheet" href="./src/common/css/lib/src/curity-theme.css" />
+    <title>Curity UI Kit</title>
+    <style>
+      :root {
+        --header-height: 50px;
+      }
+
+      @font-face {
+        font-family: "Roboto-Bold";
+        src:
+          url("./src/common/assets/fonts/Roboto-Bold.woff2") format("woff2"),
+          url("./src/common/assets/fonts/Roboto-Bold.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Roboto-Medium";
+        src:
+          url("./src/common/assets/fonts/Roboto-Medium.woff2") format("woff2"),
+          url("./src/common/assets/fonts/Roboto-Medium.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Roboto-Regular";
+        src:
+          url("./src/common/assets/fonts/Roboto-Regular.woff2") format("woff2"),
+          url("./src/common/assets/fonts/Roboto-Regular.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      header {
+        --color-link: white;
+        --color-link-hover: white;
+
+        top: 0;
+        position: sticky;
+        height: var(--header-height);
+        backdrop-filter: blur(8px);
+        z-index: 2;
+        background-color: var(--color-primary-dark);
+        display: flex;
+        gap: 1rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        padding-inline: 0.5rem;
+        justify-content: space-between;
+
+        a {
+          text-decoration: none;
+        }
+
+        div:first-child a {
+          color: var(--color-yellow);
+          display: inline-flex;
+          gap: 1rem;
+          align-items: center;
+        }
+
+        span {
+          display: inline-flex;
+          white-space: nowrap;
+        }
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        text-wrap: balance;
+        font-family: var(--type-bold);
+        line-height: 1.2;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: clamp(1.25rem, 9vmin, 2.25rem);
+      }
+
+      h2 {
+        font-size: clamp(1.15rem, 9vmin, 1.5rem);
+      }
+
+      h3 {
+        font-size: clamp(1.1rem, 9vmin, 1.25rem);
+      }
+
+      h4 {
+        font-size: clamp(1rem, 9vmin, 1rem);
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        line-height: 1.5;
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        padding-bottom: var(--space-4);
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .container {
+        max-width: 80em;
+        margin: 0 auto;
+      }
+
+      .container .intro {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      main {
+        a {
+          color: #d859a1;
+        }
+      }
+
+      .card-container {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        margin-block-end: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f2f2f2;
+        padding: 2rem;
+        width: 100%;
+        max-width: 500px;
+        transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @media (max-width: 768px) {
+        .card-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .card {
+          max-width: 100%;
+        }
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card h2 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .card p {
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .button {
+        --y-tiny: 0.75;
+        --x-tiny: 1;
+
+        --y-small: 0.85;
+        --x-small: 1;
+
+        --y-medium: 1.2;
+        --x-medium: 1.5;
+
+        --y-large: 1.25;
+        --x-large: 1.75;
+
+        --y-default: var(--y-medium);
+        --x-default: var(--x-medium);
+
+        align-items: center;
+        background-color: var(--button-background-color);
+        border: none;
+        border-radius: var(--button-border-radius);
+        cursor: pointer;
+        display: inline-flex;
+        font-family: var(--type-sans-bold);
+        font-size: var(--button-font-size);
+        -webkit-font-smoothing: antialiased;
+        font-weight: var(--type-weight-bold);
+        gap: var(--space-1);
+        justify-content: center;
+
+        min-height: 44px;
+        height: fit-content;
+        padding-block-start: calc(var(--button-padding-y) * var(--y-default));
+        padding-block-end: calc(var(--button-padding-y) * var(--y-default));
+        padding-inline-start: calc(var(--button-padding-x) * var(--x-default));
+        padding-inline-end: calc(var(--button-padding-x) * var(--x-default));
+
+        transition:
+          background-color 200ms,
+          transform 200ms,
+          color 200ms,
+          box-shadow 200ms,
+          border-color 200ms;
+      }
+
+      a:is(.button) {
+        text-decoration: none;
+      }
+
+      .button-primary-outline {
+        background-color: transparent;
+        border: 1px solid var(--button-border-color);
+        color: var(--button-color);
+      }
+
+      .button-primary-outline:hover,
+      .button-primary-outline:active {
+        background-color: var(--button-color);
+        color: white;
+      }
+
+      .button-medium {
+        font-size: calc(var(--button-font-size) * var(--y-medium));
+        min-height: 44px;
+        padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
+        padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
+        padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
+        padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
+
+        &:is([type="submit"]) {
+          color: white;
+        }
+      }
+
+      .commands {
+        margin-top: 1.5rem;
+        width: 100%;
+        text-align: left;
+        border-top: 1px solid #eee;
+        padding-top: 1rem;
+      }
+
+      .commands code {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        color: #444;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        width: fit-content;
+      }
+
+      .status {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #007bff;
+        transition: color 0.3s ease;
+      }
+
+      .status.running {
+        color: #28a745;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #007bff;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+        transition: background-color 0.3s ease;
+      }
+
+      .status.running .status-dot {
+        background-color: #28a745;
+      }
+
+      .button-loading-active {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      footer {
+        padding-inline-start: 4rem;
+        padding-inline-end: 4rem;
+        padding-block-start: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <a role="presentation" href="/">
+          <img
+            src=" src/identity-server/images/curity-logo-white.svg"
+            alt="Curity Logo"
+          />
+          <span>Curity UI Kit</span>
+        </a>
+      </div>
+      <div>
+        <a href="https://curity.io/" target="_blank">Visit Curity.io</a>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="intro">
+        <img
+          src="./src/common/assets/images/ui-kit-start.jpg"
+          alt="Curity Logo"
+        />
+        <h1>Welcome to Curity UI Kit</h1>
+        <p>
+          UI Kit is where you can customize the look and feel of your
+          applications.
+        </p>
+      </div>
+    </div>
+
+    <main id="main">
+      <div class="container">
+        <div id="cards" class="card-container">
+          <div class="card">
+            <h2>Identity Server</h2>
+            <p>
+              Preview and customize authentication templates and styles for the
+              Curity Identity Server.
+            </p>
+            <a
+              href="http://localhost:3000/listing"
+              target="_blank"
+              class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
+              aria-disabled="true"
+            >
+              <span>View http://localhost:3000/listing →</span>
+            </a>
+            <div class="commands">
+              <h3>Useful Commands</h3>
+              <code>npm install</code>
+              <code>npm run start:identity-server</code>
+              <code>npm run build:identity-server</code>
+            </div>
+            <div
+              class="status"
+              data-tooltip="Note: It may take a few seconds for the preview server to be ready"
+            >
+              <span class="status-dot"></span>
+              <span>Dev server loading</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Self Service Portal</h2>
+            <p>
+              Manage your account, security settings, and access in the Self
+              Service Portal.
+            </p>
+            <a
+              href="http://localhost:5173/previewer"
+              target="_blank"
+              class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
+              aria-disabled="true"
+            >
+              <span>View http://localhost:5173/previewer →</span>
+            </a>
+            <div class="commands">
+              <h3>Useful Commands</h3>
+              <code>npm install</code>
+              <code>npm run start:ssp</code>
+              <code>npm run build:ssp</code>
+            </div>
+            <div
+              class="status"
+              data-tooltip="Note: It may take a few seconds for the preview server to be ready"
+            >
+              <span class="status-dot"></span>
+              <span>Dev server loading...</span>
+            </div>
+          </div>
+        </div>
+
+        <footer>
+          <h3>Repository structure</h3>
+          <p>
+            This repository is an npm workspace consisting of four packages:
+          </p>
+          <ul>
+            <li>
+              <strong>Identity Server</strong> - Velocity templates, messages
+              and assets used for the Curity Identity Server
+            </li>
+            <li>
+              <strong>Self-Service Portal</strong> - Manage your account,
+              security settings, and access in the Self Service Portal. Built
+              with React
+            </li>
+            <li>
+              <strong>Login Web Application</strong> - The API Driven UI Kit
+              built with React
+            </li>
+            <li>
+              A shared <strong>Common</strong> package that includes:
+              <ul>
+                <li>
+                  <strong>Curity CSS</strong> - A foundational CSS toolkit
+                  providing theming capabilities for single-brand and
+                  multi-brand applications
+                </li>
+                <li>
+                  <strong>UI Icons React</strong> - A curated selection of
+                  Curity's iconography as a React component library
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <img
+            src="./src/common/assets/images/ui-kit-repo-structure.svg"
+            alt="Repository Structure"
+          />
+
+          <h3>Prerequisites</h3>
+          <p>Node.js (version as specified in the `.nvmrc` file)</p>
+          <h4>Read more</h4>
+          <ul>
+            <li>
+              <a
+                target="_blank"
+                href="https://curity.io/resources/getting-started/"
+                >Getting Started with Curity</a
+              >
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://curity.io/resources/ui-kit-documentation/"
+                >Docs: Front-end development</a
+              >
+            </li>
+          </ul>
+        </footer>
+      </div>
+    </main>
+
+    <script>
+      const services = [
+        {
+          url: "http://localhost:3000/listing",
+          cardIndex: 0,
+        },
+        {
+          url: "http://localhost:5173/previewer",
+          cardIndex: 1,
+        },
+      ];
+
+      async function checkService(url) {
+        try {
+          const response = await fetch(url, {
+            method: "HEAD",
+            mode: "no-cors",
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      async function waitForService(url, maxAttempts = 60, interval = 1000) {
+        for (let i = 0; i < maxAttempts; i++) {
+          const isReady = await checkService(url);
+          if (isReady) {
+            return true;
+          }
+          await new Promise((resolve) => setTimeout(resolve, interval));
+        }
+        return false;
+      }
+
+      // Initialize service checks
+      services.forEach(async (service) => {
+        const cards = document.querySelectorAll(".card");
+        const card = cards[service.cardIndex];
+        const button = card.querySelector(".button-loading-active");
+        const status = card.querySelector(".status");
+        const statusText = status.querySelector("span:last-child");
+
+        const isReady = await waitForService(service.url);
+
+        if (isReady) {
+          button.classList.remove("button-loading-active");
+          button.removeAttribute("aria-disabled");
+          status.classList.add("running");
+          statusText.textContent = "Dev server running";
+        } else {
+          // Timeout - mark as failed
+          button.classList.remove("button-loading-active");
+          button.removeAttribute("aria-disabled");
+          statusText.textContent = "Dev server not responding";
+        }
+      });
+    </script>
+  </body>
+</html>

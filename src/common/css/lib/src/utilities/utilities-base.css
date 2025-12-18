@@ -1,0 +1,59 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+.h100 {
+  height: 100%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.h100vh {
+  height: 100vh;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.inlineicon {
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Disabled */
+.is-forbidden {
+  cursor: not-allowed;
+}
+
+.is-disabled {
+  pointer-events: none;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+/* Legacy */
+.clearfix::after {
+  clear: both;
+  content: '';
+  display: table;
+}

@@ -1,0 +1,81 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+/*
+ * Copyright (C) 2016 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+/* -------------------------------------------------------------------
+Progress bars
+------------------------------------------------------------------- */
+[role="progressbar"] {
+  border-radius: var(--progress-bar-border-radius);
+  color: #fff;
+  float: left;
+  font-size: 12px;
+  height: 100%;
+  line-height: var(--progress-bar-height);
+  text-align: center;
+  transition: width 0.6s ease;
+  width: 0%;
+}
+
+.progress {
+  height: var(--progress-bar-height);
+}
+
+.progress-success {
+  background-color: var(--color-success);
+}
+
+.progress-info {
+  background-color: var(--color-info);
+}
+
+.progress-warning {
+  background-color: var(--color-warning);
+}
+
+div.progress .progress-danger {
+  background-color: var(--color-danger);
+}
+
+progress {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 250px;
+    height: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-grey-subtle);
+    overflow: hidden;
+  }
+
+  progress::-webkit-progress-bar {
+    background-color: var(--color-grey-subtle);
+    border-radius: 10px;
+  }
+
+  progress::-webkit-progress-value {
+    background-color: var(--color-spot);
+    border-radius: 10px;
+  }
+
+  progress::-moz-progress-bar {
+    background-color: var(--color-spot);
+    border-radius: 10px;
+  }

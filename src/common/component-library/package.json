@@ -1,0 +1,71 @@
+{
+  "name": "@curity/ui-kit-component-library",
+  "version": "1.0.0",
+  "description": "The Curity React Component Library is a collection of UI components, which are reusable by different packages available in ui-kit monorepo: self-service-portal, login-web-app and more.",
+  "author": "Curity",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/component-library.umd.cjs",
+  "module": "./dist/component-library.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/component-library.js",
+      "require": "./dist/component-library.umd.cjs"
+    },
+    "./dist/component-library.css": "./dist/component-library.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "watch": "vite build --watch",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
+    "build": "npm run tsBuild && vite build",
+    "tsBuild": "tsc -b",
+    "tsBuild:watch": "tsc -b -w",
+    "lint": "eslint .",
+    "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@curity/ui-kit-css": "^1.0.0",
+    "@curity/ui-kit-icons": "^1.0.0",
+    "@reach/dialog": "^0.18.0",
+    "react": "^19.2.0",
+    "react-router": "^7.9.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@parcel/watcher": "^2.5.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "^19.0.1",
+    "@vitejs/plugin-basic-ssl": "^2.1.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.4.0",
+    "jsdom": "^27.0.1",
+    "stylelint-config-standard": "^39.0.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vite": "^7.1.12",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vite-plugin-dts": "^3.0.0",
+    "vitest": "^4.0.1"
+  }
+}

@@ -1,0 +1,61 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+a {
+  text-decoration-skip-ink: auto;
+}
+
+::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+main {
+  display: block;
+}
+
+.clearfix::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+textarea {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  text-rendering: optimizespeed;
+}
+
+html {
+  line-height: 1.375;
+  text-size-adjust: 100%;
+}
+
+[type='button'],
+[type='reset'],
+[type='submit'],
+button {
+  appearance: button;
+}

@@ -1,0 +1,205 @@
+---
+layout: '../../layouts/Page.astro'
+title: 'Flexbox'
+description: 'Usage on how to use Flexbox'
+updatedAt: 'August 08 2022'
+order: 2
+---
+
+# Flexbox
+
+Using the flex classes you can create a layout in both row and column based layout modes.
+
+
+
+## Example
+
+A simple demo showing how to compose flex classes to quickly create a nice layout. It's responsive and you don't need to write custom CSS.
+
+<div class="container demo-element p2 mt2 mb2">
+  <header class="sm-flex flex-center justify-between p2">
+    <h1 class="m0">Header</h1>
+    <a href="#">A link</a>
+  </header>
+  <div class="flex flex-gap-2 demo-element p2">
+    <aside class="flex-30 demo-element p2">
+      <h2>Sidebar</h2>
+      <ul class="list-reset">
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+        <li>
+          <a href="#">Sidebar link</a>
+        </li>
+      </ul>
+    </aside>
+    <main class="flex-auto p2">
+      <h2>Main</h2>
+      <p>A paragraph</p>
+      <form>
+        <div class="sm-flex flex-column flex-gap-2">
+          <label>
+            Your name
+            <input type="text" class="field w100" placeholder="Your name" />
+          </label>
+          <label>
+            Your email
+            <input type="email" class="field w100" placeholder="Your email" />
+          </label>
+          <button class="button button-medium button-primary">Submit</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+
+## HTML
+
+```html
+<div class="container p2 mt2 mb2">
+  <header class="sm-flex flex-center justify-between p2">
+    <h1 class="m0">Header</h1>
+    <a href="#">A link</a>
+  </header>
+  <div class="flex flex-gap-2 p2">
+    <aside class="flex-30 p2">
+      <h2>Sidebar</h2>
+      <ul class="list-reset">
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+        <li><a href="#">Sidebar link</a></li>
+      </ul>
+    </aside>
+    <main class="flex-auto p2">
+      <h2>Main</h2>
+      <p>A paragraph</p>
+      <form>
+        <div class="sm-flex flex-column flex-gap-2">
+          <label>
+            Your name
+            <input type="text" class="field w100" placeholder="Your name" />
+          </label>
+          <label>
+            Your email
+            <input type="email" class="field w100" placeholder="Your email" />
+          </label>
+          <button class="button button-medium button-primary">Submit</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+```
+
+## Available Classes
+
+### Display
+
+- `.flex` - Creates a flex container (`display: flex`)
+- `.inline-flex` - Creates an inline flex container (`display: inline-flex`)
+- `.sm-flex` - Flex display on small screens (min-width: 40em)
+- `.md-flex` - Flex display on medium screens (min-width: 52em)
+- `.lg-flex` - Flex display on large screens (min-width: 64em)
+- `.xlg-flex` - Flex display on extra large screens (min-width: 74em)
+- `.hide-sm-flex` - Hidden by default, displays as flex on small screens (40em+)
+- `.no-flex` - Removes flex behavior (`flex: none`)
+
+### Direction
+
+- `.flex-column` - Column direction (`flex-direction: column`)
+- `.flex-row-reverse` - Reverse row direction
+- `.flex-column-reverse` - Reverse column direction
+- `.sm-flex-row` - Row direction on small screens (40em+)
+- `.sm-flex-row-reverse` - Reverse row on small screens (40em+)
+- `.flex-row-reverse-sm-unset` - Reverse row, reset on small screens
+- `.flex-column-reverse-sm-unset` - Reverse column, reset on small screens
+
+### Wrap
+
+- `.flex-wrap` - Allow items to wrap
+
+### Alignment (align-items)
+
+- `.flex-center` - Center items vertically
+- `.flex-baseline` - Align items to baseline
+- `.flex-stretch` - Stretch items to fill container
+- `.flex-start` - Align items to flex-start
+- `.flex-end` - Align items to flex-end
+
+### Self Alignment (align-self)
+
+- `.flex-nostretch` - Individual item center alignment
+- `.flex-nostretch-start` - Individual item start alignment
+- `.flex-nostretch-end` - Individual item end alignment
+- `.flex-align-normal` - Individual item normal alignment
+
+### Justify Content
+
+- `.flex-justify` - Space between items (`justify-content: space-between`)
+- `.justify-start` - Align to start
+- `.justify-between` - Space between
+- `.justify-end` - Align to end
+- `.justify-center` - Center items
+- `.justify-reset` - Reset justify-content
+- `.sm-justify-center` - Center on small screens (40em+)
+- `.md-justify-start` - Start alignment on medium screens (52em+)
+
+### Align Content
+
+- `.flex-between` - Space between in multi-line flex container
+- `.align-items-reset` - Reset align-items
+
+### Flex Sizing
+
+- `.flex-auto` - Flex with auto sizing (`flex: 1 1 auto`)
+- `.flex-grow` - Grow to fill space (`flex: 1 0 auto`)
+- `.flex-none` - No flex behavior (`flex: none`)
+- `.flex-noshrink` - Prevent shrinking (`flex-shrink: 0`)
+
+### Fixed Width Percentages (40em+)
+
+- `.flex-10` - 10% width
+- `.flex-20` - 20% width
+- `.flex-25` - 25% width
+- `.flex-30` - 30% width
+- `.flex-33` - 33.33% width
+- `.flex-40` - 40% width
+- `.flex-50` - 50% width
+- `.flex-60` - 60% width
+- `.flex-66` - 66.67% width
+- `.flex-70` - 70% width
+- `.flex-75` - 75% width
+- `.flex-80` - 80% width
+- `.flex-90` - 90% width
+- `.flex-100` - 100% width
+
+### Gap
+
+- `.flex-gap-1` - Gap using space-1 variable
+- `.flex-gap-2` - Gap using space-2 variable
+- `.flex-gap-3` - Gap using space-3 variable
+- `.flex-gap-4` - Gap using space-4 variable
+- `.flex-row-gap-1` - Row gap using space-1 variable
+- `.flex-row-gap-2` - Row gap using space-2 variable
+- `.flex-row-gap-3` - Row gap using space-3 variable
+- `.flex-row-gap-4` - Row gap using space-4 variable
+
+### Utilities
+
+- `.mt-auto` - Margin top auto (push to bottom)
+- `.sm-mb0` - Remove bottom margin on small screens (40em+)

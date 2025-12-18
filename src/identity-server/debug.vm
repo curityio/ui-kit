@@ -1,0 +1,354 @@
+
+#*
+
+    Debug and test Velocity templates
+
+    Usage:
+    1. Place this file in templates/overrides/debug.vm
+    1. Open templates/overrides/settings.vm
+    2. Add #parse("debug")
+
+*#
+
+
+#*
+
+ Show "Debug Mode" on the screen and show some hidden elements
+ Removes `hide` classes from HTML so fields are shown. Not dependant of curity-ui.js
+
+*#
+
+<script type="text/javascript">
+    setTimeout(() => {
+
+    const debugModeBadge = document.createElement("span");
+
+    debugModeBadge.textContent = "Debug mode";
+    debugModeBadge.style.position = "fixed";
+    debugModeBadge.style.fontFamily = "sans-serif";
+    debugModeBadge.style.bottom = "0";
+    debugModeBadge.style.right = "0";
+    debugModeBadge.style.backgroundColor = "green";
+    debugModeBadge.style.color = "white";
+    debugModeBadge.style.padding = "1rem";
+    debugModeBadge.style.zIndex = "1";
+
+    document.documentElement.appendChild(debugModeBadge);
+
+    var hiddenElements = document.documentElement.querySelectorAll(".hide");
+
+    hiddenElements.forEach(function(element) {
+        element.classList.remove('hide');
+    });
+ })
+</script>
+
+#*
+
+ Debug Velocity variables
+
+*#
+
+
+## General
+#set ($_language = "en")
+#set ($!title = "Image")
+#set ($_errorIdentifier = "KkMLhiZU")
+#set ($RequestId = "KkMLhiZU")
+#set ($_visibleSigningData = "KkMLhiZU")
+#set ($_serviceMessage = "Start your BankID app")
+#set ($keyPrefix = "")
+#set ($_showPasswordFields = true)
+#set ($_errors = ["12312312"])
+#set ($_infoMessages = ["12312312"])
+#set ($_warnings = ["12312312"])
+#set ($hasAutoLogin = true)
+#set ($userName = "John Doe")
+#set ($accountId = "johndoe")
+
+## Device
+#set ($_singleDevice = true)
+#set ($_allowRegistrationDuringLogin = true)
+#set ($_authDevicesMap = {
+   "google-device" : {"capabilities" : {"push": true}},
+   "google-device-1" : {"capabilities" : {"push": false}}
+})
+
+## Duo
+#set ($_downloadAppUri = 'URI')
+#set ($_activationUrl = 'URI')
+#set ($_username = "John Doe")
+
+## General stuff
+#set ($debugSpinner = true)
+
+## OAuth Device Flow
+#set ($_userCodeLength = 8)
+#set ($_userCodeValue = "")
+
+## Webauthn
+#set ($showRegistration = true)
+#set ($_registrationEndpoint = "http://localhost")
+#set ($_allowRegistrationDuringLogin = true)
+#set ($_promptForUsername = true)
+
+## SMS
+#set ($_recipientOfCommunication = "johndoe@example.com")
+#set ($_singleFactor = true)
+#set ($_allowRegistrationDuringLogin = true)
+
+## Encap
+#set ($_allowRegistrationDuringLogin = true)
+#set ($_activationCode = "123123")
+#set ($_qrCode = true)
+#set ($_downloadUri = "http://example.com")
+#set ($_registerUrl = true)
+#set ($_autostartTokenDataUri = true)
+
+## QR Codes
+#set ($_activationCodeDataUri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAALJklEQVR4Xu2dQZIjOQwD7f8/2hu7l720lR2FRlCqyrlyKEIgIKrstv3+fD6fl/9kQAZ+ZOCtQVSGDHxnQIOoDhlYMKBBlIcMaBA1IAPXGHCCXOPNrIcwoEEe0mi3eY0BDXKNN7MewoAGeUij3eY1BjTINd7MeggDGuQhjXab1xjQINd4M+shDGiQhzTabV5jQINc482shzCgQR7SaLd5jQENco03sx7CQGyQ9/t9a6raH5ch/qh+O//05hJ/tD8NAgylBGMD4ICh+hpkzTDxh/1JPzBFDSIAu8dTgml/xB/Vb+cT/t3jxB/hd4I4QUgjR8c1SLl9KcEErz0BCD/VJ/y7x2n/hN8J4gQhjRwd1yDl9qUEEzw6wal+O5/w7x4n/gi/E8QJQho5Or69QVKA7e6kJ3AbH62f4k/zCV873sZfnyAapCuRVCBpfnd3vHobvwYJ36jjFnb/RyqQNL+7O169jV+DaJClCp9+A9AgGkSDLBjQIBpEg2iQ7wy077B8i87+R4o/zc/Q59lt/E4QJ4gTZOcJQidAesbQQybV3z0/5ae9/xRfm3/CNz5BqEG0AYq3CSb87fq0f4q38VN9ik/zp0HCK1ZbYCQQEhjF2/ipPsVp/yl+qq9BNEj0DEICJQFSXIOUP9PeJpgE0q5PAqN4Gz/Vp/g0f04QJ4gTxFexeu+DtE9gOkHpBKZ4Gz/VpzjtP8VP9Z0gThAniBOkN0HoBGrH0xO0nZ/u3wly+EN6KoA0vy3wVKDp/tL6lE/4vGKFVywiuB3XIOtv9tQgoEAiKBVY2wC0foq/nU/4KT7dPyeIE8SHdB/SfUj/xoATZD3DnCBOECeIE8QJ4gShp52f406Q8gSZvsK0H3Jpf9dk+X9WGz/h0yAaxCuWV6y5KxadsOkJSSdgun6aT/gontanfKrvBHGCOEGcIE4QH9JpVviQ/iMD6RWIaE/Xp3yqT1cMWj/NJ3wUT+tTPtX3iuUVyyuWVyyvWF6xaFZsesW6BvvvstIrBiGh9Smf4vEVojxBCX8aJ35jfto/A50CTAmk/DrBw593md4/1U/j9f5pkPLnCTRI6oFlvgap0vt61QnWINUO1vvnBHGCrBT8+CuyBtEgGmTxKqcG0SAaRIN8ZaB+h/UZxGeQKgPDi9MdPDXY7vnD9MflqX9UoP6nJgRg9zgRvLvAU/y794fw0f4pX4MAQ0SwBiGJzcapf4ROg2gQ0sjRcQ1Sbh8R7AQpNyBcnvpHyztBnCCkkaPjGqTcPiLYCVJuQLg89Y+Wd4I4QUgjR8fHDXI0e38AfnqC/MEWXGLBQDxBns6uBrm3AjRI2F8NEhK4eboGCRukQUICN0/XIGGDNEhI4ObpGiRskAYJCdw8XYOEDdIgIYGbp2uQsEEaJCRw8/TYICSQdP/0Rk+7/jT+6f1T/ZQf6l+7PuHXIMRQGKcGpwKh/BD+i/Cn6xP+dn3Cr0GIoTBODU4FQvkhfA3S/tKGdoPaApnGnxqsjT9dn/pH+0/rU74ThBgK49TgVCCUH8J3gjhBUgmt8zXImh8yOPHX7d7r5QQpM0wNTgVC+en2CH+6PuFv1yf8GoQYCuPU4FQglB/C94rVvmK1BUICIAERvvb6hI/qE35a/+75xB/F6xOk3QDcYPkHYtoCpP21+W3vr42f+KO4Bvl8iKNlvC0gAtcWWHt/bfzEH8U1iAYZPQA0CAgwPaHwBPCKtaSoLdC0v2k+6YPiThAniBNkwYAG0SAaRIN8Z4CuGDiCwyscXSGoPuGn9e+eT/xRPJ4gVIDipzfw9P0RfoqnBqP1KU71KZ/iGiScAEhwuH77ACH8FCeBEn5an+JUn/IprkFCASPB4fokMBII5RN+iu9en/BTXIOEAkaCw/VJ4LsLlPATfxSn/VM+xTVIKGAkOFyfBEYCoXzCT/Hd6xN+imuQUMBIcLg+CXx3gRJ+4o/itH/Kp7gGCQWMBIfrk8BIIJRP+Cm+e33CT3ENEgoYCQ7XJ4HvLlDCT/xRnPZP+RSvG4QISjdI6xMBVJ/WT/MJXzs+jb9dn9YnfjVI+Y8pyWDUoHacBNTG365P6xO/GkSDLDWiQVKLgQWJ4LQ8rU8nBNWn9dN8wteOT+Nv16f1iV8niBPECbJgQINoEA2iQb4zQCPYK9abbiFRPOWfitP6lO8EcYI4QZoThE5Ycig5PF2f6qfxafzWz76VhvofT5BUwNMNJoIoPo3f+hqENDoaV6BrgaYHKDWX+Kd8ijtBiCGIU4OmBfL0+mF757/dfVpgKYHT+K3vFSvVcDVfgXrFqr4MOC2w1D3T+K3vBEk1XM1XoE6QqsBOX3z6ITjlj/DTAdCuT+vX8aU/oEMbuHucBJbuvy6A8BOP6f5S/ur8aJCsxWmDqXpdABpk/YytQUii67gGmeWvfoBokNkGU/W6AJwgThASYRJ3giTsvV4pf/UDxAky22CqXheAE8QJQiJM4ukJSLU1yJqhOj/pBGkLhATUjlMDaP+Un+K3/voTjyn/43/NmwqknU8EK9CuQKm/bf41CHRAg2QvcxN/ZACKaxBiqBynBrcbRNuzfneCOUGcIOTB9as8m78KRgccbV6DaBDSiAZJGKIRn6y9Qy6dQLR/yk/3aH2vWKmGonwSuALtCpSa1+a/fsUigREB7XhKMOWn+Nv8Ef7p+sRfHV/7jcL2BohAiqcCoXyqT/E2f4R/uv44PxokuyKQwKjBFJ8W6HT9cX40iAZZiVCDhAzQCRouTwdIHE/xU34KsM0f4Z+uT/zV8TlBnCBOkO8M+CpW+E4wncB0AlK8fkKG+yf8FE/5q/PjBHGCOEE2niDpCUInFJ0wVL+dT/gpPo3/9PrI7/QEIYJpAxRvC5zwU33CT/G0/tPzkV8N0r1iaZDsq0mJv9TgGmT4NwipwdQgiqcCeXo+8usEcYIkD+mnG0yDOEGWGjhd4Cl+DaJBNAi5YBEff6OQToBgb/+l0jMA1W/np/ubxn96feJfg5TfST5dQKfjJwNQXINokFtfwcgAFNcgGkSD+AzynYH0CoEnUGjAFN/T86k/FHeChAJGgsP1ny7wdP/UH4prkFDASHC4fiqQp+dTfyiuQUIBI8Hh+k8XeLp/6g/FNUgoYCQ4XD8VyNPzqT8U1yCbC5gamL6RSetTvF0/XZ/yaX8aRIOQRpZxEiBNMCqerk/5VF+DaBDSiAZJGKITghxM+Qm2f3PT+tP5tP8UH61P8Xb9dH3Kp/05QZwgpBEnSMIQTQByMOUn2Jwg+e+QE//t/qbrUz7tzwniBCGNOEEShmgCkIMpP8HmBHGCkP5IX+MThAC242RQIpjyCX97/bvXJ/5o/xTXIOUrFjWAGpwa8O71iT/aP8U1iAZZamR3g2oQsngYJwFQAyif4LXXv3t94o/2T3EniBPECbJgQINoEA2iQb4zQFckGuGUTyO8vf7d6xN/tH+KO0GcIE6QyQlCDt09TifU9ARp46P+TNdP8VF+fYIQgN3jbQGk66f5Kf/T9Qk/4aN8DQIMEcFOkOz3P0igaZz6R+trEA1CGlnGSYDpARKB+8XngWh9DaJBSCMaJGFo+oRIsP8mt31Cpuun+b/hYPV/pusTfsJH+U4QJwhpxAmSMOQEWf+EG3FLJxzxm+YTPopP10/xUX48QaiAcRk4mQENcnL3xF5nQIPUKbbAyQxokJO7J/Y6AxqkTrEFTmZAg5zcPbHXGdAgdYotcDIDGuTk7om9zoAGqVNsgZMZ0CAnd0/sdQY0SJ1iC5zMgAY5uXtirzOgQeoUW+BkBjTIyd0Te50BDVKn2AInM6BBTu6e2OsM/ANWg+575mU53wAAAABJRU5ErkJggg")
+#set ($_downloadUriDataUri = "data:image/png;base64,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")
+#set ($_qrCode = "data:image/png;base64,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")
+#set ($_activationBarcode = "data:image/png;base64,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")
+#set ($_autostartTokenDataUri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAALJklEQVR4Xu2dQZIjOQwD7f8/2hu7l720lR2FRlCqyrlyKEIgIKrstv3+fD6fl/9kQAZ+ZOCtQVSGDHxnQIOoDhlYMKBBlIcMaBA1IAPXGHCCXOPNrIcwoEEe0mi3eY0BDXKNN7MewoAGeUij3eY1BjTINd7MeggDGuQhjXab1xjQINd4M+shDGiQhzTabV5jQINc482shzCgQR7SaLd5jQENco03sx7CQGyQ9/t9a6raH5ch/qh+O//05hJ/tD8NAgylBGMD4ICh+hpkzTDxh/1JPzBFDSIAu8dTgml/xB/Vb+cT/t3jxB/hd4I4QUgjR8c1SLl9KcEErz0BCD/VJ/y7x2n/hN8J4gQhjRwd1yDl9qUEEzw6wal+O5/w7x4n/gi/E8QJQho5Or69QVKA7e6kJ3AbH62f4k/zCV873sZfnyAapCuRVCBpfnd3vHobvwYJ36jjFnb/RyqQNL+7O169jV+DaJClCp9+A9AgGkSDLBjQIBpEg2iQ7wy077B8i87+R4o/zc/Q59lt/E4QJ4gTZOcJQidAesbQQybV3z0/5ae9/xRfm3/CNz5BqEG0AYq3CSb87fq0f4q38VN9ik/zp0HCK1ZbYCQQEhjF2/ipPsVp/yl+qq9BNEj0DEICJQFSXIOUP9PeJpgE0q5PAqN4Gz/Vp/g0f04QJ4gTxFexeu+DtE9gOkHpBKZ4Gz/VpzjtP8VP9Z0gThAniBOkN0HoBGrH0xO0nZ/u3wly+EN6KoA0vy3wVKDp/tL6lE/4vGKFVywiuB3XIOtv9tQgoEAiKBVY2wC0foq/nU/4KT7dPyeIE8SHdB/SfUj/xoATZD3DnCBOECeIE8QJ4gShp52f406Q8gSZvsK0H3Jpf9dk+X9WGz/h0yAaxCuWV6y5KxadsOkJSSdgun6aT/gontanfKrvBHGCOEGcIE4QH9JpVviQ/iMD6RWIaE/Xp3yqT1cMWj/NJ3wUT+tTPtX3iuUVyyuWVyyvWF6xaFZsesW6BvvvstIrBiGh9Smf4vEVojxBCX8aJ35jfto/A50CTAmk/DrBw593md4/1U/j9f5pkPLnCTRI6oFlvgap0vt61QnWINUO1vvnBHGCrBT8+CuyBtEgGmTxKqcG0SAaRIN8ZaB+h/UZxGeQKgPDi9MdPDXY7vnD9MflqX9UoP6nJgRg9zgRvLvAU/y794fw0f4pX4MAQ0SwBiGJzcapf4ROg2gQ0sjRcQ1Sbh8R7AQpNyBcnvpHyztBnCCkkaPjGqTcPiLYCVJuQLg89Y+Wd4I4QUgjR8fHDXI0e38AfnqC/MEWXGLBQDxBns6uBrm3AjRI2F8NEhK4eboGCRukQUICN0/XIGGDNEhI4ObpGiRskAYJCdw8XYOEDdIgIYGbp2uQsEEaJCRw8/TYICSQdP/0Rk+7/jT+6f1T/ZQf6l+7PuHXIMRQGKcGpwKh/BD+i/Cn6xP+dn3Cr0GIoTBODU4FQvkhfA3S/tKGdoPaApnGnxqsjT9dn/pH+0/rU74ThBgK49TgVCCUH8J3gjhBUgmt8zXImh8yOPHX7d7r5QQpM0wNTgVC+en2CH+6PuFv1yf8GoQYCuPU4FQglB/C94rVvmK1BUICIAERvvb6hI/qE35a/+75xB/F6xOk3QDcYPkHYtoCpP21+W3vr42f+KO4Bvl8iKNlvC0gAtcWWHt/bfzEH8U1iAYZPQA0CAgwPaHwBPCKtaSoLdC0v2k+6YPiThAniBNkwYAG0SAaRIN8Z4CuGDiCwyscXSGoPuGn9e+eT/xRPJ4gVIDipzfw9P0RfoqnBqP1KU71KZ/iGiScAEhwuH77ACH8FCeBEn5an+JUn/IprkFCASPB4fokMBII5RN+iu9en/BTXIOEAkaCw/VJ4LsLlPATfxSn/VM+xTVIKGAkOFyfBEYCoXzCT/Hd6xN+imuQUMBIcLg+CXx3gRJ+4o/itH/Kp7gGCQWMBIfrk8BIIJRP+Cm+e33CT3ENEgoYCQ7XJ4HvLlDCT/xRnPZP+RSvG4QISjdI6xMBVJ/WT/MJXzs+jb9dn9YnfjVI+Y8pyWDUoHacBNTG365P6xO/GkSDLDWiQVKLgQWJ4LQ8rU8nBNWn9dN8wteOT+Nv16f1iV8niBPECbJgQINoEA2iQb4zQCPYK9abbiFRPOWfitP6lO8EcYI4QZoThE5Ycig5PF2f6qfxafzWz76VhvofT5BUwNMNJoIoPo3f+hqENDoaV6BrgaYHKDWX+Kd8ijtBiCGIU4OmBfL0+mF757/dfVpgKYHT+K3vFSvVcDVfgXrFqr4MOC2w1D3T+K3vBEk1XM1XoE6QqsBOX3z6ITjlj/DTAdCuT+vX8aU/oEMbuHucBJbuvy6A8BOP6f5S/ur8aJCsxWmDqXpdABpk/YytQUii67gGmeWvfoBokNkGU/W6AJwgThASYRJ3giTsvV4pf/UDxAky22CqXheAE8QJQiJM4ukJSLU1yJqhOj/pBGkLhATUjlMDaP+Un+K3/voTjyn/43/NmwqknU8EK9CuQKm/bf41CHRAg2QvcxN/ZACKaxBiqBynBrcbRNuzfneCOUGcIOTB9as8m78KRgccbV6DaBDSiAZJGKIRn6y9Qy6dQLR/yk/3aH2vWKmGonwSuALtCpSa1+a/fsUigREB7XhKMOWn+Nv8Ef7p+sRfHV/7jcL2BohAiqcCoXyqT/E2f4R/uv44PxokuyKQwKjBFJ8W6HT9cX40iAZZiVCDhAzQCRouTwdIHE/xU34KsM0f4Z+uT/zV8TlBnCBOkO8M+CpW+E4wncB0AlK8fkKG+yf8FE/5q/PjBHGCOEE2niDpCUInFJ0wVL+dT/gpPo3/9PrI7/QEIYJpAxRvC5zwU33CT/G0/tPzkV8N0r1iaZDsq0mJv9TgGmT4NwipwdQgiqcCeXo+8usEcYIkD+mnG0yDOEGWGjhd4Cl+DaJBNAi5YBEff6OQToBgb/+l0jMA1W/np/ubxn96feJfg5TfST5dQKfjJwNQXINokFtfwcgAFNcgGkSD+AzynYH0CoEnUGjAFN/T86k/FHeChAJGgsP1ny7wdP/UH4prkFDASHC4fiqQp+dTfyiuQUIBI8Hh+k8XeLp/6g/FNUgoYCQ4XD8VyNPzqT8U1yCbC5gamL6RSetTvF0/XZ/yaX8aRIOQRpZxEiBNMCqerk/5VF+DaBDSiAZJGKITghxM+Qm2f3PT+tP5tP8UH61P8Xb9dH3Kp/05QZwgpBEnSMIQTQByMOUn2Jwg+e+QE//t/qbrUz7tzwniBCGNOEEShmgCkIMpP8HmBHGCkP5IX+MThAC242RQIpjyCX97/bvXJ/5o/xTXIOUrFjWAGpwa8O71iT/aP8U1iAZZamR3g2oQsngYJwFQAyif4LXXv3t94o/2T3EniBPECbJgQINoEA2iQb4zQFckGuGUTyO8vf7d6xN/tH+KO0GcIE6QyQlCDt09TifU9ARp46P+TNdP8VF+fYIQgN3jbQGk66f5Kf/T9Qk/4aN8DQIMEcFOkOz3P0igaZz6R+trEA1CGlnGSYDpARKB+8XngWh9DaJBSCMaJGFo+oRIsP8mt31Cpuun+b/hYPV/pusTfsJH+U4QJwhpxAmSMOQEWf+EG3FLJxzxm+YTPopP10/xUX48QaiAcRk4mQENcnL3xF5nQIPUKbbAyQxokJO7J/Y6AxqkTrEFTmZAg5zcPbHXGdAgdYotcDIDGuTk7om9zoAGqVNsgZMZ0CAnd0/sdQY0SJ1iC5zMgAY5uXtirzOgQeoUW+BkBjTIyd0Te50BDVKn2AInM6BBTu6e2OsM/ANWg+575mU53wAAAABJRU5ErkJggg")
+
+## Opt-in MFA
+#set ($_availableFactors = [])
+#set ($_usernameFactor = {"description" : "BankID" , "acr": "XXX", "id" : "username", "type": "bankid"})
+#set ($_username2Factor = {"description" : "SMS" , "acr": "XXX", "id" : "username2", "type": "sms"})
+#set ($ignore = $_availableFactors.add($_usernameFactor))
+#set ($ignore = $_availableFactors.add($_username2Factor))
+
+#set ($_registrableFactors = [])
+#set ($_usernameFactor = {"description" : "username" , "acr": "XXX", "id" : "username", "type": "username"})
+#set ($_username2Factor = {"description" : "username2" , "acr": "XXX", "id" : "username2", "type": "username"})
+#set ($ignore = $_registrableFactors.add($_usernameFactor))
+#set ($ignore = $_registrableFactors.add($_username2Factor))
+
+#set ($_deletableFactors = [])
+#set ($_usernameFactor = {"description" : "username" , "acr": "XXX", "id" : "username", "type": "username"})
+#set ($_username2Factor = {"description" : "username2" , "acr": "XXX", "id" : "username2", "type": "username"})
+#set ($ignore = $_deletableFactors.add($_usernameFactor))
+#set ($ignore = $_deletableFactors.add($_username2Factor))
+
+#set ($_recoveryCodes = [])
+#set ($_recoveryCodes1 = "cfdb9d3ae7415285")
+#set ($_recoveryCodes2 = "2fcee9c57568567b")
+#set ($_recoveryCodes3 = "df2e8f785d7c5e1d")
+#set ($_recoveryCodes4 = "12c8aabdc03e5640")
+#set ($_recoveryCodes5 = "a3d980ef408757af")
+#set ($_recoveryCodes6 = "81713f86c60d5858")
+#set ($_recoveryCodes7 = "49107877cf4e5f15")
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes1))
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes2))
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes3))
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes4))
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes5))
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes6))
+#set ($ignore = $_recoveryCodes.add($_recoveryCodes7))
+
+#set ($_isOptOutAllowed = true)
+#set ($_recoveryCodeUri = "https://localhost:3000")
+#set ($_availableRecoveryCodes = 10)
+#set ($_factorDescription = "username2")
+
+## CSP
+#set ($_cspImgsrc = '')
+
+## Password Policies
+#set ($_hasCredentialPolicy = true)
+#set ($_passwordRules = true)
+#set ($_passwordRules = [{"type" : "min-lower-case-characters", "arg": '4'}, {"type" : "min-upper-case-characters", "arg": '2'}])
+
+## Passkeys
+#set ($_credentialCreationOptionsJson = '')
+#set ($_credentialCreationOptionsJson = '')
+#set ($_platformJson = true)
+
+## Attribute Prompt
+#set ($_fields = {"description" : "username2" , "acr": "XXX", "id" : "username2", "type": "username"})
+#set ($_allowSkip = true )
+
+## Request Acknowledgement
+#set($_cancellable = true)
+#set($_acknowledgementRequestMessage = "Message")
+#set($_acceptButtonLabel = "Accept")
+#set($_cancelButtonLabel = "Cancel")
+#set($_leftColumn = "Left column")
+#set($_rightColumn = "Right column")
+
+## Authenticator Selector
+#set ($_allowedAuthenticators = {})
+#set ($_googleAuth = {"description" : "Google" , "authenticatorId" : "google1", "type": "google", "url" : "https://example.com"})
+#set ($_bankIdAuth = {"description" : "BankId" , "authenticatorId" : "bankid1", "type": "bankid", "url" : "https://example.com"})
+#set ($_twitterAuth = {"description" : "Twitter" , "authenticatorId" : "twitter", "type": "twitter", "url" : "https://example.com"})
+#set ($_htmlAuth =   {"description" : "Username/Password" , "authenticatorId" : "html1", "type": "html-form", "url" : "https://example.com"})
+#set ($_encapAuth = {"description" : "Encap" , "authenticatorId" : "encap1", "type": "encap", "url" : "https://example.com"})
+#set ($_smsAuth = {"description" : "Sms" , "authenticatorId" : "sms1", "type": "sms", "url" : "https://example.com"})
+#set ($_emailAuth = {"description" : "Email" , "authenticatorId" : "email1", "type": "email", "url" : "https://example.com"})
+#set ($_oidcAuth = {"description" : "OpenID" , "authenticatorId" : "oidc1", "type": "oidc", "url" : "https://example.com"})
+#set ($_facebookAuth = {"description" : "Facebook" , "authenticatorId" : "fb1", "type": "facebook", "url" : "https://example.com"})
+#set ($_windowsAuth = {"description" : "IWA" , "authenticatorId" : "windows1", "type": "windows", "url" : "https://example.com"})
+#set ($_pingAuth = {"description" : "PingFederate" , "authenticatorId" : "ping1", "type": "pingfederate", "url" : "https://example.com"})
+#set ($_sithsAuth = {"description" : "Siths" , "authenticatorId" : "siths1", "type": "siths", "url" : "https://example.com"})
+#set ($_groupAuth = {"description" : "Group" , "authenticatorId" : "group1", "type": "group", "url" : "https://example.com"})
+#set ($_samlAuth = {"description" : "SAML" , "authenticatorId" : "saml1", "type": "saml", "url" : "https://example.com"})
+#set ($_totpAuth = {"description" : "TOTP" , "authenticatorId" : "totp1", "type": "totp", "url" : "https://example.com"})
+#set ($_githubAuth = {"description" : "Github" , "authenticatorId" : "totp1", "type": "github", "url" : "https://example.com"})
+#set ($_linkedinAuth = {"description" : "LinkedIn" , "authenticatorId" : "linkedin", "type": "linkedin", "url" : "https://example.com"})
+#set ($_dropboxAuth = {"description" : "Dropbox" , "authenticatorId" : "dropbox", "type": "dropbox", "url" : "https://example.com"})
+#set ($_awsAuth = {"description" : "AWS" , "authenticatorId" : "aws", "type": "aws", "url" : "https://example.com"})
+#set ($_salesforceAuth = {"description" : "Sales Force" , "authenticatorId" : "salesforce", "type": "salesforce", "url" : "https://example.com"})
+#set ($_windowsliveAuth = {"description" : "Windows Live" , "authenticatorId" : "windowslive", "type": "windows-live", "url" : "https://example.com"})
+#set ($_frejaAuth = {"description" : "Freja e-id" , "authenticatorId" : "freja-eid", "type": "freja-eid", "url" : "https://example.com"})
+#set ($_boxAuth = {"description" : "Box" , "authenticatorId" : "box", "type": "box", "url" : "https://example.com"})
+#set ($_slackAuth = {"description" : "Slack" , "authenticatorId" : "slack", "type": "slack", "url" : "https://example.com"})
+#set ($_bitbucketAuth = {"description" : "Bitbucket" , "authenticatorId" : "bitbucket", "type": "bitbucket", "url" : "https://example.com"})
+#set ($_instagramAuth = {"description" : "Instagram" , "authenticatorId" : "instagram", "type": "instagram", "url" : "https://example.com"})
+#set ($_stackexchangeAuth = {"description" : "Stack Exchange" , "authenticatorId" : "stackexchange", "type": "stackexchange", "url" : "https://example.com"})
+#set ($_signicatAuth = {"description" : "Signicat" , "authenticatorId" : "signicat", "type": "signicat", "url" : "https://example.com"})
+#set ($_criiptoAuth = {"description" : "Criipto" , "authenticatorId" : "criipto", "type": "criipto", "url" : "https://example.com"})
+#set ($_usernameAuth = {"description" : "Username" , "authenticatorId" : "username", "type": "username", "url" : "https://example.com"})
+#set ($_duoAuth = {"description" : "Duo" , "authenticatorId" : "username", "type": "duo", "url" : "https://example.com"})
+#set ($_appleAuth = {"description" : "Sign in with Apple" , "authenticatorId" : "username", "type": "sign-in-with-apple", "url" : "https://example.com"})
+#set ($_netidAuth = {"description" : "NetID" , "authenticatorId" : "netid", "type": "netid", "url" : "https://example.com"})
+#set ($_netidAuth = {"description" : "Test" , "authenticatorId" : "test", "type": "test", "url" : "https://example.com"})
+#set ($_netidaccessosAuth = {"description" : "NetID" , "authenticatorId" : "netidaccess-os", "type": "netidaccess-os", "url" : "https://example.com"})
+
+#set ($ignore = $_allowedAuthenticators.put("google", $_googleAuth))
+#set ($ignore = $_allowedAuthenticators.put("bid", $_bankIdAuth))
+#set ($ignore = $_allowedAuthenticators.put("twitter", $_twitterAuth))
+#set ($ignore = $_allowedAuthenticators.put("username", $_appleAuth))
+#set ($ignore = $_allowedAuthenticators.put("netidaccess-os", $_netidaccessosAuth))
+#set ($ignore = $_allowedAuthenticators.put("duo", $_duoAuth))
+#set ($ignore = $_allowedAuthenticators.put("html", $_htmlAuth))
+#set ($ignore = $_allowedAuthenticators.put("encap", $_encapAuth))
+#set ($ignore = $_allowedAuthenticators.put("sms", $_smsAuth))
+#set ($ignore = $_allowedAuthenticators.put("email", $_emailAuth))
+#set ($ignore = $_allowedAuthenticators.put("oidc", $_oidcAuth))
+#set ($ignore = $_allowedAuthenticators.put("facebook", $_facebookAuth))
+#set ($ignore = $_allowedAuthenticators.put("saml", $_samlAuth))
+#set ($ignore = $_allowedAuthenticators.put("win", $_windowsAuth))
+#set ($ignore = $_allowedAuthenticators.put("pingfederate", $_pingAuth))
+#set ($ignore = $_allowedAuthenticators.put("siths", $_sithsAuth))
+#set ($ignore = $_allowedAuthenticators.put("group", $_groupAuth))
+#set ($ignore = $_allowedAuthenticators.put("totp", $_totpAuth))
+#set ($ignore = $_allowedAuthenticators.put("github", $_githubAuth))
+#set ($ignore = $_allowedAuthenticators.put("linkedin", $_linkedinAuth))
+#set ($ignore = $_allowedAuthenticators.put("dropbox", $_dropboxAuth))
+#set ($ignore = $_allowedAuthenticators.put("aws", $_awsAuth))
+#set ($ignore = $_allowedAuthenticators.put("salesforce", $_salesforceAuth))
+#set ($ignore = $_allowedAuthenticators.put("windowslive", $_windowsliveAuth))
+#set ($ignore = $_allowedAuthenticators.put("freja-eid", $_frejaAuth))
+#set ($ignore = $_allowedAuthenticators.put("box", $_boxAuth))
+#set ($ignore = $_allowedAuthenticators.put("slack", $_slackAuth))
+#set ($ignore = $_allowedAuthenticators.put("bitbucket", $_bitbucketAuth))
+#set ($ignore = $_allowedAuthenticators.put("instagram", $_instagramAuth))
+#set ($ignore = $_allowedAuthenticators.put("stackexchange", $_stackexchangeAuth))
+#set ($ignore = $_allowedAuthenticators.put("signicat", $_signicatAuth))
+#set ($ignore = $_allowedAuthenticators.put("criipto", $_criiptoAuth))
+#set ($ignore = $_allowedAuthenticators.put("username", $_usernameAuth))
+#set ($ignore = $_allowedAuthenticators.put("netid", $_netidAuth))
+#set ($ignore = $_allowedAuthenticators.put("test", $_testAuth))
+
+#set ($_allowedConsentors = {})
+#set ($_cgiConsentor = {"description" : "CGI" , "consentorId" : "cgi", "type": "cgi", "url" : "https://example.com"})
+#set ($_bankidConsentor = {"description" : "BankID" , "consentorId" : "bankid", "type": "bankid", "url" : "https://example.com"})
+#set ($ignore = $_allowedConsentors.put("cgi", $_cgiConsentor))
+#set ($ignore = $_allowedConsentors.put("bid", $_bankidConsentor))
+
+#*
+  Authenticator color
+  true = Use single color version, using theme primary color
+  false = Use default coloured version
+
+*#
+#set ($single_color_authenticator_chooser = false)
+
+#*
+  Authenticator style
+  true = Use icons only
+  false = Use default icon + text
+
+*#
+#set ($icons_only_authenticator_chooser = false)
+
+
+
+#set ($main_css_path = $!_staticResourceRootPath + '/assets/css/main.css' )
+#set ($theme_css_path = $!_staticResourceRootPath + '/assets/css/curity-theme.css')
+
+#*
+  Background color.
+  body-light = White background color
+  body-dark = Dark background color
+*#
+#set ($body_background = 'body-light')
+##set ($body_background = 'body-dark')
+
+#*
+  Login form background color
+  form-light = White background around form
+  form-transparent = Transparent around form
+*#
+#set ($login_form_background = 'form-light')
+##set ($login_form_background = 'form-transparent')
+
+#*
+  Logo path and file name. Use -white version for using the negative logotype.
+  path + file name
+*#
+#set ($logo_email_path = $!_staticResourceRootPath + '/assets/images/curity-logo.png')
+#set ($logo_path = $!_staticResourceRootPath + '/assets/images/curity-logo.svg')
+#set ($logo_white_path = $!_staticResourceRootPath + '/assets/images/curity-logo-white.svg')
+
+#*
+  Logo position. The logo can be used inside the login well, or outside right before
+  inside = inside the well
+  outside = right before the well
+*#
+#set ($logo_inside = false)
+
+#* Page Symbols *#
+#set ($show_symbol = true)
+
+#set ($page_symbol_path = $!_staticResourceRootPath + '/assets/images/')
+
+#set ($page_symbol_done = $page_symbol_path + "done.svg")
+#set ($page_symbol_authenticate_desktop = $page_symbol_path + "login-symbol-computer.svg")
+#set ($page_symbol_authenticate_mobile = $page_symbol_path + "login-symbol-user-computer.svg")
+#set ($page_symbol_authenticate_email = $page_symbol_path + "login-symbol-email.svg")
+#set ($page_symbol_authenticate_card = $page_symbol_path + "login-symbol-card.svg")
+#set ($page_symbol_authenticate_sms = $page_symbol_path + "login-symbol-sms.svg")
+#set ($page_symbol_authenticate_pair_device = $page_symbol_path + "login-symbol-pair-device.svg")
+#set ($page_symbol_authenticate_htmlform = $page_symbol_path + "login-symbol-password.svg")
+#set ($page_symbol_authenticate_totp = $page_symbol_path + "login-symbol-totp.svg")
+#set ($page_symbol_authenticate_bankid = $page_symbol_path + "login-symbol-bankid.svg")
+#set ($page_symbol_authenticate_netid = $page_symbol_path + "login-symbol-netid.svg")
+#set ($page_symbol_authenticate_webauthn = $page_symbol_path + "login-symbol-webauthn.svg")
+#set ($page_symbol_authenticate_opt_in_mfa = $page_symbol_path + "login-symbol-opt-in-mfa.svg")
+#set ($page_symbol_authenticate_passkeys = $page_symbol_path + "login-symbol-passkeys.svg")
+#set ($page_symbol_facebook_data_deletion = $page_symbol_path + "login-symbol-facebook-data-deletion.svg")
+#set ($page_symbol_openid_wallet = $page_symbol_path + "login-symbol-openid-wallet.svg")
+
+#set ($page_symbol_error_generic = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_401 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_400 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_403 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_404 = $page_symbol_path + "login-symbol-questionmark.svg")
+#set ($page_symbol_error_406 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_405 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_406 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_413 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_500 = $page_symbol_path + "login-symbol-exclamation.svg")
+#set ($page_symbol_error_503 = $page_symbol_path + "login-symbol-exclamation.svg")
+
+#set ($page_symbol_done = "PAGE_SYMBOL_DONE")
+
+#set ($powered_by = true)
+
+#* Default Page Symbol*#
+#set ($page_symbol = $page_symbol_authenticate_desktop)
+
+#* Common Right-to-left languages *#
+#set($_rtlLanguages = ["ar", "he", "fa", "ur", "ps", "ku", "sd", "prs", "arc", "ms"])

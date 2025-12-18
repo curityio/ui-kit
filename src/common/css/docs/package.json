@@ -1,0 +1,37 @@
+{
+  "name": "@curity/ui-kit-css-docs",
+  "description": "Documentation for Curity CSS",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "astro dev --host --open",
+    "start": "astro dev",
+    "share": "ngrok http 3000",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "clean": "rm -rf ./dist"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.12",
+    "@astrojs/partytown": "^2.1.4",
+    "@astrojs/react": "^4.4.2",
+    "@curity/ui-kit-css": "*",
+    "@curity/ui-kit-icons": "*",
+    "astro": "^5.16.1",
+    "mdast-util-to-string": "3.2.0",
+    "react": "19.1.0",
+    "react-compiler-runtime": "^19.0.0-beta-63e3235-20250105",
+    "react-dom": "19.1.0",
+    "rollup": "3.28.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@typescript/twoslash": "^3.2.9",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.12.3"
+  }
+}

@@ -1,0 +1,100 @@
+---
+layout: "../../layouts/Page.astro"
+title: "CSS Grid"
+description: "Usage on how to use CSS Grid"
+updatedAt: "August 08 2022"
+order: 3
+---
+
+# CSS Grid
+
+CSS Grid is the newest spec in CSS for two-dimensional grid-based layout systems. Flexbox is also great but its one-directional flow has different use cases.
+
+## Example Usage
+
+```html
+<div class="grid-container" columns="1" md-columns="3" lg-columns="4" gap="2">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+  <div class="span-all-columns">Full width item</div>
+</div>
+```
+
+<div class="grid-container demo-element" columns="1" md-columns="3" lg-columns="4" gap="2">
+  <div class="demo-element">Item 1</div>
+  <div class="demo-element">Item 2</div>
+  <div class="demo-element">Item 3</div>
+  <div class="demo-element span-all-columns">Full width item</div>
+</div>
+
+## Available Classes
+
+### Container Class
+
+- `.grid-container` - Creates a grid container with `display: grid` and a default gap of `1rem`
+
+### Column Layout
+
+Set the number of columns in your grid:
+
+- `columns="1"` - 1 column
+- `columns="2"` - 2 columns
+
+#### Responsive Columns
+
+Control columns at different breakpoints:
+
+**Small (min-width: 40em)**
+- `sm-columns="2"` - 2 columns
+- `sm-columns="3"` - 3 columns
+
+**Medium (min-width: 52em)**
+- `md-columns="2"` - 2 columns
+- `md-columns="3"` - 3 columns
+- `md-columns="4"` - 4 columns
+- `md-grid-auto-flow="column"` - Auto flow in columns
+
+**Large (min-width: 64em)**
+- `lg-columns="2"` - 2 columns
+- `lg-columns="3"` - 3 columns
+- `lg-columns="4"` - 4 columns
+- `lg-columns="5"` - 5 columns
+- `lg-columns="6"` - 6 columns
+
+**Extra Large (min-width: 74em)**
+- `xlg-columns="2"` - 2 columns
+
+### Gap Spacing
+
+Control the gap between grid items (mobile: 1rem, desktop: varies):
+
+- `gap="0"` - 0.5rem on mobile, 0rem on desktop (40em+)
+- `gap="1"` - 0.5rem on mobile, 1rem on desktop (40em+)
+- `gap="2"` - 1rem on mobile, 2rem on desktop (40em+)
+- `gap="3"` - 1rem on mobile, 3rem on desktop (40em+)
+- `gap="4"` - 1rem on mobile, 4rem on desktop (40em+)
+
+### Grid Flow
+
+- `grid-auto-flow="column"` - Items flow horizontally instead of vertically
+- `md-grid-auto-flow="column"` - Column flow on medium screens and up
+
+### Grid Columns
+
+- `grid-auto-columns="max-content"` - Auto columns sized to max content
+
+### Auto Rows
+
+- `grid-auto-rows` - Sets all rows to equal height (1fr)
+
+### Alignment
+
+- `grid-justify="center"` - Centers grid items horizontally (justify-content)
+- `grid-justify="start"` - Aligns grid items to start
+- `align-center="center"` - Centers items vertically (align-items)
+- `justify-items="center"` - Centers items within their grid area
+
+### Span Utilities
+
+- `.span-all-columns` - Makes an item span all columns (grid-column: 1/-1)

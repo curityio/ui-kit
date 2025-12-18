@@ -23,3 +23,8 @@ dist
 *.sw?
 
 *.tsbuildinfo
+
+.astro
+.astro/
+
+.env

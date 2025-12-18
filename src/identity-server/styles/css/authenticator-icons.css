@@ -1,0 +1,154 @@
+[class^="ion-"] {
+  display: inline-block;
+  font-family: Ionicons;
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 1;
+  text-rendering: auto;
+  text-transform: none;
+
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  width: 1px;
+}
+
+.ion-bankid {
+  background-image: url("/assets/images/bankid-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-google {
+  background-image: url("/assets/images/icon-google-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 45%;
+}
+
+.ion-aws {
+  background-image: url("/assets/images/aws-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-salesforce {
+  background-image: url("/assets/images/salesforce-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-freja {
+  background-image: url("/assets/images/freja-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-cgi {
+  background-image: url("/assets/images/cgi-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-slack {
+  background-image: url("/assets/images/slack-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-bitbucket {
+  background-image: url("/assets/images/bitbucket-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-box {
+  background-image: url("/assets/images/box-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-signicat {
+  background-image: url("/assets/images/signicat-logo-white.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-stackexchange {
+  background-image: url("/assets/images/stackexchange-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-criipto {
+  background-image: url("/assets/images/criipto-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-bitbucket {
+  background-image: url("/assets/images/bitbucket-logo-white.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-signicat {
+  background-image: url("/assets/images/signicat-logo-white.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
+
+.ion-openid {
+  background: url("/assets/images/openid-logo-white.svg") 50% 50% no-repeat;
+  background-size: 50%;
+}
+
+.ion-duo {
+  background: url("/assets/images/duo-logo-white.svg") 50% 50% no-repeat;
+  background-size: 60%;
+}
+
+.ion-netidaccess-os {
+  background: url("/assets/images/netidaccess-os-logo.svg") 50% 50% no-repeat;
+  background-size: 40%;
+}
+
+.ion-passkeys {
+  background: url("/assets/images/passkeys.svg") 50% 50% no-repeat;
+  background-size: 50%;
+}
+
+.ion-openid-wallet {
+  background: url("/assets/images/openid-wallet.svg") 50% 50% no-repeat;
+  background-size: 70%;
+}
+
+.ion-saml,
+.ion-saml2 {
+  background: url("/assets/images/saml.svg") 50% 50% no-repeat;
+  background-size: 40%;
+}
+
+.ion-x {
+    background-image: url("/assets/images/x.svg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 50%;
+  }

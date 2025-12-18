@@ -1,0 +1,333 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  align-items: center;
+}
+
+.flex-baseline {
+  align-items: baseline;
+}
+
+.flex-stretch {
+  align-items: stretch;
+}
+
+.flex-start {
+  align-items: flex-start;
+}
+
+.flex-end {
+  align-items: flex-end;
+}
+
+.flex-justify {
+  justify-content: space-between;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-grow {
+  flex: 1 0 auto;
+}
+
+.flex-none {
+  flex: none;
+}
+
+@media (width >=40em) {
+  .sm-flex {
+    display: flex;
+  }
+}
+
+@media (width >=52em) {
+  .md-flex {
+    display: flex;
+  }
+}
+
+@media (width >=64em) {
+  .lg-flex {
+    display: flex;
+  }
+}
+
+/* Flexbox */
+
+@media (width >=40em) {
+  .flex-10 {
+    flex: 0 0 10%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-20 {
+    flex: 0 0 20%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-25 {
+    flex: 0 0 25%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-33 {
+    flex: 0 0 33.3333%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-30 {
+    flex: 0 0 30%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-40 {
+    flex: 0 0 40%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-50 {
+    flex: 0 0 50%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-60 {
+    flex: 0 0 60%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-66 {
+    flex: 0 0 66.6667%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-70 {
+    flex: 0 0 70%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-75 {
+    flex: 0 0 75%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-80 {
+    flex: 0 0 80%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-90 {
+    flex: 0 0 90%;
+  }
+}
+
+@media (width >=40em) {
+  .flex-100 {
+    flex: 0 0 100%;
+  }
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+/* .justify-center-lg {
+  @media (min-width: 64em) {
+    justify-content: center;
+  }
+} */
+
+@media (width >=74em) {
+  .xlg-flex {
+    display: flex;
+  }
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-stretch {
+  align-items: stretch;
+}
+
+.flex-nostretch {
+  align-self: center;
+}
+
+.flex-nostretch-start {
+  align-self: flex-start;
+}
+
+.flex-nostretch-end {
+  align-self: flex-end;
+}
+
+.flex-noshrink {
+  flex-shrink: 0;
+}
+
+.flex-align-normal {
+  align-self: normal;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+.justify-reset {
+  justify-content: unset;
+}
+
+.align-items-reset {
+  align-items: unset;
+}
+
+@media (width >=40em) {
+  .sm-mb0 {
+    margin-bottom: 0;
+  }
+}
+
+@media (width >=40em) {
+  .sm-justify-center {
+    justify-content: center;
+  }
+}
+
+@media (width >=52em) {
+  .md-justify-start {
+    justify-content: flex-start;
+  }
+}
+
+@media (width >=40em) {
+  .sm-flex-row {
+    flex-direction: row;
+  }
+}
+
+.flex-between {
+  align-content: space-between;
+}
+
+.no-flex {
+  flex: none;
+}
+
+.flex-gap-1 {
+  gap: var(--space-1);
+}
+
+.flex-gap-2 {
+  gap: var(--space-2);
+}
+
+.flex-gap-3 {
+  gap: var(--space-3);
+}
+
+.flex-gap-4 {
+  gap: var(--space-4);
+}
+
+.flex-row-gap-1 {
+  row-gap: var(--space-1);
+}
+
+.flex-row-gap-2 {
+  row-gap: var(--space-2);
+}
+
+.flex-row-gap-3 {
+  row-gap: var(--space-3);
+}
+
+.flex-row-gap-4 {
+  row-gap: var(--space-4);
+}
+
+.hide-sm-flex {
+  display: none;
+}
+
+@media (width >=40em) {
+  .hide-sm-flex {
+    display: flex;
+  }
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.sm-flex-row-reverse {
+  @media (width >=40em) {
+    flex-direction: row-reverse;
+  }
+}
+
+.flex-column-reverse {
+  flex-direction: column-reverse;
+}
+
+.flex-row-reverse-sm-unset {
+  flex-direction: row-reverse;
+
+  @media (width >=40em) {
+    flex-direction: unset;
+  }
+}
+
+.flex-column-reverse-sm-unset {
+  flex-direction: column-reverse;
+
+  @media (width >=40em) {
+    flex-direction: unset;
+  }
+}

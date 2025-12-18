@@ -1,0 +1,162 @@
+/*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+.enter-usercode-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+input[type="text"].field-enter-usercode {
+  width: 40px;
+  height: 50px;
+  border: 1px solid #626c87;
+  line-height: 50px;
+  font-size: 1rem;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  background-color: white;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  background-clip: padding-box;
+}
+
+@media (min-width: 600px) {
+  /* replace with your $breakpoint-sm */
+  input[type="text"].field-enter-usercode {
+    width: 40px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+}
+
+input[type="text"].field-enter-usercode-success {
+  border: 1px solid var(--color-success);
+}
+
+input[type="text"].field-enter-usercode-error {
+  border: 1px solid var(--color-danger);
+}
+
+input[type="text"].field-enter-usercode-success:focus {
+  background-color: white;
+  color: inherit;
+}
+
+.field-enter-usercode-separator {
+  border: none;
+  pointer-events: none;
+  user-select: none;
+  height: 100%;
+  position: relative;
+  width: 100%;
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 0.5rem;
+}
+
+.field-enter-usercode-separator::after {
+  display: block;
+  width: 16px;
+  margin: 0 auto;
+  content: "";
+  height: 2px;
+  background-color: #333;
+}
+
+@media (min-width: 600px) {
+  /* replace with your $breakpoint-sm */
+  .field-enter-usercode-separator {
+    width: 20px;
+    display: inline-block;
+  }
+  .field-enter-usercode-separator::after {
+    width: 80%;
+  }
+}
+
+input[type="text"].field-enter-usercode:focus {
+  background-color: #fff;
+  border-color: #626c87;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgb(98 108 135 / 25%);
+}
+
+.field-enter-usercode:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+input[type="submit"][disabled] {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.confirm-device {
+  background-color: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.confirm-device-image {
+  flex: 1 1 auto;
+  display: block;
+  max-width: 300px;
+}
+
+.confirm-device-image img {
+  display: block;
+  object-fit: fill;
+}
+
+.confirm-device-text {
+  flex: 1 0 auto;
+  font-size: 1.25rem;
+  padding: 1rem;
+}
+
+@media (min-width: 40em) {
+  .confirm-device-text {
+    font-size: 2rem;
+  }
+}
+
+/* QR Codes */
+img#autostartTokenQr,
+img[alt*="barcode"] {
+  margin: 0 auto;
+  display: block;
+  width: 250px;
+}
+
+/* QR code is larger when clicked */
+#trigger-fullscreen:focus {
+  box-shadow: none;
+}
+
+img.qr-enlarge {
+  min-width: 100%;
+}
+
+@media (min-width: 40em) {
+  img.qr-enlarge {
+    min-width: 400px;
+  }
+}

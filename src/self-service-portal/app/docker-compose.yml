@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+  curity:
+    image: ${DOCKER_IMAGE}
+    command: ['idsvr', '-s', 'TestServer1']
+    healthcheck:
+      test: ['CMD', '/opt/idsvr/bin/status']
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    networks:
+      curity:
+        aliases:
+          - '${PROJECT_NAME}-curity'
+networks:
+  default:
+    external:
+      name: 'curity'
+  curity:
+    external: true

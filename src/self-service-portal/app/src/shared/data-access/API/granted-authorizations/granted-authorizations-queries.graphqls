@@ -1,0 +1,75 @@
+query getGrantedAuthorizationsByOwner($owner: String!, $first: Int, $after: String) {
+  grantedAuthorizationsByOwner(owner: $owner, first: $first, after: $after) {
+    edges {
+      node {
+        owner
+        authorizedClient {
+          id
+          name
+          description
+          logoUri
+        }
+        authorizedScopes {
+          name
+          localizedName
+          description
+        }
+        authorizedClaims {
+          name
+          localizedName
+          description
+        }
+        meta {
+          created
+          lastModified
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    totalCount
+    warnings {
+      type
+    }
+  }
+}
+
+query getGrantedAuthorizationsByOwnerAndClient($owner: String!, $clientId: String!, $first: Int, $after: String) {
+  grantedAuthorizationsByOwnerAndClient(owner: $owner, clientId: $clientId, first: $first, after: $after) {
+    edges {
+      node {
+        owner
+        authorizedClient {
+          id
+          name
+          description
+          logoUri
+        }
+        authorizedScopes {
+          name
+          localizedName
+          description
+        }
+        authorizedClaims {
+          name
+          localizedName
+          description
+        }
+        meta {
+          created
+          lastModified
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    totalCount
+    warnings {
+      type
+    }
+  }
+}

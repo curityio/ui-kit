@@ -1,0 +1,31 @@
+{
+  "name": "@curity/ui-kit-css-lib",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "license": "Apache-2.0",
+  "files": [
+    "dist/index.css"
+  ],
+  "author": {
+    "name": "Curity AB"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "postwatch": "mkdir -p ../../identity-server/build/curity/webroot/assets/css && cp src/!(main|curity-application).css ../../identity-server/build/curity/webroot/assets/css/",
+    "format": "npx prettier --write ./src/**/*.css",
+    "preview": "vite preview",
+    "lint": "stylelint ./src/**/**/*.css",
+    "lint:fix": "stylelint ./src/**/**/*.css --fix",
+    "clean": "rm -rf ./dist"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

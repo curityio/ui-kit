@@ -1,0 +1,12 @@
+.hover-bg-light:hover {
+  background-color: var(--color-grey-subtle);
+}
+
+.hover-bg-primary-dark:hover {
+  background-color: var(--color-primary-dark);
+}
+
+a.hover-color-white:hover,
+.hover-color-white:hover {
+  color: white;
+}

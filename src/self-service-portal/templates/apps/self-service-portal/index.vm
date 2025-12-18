@@ -1,0 +1,91 @@
+#*
+ * Copyright (C) 2015 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *###
+#*
+ * For a full list of variables available in this template and their associated values, do the following:
+ *
+ * 1. Create a file called globals.vm in <installation-dir>/usr/share/templates/overrides/fragments
+ *
+ * 2. Add the following to this new file:
+ *
+ * <!--
+ *    All variables:
+ *    #foreach ($entry in $_context.entrySet())
+ *        $entry.key => $!entry.value
+ *    #end
+ * -->
+ *
+ * 3. Request this template again and view the HTML source code. All variables and their values will be shown in an
+ *    HTML comment at the top of the file.
+ *
+ * For more information about using the Velocity templating language, refer to
+ * http://velocity.apache.org/engine/devel/user-guide.html.
+ *###
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curity Self Service Portal</title>
+
+    <link rel="icon" href="${_assetsPath}/favicon.png" type="image/png" />
+
+    <meta name="theme-color" content="#fff" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+
+    <meta property="og:title" content="Curity Self Service Portal" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://curity.io" />
+    <meta
+            property="og:image"
+            content="https://curity.io/images/start/identity-management-for-apps-apis-and-ai.jpg"
+    />
+    <meta property="og:description" content="Curity Self Service Portal" />
+    <meta property="og:site_name" content="Curity Self Service Portal" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Curity Self Service Portal" />
+    <meta name="twitter:description" content="Curity Self Service Portal" />
+    <meta
+            name="twitter:image"
+            content="https://curity.io/images/start/identity-management-for-apps-apis-and-ai.jpg"
+    />
+    <script>
+        window.__CONFIG__ = {
+            appBasePath: "$appBasePath",
+            bffBaseUrl: "$bffBaseUrl",
+            metadataPath: "$metadataPath",
+            theme: {
+#if ($_configured_logo_path)
+                logoImage: "$_configured_logo_path",
+#end
+#if ($_configured_ussp_intro_image)
+                loginImage: "$_configured_ussp_intro_image",
+#end
+            }
+        }
+    </script>
+    <script type="module" crossorigin src="${_assetsPath}/index.js?v=${_cacheBustingHash}"></script>
+    <link rel="stylesheet" crossorigin href="${_assetsPath}/index.css?v=${_cacheBustingHash}">
+    <link rel="stylesheet" crossorigin href="/assets/css/curity-theme.css?v=${_cacheBustingHash}">
+#if ($_configured_ui_theme_css_path)
+    <link rel="stylesheet" type="text/css" href="${_configured_ui_theme_css_path}?v=${_cacheBustingHash}" />
+#end
+#if ($_configured_ui_custom_theme_css_path)
+    <link rel="stylesheet" type="text/css" href="${_configured_ui_custom_theme_css_path}?v=${_cacheBustingHash}">
+#end
+</head>
+<body>
+<div id="root"></div>
+</body>
+</html>

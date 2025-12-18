@@ -1,0 +1,13 @@
+mutation revokeGrantedAuthorizationsByOwner($input: RevokeGrantedAuthorizationsByOwnerInput) {
+  revokeGrantedAuthorizationsByOwner(input: $input) {
+    success
+    asynchronous
+  }
+}
+
+mutation revokeGrantedAuthorizationsByOwnerAndClient($input: RevokeGrantedAuthorizationByOwnerAndClientInput) {
+  revokeGrantedAuthorizationsByOwnerAndClient(input: $input) {
+    success
+    asynchronous
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@curity/ui-kit-identity-server",
+  "author": "Curity",
+  "version": "1.6.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.16.0",
+    "npm": ">=10.8.1"
+  },
+  "scripts": {
+    "java": "node previewer",
+    "clean": "rm -rf build",
+    "preinstall": "cp ./git/hooks/* .git/hooks/ || true",
+    "start": "concurrently --kill-others \" npm run java\" \" npm run dev\"",
+    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css --workspace @curity/ui-kit-identity-server && npm run unzip-libs || true",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css || true",
+    "build:styles": "vite build --mode styles",
+    "build:ui": "vite build --mode ui",
+    "build": "npm run build:styles && npm run build:ui",
+    "watch:styles": "vite build --watch --mode styles",
+    "watch:ui": "vite build --watch --mode ui",
+    "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib",
+    "predev": "npm run build --workspace @curity/ui-kit-css-lib",
+    "dev": "npm run watch:css-lib & sleep 2 && concurrently \"npm run watch:styles\" \"npm run watch:ui\"",
+    "unzip-libs": "node unzip-libs.mjs",
+    "clean-libs": "find ../../lib -mindepth 1  -maxdepth 1 ! -name '.gitignore' ! -name 'ui-kit-runtime.zip' -exec rm -rf {} +"
+  },
+  "dependencies": {
+    "jquery": "3.5.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.2",
+    "concurrently": "^8.2.2",
+    "extract-zip": "^2.0.1",
+    "node-env-file": "^0.1.8",
+    "vite": "^7.1.5",
+    "vite-plugin-static-copy": "^3.1.2"
+  }
+}

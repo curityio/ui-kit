@@ -1,0 +1,33 @@
+
+
+.backup-codes {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.backup-codes ul {
+  font-family: var(--type-mono);
+  font-size: 1rem;
+}
+
+@media (min-width: 40em) {
+  .backup-codes ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1rem;
+  }
+}
+
+.backup-codes li {
+  text-align: center;
+}
+
+@media (min-width: 40em) {
+  .backup-codes li {
+    justify-self: center;
+  }
+}
+
+body.body-dark .form-transparent .backup-codes code {
+  color: white;
+}

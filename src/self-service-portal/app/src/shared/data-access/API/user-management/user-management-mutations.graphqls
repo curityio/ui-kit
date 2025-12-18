@@ -1,0 +1,215 @@
+mutation addDeviceToAccountByAccountId($input: AddDeviceToAccountByAccountIdInput!) {
+  addDeviceToAccountByAccountId(input: $input) {
+    device {
+      ...DEVICE_FIELDS
+    }
+  }
+}
+
+mutation updateDeviceFromAccountByAccountId($input: UpdateDeviceFromAccountByAccountIdInput!) {
+  updateDeviceFromAccountByAccountId(input: $input) {
+    device {
+      ...DEVICE_FIELDS
+    }
+  }
+}
+
+mutation deleteOptInMfaFactorFromAccountByAccountId($input: DeleteOptInMfaFactorFromAccountByAccountIdInput!) {
+  deleteOptInMfaFactorFromAccountByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation resetOptInMfaStateByAccountId($input: ResetOptInMfaStateByAccountIdInput!) {
+  resetOptInMfaStateByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation updateAccountById($input: UpdateAccountByIdInput!) {
+  updateAccountById(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation createAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation deleteAccountById($input: DeleteAccountByIdInput!) {
+  deleteAccountById(input: $input) {
+    deleted
+  }
+}
+
+mutation deleteDeviceFromAccountByAccountId($input: DeleteDeviceFromAccountByAccountIdInput!) {
+  deleteDeviceFromAccountByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation updateAccountById($input: UpdateAccountByIdInput!) {
+  updateAccountById(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation deleteLinkFromAccountByAccountId($input: DeleteLinkFromAccountByAccountIdInput!) {
+  deleteLinkFromAccountByAccountId(input: $input) {
+    deleted
+  }
+}
+
+mutation startVerifyTotpDeviceByAccountId($input: StartVerifyTotpDeviceByAccountIdInput!) {
+  startVerifyTotpDeviceByAccountId(input: $input) {
+    state
+    deviceId
+    issuer
+    key
+    digits
+    interval
+    algorithm
+    skew
+    delayWindow
+    deviceType
+    deviceExpiresIn
+    qrLink
+  }
+}
+
+mutation completeVerifyTotpDeviceByAccountId($input: CompleteVerifyTotpDeviceByAccountIdInput!) {
+  completeVerifyTotpDeviceByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation startVerifyEmailAddressByAccountId($input: StartVerifyEmailAddressByAccountIdInput!) {
+  startVerifyEmailAddressByAccountId(input: $input) {
+    result
+    state
+  }
+}
+
+mutation completeVerifyEmailAddressByAccountId($input: CompleteVerifyEmailAddressByAccountIdInput!) {
+  completeVerifyEmailAddressByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation deleteEmailAddressByAccountId($input: DeleteEmailAddressByAccountIdInput!) {
+  deleteEmailAddressByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation updatePrimaryEmailAddressByAccountId($input: UpdatePrimaryEmailAddressByAccountIdInput!) {
+  updatePrimaryEmailAddressByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation startVerifyPhoneNumberByAccountId($input: StartVerifyPhoneNumberByAccountIdInput!) {
+  startVerifyPhoneNumberByAccountId(input: $input) {
+    result
+    state
+  }
+}
+
+mutation completeVerifyPhoneNumberByAccountId($input: CompleteVerifyPhoneNumberByAccountIdInput!) {
+  completeVerifyPhoneNumberByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation deletePhoneNumberByAccountId($input: DeletePhoneNumberByAccountIdInput!) {
+  deletePhoneNumberByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation updatePrimaryPhoneNumberByAccountId($input: UpdatePrimaryPhoneNumberByAccountIdInput!) {
+  updatePrimaryPhoneNumberByAccountId(input: $input) {
+    result
+  }
+}
+
+mutation validatePasswordAndUpdateAccountById($input: ValidatePasswordAndUpdateAccountByIdInput!) {
+  validatePasswordAndUpdateAccountById(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation addOptInMfaFactorToAccountByAccountId($input: AddOptInMfaFactorToAccountByAccountIdInput!) {
+  addOptInMfaFactorToAccountByAccountId(input: $input) {
+    added
+  }
+}
+
+mutation optOutFromOptInMfaByAccountId($input: OptOutFromOptInMfaByAccountIdInput!) {
+  optOutFromOptInMfaByAccountId(input: $input) {
+    optedOut
+  }
+}
+
+mutation startOptInMfaSetupByAccountId($input: StartOptInMfaSetupByAccountIdInput!) {
+  startOptInMfaSetupByAccountId(input: $input) {
+    factors {
+      acr
+      description
+      type
+      hasDevices
+    }
+    recoveryCodes {
+      value
+    }
+    state
+  }
+}
+
+mutation completeOptInMfaSetupByAccountId($input: CompleteOptInMfaSetupByAccountIdInput!) {
+  completeOptInMfaSetupByAccountId(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation startOptInMfaResetRecoveryCodesByAccountId($input: StartOptInMfaResetRecoveryCodesByAccountIdInput!) {
+  startOptInMfaResetRecoveryCodesByAccountId(input: $input) {
+    recoveryCodes {
+      value
+    }
+    state
+  }
+}
+
+mutation completeOptInMfaResetRecoveryCodesByAccountId($input: CompleteOptInMfaResetRecoveryCodesByAccountIdInput!) {
+  completeOptInMfaResetRecoveryCodesByAccountId(input: $input) {
+    account {
+      ...USER_ACCOUNT_FIELDS
+    }
+  }
+}
+
+mutation startVerifyPasskeyByAccountId($input: StartVerifyPasskeyByAccountIdInput!) {
+  startVerifyPasskeyByAccountId(input: $input) {
+    state
+    credentialOptionsJson
+  }
+}
+
+mutation completeVerifyPasskeyByAccountId($input: CompleteVerifyPasskeyByAccountIdInput!) {
+  completeVerifyPasskeyByAccountId(input: $input) {
+    result
+  }
+}

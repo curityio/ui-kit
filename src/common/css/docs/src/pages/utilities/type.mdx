@@ -1,0 +1,106 @@
+---
+layout: '../../layouts/Page.astro'
+title: 'Type'
+description: 'Usage on how to use Type'
+updatedAt: 'August 08 2022'
+---
+
+# Typography Utilities
+
+Utility classes for controlling text styling, alignment, transformation, and formatting.
+
+## Available Classes
+
+### Font Weight
+
+- `.regular` - Normal font weight (`font-weight: normal`)
+
+### Font Style
+
+- `.italic` - Italic text style (`font-style: italic`)
+
+### Text Alignment
+
+- `.left-align` - Align text to the left
+- `.center` - Center align text
+- `.right-align` - Align text to the right
+- `.justify` - Justify text alignment
+
+### Text Transform
+
+- `.uppercase` - Transform text to uppercase
+- `.capitalize` - Capitalize first letter of each word
+- `.uppercasecaps` - Uppercase with bold font family, custom letter spacing (0.085em), and antialiasing
+
+### Text Decoration
+
+- `.no-decoration` - Remove text decoration (`text-decoration: none`)
+
+### White Space
+
+- `.nowrap` - Prevent text wrapping (`white-space: nowrap`)
+- `.balance` - Balance text across lines for better readability (`text-wrap: balance`)
+
+### List Styling
+
+- `.list-reset` - Remove default list styling (removes list-style and padding-left)
+
+## Usage Examples
+
+### Text Alignment
+```html
+<p class="left-align">Left aligned text</p>
+<p class="center">Centered text</p>
+<p class="right-align">Right aligned text</p>
+```
+
+### Text Transform
+```html
+<h2 class="uppercase">This Will Be Uppercase</h2>
+<h3 class="capitalize">this will be capitalized</h3>
+<span class="uppercasecaps">Styled uppercase caps</span>
+```
+
+### White Space Control
+```html
+<span class="nowrap">This text won't wrap</span>
+<h1 class="balance">This heading will balance nicely across multiple lines</h1>
+```
+
+### Clean Lists
+```html
+<ul class="list-reset">
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+```
+
+### Text Styling
+```html
+<p class="italic">Italic text</p>
+<p class="regular">Normal weight text</p>
+<a href="#" class="no-decoration">Link without underline</a>
+```
+
+## Special Classes
+
+### `.uppercasecaps`
+This class provides a more refined uppercase style with:
+- Bold sans-serif font family (from CSS variables)
+- Antialiased rendering for smoother appearance
+- Increased letter spacing (0.085em) for better readability
+- Uppercase transformation
+
+```html
+<span class="uppercasecaps">Premium Uppercase Text</span>
+```
+
+### `.balance`
+Modern text wrapping that balances line lengths for better visual appearance, particularly useful for headings and short paragraphs.
+
+```html
+<h2 class="balance">
+  This heading will wrap in a balanced way for better typography
+</h2>
+```

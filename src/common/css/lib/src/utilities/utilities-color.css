@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2023 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+.primary {
+  color: var(--color-primary);
+}
+
+.primary-dark {
+  color: var(--color-primary-dark);
+}
+
+.primary-light {
+  color: var(--color-primary-light);
+}
+
+.primary-spot {
+  color: var(--color-spot);
+}
+
+.tertiary {
+  color: var(--color-yellow);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-primary-dark {
+  background-color: var(--color-primary-dark);
+}
+
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
+
+.bg-primary-spot {
+  background-color: var(--color-spot);
+}
+
+.bg-light-grey {
+  background-color: var(--color-grey-subtle);
+}
+
+.white {
+  color: white;
+}
+
+.red {
+  color: red;
+}
+
+.grey-light {
+  color: var(--color-grey-light);
+}
+
+.grey-subtle {
+  color: var(--color-grey-subtle);
+}

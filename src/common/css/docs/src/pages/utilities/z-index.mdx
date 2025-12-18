@@ -1,0 +1,224 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Z-index"
+description: "Usage on how to use Z-index"
+updatedAt: "August 08 2022"
+---
+
+# Z-Index Utilities
+
+Utility classes for controlling the stacking order of elements. Z-index determines which elements appear in front of or behind other elements.
+
+## Available Classes
+
+- `.z-1` - z-index: 1
+- `.z-2` - z-index: 2
+- `.z-3` - z-index: 3
+- `.z-4` - z-index: 4
+- `.z-5` - z-index: 5
+- `.z-6` - z-index: 6
+- `.z-7` - z-index: 7
+- `.z-8` - z-index: 8
+- `.z-9` - z-index: 9
+- `.z-10` - z-index: 10
+
+## Requirements
+
+⚠️ **Important**: Z-index only works on positioned elements. The element must have a position value other than `static` (e.g., `relative`, `absolute`, `fixed`, or `sticky`).
+
+```html
+<!-- ✓ Correct - element is positioned -->
+<div class="relative z-5">Content</div>
+
+<!-- ✗ Incorrect - z-index won't work on static positioning -->
+<div class="z-5">Content</div>
+```
+
+## Usage Examples
+
+### Basic Layering
+
+```html
+<!-- Background layer -->
+<div class="absolute z-1" style="inset: 0; background: blue;">
+  Layer 1
+</div>
+
+<!-- Middle layer -->
+<div class="absolute z-5" style="inset: 0; background: rgba(255,0,0,0.5);">
+  Layer 5
+</div>
+
+<!-- Top layer -->
+<div class="absolute z-10" style="inset: 0; background: rgba(0,255,0,0.5);">
+  Layer 10
+</div>
+```
+
+### Overlays and Modals
+
+```html
+<!-- Page content -->
+<main class="relative z-1">
+  <h1>Page Content</h1>
+</main>
+
+<!-- Modal backdrop -->
+<div class="fixed z-8" style="inset: 0; background: rgba(0,0,0,0.5);">
+</div>
+
+<!-- Modal dialog -->
+<div class="fixed z-9" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+  <div class="bg-white p-4 br-6">
+    Modal Content
+  </div>
+</div>
+```
+
+### Dropdown Menus
+
+```html
+<div class="relative">
+  <!-- Button -->
+  <button class="relative z-1">Menu</button>
+
+  <!-- Dropdown (appears above other content) -->
+  <div class="absolute z-5 bg-white border-light br-4 p-2" style="top: 100%; left: 0;">
+    <ul class="list-reset">
+      <li>Option 1</li>
+      <li>Option 2</li>
+      <li>Option 3</li>
+    </ul>
+  </div>
+</div>
+```
+
+## Common Patterns
+
+### Sticky Header
+```html
+<header class="sticky z-10 bg-white border-bottom-light" style="top: 0;">
+  <nav class="container p-2">
+    Navigation
+  </nav>
+</header>
+```
+
+### Tooltip
+```html
+<div class="relative inline-flex">
+  <button>Hover me</button>
+  <div class="absolute z-5 bg-primary-dark white p-2 br-3"
+       style="bottom: 100%; left: 50%; transform: translateX(-50%);">
+    Tooltip text
+  </div>
+</div>
+```
+
+### Notification Badge
+```html
+<div class="relative">
+  <button>Notifications</button>
+  <span class="absolute z-2 bg-error white br-8"
+        style="top: -0.5rem; right: -0.5rem; padding: 0.25rem 0.5rem;">
+    3
+  </span>
+</div>
+```
+
+### Image with Overlay
+```html
+<div class="relative">
+  <!-- Image (base layer) -->
+  <img src="image.jpg" alt="Image" class="relative z-1">
+
+  <!-- Dark overlay -->
+  <div class="absolute z-2 bg-primary-dark"
+       style="inset: 0; opacity: 0.5;">
+  </div>
+
+  <!-- Text content (top layer) -->
+  <div class="absolute z-3 white"
+       style="inset: 0; display: flex; align-items: center; justify-content: center;">
+    <h2>Overlay Text</h2>
+  </div>
+</div>
+```
+
+### Stacked Cards
+```html
+<div class="relative">
+  <div class="relative z-3 bg-white border-light p-4 br-4">
+    Top Card
+  </div>
+  <div class="absolute z-2 bg-white border-light p-4 br-4"
+       style="top: 0.5rem; left: 0.5rem; right: -0.5rem;">
+    Middle Card
+  </div>
+  <div class="absolute z-1 bg-white border-light p-4 br-4"
+       style="top: 1rem; left: 1rem; right: -1rem;">
+    Bottom Card
+  </div>
+</div>
+```
+
+## Z-Index Hierarchy
+
+A recommended z-index scale for typical UI components:
+
+- **1-2**: Default content, subtle overlays
+- **3-4**: Dropdowns, popovers, tooltips
+- **5-7**: Sticky headers, floating action buttons
+- **8-9**: Modal backdrops, side drawers
+- **10**: Modal dialogs, notifications (highest priority)
+
+## Best Practices
+
+1. **Use sparingly**: Only apply z-index when you need to control stacking order
+2. **Keep it simple**: Lower values are easier to manage and debug
+3. **Be consistent**: Establish a z-index scale for your application
+4. **Position first**: Always combine with a position utility (`.relative`, `.absolute`, `.fixed`, `.sticky`)
+5. **Document your scale**: Create a clear hierarchy for different UI components
+
+## Common Use Cases
+
+### Low Values (1-3)
+- Content sections
+- Simple overlays
+- Subtle visual effects
+
+### Medium Values (4-6)
+- Dropdowns and menus
+- Tooltips
+- Sticky navigation
+
+### High Values (7-10)
+- Modals and dialogs
+- Full-screen overlays
+- Critical notifications
+
+## Troubleshooting
+
+### Z-index not working?
+
+Check these common issues:
+
+1. **Element needs positioning**: Add `.relative`, `.absolute`, `.fixed`, or `.sticky`
+2. **Parent stacking context**: Parent elements with z-index create new stacking contexts
+3. **Order in HTML**: Elements later in the DOM appear on top by default
+4. **Parent overflow**: `overflow: hidden` on a parent can hide positioned children
+
+```html
+<!-- Solution: Add position to make z-index work -->
+<div class="relative z-5">
+  This will now respect z-index
+</div>
+```
+
+## Tips
+
+- Start with lower values and increase only when needed
+- Reserve `.z-10` for the most important overlays (modals, critical notifications)
+- Use `.relative z-1` for content that should appear above backgrounds
+- Combine with opacity for layered transparency effects
+- Test with browser dev tools to visualize stacking order

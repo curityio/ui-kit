@@ -1,0 +1,82 @@
+/*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+.box {
+	overflow: hidden;
+	max-height: 40px;
+	transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+	border: 1px solid var(--form-field-border-color);
+	border-radius: 4px;
+}
+
+.box:not(:last-child) {
+	margin-bottom: 0.5rem;
+}
+
+.login-well:not(.login-well-info) .area .box .area,
+.login-well:not(.login-well-info) .area .box form {
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
+	padding-bottom: 0;
+}
+.box.active {
+	max-height: 999px;
+	transition: max-height 1s ease-out;
+	padding-bottom: 2rem;
+}
+
+.box-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid var(--form-field-border-color);
+	height: 40px;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	cursor: pointer;
+}
+
+.box-header:hover {
+	background-color: #fafafa;
+}
+
+.body-dark .form-transparent .box-header:hover {
+	background-color: var(--form-field-background-color-dark);
+}
+
+.box-header h1 {
+	font-size: 1rem;
+	margin: 0;
+	color: var(--color-primary);
+}
+
+.box-close {
+	box-shadow: none;
+}
+
+.box-close:hover {
+	background-color: transparent;
+}
+
+.box-close i {
+	color: var(--color-primary);
+}
+
+body.body-dark .form-transparent .box-close i {
+	color: white;
+}
+
+.box-close i::before {
+	transition: all 200ms ease;
+}
+
+.box:not(.active) .box-close i::before {
+	transform: rotate(180deg);
+}

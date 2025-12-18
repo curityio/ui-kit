@@ -1,0 +1,157 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Color"
+description: "Usage on how to use Color"
+updatedAt: "August 08 2022"
+---
+
+# Color Utilities
+
+Utility classes for controlling text color and background color of elements using the Curity design system color palette.
+
+## Available Classes
+
+### Text Color Classes
+
+Apply color to text using these classes:
+
+**Brand Colors**
+- `.primary` - Primary brand color (`var(--color-primary)`)
+- `.primary-dark` - Dark primary color (`var(--color-primary-dark)`)
+- `.primary-light` - Light primary color (`var(--color-primary-light)`)
+- `.primary-spot` - Spot/accent color (`var(--color-spot)`)
+- `.tertiary` - Tertiary/yellow color (`var(--color-yellow)`)
+
+**Neutral Colors**
+- `.white` - White text color
+- `.grey-light` - Light grey color (`var(--color-grey-light)`)
+- `.grey-subtle` - Subtle grey color (`var(--color-grey-subtle)`)
+
+**State Colors**
+- `.red` - Red color (typically for errors or warnings)
+
+### Background Color Classes
+
+Apply background colors using these classes:
+
+**Brand Backgrounds**
+- `.bg-primary` - Primary brand background (`var(--color-primary)`)
+- `.bg-primary-dark` - Dark primary background (`var(--color-primary-dark)`)
+- `.bg-primary-light` - Light primary background (`var(--color-primary-light)`)
+- `.bg-primary-spot` - Spot/accent background (`var(--color-spot)`)
+
+**Neutral Backgrounds**
+- `.bg-white` - White background
+- `.bg-light-grey` - Light grey background (`var(--color-grey-subtle)`)
+
+## Usage Examples
+
+### Text Colors
+
+```html
+<!-- Brand text colors -->
+<h1 class="primary">Primary Heading</h1>
+<p class="primary-dark">Dark primary text</p>
+<span class="primary-spot">Accent text</span>
+<p class="tertiary">Yellow tertiary text</p>
+
+<!-- Neutral text colors -->
+<p class="grey-light">Light grey text</p>
+<small class="grey-subtle">Subtle grey text</small>
+<p class="white">White text on dark background</p>
+
+<!-- State colors -->
+<p class="red">Error message</p>
+```
+
+### Background Colors
+
+```html
+<!-- Brand backgrounds -->
+<div class="bg-primary white p-3">
+  Content with primary background
+</div>
+
+<div class="bg-primary-dark white p-3">
+  Content with dark primary background
+</div>
+
+<div class="bg-primary-spot p-3">
+  Content with spot color background
+</div>
+
+<!-- Neutral backgrounds -->
+<div class="bg-white p-3">
+  White background section
+</div>
+
+<div class="bg-light-grey p-3">
+  Light grey background section
+</div>
+```
+
+### Combining Text and Background
+
+```html
+<!-- Call-to-action card -->
+<div class="bg-primary white p-4">
+  <h2>Get Started</h2>
+  <p class="primary-light">Join thousands of developers</p>
+</div>
+
+<!-- Info card -->
+<div class="bg-light-grey p-4">
+  <h3 class="primary">Information</h3>
+  <p class="grey-subtle">Additional details here</p>
+</div>
+
+<!-- Alert -->
+<div class="bg-white p-3">
+  <p class="red">Important: Action required</p>
+</div>
+```
+
+## Design System Integration
+
+All color utilities use CSS custom properties from the Curity design system:
+
+- `--color-primary` - Main brand color
+- `--color-primary-dark` - Darker shade of brand color
+- `--color-primary-light` - Lighter shade of brand color
+- `--color-spot` - Accent/spot color
+- `--color-yellow` - Tertiary yellow color
+- `--color-grey-light` - Light grey
+- `--color-grey-subtle` - Subtle grey for backgrounds
+
+## Accessibility Tips
+
+- Ensure sufficient contrast between text and background colors
+- When using `.white` text, always use it on dark backgrounds (e.g., `.bg-primary`, `.bg-primary-dark`)
+- Use `.grey-subtle` and `.grey-light` for secondary text that still needs to be readable
+- Consider using semantic colors (`.red`) for state-specific messaging
+
+## Common Patterns
+
+### Hero Section
+```html
+<section class="bg-primary-dark white p-4">
+  <h1>Welcome to Curity</h1>
+  <p class="primary-light">Secure identity solutions</p>
+</section>
+```
+
+### Card Component
+```html
+<div class="bg-white p-3">
+  <h3 class="primary">Card Title</h3>
+  <p class="grey-subtle">Card description text</p>
+  <a href="#" class="primary-spot">Learn more →</a>
+</div>
+```
+
+### Error Message
+```html
+<div class="bg-light-grey p-2">
+  <p class="red">Error: Invalid input</p>
+</div>
+```

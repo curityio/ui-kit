@@ -1,0 +1,9 @@
+{
+  "name": "@curity/ui-kit-assets",
+  "version": "1.0.0",
+  "author": "Curity AB",
+  "license": "Apache-2.0",
+  "description": "//TODO: Add description",
+  "type": "module",
+  "private": true
+}

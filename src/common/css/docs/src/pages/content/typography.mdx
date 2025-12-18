@@ -1,0 +1,168 @@
+---
+layout: '../../layouts/Page.astro'
+title: 'Typography'
+description: 'Usage on how to use Typography'
+updatedAt: 'August 08 2022'
+---
+
+# Typography
+
+## Headings
+
+# This is a h1 heading
+
+## This is a h2 heading
+
+### This is a h3 heading
+
+#### This is a h4 heading
+
+```html
+<h1>This is a h1 heading</h1>
+<h2>This is a h2 heading</h2>
+<h3>This is a h3 heading</h3>
+<h4>This is a h4 heading</h4>
+```
+
+## Paragraph
+
+This is a paragraph. It is a block of text that is used to demonstrate the typography styles. You can use this paragraph to test the font size, line height, and other text properties.
+
+```html
+<p>
+  This is a paragraph. It is a block of text that is used to demonstrate the typography styles. You
+  can use this paragraph to test the font size, line height, and other text properties.
+</p>
+```
+
+## Text Styles
+
+**This is bold text**
+
+*This is italic text*
+
+***This is bold and italic text***
+
+~~This is strikethrough text~~
+
+```html
+<strong>This is bold text</strong>
+<em>This is italic text</em>
+<strong><em>This is bold and italic text</em></strong>
+<del>This is strikethrough text</del>
+```
+
+## Links
+
+This is a [link to Curity](https://curity.io).
+
+```html
+<a href="https://curity.io">link to Curity</a>
+```
+
+## Lists
+
+### Unordered List
+
+- List item 1
+- List item 2
+- List item 3
+  - Nested item 1
+  - Nested item 2
+
+```html
+<ul>
+  <li>List item 1</li>
+  <li>List item 2</li>
+  <li>List item 3
+    <ul>
+      <li>Nested item 1</li>
+      <li>Nested item 2</li>
+    </ul>
+  </li>
+</ul>
+```
+
+### Ordered List
+
+1. First item
+2. Second item
+3. Third item
+   1. Nested first
+   2. Nested second
+
+```html
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item
+    <ol>
+      <li>Nested first</li>
+      <li>Nested second</li>
+    </ol>
+  </li>
+</ol>
+```
+
+## Blockquote
+
+> This is a blockquote. It is used to highlight a quote or important text.
+> It can span multiple lines and provides visual emphasis.
+
+```html
+<blockquote>
+  This is a blockquote. It is used to highlight a quote or important text.
+  It can span multiple lines and provides visual emphasis.
+</blockquote>
+```
+
+## Code
+
+Inline code can be shown using `backticks` like this.
+
+```html
+Inline code can be shown using <code>backticks</code> like this.
+```
+
+### Code Block
+
+```javascript
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+```
+
+## Horizontal Rule
+
+---
+
+```html
+<hr>
+```
+
+## Small Text
+
+<small>This is small text</small>
+
+```html
+<small>This is small text</small>
+```
+
+## Abbreviations
+
+The <abbr title="HyperText Markup Language">HTML</abbr> specification.
+
+```html
+The <abbr title="HyperText Markup Language">HTML</abbr> specification.
+```
+
+## Subscript and Superscript
+
+H<sub>2</sub>O is water.
+
+E = mc<sup>2</sup> is Einstein's famous equation.
+
+```html
+H<sub>2</sub>O is water.
+E = mc<sup>2</sup> is Einstein's famous equation.
+```

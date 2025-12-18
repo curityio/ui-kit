@@ -1,0 +1,37 @@
+/*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+.login-powered-by {
+	display: var(--page-powered-by-display);
+	justify-content: center;
+	align-content: center;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	flex-direction: column;
+	text-align: center;
+	opacity: 0.25;
+}
+
+.login-powered-by small {
+	font-size: 0.65rem;
+	text-transform: uppercase;
+}
+
+.login-powered-by-logo {
+	filter: grayscale(100%);
+	background-image: url("/assets/images/curity-logo.svg");
+	background-size: 70px 20px;
+	background-repeat: no-repeat;
+	width: 70px;
+	height: 20px;
+	display: block;
+	margin: 0 auto;
+}

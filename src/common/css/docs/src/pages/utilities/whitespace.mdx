@@ -1,0 +1,277 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Whitespace"
+description: "Usage on how to use Whitespace"
+updatedAt: "August 08 2022"
+order: 4
+---
+
+# Whitespace Utilities
+
+Utility classes for controlling margin and padding using a consistent spacing scale based on CSS custom properties.
+
+## Spacing Scale
+
+All whitespace utilities use CSS custom properties from the design system:
+
+- `--space-1` - Smallest spacing unit
+- `--space-2` - Medium-small spacing
+- `--space-3` - Medium spacing
+- `--space-4` - Large spacing
+
+## Margin Classes
+
+### All Sides Margin
+
+- `.m0` - margin: 0
+- `.m1` - margin: var(--space-1)
+- `.m2` - margin: var(--space-2)
+- `.m3` - margin: var(--space-3)
+- `.m4` - margin: var(--space-4)
+
+### Directional Margin
+
+**Top**
+- `.mt0` - margin-top: 0
+- `.mt1` - margin-top: var(--space-1)
+- `.mt2` - margin-top: var(--space-2)
+- `.mt3` - margin-top: var(--space-3)
+- `.mt4` - margin-top: var(--space-4)
+
+**Right**
+- `.mr0` - margin-right: 0
+- `.mr1` - margin-right: var(--space-1)
+- `.mr2` - margin-right: var(--space-2)
+- `.mr3` - margin-right: var(--space-3)
+- `.mr4` - margin-right: var(--space-4)
+
+**Bottom**
+- `.mb0` - margin-bottom: 0
+- `.mb1` - margin-bottom: var(--space-1)
+- `.mb2` - margin-bottom: var(--space-2)
+- `.mb3` - margin-bottom: var(--space-3)
+- `.mb4` - margin-bottom: var(--space-4)
+
+**Left**
+- `.ml0` - margin-left: 0
+- `.ml1` - margin-left: var(--space-1)
+- `.ml2` - margin-left: var(--space-2)
+- `.ml3` - margin-left: var(--space-3)
+- `.ml4` - margin-left: var(--space-4)
+
+### Negative Horizontal Margin
+
+- `.mxn1` - Negative horizontal margin (left and right): calc(var(--space-1) * -1)
+- `.mxn2` - Negative horizontal margin: calc(var(--space-2) * -1)
+- `.mxn3` - Negative horizontal margin: calc(var(--space-3) * -1)
+- `.mxn4` - Negative horizontal margin: calc(var(--space-4) * -1)
+
+### Auto Horizontal Margin
+
+- `.mx-auto` - margin-left: auto; margin-right: auto (centers block elements)
+
+### Responsive Margin (Large screens: 64em+)
+
+**Top**
+- `.lg-mt0` - margin-top: 0
+- `.lg-mt1` - margin-top: var(--space-2)
+- `.lg-mt2` - margin-top: var(--space-3)
+- `.lg-mt3` - margin-top: var(--space-3)
+- `.lg-mt4` - margin-top: var(--space-3)
+
+**Bottom**
+- `.lg-mb0` - margin-bottom: 0
+- `.lg-mb2` - margin-bottom: var(--space-3)
+- `.lg-mb3` - margin-bottom: var(--space-3)
+- `.lg-mb4` - margin-bottom: var(--space-3)
+
+## Padding Classes
+
+### All Sides Padding
+
+- `.p0` - padding: 0
+- `.p05` - padding: calc(var(--space-1) / 2) (half spacing)
+- `.p1` - padding: var(--space-1)
+- `.p2` - padding: var(--space-2)
+- `.p3` - padding: var(--space-3)
+- `.p4` - padding: var(--space-4)
+
+### Vertical Padding (py)
+
+- `.py05` - padding-top and padding-bottom: calc(var(--space-1) / 2)
+- `.py1` - padding-top and padding-bottom: var(--space-1)
+- `.py2` - padding-top and padding-bottom: var(--space-2)
+- `.py3` - padding-top and padding-bottom: var(--space-3)
+- `.py4` - padding-top and padding-bottom: var(--space-4)
+
+### Horizontal Padding (px)
+
+- `.px05` - padding-left and padding-right: calc(var(--space-1) / 2)
+- `.px1` - padding-left and padding-right: var(--space-1)
+- `.px2` - padding-left and padding-right: var(--space-2)
+- `.px3` - padding-left and padding-right: var(--space-3)
+- `.px4` - padding-left and padding-right: var(--space-4)
+
+### Responsive Padding (Large screens: 64em+)
+
+**All Sides**
+- `.lg-p2` - padding: var(--space-2)
+- `.lg-p3` - padding: var(--space-3)
+- `.lg-p4` - padding: var(--space-4)
+
+**Horizontal**
+- `.lg-px2` - padding-left and padding-right: var(--space-2)
+- `.lg-px3` - padding-left and padding-right: var(--space-3)
+- `.lg-px4` - padding-left and padding-right: var(--space-4)
+
+## Usage Examples
+
+### Basic Spacing
+
+```html
+<!-- Margin examples -->
+<div class="m2">Margin on all sides</div>
+<div class="mt3">Top margin only</div>
+<div class="mb0">Remove bottom margin</div>
+
+<!-- Padding examples -->
+<div class="p3">Padding on all sides</div>
+<div class="py2">Vertical padding only</div>
+<div class="px4">Horizontal padding only</div>
+```
+
+### Centering Elements
+
+```html
+<!-- Center a block element -->
+<div class="mx-auto" style="max-width: 800px;">
+  Centered content
+</div>
+```
+
+### Card Components
+
+```html
+<div class="bg-white border-light br-4 p3 mb2">
+  <h3 class="mt0">Card Title</h3>
+  <p class="mb0">Card content with consistent spacing</p>
+</div>
+```
+
+### Negative Margins
+
+```html
+<!-- Extend content beyond container -->
+<div class="container">
+  <div class="mxn2">
+    Content extends beyond container on left and right
+  </div>
+</div>
+```
+
+### Section Spacing
+
+```html
+<section class="py4">
+  <div class="container">
+    <h2 class="mt0 mb3">Section Title</h2>
+    <p class="mb2">Paragraph with bottom margin</p>
+    <p class="mb0">Last paragraph with no bottom margin</p>
+  </div>
+</section>
+```
+
+### Responsive Spacing
+
+```html
+<!-- More padding on large screens -->
+<div class="p2 lg-p4">
+  Content with responsive padding
+</div>
+
+<!-- Adjusted margin on large screens -->
+<h1 class="mt2 lg-mt4">
+  Heading with responsive top margin
+</h1>
+```
+
+## Common Patterns
+
+### Form Fields
+```html
+<form>
+  <div class="mb2">
+    <label class="mb1">Email</label>
+    <input type="email" class="p2 w-100">
+  </div>
+  <div class="mb2">
+    <label class="mb1">Password</label>
+    <input type="password" class="p2 w-100">
+  </div>
+  <button class="px3 py2">Submit</button>
+</form>
+```
+
+### Button Spacing
+```html
+<button class="px3 py2 br-4 bg-primary white">
+  Click Me
+</button>
+```
+
+### List Items
+```html
+<ul class="list-reset m0">
+  <li class="py2 px3 border-bottom-light">Item 1</li>
+  <li class="py2 px3 border-bottom-light">Item 2</li>
+  <li class="py2 px3">Item 3</li>
+</ul>
+```
+
+### Grid Spacing
+```html
+<div class="grid-container" columns="3" gap="0">
+  <div class="p2">Column 1</div>
+  <div class="p2">Column 2</div>
+  <div class="p2">Column 3</div>
+</div>
+```
+
+### Hero Section
+```html
+<section class="py4 lg-py4">
+  <div class="container px2 lg-px4">
+    <h1 class="mt0 mb3">Hero Title</h1>
+    <p class="mb3">Hero description</p>
+    <button class="px4 py2">Call to Action</button>
+  </div>
+</section>
+```
+
+## Best Practices
+
+1. **Reset margins**: Use `.mt0` or `.mb0` on the first/last child to prevent unwanted spacing
+2. **Consistent spacing**: Stick to the spacing scale (1-4) for visual consistency
+3. **Padding for containers**: Use padding classes for internal spacing in components
+4. **Margin for separation**: Use margin classes to separate components
+5. **Responsive spacing**: Increase spacing on larger screens using `.lg-*` classes
+6. **Center with mx-auto**: Combine with a max-width for centered layouts
+
+## Naming Convention
+
+- **m** = margin, **p** = padding
+- **t** = top, **r** = right, **b** = bottom, **l** = left
+- **x** = horizontal (left + right), **y** = vertical (top + bottom)
+- **n** = negative (e.g., mxn1)
+- **0-4** = spacing scale value
+- **05** = half spacing (0.5)
+- **lg-** = responsive large screen (64em+)
+
+## Tips
+
+- Use `.p0` to remove default padding from elements
+- Use `.m0` on headings to better control spacing
+- `.mx-auto` is perfect for centering containers with a max-width
+- Negative margins (`.mxn*`) are useful for breaking out of containers
+- Combine directional classes for precise control (e.g., `mt2 mb3 px4`)
+- Use consistent spacing values throughout your design for better visual rhythm

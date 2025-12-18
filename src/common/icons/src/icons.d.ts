@@ -1,0 +1,34 @@
+declare module '@icons' {
+  export { default as IconActionAutoLinkAccount } from './@icons/components/action/IconActionAutoLinkAccount';
+  export { default as IconActionMultiFactor } from './@icons/components/action/IconActionMultiFactor';
+  export { default as IconAuthenticatorDefault } from './@icons/components/authenticator/IconAuthenticatorDefault';
+  export { default as IconAuthenticatorGoogle } from './@icons/components/authenticator/IconAuthenticatorGoogle';
+  export { default as IconAuthenticatorPasskeys } from './@icons/components/authenticator/IconAuthenticatorPasskeys';
+  export { default as IconAuthenticatorTotp } from './@icons/components/authenticator/IconAuthenticatorTotp';
+  export { default as IconCapabilityResourceOwnerPasswordCredentials } from './@icons/components/capability/IconCapabilityResourceOwnerPasswordCredentials';
+  export { default as IconFacilitiesEmail } from './@icons/components/facilities/IconFacilitiesEmail';
+  export { default as IconFacilitiesSms } from './@icons/components/facilities/IconFacilitiesSms';
+  export { default as IconGeneralArrowBack } from './@icons/components/general/IconGeneralArrowBack';
+  export { default as IconGeneralArrowForward } from './@icons/components/general/IconGeneralArrowForward';
+  export { default as IconGeneralCheckmarkCircled } from './@icons/components/general/IconGeneralCheckmarkCircled';
+  export { default as IconGeneralChevron } from './@icons/components/general/IconGeneralChevron';
+  export { default as IconGeneralClose } from './@icons/components/general/IconGeneralClose';
+  export { default as IconGeneralDownload } from './@icons/components/general/IconGeneralDownload';
+  export { default as IconGeneralEdit } from './@icons/components/general/IconGeneralEdit';
+  export { default as IconGeneralEyeHide } from './@icons/components/general/IconGeneralEyeHide';
+  export { default as IconGeneralKebabMenu } from './@icons/components/general/IconGeneralKebabMenu';
+  export { default as IconGeneralLocation } from './@icons/components/general/IconGeneralLocation';
+  export { default as IconGeneralLock } from './@icons/components/general/IconGeneralLock';
+  export { default as IconGeneralLockUnlocked } from './@icons/components/general/IconGeneralLockUnlocked';
+  export { default as IconGeneralEmptyStateIcon } from './@icons/components/general/IconGeneralEmptyStateIcon';
+  export { default as IconGeneralPlane } from './@icons/components/general/IconGeneralPlane';
+  export { default as IconGeneralPlus } from './@icons/components/general/IconGeneralPlus';
+  export { default as IconGeneralTrash } from './@icons/components/general/IconGeneralTrash';
+  export { default as IconGeneralWarning } from './@icons/components/general/IconGeneralWarning';
+  export { default as IconKey } from './@icons/components/key/IconKey';
+  export { default as IconToken } from './@icons/components/token/IconToken';
+  export { default as IconUser } from './@icons/components/user/IconUser';
+  export { default as IconUserDataSources } from './@icons/components/user/IconUserDataSources';
+  export { default as IconUserManagement } from './@icons/components/user/IconUserManagement';
+  export { default as IconVciCredentialHome } from './@icons/components/vci/IconVciCredentialHome';
+}

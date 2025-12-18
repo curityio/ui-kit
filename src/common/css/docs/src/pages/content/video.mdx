@@ -1,0 +1,39 @@
+---
+layout: "../../layouts/Page.astro"
+title: "Video"
+description: "Usage on how to use video"
+updatedAt: "August 08 2022"
+---
+
+# Video
+
+## HTML Video
+
+<video muted playsinline loop controls width="640" height="400">
+  <source
+    src="https://curity.io/videos/oauth-tools/jwt.mp4"
+    type="video/mp4"
+    autoplay
+  />
+  Your browser does not support HTML5 video.
+</video>
+
+```html
+<video muted playsinline loop controls width="640" height="400">
+  <source
+    src="https://curity.io/videos/oauth-tools/jwt.mp4"
+    type="video/mp4"
+    autoplay
+  />
+  Your browser does not support HTML5 video.
+</video>
+```
+
+## Video Attributes
+
+- `muted` - Video starts muted
+- `playsinline` - Video plays inline on mobile devices
+- `loop` - Video loops continuously
+- `controls` - Shows video controls (play, pause, volume, etc.)
+- `width` and `height` - Dimensions of the video player
+- `autoplay` - Video starts playing automatically (works best with muted)

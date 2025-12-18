@@ -1,0 +1,39 @@
+---
+import BaseHead from '@components/BaseHead.astro';
+import { Sidebar } from '@components/Sidebar';
+import { Header } from '@components/Header';
+import { CopyToClipboard } from '@components/CopyToClipboard';
+import type { MDXInstance } from 'astro';
+
+export interface Props {
+  content: {
+    title: string;
+    description: string;
+  };
+}
+
+const {
+  content: { title, description },
+} = Astro.props;
+
+const pageModules = await import.meta.glob<MDXInstance<Record<string, any>>>('../pages/**/*.mdx');
+const pages = await Promise.all(Object.values(pageModules).map((module) => module()));
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <Header title="CSS" />
+    <div class="layout">
+      <Sidebar pages={pages} client:load />
+      <main class="main">
+        <div class="container">
+          <slot />
+        </div>
+      </main>
+    </div>
+    <CopyToClipboard client:only />
+  </body>
+</html>

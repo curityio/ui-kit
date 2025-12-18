@@ -1,0 +1,168 @@
+.m0 {
+  margin: 0;
+}
+
+.mt0 {
+  margin-top: 0;
+}
+
+.mr0 {
+  margin-right: 0;
+}
+
+.mb0 {
+  margin-bottom: 0;
+}
+
+.ml0 {
+  margin-left: 0;
+}
+
+.m1 {
+  margin: var(--space-1);
+}
+
+.mt1 {
+  margin-top: var(--space-1);
+}
+
+.mr1 {
+  margin-right: var(--space-1);
+}
+
+.mb1 {
+  margin-bottom: var(--space-1);
+}
+
+.ml1 {
+  margin-left: var(--space-1);
+}
+
+.m2 {
+  margin: var(--space-2);
+}
+
+.mt2 {
+  margin-top: var(--space-2);
+}
+
+.mr2 {
+  margin-right: var(--space-2);
+}
+
+.mb2 {
+  margin-bottom: var(--space-2);
+}
+
+.ml2 {
+  margin-left: var(--space-2);
+}
+
+.m3 {
+  margin: var(--space-3);
+}
+
+.mt3 {
+  margin-top: var(--space-3);
+}
+
+.mr3 {
+  margin-right: var(--space-3);
+}
+
+.mb3 {
+  margin-bottom: var(--space-3);
+}
+
+.ml3 {
+  margin-left: var(--space-3);
+}
+
+.m4 {
+  margin: var(--space-4);
+}
+
+.mt4 {
+  margin-top: var(--space-4);
+}
+
+.mr4 {
+  margin-right: var(--space-4);
+}
+
+.mb4 {
+  margin-bottom: var(--space-4);
+}
+
+.ml4 {
+  margin-left: var(--space-4);
+}
+
+.mxn1 {
+  margin-left: calc(var(--space-1) * -1);
+  margin-right: calc(var(--space-1) * -1);
+}
+
+.mxn2 {
+  margin-left: calc(var(--space-2) * -1);
+  margin-right: calc(var(--space-2) * -1);
+}
+
+.mxn3 {
+  margin-left: calc(var(--space-3) * -1);
+  margin-right: calc(var(--space-3) * -1);
+}
+
+.mxn4 {
+  margin-left: calc(var(--space-4) * -1);
+  margin-right: calc(var(--space-4) * -1);
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (width >= 64em) {
+  .lg-mt0 {
+    margin-top: 0;
+  }
+
+  .lg-mt1 {
+    margin-top: var(--space-2);
+  }
+
+  .lg-mt2 {
+    margin-top: var(--space-3);
+  }
+
+  .lg-mt3 {
+    margin-top: var(--space-3);
+  }
+
+  .lg-mt4 {
+    margin-top: var(--space-3);
+  }
+}
+
+@media (width >= 64em) {
+  .lg-mb0 {
+    margin-bottom: 0;
+  }
+
+  .lg-mt1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .lg-mb2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .lg-mb3 {
+    margin-bottom: var(--space-3);
+  }
+
+  .lg-mb4 {
+    margin-bottom: var(--space-3);
+  }
+}
