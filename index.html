@@ -317,10 +317,48 @@
         background-color: #28a745;
       }
 
-      .button-loading-active {
+      .toast {
+        position: fixed;
+        top: calc(var(--header-height) + 1rem);
+        right: 1rem;
+        background-color: #333;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.9rem;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+        opacity: 0;
         pointer-events: none;
-        opacity: 0.6;
-        cursor: not-allowed;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .toast-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #007bff;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
       }
 
       @keyframes pulse {
@@ -341,6 +379,10 @@
     </style>
   </head>
   <body>
+    <div id="toast" class="toast">
+      <span class="toast-dot"></span>
+      <span>Dev servers loading...</span>
+    </div>
     <header>
       <div>
         <a role="presentation" href="/">
@@ -382,8 +424,7 @@
             <a
               href="http://localhost:3000/listing"
               target="_blank"
-              class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
-              aria-disabled="true"
+              class="button button-primary-outline button-medium w100 mt2"
             >
               <span>View http://localhost:3000/listing →</span>
             </a>
@@ -411,8 +452,7 @@
             <a
               href="http://localhost:5173/previewer"
               target="_blank"
-              class="button button-primary-outline button-medium button-loading button-loading-active w100 mt2"
-              aria-disabled="true"
+              class="button button-primary-outline button-medium w100 mt2"
             >
               <span>View http://localhost:5173/previewer →</span>
             </a>
@@ -448,10 +488,6 @@
               with React
             </li>
             <li>
-              <strong>Login Web Application</strong> - The API Driven UI Kit
-              built with React
-            </li>
-            <li>
               A shared <strong>Common</strong> package that includes:
               <ul>
                 <li>
@@ -476,6 +512,9 @@
           <h4>Read more</h4>
           <ul>
             <li>
+              <a href="README.md">Main README</a>
+            </li>
+            <li>
               <a
                 target="_blank"
                 href="https://curity.io/resources/getting-started/"
@@ -485,7 +524,14 @@
             <li>
               <a
                 target="_blank"
-                href="https://curity.io/resources/ui-kit-documentation/"
+                href="https://curity.io/docs/identity-server/developer-guide/front-end-development/settings-and-theme/"
+                >Docs: Customize branding per Application</a
+              >
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://curity.io/docs/identity-server/developer-guide/front-end-development/"
                 >Docs: Front-end development</a
               >
             </li>
@@ -505,6 +551,14 @@
           cardIndex: 1,
         },
       ];
+
+      const toast = document.getElementById("toast");
+      let readyCount = 0;
+
+      // Show toast on page load
+      setTimeout(() => {
+        toast.classList.add("show");
+      }, 100);
 
       async function checkService(url) {
         try {
@@ -533,22 +587,26 @@
       services.forEach(async (service) => {
         const cards = document.querySelectorAll(".card");
         const card = cards[service.cardIndex];
-        const button = card.querySelector(".button-loading-active");
         const status = card.querySelector(".status");
         const statusText = status.querySelector("span:last-child");
 
         const isReady = await waitForService(service.url);
 
         if (isReady) {
-          button.classList.remove("button-loading-active");
-          button.removeAttribute("aria-disabled");
           status.classList.add("running");
           statusText.textContent = "Dev server running";
+          readyCount++;
         } else {
           // Timeout - mark as failed
-          button.classList.remove("button-loading-active");
-          button.removeAttribute("aria-disabled");
           statusText.textContent = "Dev server not responding";
+          readyCount++;
+        }
+
+        // Hide toast when all services have been checked
+        if (readyCount === services.length) {
+          setTimeout(() => {
+            toast.classList.remove("show");
+          }, 500);
         }
       });
     </script>
