@@ -57,7 +57,6 @@ To start projects individually, run:
 
 - `npm start:identity-server` - to start the Curity Identity Server Templates
 - `npm start:ssp` to start the Self Service Portal
-- `npm start:lwa` to start the Login Web App
 
 ## Build
 
@@ -71,7 +70,6 @@ To build projects individually, run:
 
 - `npm run build:identity-server` to build the Identity Server Templates
 - `npm run build:ssp` to build the Self Service Portal
-- `npm run build:lwa` to build the Login Web App
 - `npm run build:css` to build Curity CSS library
 - `npm run build:icons` to build Curity UI Icons React library
 
