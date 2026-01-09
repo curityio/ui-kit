@@ -1,6 +1,8 @@
 # Curity CSS Documentation
 
-Built using Astro, MDX and TypeScript
+Documentation site for the Curity CSS library.
+
+When running the main `npm start` script from the root, this documentation site is available at `http://localhost:4321/`.
 
 ## Development
 
