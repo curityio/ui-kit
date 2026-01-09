@@ -227,6 +227,14 @@ button svg {
   }
 }
 
+a:is(.button) {
+  text-decoration: none;
+
+  &:is(.button-grey) {
+    color: white
+  }
+}
+
 .button-large {
   font-size: calc(var(--button-font-size) * var(--y-large));
   min-height: 58px;
