@@ -2,9 +2,7 @@
 
 The baseline CSS toolkit for that Curity look and feel.
 
-## What?
-
-Curity CSS s our CSS base and utility classes to style everything that lives inside a browser, a Curity web project, demo app, SPA, Docs or anything.
+Curity CSS is a small base toolkit of base styles and utility classes. It is themeable via CSS variables.
 
 ## Usage
 
@@ -14,7 +12,15 @@ Import
 import "@curity/ui-kit-css-lib/dist/index.css";
 ```
 
-[Read the Docs](src/common/css/docs/readme.md)
+[Read the Docs](../docs/README.md)
+
+## Theming
+
+A default theme is provided, but you can change and also override CSS variables to customize the look and feel.
+
+See the default [curity-theme.css](./src/curity-theme.css) for details.
+
+```css
 
 ## Development
 
