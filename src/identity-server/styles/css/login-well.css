@@ -95,7 +95,7 @@ Login well
 	padding-right: 1rem;
 }
 
-.login-well .area button {
+.login-well .area > button {
 	margin-top: var(--space-2);
 }
 
@@ -131,6 +131,7 @@ Login well
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-1);
+	margin-bottom: var(--space-2);
 	padding-bottom: 0;
 }
 
