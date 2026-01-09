@@ -25,6 +25,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "watch": "vite build --watch",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
     "build": "npm run tsBuild && vite build",
