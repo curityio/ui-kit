@@ -118,3 +118,6 @@ This deploys:
 **Self Service Portal:**
 - Templates → `${IDSVR_HOME}/usr/share/templates/overrides/apps/self-service-portal` or `template-areas/{area}/apps/self-service-portal`
 - Messages → `${IDSVR_HOME}/usr/share/messages/overrides/{language}/apps/self-service-portal` or `template-areas/{area}/{language}/apps/self-service-portal`
+
+## License
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
