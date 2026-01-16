@@ -13,6 +13,7 @@ meta.title=Login
 page.title=Login
 view.authenticate=Login
 view.username=Username
+view.email=Email
 view.password=Password
 view.no-account=Create account
 view.forgot-password=Forgot your password?
@@ -23,7 +24,7 @@ view.success=You have been successfully authenticated
 
 validation.error.authentication.failed=Something went wrong while authenticating your account. Please try again.
 validation.error.incorrect.credentials=Incorrect credentials
-validation.error.accountId.required=You have to enter your username
+validation.error.accountId.required=You have to enter your username/email
 validation.error.password.required=You have to enter your password
 error.too-many-attempts=Too many attempts. You may try again later.
 subject-not-found.rejected.credential=Incorrect credentials

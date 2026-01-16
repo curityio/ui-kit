@@ -13,6 +13,7 @@ meta.title=Logga in
 page.title=Logga in
 view.authenticate=Logga in
 view.username=Användarnamn
+view.email=E-post
 view.password=Lösenord
 view.no-account=Har du inget konto?
 view.forgot-password=Har du glömt ditt lösenord?
@@ -23,7 +24,7 @@ view.success=Du är inloggad
 
 validation.error.authentication.failed=Något gick fel under inloggnigen, var vänlig försök igen
 validation.error.incorrect.credentials=Fel användarnamn och/eller lösenord
-validation.error.accountId.required=Du måste ange ditt användarnamn
+validation.error.accountId.required=Du måste ange ditt användarnamn/e-post
 validation.error.password.required=Du måste ange ditt lösenord
 error.too-many-attempts=För många försök. Du måste vänta ett tag innan du får försöka igen.
 subject-not-found.rejected.credential=Fel användarnamn och/eller lösenord
