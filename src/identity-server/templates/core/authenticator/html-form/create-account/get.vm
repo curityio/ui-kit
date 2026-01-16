@@ -74,13 +74,19 @@
             <i class="form-field-icon icon ion-iphone"></i>
         </div>
 
-
-    <div class="form-field">
-        <label for="userName">#message("authenticator.html-form.create-account.view.username")</label>
-        <input type="text" name="userName" id="userName" value="$!{_postBack["userName"]}"
-           class="block full-width mb1 field-light" autocapitalize="none">
+        <div class="form-field">
+        #if($_showEmailField)
+            <label for="userName">#message("authenticator.html-form.create-account.view.username")</label>
+            <input type="text" name="userName" id="userName" value="$!{_postBack["userName"]}"
+                   class="block full-width mb1 field-light" autocapitalize="none">
             <i class="form-field-icon icon ion-ios-person"></i>
-    </div>
+        #else
+            <label for="userName">#message("authenticator.html-form.create-account.view.email")</label>
+            <input type="email" name="userName" id="userName" value="$!{_postBack["userName"]}"
+                   class="block full-width mb1 field-light" autocapitalize="none">
+            <i class="form-field-icon icon ion-email"></i>
+        #end
+        </div>
 
     #if ($_showPasswordFields == true)
         <div class="form-password-reveal-form password-group">
