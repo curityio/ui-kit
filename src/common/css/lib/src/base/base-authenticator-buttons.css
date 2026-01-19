@@ -127,11 +127,6 @@ button.button-social.button-group .icon,
   background-color: var(--authenticator-group-color);
 }
 
-button.button-social.button-encap .icon,
-.button-social.button-encap .icon {
-  background-color: var(--authenticator-encap-color);
-}
-
 button.button-social.button-windows .icon,
 .button-social.button-windows .icon {
   background-color: var(--authenticator-windows-color);
