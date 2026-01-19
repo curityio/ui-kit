@@ -52,6 +52,7 @@ Then you can access the projects at:
 
 - Curity Identity Server Templates: [http://localhost:3000](http://localhost:3000)
 - Self Service Portal: [http://localhost:5173/previewer](http://localhost:5173/previewer)
+- Curity CSS Docs: [http://localhost:4321/](http://localhost:4321/)
 
 To start projects individually, run:
 
