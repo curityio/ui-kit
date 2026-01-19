@@ -7,7 +7,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "prestart": "npm run build:lib",
+    "prestart": "test \"$SKIP_PRESTART\" = \"1\" || npm run build:lib",
     "start:docs": "npm start -w docs",
     "start:lib": "npm start -w lib",
     "start": "npm-run-all -p start:docs start:lib",
