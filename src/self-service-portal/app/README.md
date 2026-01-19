@@ -28,6 +28,9 @@ npm start
 
 Open your browser and navigate to `http://localhost:5173/previewer` to access the Previewer.
 
+For testing the functionality of verifying external sources (like email, phone number, passkeys, etc.), 
+you can use the following test code: `123456`.
+
 ## Development
 To develop and test the application against a real Identity Server instance, you need to set up a development environment:
 1. Configure an Identity Server instance with the Self-Service Portal enabled.
