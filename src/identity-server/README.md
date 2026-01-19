@@ -34,7 +34,8 @@ Common templates include:
 - Error pages
 
 ### `styles/`
-Global CSS styling and theming:
+Curity CSS is used as the base styling framework. On top of that, some custom styles are applied for Identity Server-specific UI elements.
+- Curity CSS: [src/common/css/lib/readme.md](../common/css/lib/readme.md)
 - `css/` - Individual CSS modules for different authentication flows
   - `authenticator-icons.css` - Authenticator branding
   - `consent.css` - Consent screen styles
@@ -42,6 +43,7 @@ Global CSS styling and theming:
   - `dialog.css` - Modal dialogs
   - And more...
 - `index.js` - Main style entry point
+
 
 ### `scripts/`
 JavaScript utilities and client-side functionality:
