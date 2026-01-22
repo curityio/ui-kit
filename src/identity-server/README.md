@@ -86,16 +86,19 @@ npm install
    ```
    This runs both the Java server and watches templates and assets for changes
 
-3. **Make changes:**
+2. **Make changes:**
    - Edit templates in `templates/`
    - Modify styles in `styles/`
    - Update messages in `messages/`
    - Add scripts in `scripts/`
 
-4. **Build for production:**
+3. **Build for production:**
    ```bash
    npm run build
    ```
+
+Changes made to _templates_, _styles_ and _scripts_ will be reflected immediately in the development server.  
+Changes to _messages_ are updated at 2-second intervals.
 
 ## Customization
 
