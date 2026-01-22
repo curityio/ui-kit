@@ -1,6 +1,6 @@
 # @curity/ui-kit-component-library
 
-The Curity React Component Library is a collection of reusable UI components designed for use across the ui-kit monorepo, including the self-service-portal, login-web-app, and other packages.
+The Curity React Component Library is a collection of reusable UI components designed for use across the ui-kit monorepo, including the self-service-portal, and other packages.
 
 ## Features
 
