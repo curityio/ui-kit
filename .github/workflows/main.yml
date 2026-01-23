@@ -1,0 +1,54 @@
+name: "Previewer bundler"
+on: workflow_dispatch
+jobs:
+  buildOnLinux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: download the jars
+        uses: robinraju/release-downloader@v1
+        with:
+          latest: true
+          fileName: 'ui-kit-previewer-*-jars.zip'
+      - name: Extract
+        uses: ihiroky/extract-action@v1
+        with:
+          file_path: 'ui-kit-previewer-*-jars.zip'
+          extract_dir: 'dist/lib'
+      - name: copy JRE
+        run: 'cp -R $JAVA_HOME_21_X64/* dist/lib/java/jre'
+      - uses: 1arp/create-a-file-action@0.4.5
+        with:
+          path: 'dist'
+          file: 'run-ui-kit-server.sh'
+          content: |
+            #!/bin/bash
+            
+            #
+            # Copyright (C) 2025 Curity AB. All rights reserved.
+            #
+            # The contents of this file are the property of Curity AB.
+            # You may not copy or use this file, in either source code
+            # or executable form, except in compliance with terms
+            # set by Curity AB.
+            #
+            # For further information, please contact Curity AB.
+            #
+            
+            set -e
+            
+            D="$(dirname "$0")"
+            
+            $D/lib/java/jre/bin/java -cp "$D/lib/*" se.curity.templates.preview.App "$@"
+      - name: pack it
+        run: |
+          cd dist && zip -r ui-kit-previewer-1.0.0-linux.zip .
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: https://uploads.github.com/repos/curityio/ui-kit/releases/279374358/assets
+          asset_path: dist/ui-kit-previewer-1.0.0-linux.zip
+          asset_name: ui-kit-previewer-1.0.0-linux.zip
+          asset_content_type: application/zip
