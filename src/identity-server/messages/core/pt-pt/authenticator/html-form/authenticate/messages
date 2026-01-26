@@ -13,6 +13,7 @@ meta.title=Login
 page.title=Login
 view.authenticate=Login
 view.username=Nome de usuário
+view.email=E-mail
 view.password=Senha
 view.no-account=Criar conta
 view.forgot-password=Esqueceu sua senha?
@@ -23,7 +24,7 @@ view.success=Você foi autenticado com sucesso
 
 validation.error.authentication.failed=Ocorreu um erro ao autenticar sua conta. Tente novamente.
 validation.error.incorrect.credentials=Credenciais incorretas
-validation.error.accountId.required=Você tem que digitar seu nome de usuário
+validation.error.accountId.required=Você tem que digitar seu nome de usuário/e-mail
 validation.error.password.required=Você tem que digitar sua senha
 error.too-many-attempts=Demasiadas tentativas. Você pode tentar novamente mais tarde.
 subject-not-found.rejected.credential=Credenciais incorretas

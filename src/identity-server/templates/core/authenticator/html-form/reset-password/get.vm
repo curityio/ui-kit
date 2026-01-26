@@ -61,10 +61,17 @@
 #end
 
     <div class="form-field">
+    #if($_showEmailField)
         <label for="userName" class="$!_errorClass">#message("authenticator.html-form.reset-password.view.username")</label>
         <input type="text" name="userName" class="block full-width mb1 field-light $!_errorClass"
-        value="$!userNameValue" autocapitalize="none" autofocus>
+               value="$!userNameValue" autocapitalize="none" autofocus>
         <i class="form-field-icon icon ion-person"></i>
+    #else
+        <label for="userName" class="$!_errorClass">#message("authenticator.html-form.reset-password.view.email")</label>
+        <input type="text" name="userName" class="block full-width mb1 field-light $!_errorClass"
+               value="$!userNameValue" autocapitalize="none" autofocus>
+        <i class="form-field-icon icon ion-email"></i>
+    #end
     </div>
 
     <button type="submit" class="button button-fullwidth button-primary">#message("${_templatePrefix}.view.button")</button>
