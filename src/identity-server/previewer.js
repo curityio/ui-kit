@@ -14,7 +14,7 @@ var browsersync = require("browser-sync").create('local');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var classpathSeparator = os.platform() === "win32" ? ';' : ':';
-const paths = require('./config').basePaths
+const paths = require('./config').basePaths;
 
 
 /**
@@ -199,12 +199,12 @@ function prepareSettings(optionsOrArgv) {
 
     if (optionsOrArgv['additional-static-root'] !== undefined) {
         procArgs.push('-a');
-        procArgs.push(optionsOrArgv['additional-static-root'])
+        procArgs.push(optionsOrArgv['additional-static-root']);
     }
 
     if (process.env.LISTING_TEMPLATE) {
         procArgs.push('-l');
-        procArgs.push(process.env.LISTING_TEMPLATE)
+        procArgs.push(process.env.LISTING_TEMPLATE);
     }
 
     if (optionsOrArgv['exec-path'] !== undefined) {
@@ -234,10 +234,10 @@ function init() {
     };
 
     if (paths.curity.additionalAssetsRoot !== undefined) {
-        settings['additional-static-root'] = paths.curity.additionalAssetsRoot
+        settings['additional-static-root'] = paths.curity.additionalAssetsRoot;
     }
 
     start(settings);
   }
 
-init()
+init();
