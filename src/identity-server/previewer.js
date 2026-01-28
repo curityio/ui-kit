@@ -14,7 +14,7 @@ var browsersync = require("browser-sync").create('local');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var classpathSeparator = os.platform() === "win32" ? ';' : ':';
-const paths = require('./config').basePaths
+const paths = require('./config').basePaths;
 
 
 /**
@@ -234,10 +234,10 @@ function init() {
     };
 
     if (paths.curity.additionalAssetsRoot !== undefined) {
-        settings['additional-static-root'] = paths.curity.additionalAssetsRoot
+        settings['additional-static-root'] = paths.curity.additionalAssetsRoot;
     }
 
     start(settings);
   }
 
-init()
+init();
