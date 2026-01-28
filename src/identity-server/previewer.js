@@ -199,12 +199,12 @@ function prepareSettings(optionsOrArgv) {
 
     if (optionsOrArgv['additional-static-root'] !== undefined) {
         procArgs.push('-a');
-        procArgs.push(optionsOrArgv['additional-static-root'])
+        procArgs.push(optionsOrArgv['additional-static-root']);
     }
 
     if (process.env.LISTING_TEMPLATE) {
         procArgs.push('-l');
-        procArgs.push(process.env.LISTING_TEMPLATE)
+        procArgs.push(process.env.LISTING_TEMPLATE);
     }
 
     if (optionsOrArgv['exec-path'] !== undefined) {
