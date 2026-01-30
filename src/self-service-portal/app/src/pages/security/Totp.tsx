@@ -22,6 +22,7 @@ import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { NewTotpDeviceDialog } from '@/pages/security/NewTotpDeviceDialog';
 import { useState } from 'react';
 import { UI_CONFIG_RESOURCES } from '@/ui-config/typings';
+import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA.tsx';
 
 export const Totp = () => {
   const { t } = useTranslation();
@@ -56,6 +57,24 @@ export const Totp = () => {
       `${device.alias}${device.deviceId}${device.deviceType}`.toLocaleLowerCase().includes(search.toLocaleLowerCase())
     );
 
+  const shouldDisallowDeletingOtpDevices =
+    otpDevices?.length === 1 &&
+    accountResponse?.accountByUserName?.mfaOptIn?.registeredFactors?.factors.some(
+      factor => factor.type === MFA_REGISTRABLE_FACTORS.TOTP
+    );
+
+  if (shouldDisallowDeletingOtpDevices) {
+    columns.push({
+      key: 'meta',
+      label: t('actions'),
+      customRender: () => (
+        <small>
+          <em>{t('security.otp-authenticators.disallow.deletion.description')}</em>
+        </small>
+      ),
+    });
+  }
+
   const deleteDeviceFromAccount = (device: Device) => {
     if (accountId && device) {
       deleteDeviceFromAccountByAccountId({
@@ -84,6 +103,7 @@ export const Totp = () => {
         columns={columns}
         data={otpDevices}
         createButtonLabel={t('security.otp-authenticators.authenticator')}
+        showDelete={!shouldDisallowDeletingOtpDevices}
         onRowDelete={deleteDeviceFromAccount}
         onSearch={(query: string) => setSearch(query)}
         onCreateNew={() => setIsNewTotpDeviceDialogOpen(true)}
