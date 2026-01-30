@@ -61,11 +61,11 @@
 
 ## Now, parse the actual template view and kick off processing.
 
-## * use_api_driven_ui - flag to enable the API driven UI, set by "settings" evaluation
-## * _haapiNotSupported - flag set to true when the request context does not support HAAPI
-## * api-driven-ui - folder containing the index.vm with the api driven application
-
-#if ($use_api_driven_ui && !$_haapiNotSupported)
+#if ($_useApiDrivenUi)
+    #parse("api-driven-ui/index")
+#elseif ($use_api_driven_ui && !$_haapiNotSupported)
+    ## * use_api_driven_ui - flag to enable the API driven UI, set by "settings" evaluation
+    ## * _haapiNotSupported - flag set to true when the request context does not support HAAPI
     #parse("api-driven-ui/index")
 #else
     #parse("$_template")
