@@ -1,8 +1,21 @@
-# UI Kit
+# Curity UI Kit
 
-Customize the look and feel of your applications.
+**Customize the look and feel of your applications**
 
-Monorepo using [**npm Workspaces**](https://docs.npmjs.com/cli/v8/using-npm/workspaces) for Curity Identity Server Templates, Self Service Portal, Curity CSS, Curity UI Icons React and Curity React Component Library
+<img
+   src="src/common/assets/images/ui-kit-start.jpg"
+   alt="Curity Logo"
+   width="800"
+/>
+
+
+This monorepo contains:
+
+- Curity Identity Server Templates
+- Self Service Portal,
+- Curity CSS
+- Curity UI Icons React
+- Curity React Component Library
 
 ## Prerequisites
 - Node.js (version as specified in the `.nvmrc` file)
@@ -77,7 +90,7 @@ To build projects individually, run:
 
 ## Deploy
 
-To deploy build artifacts (assets, templates, and messages) to a production environment, use the `deploy.sh` script.
+To deploy build artifacts (assets, templates, and messages) to a production environment, you can use the `deploy.sh` script.
 
 ### Prerequisites
 
