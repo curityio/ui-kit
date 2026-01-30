@@ -12,8 +12,8 @@
 This monorepo contains:
 
 - Curity Identity Server Templates
-- Self Service Portal,
-- Curity CSS
+- Self Service Portal
+- Curity CSS Library
 - Curity UI Icons React
 - Curity React Component Library
 
