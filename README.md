@@ -4,18 +4,18 @@
 
 <img
    src="src/common/assets/images/ui-kit-start.jpg"
-   alt="Curity Logo"
+   alt="Curity UI Kit"
    width="800"
 />
 
 
 This monorepo contains:
 
-- Curity Identity Server Templates
+- Identity Server Templates
 - Self Service Portal
-- Curity CSS Library
-- Curity UI Icons React
-- Curity React Component Library
+- CSS Library
+- UI Icons React Library
+- React Component Library
 
 ## Prerequisites
 - Node.js (version as specified in the `.nvmrc` file)
