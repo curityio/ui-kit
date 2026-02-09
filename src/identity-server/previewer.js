@@ -20,7 +20,7 @@ const paths = require('./config').basePaths
 /**
  * Prepare settings and start java
  */
-start = function (options) {
+const start = function (options) {
     var config = prepareSettings(options);
     startJava(config);
 
@@ -162,8 +162,6 @@ function getClasspath(uiBuilderLibs) {
 function prepareSettings(optionsOrArgv) {
     var config = {};
 
-    var uiBuilderHome = __dirname + "/../../lib";
-
     var procArgs = [];
 
     if (optionsOrArgv['idsvr-home'] !== undefined) {
@@ -175,28 +173,28 @@ function prepareSettings(optionsOrArgv) {
         procArgs.push("-p");
         procArgs.push(optionsOrArgv['port']);
     } else {
-        throw "Port must be specified";
+        throw new Error("Port must be specified");
     }
 
     if (optionsOrArgv['template-root'] !== undefined) {
         procArgs.push('-t');
         procArgs.push(optionsOrArgv['template-root']);
     } else {
-        throw "Template root must be specified";
+        throw new Error("Template root must be specified");
     }
 
     if (optionsOrArgv['message-root'] !== undefined) {
         procArgs.push('-m');
         procArgs.push(optionsOrArgv['message-root']);
     } else {
-        throw "Message root must be specified";
+        throw new Error("Message root must be specified");
     }
 
     if (optionsOrArgv['static-root'] !== undefined) {
         procArgs.push('-s');
         procArgs.push(optionsOrArgv['static-root']);
     } else {
-        throw "Static root must be specified";
+        throw new Error("Static root must be specified");
     }
 
     if (optionsOrArgv['additional-static-root'] !== undefined) {
@@ -204,10 +202,15 @@ function prepareSettings(optionsOrArgv) {
         procArgs.push(optionsOrArgv['additional-static-root'])
     }
 
+    if (process.env.LISTING_TEMPLATE) {
+        procArgs.push('-l');
+        procArgs.push(process.env.LISTING_TEMPLATE)
+    }
+
     if (optionsOrArgv['exec-path'] !== undefined) {
         config['procCmd'] = optionsOrArgv['exec-path'];
     } else {
-        throw "Exec path must be specified";
+        throw new Error("Exec path must be specified");
     }
     config['procArgs'] = procArgs;
     config['static-root'] = optionsOrArgv['static-root'];
