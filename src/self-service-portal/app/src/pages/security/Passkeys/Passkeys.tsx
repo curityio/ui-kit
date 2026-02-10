@@ -22,7 +22,7 @@ import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
 import { PageHeader, Spinner, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { NewPasskeyDialog } from './NewPasskeyDialog';
 import { getFormattedDate } from '@shared/utils/date.ts';
-import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA.tsx';
+import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA';
 
 export const Passkeys = () => {
   const { t } = useTranslation();
