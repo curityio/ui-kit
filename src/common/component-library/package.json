@@ -1,7 +1,7 @@
 {
   "name": "@curity/ui-kit-component-library",
   "version": "1.0.0",
-  "description": "The Curity React Component Library is a collection of UI components, which are reusable by different packages available in ui-kit monorepo: self-service-portal, login-web-app and more.",
+  "description": "The Curity React Component Library is a collection of UI components, which are reusable by different packages available in ui-kit monorepo: self-service-portal, and more.",
   "author": "Curity",
   "private": true,
   "license": "Apache-2.0",
@@ -25,6 +25,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "watch": "vite build --watch",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
     "build": "npm run tsBuild && vite build",

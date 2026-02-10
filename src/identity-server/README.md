@@ -34,7 +34,8 @@ Common templates include:
 - Error pages
 
 ### `styles/`
-Global CSS styling and theming:
+Curity CSS is used as the base styling framework. On top of that, some custom styles are applied for Identity Server-specific UI elements.
+- Curity CSS: [src/common/css/lib/readme.md](../common/css/lib/readme.md)
 - `css/` - Individual CSS modules for different authentication flows
   - `authenticator-icons.css` - Authenticator branding
   - `consent.css` - Consent screen styles
@@ -42,6 +43,7 @@ Global CSS styling and theming:
   - `dialog.css` - Modal dialogs
   - And more...
 - `index.js` - Main style entry point
+
 
 ### `scripts/`
 JavaScript utilities and client-side functionality:
@@ -84,16 +86,19 @@ npm install
    ```
    This runs both the Java server and watches templates and assets for changes
 
-3. **Make changes:**
+2. **Make changes:**
    - Edit templates in `templates/`
    - Modify styles in `styles/`
    - Update messages in `messages/`
    - Add scripts in `scripts/`
 
-4. **Build for production:**
+3. **Build for production:**
    ```bash
    npm run build
    ```
+
+Changes made to _templates_, _styles_ and _scripts_ will be reflected immediately in the development server.  
+Changes to _messages_ are updated at 2-second intervals.
 
 ## Customization
 

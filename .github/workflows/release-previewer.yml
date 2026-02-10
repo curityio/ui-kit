@@ -1,0 +1,68 @@
+name: Release Curity UI Kit Previewer Java runtime.
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  release:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            architecture: x64
+            asset_suffix: linux-x64
+          - runner: ubuntu-22.04-arm
+            architecture: arm64
+            asset_suffix: linux-arm64
+          - runner: macos-13
+            architecture: x64
+            asset_suffix: macos-x64
+          - runner: macos-14
+            architecture: arm64
+            asset_suffix: macos-arm64
+          - runner: windows-2022
+            architecture: x64
+            asset_suffix: windows-x64
+    env:
+      VERSION: ${{ github.event.release.tag_name }}
+    steps:
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          architecture: ${{ matrix.architecture }}
+      - name: jlink
+        run: >-
+          jlink --output=jre-image --no-header-files --no-man-pages --compress=2
+          --strip-java-debug-attributes --add-modules
+          jdk.management.jfr,jdk.sctp,jdk.security.jgss,jdk.nio.mapmode,jdk.naming.dns,jdk.jcmd,jdk.internal.opt,java.security.jgss,jdk.jstatd,jdk.internal.ed,jdk.security.auth,jdk.internal.vm.compiler.management,java.instrument,jdk.net,jdk.naming.rmi,java.management.rmi,java.base,java.xml,java.net.http,jdk.crypto.ec,jdk.internal.vm.ci,jdk.internal.vm.compiler,jdk.internal.le,jdk.unsupported,jdk.jdwp.agent,jdk.crypto.cryptoki,jdk.random,jdk.jdi,jdk.zipfs,jdk.management,jdk.localedata,jdk.management.agent,java.management,jdk.charsets,jdk.attach,java.prefs,java.logging,jdk.hotspot.agent,java.se,jdk.jfr,jdk.internal.jvmstat,java.security.sasl
+      - name: Download UI Kit runtime asset
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >-
+          gh release download "$VERSION" --repo "${{ github.repository }}"
+          --pattern "ui-kit-runtime-$VERSION.zip" --output "ui-kit-runtime-$VERSION.zip"
+      - name: Archive runtime (Unix)
+        if: runner.os != 'Windows'
+        env:
+          ASSET_NAME: curity-ui-kit-previewer-${{ env.VERSION }}-${{ matrix.asset_suffix }}.zip
+        run: zip -r "$ASSET_NAME" jre-image "ui-kit-runtime-$VERSION.zip"
+      - name: Archive runtime (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          ASSET_NAME: curity-ui-kit-previewer-${{ env.VERSION }}-${{ matrix.asset_suffix }}.zip
+        run: Compress-Archive -Path jre-image,"ui-kit-runtime-$($env:VERSION).zip" -DestinationPath $env:ASSET_NAME
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: curity-ui-kit-previewer-${{ env.VERSION }}-${{ matrix.asset_suffix }}.zip
+          asset_name: curity-ui-kit-previewer-${{ env.VERSION }}-${{ matrix.asset_suffix }}.zip
+          asset_content_type: application/zip

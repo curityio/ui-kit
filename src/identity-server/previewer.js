@@ -35,47 +35,77 @@ start = function (options) {
  */
 function watch(config) {
 
+
     browsersync.init({
         proxy: "127.0.0.1:8080/listing",
-        open: false
+        open: false,
+        injectChanges: true,
+        reloadDelay: 100,
+        reloadDebounce: 200,
+        ghostMode: false,
     });
 
+    // Create .reload file if it doesn't exist
+    if (!fs.existsSync(".reload")) {
+        fs.writeFileSync(".reload", "");
+    }
+
     function watchResource(path) {
-        console.log("Watching: " + path);
         browsersync.watch(path, function (event, file) {
             const time = new Date();
             fs.utimesSync(".reload", time, time);
-            browsersync.reload(path);
         });
     }
 
     function watchReload() {
-        console.log("Watching: .reload");
-        browsersync.watch(".reload", function (event, file) {
-            browsersync.reload(".reload");
+
+        browsersync.watch(".reload", {
+            ignoreInitial: true,
+            awaitWriteFinish: {
+                stabilityThreshold: 500,
+                pollInterval: 100
+            }
+        }).on("change", function (file) {
+            browsersync.reload();
         });
     }
 
     function watchInjectableResource(path) {
         console.log("Watching: " + path);
-        browsersync.watch(path).on("change", browsersync.reload);
+        const watcher = browsersync.watch(path, {
+            ignoreInitial: true,
+            awaitWriteFinish: {
+                stabilityThreshold: 300,
+                pollInterval: 100
+            }
+        });
+
+        watcher.on("change", function(file) {
+            browsersync.reload(file);
+        });
+
     }
 
-    if ('messageRoot' in config) {
+    if ('messageRoot' in config || 'message-root' in config) {
         watchReload();
     }
-    if ('templateRoot' in config) {
-        watchResource(config.templateRoot + "/**/**.vm");
+    if ('templateRoot' in config || 'template-root' in config) {
+        const templateRoot = config.templateRoot || config['template-root'];
+        watchResource(templateRoot + "/**/**.vm");
     }
-    if ('staticRoot' in config) {
-        watchInjectableResource(config.staticRoot + "/**/**.css");
-        watchInjectableResource(config.staticRoot + "/**/**.js");
-        watchInjectableResource(config.staticRoot + "/**/**.{gif,jpeg,jpg,png,svg,webp}");
+    if ('staticRoot' in config || 'static-root' in config) {
+        const staticRoot = config.staticRoot || config['static-root'];
+        const cssPath = staticRoot + "/**/**.css";
+        console.log("Static root CSS watch path: " + cssPath);
+        watchInjectableResource(cssPath);
+        watchInjectableResource(staticRoot + "/**/**.js");
+        watchInjectableResource(staticRoot + "/**/**.{gif,jpeg,jpg,png,svg,webp}");
     }
-    if ('additionalStaticRoot' in config) {
-        watchInjectableResource(config.additionalStaticRoot + "/**/**.css");
-        watchInjectableResource(config.additionalStaticRoot + "/**/**.js");
-        watchInjectableResource(config.additionalStaticRoot + "/**/**.{gif,jpeg,jpg,png,svg,webp}");
+    if ('additionalStaticRoot' in config || 'additional-static-root' in config) {
+        const additionalStaticRoot = config.additionalStaticRoot || config['additional-static-root'];
+        watchInjectableResource(additionalStaticRoot + "/**/**.css");
+        watchInjectableResource(additionalStaticRoot + "/**/**.js");
+        watchInjectableResource(additionalStaticRoot + "/**/**.{gif,jpeg,jpg,png,svg,webp}");
     }
 }
 
@@ -180,6 +210,10 @@ function prepareSettings(optionsOrArgv) {
         throw "Exec path must be specified";
     }
     config['procArgs'] = procArgs;
+    config['static-root'] = optionsOrArgv['static-root'];
+    config['template-root'] = optionsOrArgv['template-root'];
+    config['message-root'] = optionsOrArgv['message-root'];
+    config['additional-static-root'] = optionsOrArgv['additional-static-root'];
     return config;
 }
 

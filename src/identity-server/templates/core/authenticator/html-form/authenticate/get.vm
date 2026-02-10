@@ -67,11 +67,20 @@
     #end
 
     <h1 class="mt0 center">#message("authenticator.html-form.authenticate.view.authenticate")</h1>
-    
+
     <div class="form-field">
-        <label for="userName" class="$!_errorClassUsername">#message("authenticator.html-form.authenticate.view.username")</label>
-        <input type="text" name="userName" id="userName" autocorrect="off" spellcheck="false" class="block full-width mb1 field-light $!_errorClassUsername" autocapitalize="none"
-        value="$!userNameValue" #if ($_passwordOnly)disabled="disabled" #else autofocus #end>
+        #if($_usernameIsEmail)
+            #set($userNameInputType = "email")
+            #set($userNameInputLabel= "authenticator.html-form.authenticate.view.email")
+        #else
+            #set($userNameInputType = "text")
+            #set($userNameInputLabel= "authenticator.html-form.authenticate.view.username")
+        #end
+
+        <label for="userName" class="$!_errorClassUsername">#message($userNameInputLabel)</label>
+        <input type="$userNameInputType" name="userName" id="userName" autocorrect="off" spellcheck="false"
+               class="block full-width mb1 field-light $!_errorClassUsername" autocapitalize="none"
+                value="$!userNameValue" #if ($_passwordOnly)disabled="disabled" #else autofocus #end>
         <i class="form-field-icon icon ion-ios-person"></i>
     </div>
 
@@ -83,12 +92,12 @@
 
     <button type="submit" class="button button-fullwidth $!button_color mt2">#message(
         "authenticator.html-form.authenticate.view.authenticate")</button>
-#parse("fragments/remember-me")
+    #parse("fragments/remember-me")
     <div class="mt3 clearfix">
         <div class="center py2 login-actions">
             <a href="$_authUrl/forgot-password">#message(
                 "authenticator.html-form.authenticate.view.forgot-password")</a>
-            #if (!$_passwordOnly)
+            #if (!$_passwordOnly && !$_usernameIsEmail)
             <a href="$_authUrl/forgot-account-id">#message(
                 "authenticator.html-form.authenticate.view.forgot-account-id")</a>
             #end

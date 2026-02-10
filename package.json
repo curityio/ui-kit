@@ -20,19 +20,17 @@
     "src/common/css/docs",
     "src/common/icons",
     "src/identity-server",
-    "src/self-service-portal/app",
-    "src/login-web-app"
+    "src/self-service-portal/app"
   ],
   "scripts": {
-    "start": "concurrently \"npm run start:identity-server\" \"npm run start:ssp\" \"npm run start:css\" \"npm run start:component-library\" \"open index.html\"",
+    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library && npm run unzip-libs --workspace @curity/ui-kit-identity-server",
+    "start": "SKIP_PRESTART=1 concurrently \"npm run start:identity-server\" \"npm run start:ssp\" \"npm run start:css\" \"npm run start:component-library\" \"open index.html\"",
     "start:ssp": "npm run -w src/self-service-portal/app start",
-    "start:lwa": "npm run -w src/login-web-app/app start",
     "start:css": "npm run -w src/common/css start",
     "start:component-library": "npm run -w src/common/component-library start",
     "start:identity-server": "npm run -w src/identity-server start",
     "build:identity-server": "npm run -w src/identity-server build",
     "build:ssp": "npm run -w src/self-service-portal/app build",
-    "build:lwa": "npm run -w src/login-web-app/app build",
     "build:css": "npm run -w src/common/css build",
     "build:component-library": "npm run -w src/common/component-library build",
     "build:icons": "npm run -w src/common/icons build",

@@ -20,7 +20,7 @@ a.button-social,
   border-color: var(--form-field-border-color);
   border-style: var(--form-field-border-style);
   border-width: var(--form-field-border-width);
-  color: var(--color-heading);
+  color: var(--button-color);
   margin: 0;
   text-align: left;
   transition:
@@ -99,7 +99,7 @@ a.button-social-icon .icon,
 .body-dark .form-transparent .button-social {
   background-color: var(--form-field-background-color-dark);
   border-width: 0;
-  color: white;
+  color: black;
 }
 
 button.button-social.button-google .icon,
@@ -125,11 +125,6 @@ button.button-social.button-oidc .icon,
 button.button-social.button-group .icon,
 .button-social.button-group .icon {
   background-color: var(--authenticator-group-color);
-}
-
-button.button-social.button-encap .icon,
-.button-social.button-encap .icon {
-  background-color: var(--authenticator-encap-color);
 }
 
 button.button-social.button-windows .icon,
