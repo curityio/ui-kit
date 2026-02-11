@@ -23,7 +23,7 @@
     "src/self-service-portal/app"
   ],
   "scripts": {
-    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library && npm run unzip-libs --workspace @curity/ui-kit-identity-server",
+    "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library --workspace @curity/ui-kit-identity-server && npm run unzip-libs --workspace @curity/ui-kit-identity-server",
     "start": "SKIP_PRESTART=1 concurrently \"npm run start:identity-server\" \"npm run start:ssp\" \"npm run start:css\" \"npm run start:component-library\" \"open index.html\"",
     "start:ssp": "npm run -w src/self-service-portal/app start",
     "start:css": "npm run -w src/common/css start",
