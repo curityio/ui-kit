@@ -117,7 +117,8 @@ function startJava(config) {
     console.log("proc cmd: " + config.procCmd);
     console.log("proc args: " + config.procArgs.join(' '));
 
-    var javaPreviewer = spawn(config.procCmd, config.procArgs);
+    var spawnOptions = os.platform() === "win32" ? { shell: true } : undefined;
+    var javaPreviewer = spawn(config.procCmd, config.procArgs, spawnOptions);
 
     process.on('exit', function () {
         console.log('Killing java process');
