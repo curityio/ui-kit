@@ -205,7 +205,14 @@ function prepareSettings(optionsOrArgv) {
     }
 
     if (optionsOrArgv['exec-path'] !== undefined) {
-        config['procCmd'] = optionsOrArgv['exec-path'];
+        var execPath = optionsOrArgv['exec-path'];
+        if (os.platform() === "win32" && execPath.endsWith('.sh')) {
+            var windowsExecPath = execPath.replace(/\.sh$/, '.cmd');
+            if (fs.existsSync(windowsExecPath)) {
+                execPath = windowsExecPath;
+            }
+        }
+        config['procCmd'] = execPath;
     } else {
         throw "Exec path must be specified";
     }
@@ -226,7 +233,7 @@ function init() {
         'template-root' : paths.curity.templates.base,
         'message-root' : paths.curity.messages.base,
         'static-root' : paths.curity.webroot,
-        'exec-path': '../../lib/run-ui-kit-server.sh',
+        'exec-path': os.platform() === "win32" ? '../../lib/run-ui-kit-server.cmd' : '../../lib/run-ui-kit-server.sh',
         'port': 8080,
     };
 
