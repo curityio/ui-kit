@@ -13,6 +13,7 @@ var fs = require('fs');
 var browsersync = require("browser-sync").create('local');
 var spawn = require('child_process').spawn;
 var os = require('os');
+var path = require('path');
 var classpathSeparator = os.platform() === "win32" ? ';' : ':';
 const paths = require('./config').basePaths
 
@@ -117,8 +118,14 @@ function startJava(config) {
     console.log("proc cmd: " + config.procCmd);
     console.log("proc args: " + config.procArgs.join(' '));
 
-    var spawnOptions = os.platform() === "win32" ? { shell: true } : undefined;
-    var javaPreviewer = spawn(config.procCmd, config.procArgs, spawnOptions);
+    var javaPreviewer;
+    if (os.platform() === "win32" && config.procCmd.toLowerCase().endsWith('.cmd')) {
+        var cmdArgs = ['/c', config.procCmd].concat(config.procArgs);
+        javaPreviewer = spawn('cmd.exe', cmdArgs, { windowsHide: true });
+    } else {
+        var spawnOptions = os.platform() === "win32" ? { shell: true } : undefined;
+        javaPreviewer = spawn(config.procCmd, config.procArgs, spawnOptions);
+    }
 
     process.on('exit', function () {
         console.log('Killing java process');
@@ -213,7 +220,7 @@ function prepareSettings(optionsOrArgv) {
                 execPath = windowsExecPath;
             }
         }
-        config['procCmd'] = execPath;
+        config['procCmd'] = path.resolve(__dirname, execPath);
     } else {
         throw "Exec path must be specified";
     }
