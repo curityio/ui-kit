@@ -50,7 +50,7 @@ of the following directories on the Identity Server:
 directory on the Identity Server depending on usage or not of the template areas.
 
 More on the localization in Identity Server can be found in the documentation:
-[Identity Server - Localizing Resources](https://curity.io/docs/identity-server/developer-guide/front-end-development/localization.html).
+[Identity Server - Localizing Resources](https://curity.io/docs/identity-server/developer-guide/front-end-development/#loading-resources-from-the-file-system).
 
 ### Customising Look & Feel
 
