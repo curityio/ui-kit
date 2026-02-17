@@ -13,6 +13,7 @@ var fs = require('fs');
 var browsersync = require("browser-sync").create('local');
 var spawn = require('child_process').spawn;
 var os = require('os');
+var path = require('path');
 var classpathSeparator = os.platform() === "win32" ? ';' : ':';
 const paths = require('./config').basePaths
 
@@ -117,7 +118,14 @@ function startJava(config) {
     console.log("proc cmd: " + config.procCmd);
     console.log("proc args: " + config.procArgs.join(' '));
 
-    var javaPreviewer = spawn(config.procCmd, config.procArgs);
+    var javaPreviewer;
+    if (os.platform() === "win32" && config.procCmd.toLowerCase().endsWith('.cmd')) {
+        var cmdArgs = ['/c', config.procCmd].concat(config.procArgs);
+        javaPreviewer = spawn('cmd.exe', cmdArgs, { windowsHide: true });
+    } else {
+        var spawnOptions = os.platform() === "win32" ? { shell: true } : undefined;
+        javaPreviewer = spawn(config.procCmd, config.procArgs, spawnOptions);
+    }
 
     process.on('exit', function () {
         console.log('Killing java process');
@@ -205,7 +213,14 @@ function prepareSettings(optionsOrArgv) {
     }
 
     if (optionsOrArgv['exec-path'] !== undefined) {
-        config['procCmd'] = optionsOrArgv['exec-path'];
+        var execPath = optionsOrArgv['exec-path'];
+        if (os.platform() === "win32" && execPath.endsWith('.sh')) {
+            var windowsExecPath = execPath.replace(/\.sh$/, '.cmd');
+            if (fs.existsSync(windowsExecPath)) {
+                execPath = windowsExecPath;
+            }
+        }
+        config['procCmd'] = path.resolve(__dirname, execPath);
     } else {
         throw "Exec path must be specified";
     }
@@ -226,7 +241,7 @@ function init() {
         'template-root' : paths.curity.templates.base,
         'message-root' : paths.curity.messages.base,
         'static-root' : paths.curity.webroot,
-        'exec-path': '../../lib/run-ui-kit-server.sh',
+        'exec-path': os.platform() === "win32" ? '../../lib/run-ui-kit-server.cmd' : '../../lib/run-ui-kit-server.sh',
         'port': 8080,
     };
 
