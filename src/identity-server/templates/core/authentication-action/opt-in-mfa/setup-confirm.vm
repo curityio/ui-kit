@@ -49,13 +49,13 @@
             #end
             <!-- This can be used to add a checkbox -->
             <input type="hidden" name="confirm" value="on"/>
-            <input type="submit" value="#message("${_templatePrefix}.setup-confirm.view.confirm")" class="button button-fullwidth button-primary"/>
+            <button type="submit" class="button button-fullwidth button-primary button-loading"><span>#message("${_templatePrefix}.setup-confirm.view.confirm")</span></button>
         </form>
     </div>
     <div class="col-12 px1">
         <form method="POST" name="setup-cancel" class="no-padding">
             <input type="hidden" name="cancel" value="true"/>
-            <input type="submit" value="#message("${_templatePrefix}.setup-confirm.view.cancel")" class="button button-fullwidth button-primary-outline"/>
+            <button type="submit" class="button button-fullwidth button-primary-outline button-loading"><span>#message("${_templatePrefix}.setup-confirm.view.cancel")</span></button>
         </form>
     </div>
 </div>
@@ -68,9 +68,8 @@
                 window.print();
             })
         }
-    })    
+    })
 </script>
-
-#end
+#parse("fragments/button-loading")#end
 
 #parse("layouts/default")

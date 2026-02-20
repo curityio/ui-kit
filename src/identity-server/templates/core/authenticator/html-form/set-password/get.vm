@@ -57,7 +57,7 @@
                 #end
             </div>
 
-            <button type="submit" class="button button-primary button-fullwidth">#message("${_templatePrefix}.view.button")</button>
+            <button type="submit" class="button button-primary button-fullwidth button-loading"><span>#message("${_templatePrefix}.view.button")</span></button>
 
             <div class="login-actions center py2">
                 <a href="$_authUrl">#message("authenticator.html-form.set-password.view.cancel")</a>
@@ -71,6 +71,7 @@
         </form>
     #end
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

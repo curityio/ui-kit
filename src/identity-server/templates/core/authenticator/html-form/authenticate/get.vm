@@ -90,8 +90,8 @@
         <i class="form-field-icon icon ion-ios-locked"></i>
     </div>
 
-    <button type="submit" class="button button-fullwidth $!button_color mt2">#message(
-        "authenticator.html-form.authenticate.view.authenticate")</button>
+    <button type="submit" class="button button-loading button-fullwidth $!button_color mt2"><span>#message(
+        "authenticator.html-form.authenticate.view.authenticate")</span></button>
     #parse("fragments/remember-me")
     <div class="mt3 clearfix">
         <div class="center py2 login-actions">
@@ -113,6 +113,9 @@
     </div>
 
 </form>
+
+#parse("fragments/button-loading")
+
 #end
 
 #parse("layouts/default")

@@ -23,10 +23,11 @@
     #set($otpInputLength = $_userCodeLength)
     #parse("fragments/otp-input")
 
-    <input type="submit" disabled class="button button-medium button-primary button-fullwidth" value='#message("views.oauth.enter-user-code-submit")' tabindex="$tabindex" $!disabled>
+    <button type="submit" disabled class="button button-medium button-primary button-fullwidth button-loading" tabindex="$tabindex" $!disabled><span>#message("views.oauth.enter-user-code-submit")</span></button>
 
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 

@@ -28,38 +28,38 @@
 #parse("authenticator/webauthn/fragments/alerts")
 
 <div id="retryRegistration" class="area center hidden">
-    <button class="button button-fullwidth button-primary">
-        #message("${_templatePrefix}.view.try-again")</button>
+    <button class="button button-fullwidth button-primary button-loading">
+        <span>#message("${_templatePrefix}.view.try-again")</span></button>
 </div>
 
 <div id="registerDiv" class="area center hidden">
     <div class="login-chooser login-chooser-webauthn mb2">
 
         #if($_credentialCreationOptionsJson)
-        <button id="registerButton" type="submit" class="button button-fullwidth button-primary">
-            #message("${_templatePrefix}.view.button.any-attachment")
+        <button id="registerButton" type="submit" class="button button-fullwidth button-primary button-loading">
+            <span>#message("${_templatePrefix}.view.button.any-attachment")</span>
         </button>
         #end
 
         #if($_platformJson)
-        <button id="registerPlatformButton" type="submit" class="button button-transparent login-chooser-item" name="authenticator-attachment" value="platform">
+        <button id="registerPlatformButton" type="submit" class="button button-transparent login-chooser-item button-loading" name="authenticator-attachment" value="platform">
             <figure><img src="$!_staticResourceRootPath/assets/images/webauthn-platform.svg" alt="#message("${_templatePrefix}.view.button.platform")"></figure>
             <p class="m0">
                 <small>
                     <strong class="m0 inline-block bold mr1">#message("${_templatePrefix}.view.button.platform")</strong>
-                    #message("${_templatePrefix}.view.authenticator-attachment.platform")
+                    <span>#message("${_templatePrefix}.view.authenticator-attachment.platform")</span>
                 </small>
             </p>
         </button>
         #end
 
         #if($_crossPlatformJson)
-        <button id="registerCrossPlatformButton" type="submit" class="button button-transparent login-chooser-item" name="authenticator-attachment" value="cross-platform">
+        <button id="registerCrossPlatformButton" type="submit" class="button button-transparent login-chooser-item button-loading" name="authenticator-attachment" value="cross-platform">
             <figure><img src="$!_staticResourceRootPath/assets/images/webauthn-cross-platform.svg" alt="#message("${_templatePrefix}.view.button.cross-platform")"></figure>
             <p class="m0">
                 <small>
                     <strong class="m0 inline-block bold mr1">#message("${_templatePrefix}.view.button.cross-platform")</strong>
-                    #message("${_templatePrefix}.view.authenticator-attachment.cross-platform")
+                    <span>#message("${_templatePrefix}.view.authenticator-attachment.cross-platform")</span>
                 </small>
             </p>
         </button>
@@ -78,6 +78,7 @@
     #parse("authenticator/webauthn/js/register")
 #end
 
+#parse("fragments/button-loading")
 #end ## /body
 
 #parse("layouts/default")

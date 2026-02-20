@@ -28,14 +28,15 @@
             <input type="text" name="code" id="code" placeholder="#message("${_templatePrefix}.recovery-code.view.code.placeholder")" class="block full-width mb1 field-light" autofocus spellcheck="false" required autocapitalize="none">
             <i class="form-field-icon icon ion-android-create"></i>
         </div>
-        <input type="submit" value="#message("${_templatePrefix}.recovery-code.view.code.action")" class="button button-fullwidth button-primary"/>
+        <button type="submit" class="button button-fullwidth button-primary button-loading"><span>#message("${_templatePrefix}.recovery-code.view.code.action")</span></button>
 </form>
 
 <form method="POST" name="setup-confirm" class="no-bottom-padding no-top-padding">
     <input type="hidden" name="cancel" value="true"/>
-    <button type="submit" class="button button-fullwidth button-link">#message("${_templatePrefix}.recovery-code.view.cancel")</button>
+    <button type="submit" class="button button-fullwidth button-link button-loading"><span>#message("${_templatePrefix}.recovery-code.view.cancel")</span></button>
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

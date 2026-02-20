@@ -56,13 +56,14 @@
     });
 </script>
 <form name="cancel" action="cancel" class="manuallink display-none" method="get">
-    <button type="submit" class="button button-fullwidth button-danger-outline">#message($_messages,
-        "${_templatePrefix}.view.button.cancel")</button>
+    <button type="submit" class="button button-fullwidth button-danger-outline button-loading"><span>#message($_messages,
+        "${_templatePrefix}.view.button.cancel")</span></button>
 </form>
 <form action="$_action" method="post" class="display-none" id="pollingDone">
     <input type="hidden" name="_pollingDone" value="true"/>
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

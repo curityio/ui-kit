@@ -1,0 +1,97 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+<script type="text/javascript" $!nonceAttr>
+    (function() {
+        var errorObserver = null;
+
+        // Function to remove loading state from all buttons
+        function removeLoadingState() {
+            var loadingButtons = document.querySelectorAll('.button-loading-active');
+            loadingButtons.forEach(function(btn) {
+                btn.classList.remove('button-loading-active');
+                btn.disabled = false;
+            });
+        }
+
+        // Function to check if error elements exist
+        function hasErrorElements() {
+            return document.querySelector('.alert-danger, .is-error, .error, [class*="error"]') !== null;
+        }
+
+        // Function to start watching for errors
+        function startErrorObserver() {
+            // Stop existing observer if any
+            if (errorObserver) {
+                errorObserver.disconnect();
+            }
+
+            // Create observer to watch for error elements being added to the DOM
+            errorObserver = new MutationObserver(function(mutations) {
+                if (hasErrorElements()) {
+                    removeLoadingState();
+                    errorObserver.disconnect();
+                    errorObserver = null;
+                }
+            });
+
+            // Start observing the document body for child additions and attribute changes
+            errorObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
+            // Stop observing after 5 seconds (successful navigation would unload the page)
+            setTimeout(function() {
+                if (errorObserver) {
+                    errorObserver.disconnect();
+                    errorObserver = null;
+                }
+            }, 5000);
+        }
+
+        // Remove loading state on page show (handles back button and errors)
+        window.addEventListener('pageshow', function(event) {
+            // Remove loading state when page is shown (including from cache)
+            removeLoadingState();
+        });
+
+        // Add loading state to all submit buttons on form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            var forms = document.querySelectorAll('form');
+
+            forms.forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    // Only apply loading if the form is valid
+                    // Check HTML5 form validation
+                    if (form.checkValidity && !form.checkValidity()) {
+                        return true;
+                    }
+
+                    // Add loading state to all submit buttons in this form
+                    var submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+
+                    submitButtons.forEach(function(btn) {
+                        if (!btn.classList.contains('button-loading-active')) {
+                            btn.classList.add('button-loading-active');
+                            btn.disabled = true;
+                        }
+                    });
+
+                    // Start watching for error messages
+                    startErrorObserver();
+                });
+            });
+        });
+    })();
+</script>

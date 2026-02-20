@@ -27,12 +27,13 @@
                    autofocus required autocapitalize="none" maxlength="30">
             <i class="form-field-icon icon ion-iphone"></i>
         </div>
-        <button type="submit" class="button button-fullwidth button-primary mt2 ">
-            #message("${_templatePrefix}.view.continue")
+        <button type="submit" class="button button-fullwidth button-primary mt2 button-loading">
+            <span>#message("${_templatePrefix}.view.continue")</span>
         </button>
     </div>
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

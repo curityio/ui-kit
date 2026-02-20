@@ -32,14 +32,16 @@
 
             <div class="flex flex-center justify-between mb1">
                 <div class="form-field flex-auto #if($icons_only_authenticator_chooser)form-field-social-icon#end">
-                    <button type="submit" value="${_factor.description}" class="button button-primary button-fullwidth button-social #if($icons_only_authenticator_chooser)button-social-icon#end #if($single_color_authenticator_chooser)button-social-single-color#end button-$_factor.type">
+                    <button type="submit" value="${_factor.description}" class="button button-primary button-fullwidth button-social button-loading #if($icons_only_authenticator_chooser)button-social-icon#end #if($single_color_authenticator_chooser)button-social-single-color#end button-$_factor.type">
                         <i class="icon #iconClassName($_factor.type)"></i>
                         #if(!$icons_only_authenticator_chooser)
+                            <span>
                             #if($_factor.description)
                                 $_factor.description
                             #else
                                 $_factor.authenticatorId
                             #end
+                            </span>
                         #end
                     </button>
                 </div>
@@ -59,14 +61,16 @@
             <input type="hidden" name="oper" value="register"/>
 
             <div class="form-field flex-auto #if($icons_only_authenticator_chooser)form-field-social-icon#end mb1">
-                <button type="submit" value="${_factor.description}" class="button button-primary button-fullwidth button-social #if($icons_only_authenticator_chooser)button-social-icon#end button-$_factor.type">
+                <button type="submit" value="${_factor.description}" class="button button-primary button-fullwidth button-social button-loading #if($icons_only_authenticator_chooser)button-social-icon#end button-$_factor.type">
                     <i class="icon #iconClassName($_factor.type)"></i>
                     #if(!$icons_only_authenticator_chooser)
+                        <span>
                         #if($_factor.description)
                             $_factor.description
                         #else
                             $_factor.authenticatorId
                         #end
+                        </span>
                     #end
                 </button>
             </div>
@@ -80,7 +84,7 @@
         </h4>
         <form method="POST" name="new-batch" class="no-bottom-padding no-top-padding">
             <input type="hidden" name="oper" value="new-batch"/>
-            <input type="submit" value="#message("${_templatePrefix}.manage.view.recovery-codes.create")" class="button button-fullwidth button-primary-outline"/>
+            <button type="submit" class="button button-fullwidth button-primary-outline button-loading"><span>#message("${_templatePrefix}.manage.view.recovery-codes.create")</span></button>
         </form>
     #end
 
@@ -88,20 +92,21 @@
         #if($_canCompleteAuthentication)
             <form method="POST" name="authenticate" class="no-bottom-padding no-top-padding">
                 <input type="hidden" name="oper" value="authenticate"/>
-                <button type="submit" value="Done" class="button button-tiny button-primary-outline">
-                    <i class="icon ion-checkmark inlineicon"></i>#message("${_templatePrefix}.manage.view.complete-authentication")
+                <button type="submit" value="Done" class="button button-tiny button-primary-outline button-loading">
+                    <i class="icon ion-checkmark inlineicon"></i><span>#message("${_templatePrefix}.manage.view.complete-authentication")</span>
                 </button>
             </form>
         #else
             <form method="POST" name="exit" class="no-bottom-padding no-top-padding">
                 <input type="hidden" name="oper" value="exit"/>
-                <button type="submit" value="Done" class="button button-tiny button-primary-outline">
-                    <i class="icon ion-checkmark inlineicon"></i>#message("${_templatePrefix}.manage.view.exit")
+                <button type="submit" value="Done" class="button button-tiny button-primary-outline button-loading">
+                    <i class="icon ion-checkmark inlineicon"></i><span>#message("${_templatePrefix}.manage.view.exit")</span>
                 </button>
             </form>
         #end
     </div>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

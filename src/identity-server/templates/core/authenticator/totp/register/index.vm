@@ -129,8 +129,8 @@
         #set($otpInputLength = $_totpLength)
         #parse("fragments/otp-input")
 
-        <button type="submit" disabled class="button button-fullwidth button-primary">#message(
-                "authenticator.totp.register.view.register")</button>
+        <button type="submit" disabled class="button button-fullwidth button-primary button-loading"><span>#message(
+                "authenticator.totp.register.view.register")</span></button>
     </div>
 
 </form>
@@ -150,6 +150,7 @@
     });
 </script>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

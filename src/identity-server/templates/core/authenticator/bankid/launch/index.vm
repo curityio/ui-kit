@@ -98,8 +98,8 @@
             #message("${_templatePrefix}.view.button.this-device")</a>
     </form>
     <form name="cancel" action="cancel" class="manuallink" method="get">
-        <button type="submit" class="button button-fullwidth button-primary-outline">#message($_messages,
-            "${_templatePrefix}.view.button.cancel")</button>
+        <button type="submit" class="button button-fullwidth button-primary-outline button-loading"><span>#message($_messages,
+            "${_templatePrefix}.view.button.cancel")</span></button>
     </form>
     #else
     <div class="area center">
@@ -112,8 +112,8 @@
             #message("${_templatePrefix}.view.button.manualstart")</a>
     </form>
     <form name="cancel" action="cancel" class="manuallink display-none" method="get">
-        <button type="submit" class="button button-fullwidth button-primary-outline">#message($_messages,
-            "${_templatePrefix}.view.button.cancel")</button>
+        <button type="submit" class="button button-fullwidth button-primary-outline button-loading"><span>#message($_messages,
+            "${_templatePrefix}.view.button.cancel")</span></button>
     </form>
     #end
 <form action="$_action" method="post" id="pollingDone" class="display-none">
@@ -129,5 +129,6 @@
         #parse("authenticator/bankid/launch/handle-auto-start-uri")
         #parse("fragments/authentication-app-launcher")
     #end
+#parse("fragments/button-loading")
 #end
 #parse("layouts/default")

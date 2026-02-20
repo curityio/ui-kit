@@ -59,11 +59,12 @@
                    required value="$!alias" autocapitalize="none" maxlength="30">
             <i class="form-field-icon icon ion-iphone"></i>
         </div>
-        <button type="submit" class="button button-fullwidth button-primary mt2 ">#message(
-                "authenticator.totp.set-alias.view.generate-code")</button>
+        <button type="submit" class="button button-fullwidth button-primary mt2 button-loading"><span>#message(
+                "authenticator.totp.set-alias.view.generate-code")</span></button>
     </div>
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

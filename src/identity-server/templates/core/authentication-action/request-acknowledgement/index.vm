@@ -25,20 +25,23 @@
     <div #if($_cancellable == true) class="sm-grid-container" sm-columns="2" gap="1"#end>
         <div>
             <button id="submit-button" name="response" type="submit"
-                    class="button button-fullwidth button-primary $!button_color mt2"
-                    value="true">#message($_acceptButtonLabel)</button>
+                    class="button button-loading button-fullwidth button-primary $!button_color mt2"
+                    value="true"><span>#message($_acceptButtonLabel)</span></button>
         </div>
 
         #if($_cancellable == true)
             <div>
                 <button id="cancel-button" name="response" type="submit"
-                        class="button button-fullwidth button-primary-outline $!button_color mt2"
-                        value="false">#message($_cancelButtonLabel)</button>
+                        class="button button-loading button-fullwidth button-primary-outline $!button_color mt2"
+                        value="false"><span>#message($_cancelButtonLabel)</span></button>
             </div>
         #end
     </div>
 
 </form>
+
+#parse("fragments/button-loading")
+
 #end
 
 #parse("layouts/default")
