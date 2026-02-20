@@ -1,5 +1,7 @@
 # Curity UI Kit
 
+[![production](https://img.shields.io/badge/quality-production-green)](https://curity.io/resources/code-examples/status/) [![source](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
+
 **Customize the look and feel of your applications**
 
 <img
