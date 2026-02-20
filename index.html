@@ -590,7 +590,6 @@
       ];
 
       const toast = document.getElementById("toast");
-      let readyCount = 0;
 
       // Show toast on page load
       setTimeout(() => {
@@ -621,30 +620,29 @@
       }
 
       // Initialize service checks
-      services.forEach(async (service) => {
-        const cards = document.querySelectorAll(".card");
-        const card = cards[service.cardIndex];
-        const status = card.querySelector(".status");
-        const statusText = status.querySelector("span:last-child");
+      Promise.all(
+        services.map(async (service) => {
+          const cards = document.querySelectorAll(".card");
+          const card = cards[service.cardIndex];
+          const status = card.querySelector(".status");
+          const statusText = status.querySelector("span:last-child");
 
-        const isReady = await waitForService(service.url);
+          const isReady = await waitForService(service.url);
 
-        if (isReady) {
-          status.classList.add("running");
-          statusText.textContent = "Dev server running";
-          readyCount++;
-        } else {
-          // Timeout - mark as failed
-          statusText.textContent = "Dev server not responding";
-          readyCount++;
-        }
-
-        // Hide toast when all services have been checked
-        if (readyCount === services.length) {
-          setTimeout(() => {
-            toast.classList.remove("show");
-          }, 500);
-        }
+          if (isReady) {
+            status.classList.add("running");
+            statusText.textContent = "Dev server running";
+            setTimeout(() => {
+              status.style.display = "none";
+            }, 3000);
+          } else {
+            statusText.textContent = "Dev server not responding";
+          }
+        }),
+      ).then(() => {
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 500);
       });
     </script>
   </body>
