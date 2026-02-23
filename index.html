@@ -60,24 +60,15 @@
         padding-inline: 0.5rem;
         justify-content: space-between;
 
-        a {
+        > div:first-child {
           text-decoration: none;
           color: white;
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-
-          svg {
-            width: 18px;
-            height: 18px;
-          }
-
-          &:hover {
-            text-decoration: underline;
-          }
         }
 
-        div:first-child a {
+        > div:first-child {
           color: var(--color-yellow);
           display: inline-flex;
           gap: 1rem;
@@ -87,6 +78,24 @@
         > div:last-child {
           display: flex;
           gap: 1rem;
+          align-items: center;
+        }
+
+        a {
+          display: flex;
+          gap: 0.5rem;
+          align-items: center;
+          color: white;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        svg {
+          width: 18px;
+          height: 18px;
         }
 
         span {
@@ -400,13 +409,11 @@
     </div>
     <header>
       <div>
-        <a role="presentation" href="/">
-          <img
-            src=" src/identity-server/images/curity-logo-white.svg"
-            alt="Curity Logo"
-          />
-          <span>Curity UI Kit</span>
-        </a>
+        <img
+          src=" src/identity-server/images/curity-logo-white.svg"
+          alt="Curity Logo"
+        />
+        <span>Curity UI Kit</span>
       </div>
       <div>
         <a href="https://github.com/curityio/ui-kit" target="_blank">
@@ -632,9 +639,6 @@
           if (isReady) {
             status.classList.add("running");
             statusText.textContent = "Dev server running";
-            setTimeout(() => {
-              status.style.display = "none";
-            }, 3000);
           } else {
             statusText.textContent = "Dev server not responding";
           }
