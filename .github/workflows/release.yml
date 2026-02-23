@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
   create-release:
@@ -14,10 +15,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-
-      - name: Fetch all tags
-        run: git fetch --tags --force
-
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: Extract version from tag
         id: extract_version
         run: |
@@ -53,9 +53,13 @@ jobs:
             BODY=""
             for PR in $PRS; do
               TITLE=$(gh pr view $PR --json title --jq '.title')
-              BODY+="- PR #$PR: $TITLE\n"
+              BODY+="- PR #$PR: $TITLE"$'\n'
             done
-            echo -e "changelog=$BODY" >> $GITHUB_OUTPUT
+            {
+              echo 'changelog<<EOF'
+              printf '%s' "$BODY"
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create GitHub Release
