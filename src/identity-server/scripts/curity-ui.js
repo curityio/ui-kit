@@ -22,54 +22,52 @@
  *
  */
 module.exports = (function () {
-  var $ = jQuery;
+  const $ = jQuery;
 
-  var _isInt = function (value) {
-    var x;
-    return isNaN(value) ? !1 : ((x = parseFloat(value)), (0 | x) === x);
+  const _isInt = function (value) {
+    const x = Number.parseFloat(value);
+    return (0 | x) === x;
   };
 
-  var _passwordStrength = function (password) {
+  const _passwordStrength = function (password) {
     if (password === undefined || password === "") {
       return 0;
     }
 
-    var checkRepeatingChars = function (password) {
-      var chars = {};
-      var s = 0;
-      for (var i = 0; i < password.length; i++) {
-        chars[password[i]] = (chars[password[i]] || 0) + 1;
-        s += 5.0 / chars[password[i]];
-      }
-      return s;
-    };
-    var checkDiversity = function (password) {
-      var res =
-        (/\d/.test(password) ? 1 : 0) +
+    let strength = _checkRepeatingChars(password);
+    const diversity = _checkDiversity(password);
+    strength += (diversity - 1) * 10; // If 1 then no diversity.
+    return _normalizeStrength(strength);
+  };
+
+  const _checkRepeatingChars = function (password) {
+    const chars = {};
+    let s = 0;
+    for (let i = 0; i < password.length; i++) {
+      chars[password[i]] = (chars[password[i]] || 0) + 1;
+      s += 5 / chars[password[i]];
+    }
+    return s;
+  };
+  const _checkDiversity = function (password) {
+    return (/\d/.test(password) ? 1 : 0) +
         (/[a-z]/.test(password) ? 1 : 0) +
         (/[A-Z]/.test(password) ? 1 : 0) +
         (/\W/.test(password) ? 1 : 0);
-      return res;
-      //Numbers, Lowercase, Uppercase, Other
-    };
-
-    var normalizeStrength = function (strength) {
-      var normalizedStrength = strength;
-      if (strength > 100) {
-        return 100;
-      }
-      return parseInt(normalizedStrength);
-    };
-
-    var strength = checkRepeatingChars(password);
-    var diversity = checkDiversity(password);
-    strength += (diversity - 1) * 10; // If 1 then no diversity.
-    return normalizeStrength(strength);
+    //Numbers, Lowercase, Uppercase, Other
   };
 
-  var _updateProgress = function () {
-    $("div.progress div[role='progressbar']").each(function (i, val) {
-      var currentValue = $(this).attr("aria-valuenow");
+  const _normalizeStrength = function (strength) {
+    const normalizedStrength = strength;
+    if (strength > 100) {
+      return 100;
+    }
+    return parseInt(normalizedStrength);
+  };
+
+  const _updateProgress = function () {
+    $("div.progress div[role='progressbar']").each(function () {
+      const currentValue = $(this).attr("aria-valuenow");
       if (currentValue > 100 || currentValue < 0) {
         return;
       }
@@ -77,7 +75,7 @@ module.exports = (function () {
     });
   };
 
-  var setProgress = function (value, element) {
+  const setProgress = function (value, element) {
     if (!_isInt(value)) {
       return;
     }
@@ -85,16 +83,16 @@ module.exports = (function () {
       return;
     }
 
-    value = value < 0 ? 0 : value;
-    value = value > 100 ? 100 : value;
-    var $element = element instanceof jQuery ? element : $(element);
+    value = Math.max(0, value);
+    value = Math.min(100, value);
+    const $element = element instanceof jQuery ? element : $(element);
 
-    var role = $element.attr("role");
-    var $target = undefined;
+    const role = $element.attr("role");
+    let $target;
     if (role !== undefined && role !== false && role === "progressbar") {
       $target = $element;
     } else {
-      $child = $element.find("div[role='progressbar']").first();
+      const $child = $element.find("div[role='progressbar']").first();
       if ($child.length === 0) {
         //No element found to update, do nothing.
         return;
@@ -106,47 +104,46 @@ module.exports = (function () {
     return $target;
   };
 
-  var _assignPasswordStrength = function () {
-    var strengthToColor = function (strength, $element) {
-      var allColors =
-        "progress-success progress-info progress-warning progress-danger";
-      var strengthLabel = $(".password-strength-grade");
-      $element.removeClass(allColors);
-      if (strength < 33) {
-        return $element.addClass("progress-danger");
-      } else if (strength < 66) {
-        return $element.addClass("progress-warning");
-      } else {
-        return $element.addClass("progress-success");
-      }
-    };
-
-    var assignEvent = function ($input, $progess) {
-      $input.on("input", function (evt) {
-        var currentVal = $(this).val();
-        var strength = _passwordStrength(currentVal);
-        var $bar = setProgress(strength, $progess);
-        strengthToColor(strength, $bar);
+  const _assignPasswordStrength = function () {
+    const assignEvent = function ($input, $progress) {
+      $input.on("input", function () {
+        const currentVal = $(this).val();
+        const strength = _passwordStrength(currentVal);
+        const $bar = setProgress(strength, $progress);
+        _strengthToColor(strength, $bar);
       });
     };
 
-    var $passwordGroups = $(".password-group");
+    const $passwordGroups = $(".password-group");
     $passwordGroups.each(function () {
-      var $pwdField = $(this).children("input[type='password']");
-      var $progressBar = $(this).children("div.progress");
+      const $pwdField = $(this).children("input[type='password']");
+      const $progressBar = $(this).children("div.progress");
       if ($progressBar.length > 0) {
         assignEvent($pwdField, $progressBar);
       }
     });
   };
 
-  var _passwordRevealer = function () {
-    var $fields = $(".password-group");
+  const _strengthToColor = function (strength, $element) {
+    const allColors =
+        "progress-success progress-info progress-warning progress-danger";
+    $element.removeClass(allColors);
+    if (strength < 33) {
+      return $element.addClass("progress-danger");
+    } else if (strength < 66) {
+      return $element.addClass("progress-warning");
+    } else {
+      return $element.addClass("progress-success");
+    }
+  };
 
-    var assignEvent = function ($passwordField, $toggler) {
+  const _passwordRevealer = function () {
+    const $fields = $(".password-group");
+
+    const assignEvent = function ($passwordField, $toggler) {
       $toggler.on("click", function (e) {
-        e && e.preventDefault();
-        if ($passwordField.attr("type") == "password") {
+        e?.preventDefault();
+        if ($passwordField.attr("type") === "password") {
           $passwordField.attr("type", "text");
           $(this).addClass("active");
         } else {
@@ -157,8 +154,8 @@ module.exports = (function () {
     };
 
     $fields.each(function () {
-      var $toggler = $(this).find(".form-password-reveal-form-icon");
-      var $passwordField = $(this).find("input");
+      const $toggler = $(this).find(".form-password-reveal-form-icon");
+      const $passwordField = $(this).find("input");
       assignEvent($passwordField, $toggler);
     });
   };
@@ -166,7 +163,6 @@ module.exports = (function () {
   const _qrTimer = function () {
     const qrTimeProgress = document.getElementById("qr-time");
     if (qrTimeProgress) {
-      const time_duration = document.querySelector("#qr-time-duration");
       const label = document.querySelector("#qr-time-duration span");
       const time_indicator_minutes = document.getElementById(
         "qr-time-label-minutes"
@@ -201,8 +197,7 @@ module.exports = (function () {
   };
 
   const _qrEnlarge = function (
-    selector = "#trigger-fullscreen",
-    target = document.documentElement
+    selector = "#trigger-fullscreen"
   ) {
     const trigger = document.querySelector(selector);
     if (trigger) {
@@ -510,7 +505,7 @@ module.exports = (function () {
    * @returns {null|boolean} the user's decision, if known
    */
   function isNonEssentialCookiesEnabled() {
-    var localStorageValue = localStorage.getItem(
+    const localStorageValue = localStorage.getItem(
       "curityui-enable-non-essential-cookies"
     );
     if (localStorageValue) {
@@ -529,7 +524,7 @@ module.exports = (function () {
    */
   function bindNonEssentialCookiesTo(element) {
     if (!element) return;
-    var isEnabled = isNonEssentialCookiesEnabled();
+    const isEnabled = isNonEssentialCookiesEnabled();
     if (isEnabled !== null) {
       element.checked = isEnabled;
     }
@@ -538,7 +533,7 @@ module.exports = (function () {
     };
   }
 
-  var init = function () {
+  const init = function () {
     _updateProgress();
     _assignPasswordStrength();
     _passwordRevealer();
