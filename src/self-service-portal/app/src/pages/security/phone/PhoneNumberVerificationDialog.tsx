@@ -44,7 +44,7 @@ export const PhoneNumberVerificationDialog = ({
       data: verificationStartData,
       loading: verificationStartLoading,
       error: verificationStartError,
-      reset: restVerificationStartError,
+      reset: resetVerificationStart,
     },
   ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.startVerifyPhoneNumberByAccountId);
   const [
@@ -53,10 +53,10 @@ export const PhoneNumberVerificationDialog = ({
       data: verificationCompleteData,
       loading: verificationCompleteLoading,
       error: verificationCompleteError,
-      reset: restVerificationCompleteError,
+      reset: resetVerificationComplete,
     },
   ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyPhoneNumberByAccountId);
-  const [updatePrimaryPhoneNumberByAccountId] = useMutation(
+  const [updatePrimaryPhoneNumberByAccountId, { error: updatePrimaryPhoneNumberError }] = useMutation(
     USER_MANAGEMENT_API.MUTATIONS.updatePrimaryPhoneNumberByAccountId
   );
   const hasTriggeredStartVerification = useRef(false);
@@ -67,7 +67,7 @@ export const PhoneNumberVerificationDialog = ({
   const isDialogPhoneNumberStep = forcePhoneNumberStep || !verificationStartData;
   const isDialogPhoneNumberVerificationStep =
     !forcePhoneNumberStep && !!verificationStartData && !verificationCompleteData;
-  const isDialogPhoneNumberVerificationSuccessStep = !!verificationCompleteData;
+  const isDialogPhoneNumberVerificationSuccessStep = !!verificationCompleteData && !updatePrimaryPhoneNumberError;
 
   useEffect(() => {
     if (phoneNumberForOtpVerification && !hasTriggeredStartVerification.current) {
@@ -122,7 +122,6 @@ export const PhoneNumberVerificationDialog = ({
     if (isDialogPhoneNumberVerificationSuccessStep) return 'success';
     return 'phoneNumber';
   };
-
   const getDialogSubtitle = () => dialogConfig[getDialogStepKey()].subtitle;
   const getActionButtonText = () => dialogConfig[getDialogStepKey()].actionText;
   const getCancelButtonText = () => dialogConfig[getDialogStepKey()].cancelText;
@@ -165,7 +164,7 @@ export const PhoneNumberVerificationDialog = ({
 
   const verifyOtpCode = async () => {
     const code = otpDigits;
-    await completeVerifyPhoneNumberByAccountId({
+    const completeVerifyPhoneNumberByAccountIdResponse = await completeVerifyPhoneNumberByAccountId({
       variables: {
         input: {
           accountId,
@@ -175,7 +174,7 @@ export const PhoneNumberVerificationDialog = ({
       },
     });
 
-    if (setPhoneNumberAsPrimaryAfterVerification) {
+    if (setPhoneNumberAsPrimaryAfterVerification && completeVerifyPhoneNumberByAccountIdResponse.data) {
       await updatePrimaryPhoneNumberByAccountId({
         variables: {
           input: {
@@ -183,6 +182,10 @@ export const PhoneNumberVerificationDialog = ({
             newPrimaryPhoneNumber: phoneNumberForOtpVerification || phoneNumber,
           },
         },
+      }).catch(() => {
+        resetVerificationStart();
+        resetVerificationComplete();
+        setForcePhoneNumberStep(true);
       });
     }
 
@@ -192,8 +195,8 @@ export const PhoneNumberVerificationDialog = ({
   const resetDialog = () => {
     setPhoneNumber('');
     setForcePhoneNumberStep(true);
-    restVerificationStartError();
-    restVerificationCompleteError();
+    resetVerificationStart();
+    resetVerificationComplete();
   };
 
   const isActionButtonDisabled = (): boolean => {
@@ -240,10 +243,14 @@ export const PhoneNumberVerificationDialog = ({
               onChange={event => setPhoneNumber(event.target.value)}
               data-testid="phone-number-input"
             />
-            {verificationStartError && (
+            {(verificationStartError || updatePrimaryPhoneNumberError) && (
               <Alert
                 kind="danger"
-                errorMessage={t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumberByAccountId)}
+                errorMessage={
+                  verificationStartError
+                    ? t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumberByAccountId)
+                    : t(GRAPHQL_API_ERROR_MESSAGES.updatePrimaryPhoneNumberByAccountId)
+                }
                 classes="mt2"
                 data-testid="phone-number-start-verification-error"
               />
