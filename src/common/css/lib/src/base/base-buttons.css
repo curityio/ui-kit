@@ -226,7 +226,6 @@ button svg {
 
 a:is(.button) {
   text-decoration: none;
-  width: 100%;
 
   &:is(.button-grey) {
     color: white
