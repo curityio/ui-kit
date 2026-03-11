@@ -1,0 +1,32 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *###
+
+## Authenticator-specific BankID polling settings.
+## Parsed after fragments/bankid/bankid-poller which creates the se.curity.bankid namespace.
+
+<script type="text/javascript" $!nonceAttr>
+    se.curity.bankid.pollingSettings = {
+        pollUrl: "$_pollUrl",
+        failureUrl: "$_failureUrl",
+        messageSelector: "#poll_message",
+        qrSelector: "#autostartTokenQr",
+        manualStartSelector: "#manualStart",
+        cancelFormSelector: "form[name=cancel]",
+        cancelFormEvent: "submit",
+        onSuccess: function () {
+            $("#pollingDone").submit();
+        },
+        onBankidUserCancel: function () {
+            $("form[name=cancel]").submit();
+        },
+        onCancelButton: function () { /* form submits naturally */ }
+    };
+</script>

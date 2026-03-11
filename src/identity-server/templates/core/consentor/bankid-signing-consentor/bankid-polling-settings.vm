@@ -1,0 +1,42 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *###
+
+## Consentor-specific BankID polling settings.
+## Parsed after fragments/bankid/bankid-poller which creates the se.curity.bankid namespace.
+
+<script type="text/javascript" $!nonceAttr>
+    se.curity.bankid.pollingSettings = {
+        pollUrl: "$_action",
+        failureUrl: "$!_restartUrl",
+        postData: { state: "$!_state" },
+        messageSelector: "#message",
+        qrSelector: "#${_qrCodeId}",
+        manualStartSelector: "#${_sameDeviceLinkId}",
+        cancelFormSelector: "#cancelButton",
+        cancelFormEvent: "click",
+        onSuccess: function () {
+            $("#pollerForm").submit();
+        },
+        onBankidUserCancel: function () {
+            $("#cancelled").val("true");
+            $("#pollerForm").submit();
+        },
+        onCancelButton: function () {
+            $("#cancelled").val("true");
+            $("#pollerForm").submit();
+        }
+    };
+
+    // Wait 5 seconds, if iframe did not start app, then display manual link
+    setTimeout(function () {
+        jQuery(".manuallink").removeClass("display-none");
+    }, 5000);
+</script>
