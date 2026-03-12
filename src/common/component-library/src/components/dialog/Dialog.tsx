@@ -1,8 +1,8 @@
 import { TranslationFunction } from '@/types/util.type.ts';
 import { Button } from '@components/Button';
 import { IconGeneralClose } from '@curity/ui-kit-icons';
-import { DialogProps, Dialog as ReachDialog } from '@reach/dialog';
-import { ReactNode } from 'react';
+import * as RadixDialog from '@radix-ui/react-dialog';
+import { ReactNode, RefObject } from 'react';
 import styles from './Dialog.module.css';
 
 export interface CurityDialogProps {
@@ -24,7 +24,7 @@ export interface CurityDialogProps {
   showCancelButton?: boolean;
   cancelButtonText?: string;
   cancelButtonCallback?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  settings?: Pick<DialogProps, 'initialFocusRef' | 'allowPinchZoom'>;
+  settings?: { initialFocusRef?: RefObject<HTMLElement>; allowPinchZoom?: boolean };
   children?: ReactNode;
 }
 
@@ -48,7 +48,6 @@ export const Dialog = ({
   showCancelButton = false,
   cancelButtonText,
   cancelButtonCallback,
-  settings,
   children,
 }: CurityDialogProps) => {
   const closeDialog = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -108,36 +107,45 @@ export const Dialog = ({
   );
 
   return (
-    <>
-      <ReachDialog isOpen={isOpen} {...settings} onDismiss={closeDialog} className={styles.dialog} data-testid="dialog">
-        {showHeader && (
-          <header className="flex justify-between p2 border-bottom-light w100" data-testid="dialog-header">
-            {title && (
-              <p className="m0" data-testid="dialog-title">
-                {title}
-              </p>
-            )}
-            {showCloseButton && closeButtonElement}
-          </header>
-        )}
-        <main className="center flex flex-column justify-center p3" data-testid="dialog-content">
-          {subTitle && (
-            <h2 className="mt0" data-testid="dialog-subtitle">
-              {subTitle}
-            </h2>
+    <RadixDialog.Root open={isOpen} onOpenChange={(open) => {
+      if (!open && closeCallback) {
+        closeCallback(undefined as unknown as React.MouseEvent<HTMLButtonElement>);
+      }
+    }}>
+      <RadixDialog.Portal>
+        <RadixDialog.Overlay className={styles['dialog-overlay']} />
+        <RadixDialog.Content className={styles.dialog} data-testid="dialog">
+          {showHeader && (
+            <header className="flex justify-between p2 border-bottom-light w100" data-testid="dialog-header">
+              {title && (
+                <RadixDialog.Title asChild>
+                  <p className="m0" data-testid="dialog-title">
+                    {title}
+                  </p>
+                </RadixDialog.Title>
+              )}
+              {showCloseButton && closeButtonElement}
+            </header>
           )}
-          {children}
-        </main>
-        {showFooter && (
-          <footer
-            className={`${styles['dialog-footer']} flex flex-gap-2 flex-center justify-end p2 bg-light-grey mt-auto w100`}
-            data-testid="dialog-footer"
-          >
-            {showCancelButton && cancelButtonElement}
-            {showActionButton && actionButtonElement}
-          </footer>
-        )}
-      </ReachDialog>
-    </>
+          <main className="center flex flex-column justify-center p3" data-testid="dialog-content">
+            {subTitle && (
+              <h2 className="mt0" data-testid="dialog-subtitle">
+                {subTitle}
+              </h2>
+            )}
+            {children}
+          </main>
+          {showFooter && (
+            <footer
+              className={`${styles['dialog-footer']} flex flex-gap-2 flex-center justify-end p2 bg-light-grey mt-auto w100`}
+              data-testid="dialog-footer"
+            >
+              {showCancelButton && cancelButtonElement}
+              {showActionButton && actionButtonElement}
+            </footer>
+          )}
+        </RadixDialog.Content>
+      </RadixDialog.Portal>
+    </RadixDialog.Root>
   );
 };
