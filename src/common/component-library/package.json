@@ -48,6 +48,7 @@
     "react-router": "^7.9.4"
   },
   "devDependencies": {
+    "ajv": "^8.17.0",
     "@eslint/js": "^9.9.0",
     "@parcel/watcher": "^2.5.0",
     "@testing-library/dom": "^10.4.0",
