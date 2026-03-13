@@ -56,18 +56,25 @@ export const PhoneNumberVerificationDialog = ({
       reset: resetVerificationComplete,
     },
   ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.completeVerifyPhoneNumberByAccountId);
-  const [updatePrimaryPhoneNumberByAccountId, { error: updatePrimaryPhoneNumberError }] = useMutation(
-    USER_MANAGEMENT_API.MUTATIONS.updatePrimaryPhoneNumberByAccountId
-  );
+  const [
+    updatePrimaryPhoneNumberByAccountId,
+    {
+      loading: updatePrimaryPhoneNumberLoading,
+      error: updatePrimaryPhoneNumberError,
+      reset: resetUpdatePrimaryPhoneNumber,
+    },
+  ] = useMutation(USER_MANAGEMENT_API.MUTATIONS.updatePrimaryPhoneNumberByAccountId);
   const hasTriggeredStartVerification = useRef(false);
 
   const isStartVerificationLoading = verificationStartLoading;
   const isCompleteVerificationLoading = verificationCompleteLoading;
-  const isDialogLoading = isStartVerificationLoading || isCompleteVerificationLoading;
+  const isDialogLoading =
+    isStartVerificationLoading || isCompleteVerificationLoading || updatePrimaryPhoneNumberLoading;
   const isDialogPhoneNumberStep = forcePhoneNumberStep || !verificationStartData;
   const isDialogPhoneNumberVerificationStep =
     !forcePhoneNumberStep && !!verificationStartData && !verificationCompleteData;
-  const isDialogPhoneNumberVerificationSuccessStep = !!verificationCompleteData && !updatePrimaryPhoneNumberError;
+  const isDialogPhoneNumberVerificationSuccessStep =
+    !isDialogLoading && !!verificationCompleteData && !updatePrimaryPhoneNumberError;
 
   useEffect(() => {
     if (phoneNumberForOtpVerification && !hasTriggeredStartVerification.current) {
@@ -199,6 +206,7 @@ export const PhoneNumberVerificationDialog = ({
     setForcePhoneNumberStep(true);
     resetVerificationStart();
     resetVerificationComplete();
+    resetUpdatePrimaryPhoneNumber();
   };
 
   const isActionButtonDisabled = (): boolean => {
