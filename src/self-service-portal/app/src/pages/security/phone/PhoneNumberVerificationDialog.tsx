@@ -173,8 +173,10 @@ export const PhoneNumberVerificationDialog = ({
         },
       },
     });
+    const phoneNumberSuccessfullyVerified =
+      completeVerifyPhoneNumberByAccountIdResponse.data?.completeVerifyPhoneNumberByAccountId?.result === true;
 
-    if (setPhoneNumberAsPrimaryAfterVerification && completeVerifyPhoneNumberByAccountIdResponse.data) {
+    if (setPhoneNumberAsPrimaryAfterVerification && phoneNumberSuccessfullyVerified) {
       await updatePrimaryPhoneNumberByAccountId({
         variables: {
           input: {
@@ -252,7 +254,7 @@ export const PhoneNumberVerificationDialog = ({
                     : t(GRAPHQL_API_ERROR_MESSAGES.updatePrimaryPhoneNumberByAccountId)
                 }
                 classes="mt2"
-                data-testid="phone-number-start-verification-error"
+                data-testid="phone-number-start-verification-or-primary-update-error"
               />
             )}
           </div>
