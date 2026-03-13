@@ -252,7 +252,11 @@ export const PhoneNumberVerificationDialog = ({
                     : t(GRAPHQL_API_ERROR_MESSAGES.updatePrimaryPhoneNumberByAccountId)
                 }
                 classes="mt2"
-                data-testid="phone-number-start-verification-error"
+                data-testid={
+                  verificationStartError
+                    ? 'phone-number-start-verification-error'
+                    : 'phone-number-update-primary-error'
+                }
               />
             )}
           </div>
