@@ -119,18 +119,24 @@ export const Dialog = ({
           {showHeader && (
             <header className="flex justify-between p2 border-bottom-light w100" data-testid="dialog-header">
               {title && (
-                <p className="m0" data-testid="dialog-title">
-                  {title}
-                </p>
+                <RadixDialog.Title asChild>
+                  <p className="m0" data-testid="dialog-title">
+                    {title}
+                  </p>
+                </RadixDialog.Title>
               )}
               {showCloseButton && closeButtonElement}
             </header>
           )}
           <main className="center flex flex-column justify-center p3" data-testid="dialog-content">
-            {subTitle && (
-              <h2 className="mt0" data-testid="dialog-subtitle">
-                {subTitle}
-              </h2>
+            {subTitle ? (
+              <RadixDialog.Description asChild>
+                <h2 className="mt0" data-testid="dialog-subtitle">
+                  {subTitle}
+                </h2>
+              </RadixDialog.Description>
+            ) : (
+              <RadixDialog.Description />
             )}
             {children}
           </main>
