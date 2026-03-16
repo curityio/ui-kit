@@ -219,6 +219,13 @@ export const PhoneNumberVerificationDialog = ({
     return false;
   };
 
+  const updatePrimaryPhoneNumberErrorExtensions = updatePrimaryPhoneNumberError?.graphQLErrors[0]?.extensions;
+  const updatePrimaryPhoneNumberErrorMessage =
+    updatePrimaryPhoneNumberErrorExtensions?.classification === 'constraint-violation' &&
+    updatePrimaryPhoneNumberErrorExtensions?.field === 'phoneNumbers'
+      ? t(GRAPHQL_API_ERROR_MESSAGES.updatePrimaryPhoneNumberByAccountIdDuplicated)
+      : t(GRAPHQL_API_ERROR_MESSAGES.updatePrimaryPhoneNumberByAccountId);
+
   return (
     <Dialog
       t={uiKitT}
@@ -259,7 +266,7 @@ export const PhoneNumberVerificationDialog = ({
                 errorMessage={
                   verificationStartError
                     ? t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumberByAccountId)
-                    : t(GRAPHQL_API_ERROR_MESSAGES.updatePrimaryPhoneNumberByAccountId)
+                    : updatePrimaryPhoneNumberErrorMessage
                 }
                 classes="mt2"
                 data-testid={
