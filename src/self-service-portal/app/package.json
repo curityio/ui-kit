@@ -5,7 +5,8 @@
   "private": true,
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.22.0",
+    "npm": ">=10.9.4"
   },
   "scripts": {
     "prestart": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
