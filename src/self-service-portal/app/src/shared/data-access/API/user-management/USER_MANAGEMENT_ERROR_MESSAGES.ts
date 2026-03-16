@@ -1,6 +1,8 @@
 import { USER_MANAGEMENT_API_OPERATIONS } from '@/shared/data-access/API/user-management/api';
 
-export const USER_MANAGEMENT_API_ERROR_MESSAGES: Record<USER_MANAGEMENT_API_OPERATIONS, string> = {
+export const USER_MANAGEMENT_API_ERROR_MESSAGES: Record<USER_MANAGEMENT_API_OPERATIONS, string> & {
+  updatePrimaryPhoneNumberByAccountIdDuplicated: string;
+} = {
   // QUERIES
   [USER_MANAGEMENT_API_OPERATIONS.GET_ACCOUNT_BY_USERNAME]: 'error.account.fetch-by-username',
   [USER_MANAGEMENT_API_OPERATIONS.GET_ACCOUNTS]: 'error.account.fetch-all',
@@ -31,6 +33,7 @@ export const USER_MANAGEMENT_API_ERROR_MESSAGES: Record<USER_MANAGEMENT_API_OPER
   [USER_MANAGEMENT_API_OPERATIONS.COMPLETE_VERIFY_PHONE_NUMBER]: 'error.account.phone.complete-verification',
   [USER_MANAGEMENT_API_OPERATIONS.DELETE_PHONE_NUMBER]: 'error.account.phone.delete',
   [USER_MANAGEMENT_API_OPERATIONS.UPDATE_PRIMARY_PHONE_NUMBER]: 'error.account.phone.update-primary',
+  updatePrimaryPhoneNumberByAccountIdDuplicated: 'error.account.phone.update-primary-already-registered',
   [USER_MANAGEMENT_API_OPERATIONS.VALIDATE_PASSWORD_AND_UPDATE_ACCOUNT_BY_ID]:
     'error.security.password.validate-update',
   [USER_MANAGEMENT_API_OPERATIONS.ADD_OPT_IN_MFA_FACTOR_TO_ACCOUNT_BY_ACCOUNT_ID]:
