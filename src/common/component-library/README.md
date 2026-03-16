@@ -155,7 +155,7 @@ src/
 - `@curity/ui-kit-icons` - Icon library
 - `react`
 - `react-router` - Routing support
-- `@reach/dialog` - Dialog support
+- `@radix-ui/react-dialog` - Dialog support
 
 ## Browser Support
 
