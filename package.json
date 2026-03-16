@@ -37,6 +37,10 @@
     "build": "npm run build -ws --if-present",
     "clean": "npm run clean -ws --if-present"
   },
+  "engines": {
+    "node": ">=22.22.0",
+    "npm": ">=10.9.4"
+  },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3"
