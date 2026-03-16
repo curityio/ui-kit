@@ -28,8 +28,8 @@
     "rollup": "3.28.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.20",
-    "@types/react-dom": "^18.3.6",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "@typescript/twoslash": "^3.2.9",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.12.3"
