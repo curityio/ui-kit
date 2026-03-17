@@ -18,7 +18,15 @@
             var loadingButtons = document.querySelectorAll('.button-loading-active');
             loadingButtons.forEach(function(btn) {
                 btn.classList.remove('button-loading-active');
-                btn.disabled = false;
+                // Only re-enable if the button wasn't originally disabled
+                if (!btn.hasAttribute('data-was-disabled')) {
+                    btn.disabled = false;
+                }
+            });
+            // Clean up any hidden inputs we injected
+            var hiddenInputs = document.querySelectorAll('.button-loading-hidden-input');
+            hiddenInputs.forEach(function(input) {
+                input.parentNode.removeChild(input);
             });
         }
 
@@ -81,8 +89,27 @@
                     // Add loading state to all submit buttons in this form
                     var submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
 
+                    // Find the button that actually triggered the submit (if any)
+                    var activeElement = document.activeElement;
+                    var clickedButton = (activeElement && activeElement.form === form &&
+                        (activeElement.type === 'submit')) ? activeElement : null;
+
                     submitButtons.forEach(function(btn) {
                         if (!btn.classList.contains('button-loading-active')) {
+                            // If this button has a name and is the one that was clicked,
+                            // preserve its value as a hidden input so the server receives it
+                            if (btn.name && btn === clickedButton) {
+                                var hidden = document.createElement('input');
+                                hidden.type = 'hidden';
+                                hidden.name = btn.name;
+                                hidden.value = btn.value || '';
+                                hidden.className = 'button-loading-hidden-input';
+                                form.appendChild(hidden);
+                            }
+                            // Remember if this button was already disabled
+                            if (btn.disabled) {
+                                btn.setAttribute('data-was-disabled', 'true');
+                            }
                             btn.classList.add('button-loading-active');
                             btn.disabled = true;
                         }
