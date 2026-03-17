@@ -63,7 +63,7 @@ export const ConfirmButton = ({
     children: <h2 className="m0">{dialogMessage || t('confirm-proceed')}</h2>,
   };
   const dialogConfigResult = { ...defaultDialogConfig, ...dialogConfig };
-  const closeCallback = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const closeCallback = (event?: React.MouseEvent<HTMLButtonElement>) => {
     setIsOpen(false);
     onCancel?.();
     dialogConfig?.closeCallback?.(event);
