@@ -6,7 +6,7 @@ When running the main `npm start` script from the root, this documentation site 
 
 ## Development
 
-Setup
+Setup (run from the monorepo root)
 
 ```shell
 nvm use

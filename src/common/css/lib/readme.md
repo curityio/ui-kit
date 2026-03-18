@@ -24,7 +24,7 @@ See the default [curity-theme.css](./src/curity-theme.css) for details.
 
 ## Development
 
-Setup
+Setup (run from the monorepo root)
 
 ```shell
 nvm use
