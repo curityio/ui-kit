@@ -1,5 +1,5 @@
 #*
- a* Copyright (C) 2023 Curity AB. All rights reserved.
+ a* Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -9,13 +9,28 @@
  * For further information, please contact Curity AB.
  *#
 
-#set($rfa1 =  "authenticator.bankid.service.rfa1")
-#set($rfa9 =  "authenticator.bankid.service.rfa9")
-#set($rfa13 = "authenticator.bankid.service.rfa13")
-#set($rfa14 = "authenticator.bankid.service.rfa14")
-#set($rfa15 = "authenticator.bankid.service.rfa15")
-#set($rfa21 = "authenticator.bankid.service.rfa21")
-#set($rfa23 = "authenticator.bankid.service.rfa23")
+## Shared BankID poller fragment.
+## Requires:
+##   Velocity variable:
+##     $bankidKeyPrefix - Message key prefix for RFA messages (e.g. "authenticator.bankid.service")
+##     $_maxWaitTime - Timeout in seconds (default to 60 seconds)
+##   JS object: se.curity.bankid.pollingSettings (defined in a <script> tag before this fragment is parsed)
+##     .pollUrl           - Poll endpoint URL
+##     .failureUrl        - Failure redirect URL
+##     .messageSelector   - CSS selector for message display element
+##     .qrSelector        - CSS selector for QR code image element
+##     .manualStartSelector - CSS selector for manual start link
+##     .onSuccess()       - Callback on authentication success
+##     .onBankidUserCancel() - Callback on user cancel in BankID app
+##     .postData            - (optional) Object with data to include in the poll POST body
+
+#set($rfa1 =  "${bankidKeyPrefix}.rfa1")
+#set($rfa9 =  "${bankidKeyPrefix}.rfa9")
+#set($rfa13 = "${bankidKeyPrefix}.rfa13")
+#set($rfa14 = "${bankidKeyPrefix}.rfa14")
+#set($rfa15 = "${bankidKeyPrefix}.rfa15")
+#set($rfa21 = "${bankidKeyPrefix}.rfa21")
+#set($rfa23 = "${bankidKeyPrefix}.rfa23")
 
 #if ( !$_maxWaitTime )
     #set ( $_maxWaitTime = 60 )
@@ -26,7 +41,7 @@
 <script type="text/javascript" $!nonceAttr>
     const se = {'curity': {'bankid': {}}};
 
-    se.curity.bankid.Poller = function () {
+    se.curity.bankid.Poller = function (settings) {
         let messageMappings = {
             "rfa1": "#message($rfa1)",
             "rfa9": "#message($rfa9)",
@@ -52,7 +67,7 @@
             const onMessage = requireFunction(pollSettings.onMessage, 'onMessage');
 
             logger.debug("Polling the server.");
-            $.ajax({
+            const ajaxOptions = {
                 headers: {Accept: "application/json"},
                 url: pollSettings.url,
                 method: "POST",
@@ -74,7 +89,7 @@
                                 return;
                             } else if (data.message && data.message.status === 'USER_CANCEL') {
                                 logger.debug("User cancelled in the BankID app");
-                                $("form[name='cancel']").submit(); ## Do the actual cancellation
+                                settings.onBankidUserCancel(); ## Do the actual cancellation
                                 return;
                             }
                             if(pollSettings.updateMessage === true) {
@@ -89,7 +104,11 @@
                         onSuccess();
                     }
                 }
-            }).fail((err) => {
+            };
+            if (pollSettings.postData) {
+                ajaxOptions.data = pollSettings.postData;
+            }
+            $.ajax(ajaxOptions).fail((err) => {
                 stopPolling = true;
                 onFailure(err);
 
@@ -146,8 +165,12 @@
             });
 
             return () => {
+                if (stopPolling) {
+                    return false;
+                }
                 window.clearInterval(timeoutId);
                 stopPolling = true;
+                return true;
             };
         }
 
@@ -159,7 +182,7 @@
 
                     if (error && error.readyState !== 0) {
                         logger.info("Authentication failed. Redirecting to fail handler");
-                        window.location.replace("${_failureUrl}?_errorMessage=" + error);
+                        window.location.replace(settings.failureUrl + "?_errorMessage=" + error);
                     } else if (error && error.status === 0) {
                         logger.debug("The browser refused to perform the request. Likely the page is reloading")
                     } else {
@@ -176,7 +199,7 @@
             const message = (data) => {
                 if (!data) {
                     logger.info("No message in poll response");
-                    $('#poll_message').text("unknown error");
+                    $(settings.messageSelector).text("unknown error");
 
                     return;
                 }
@@ -184,29 +207,30 @@
 
                 if (data.userMessage) {
                     logger.debug("Updating user message: " + data.userMessage)
-                    $('#poll_message').text(messageMappings[data.userMessage]);
+                    $(settings.messageSelector).text(messageMappings[data.userMessage]);
                 }
 
-                if ($('#autostartTokenQr') && data.qrCode) {
-                    $('#autostartTokenQr').attr('src', data.qrCode);
+                if ($(settings.qrSelector) && data.qrCode) {
+                    $(settings.qrSelector).attr('src', data.qrCode);
                 }
 
-                if ($('#manualStart') && data.autoStartToken && se.curity.bankid.launch && se.curity.bankid.launch.browserStrategy)
+                if ($(settings.manualStartSelector) && data.autoStartToken && se.curity.bankid.launch && se.curity.bankid.launch.browserStrategy)
                 {
-                    $('#manualStart').attr('href', se.curity.bankid.launch.browserStrategy.launchUrl(data.autoStartToken));
+                    $(settings.manualStartSelector).attr('href', se.curity.bankid.launch.browserStrategy.launchUrl(data.autoStartToken));
                 }
             };
 
             const success = () => {
                 logger.debug("Authentication succeeded, submitting form");
-                $('#pollingDone').submit();
+                settings.onSuccess();
             }
 
             return {
-                url: "$!_pollUrl",
+                url: settings.pollUrl,
                 pollInterval: 1,
                 maxWaitTime: $_maxWaitTime,
-                restartUrl: "$!_restartUrl",
+                restartUrl: settings.failureUrl,
+                postData: settings.postData,
                 onTimeout: timeout,
                 onMessage: message,
                 onFailure: failure,

@@ -116,19 +116,27 @@
             #message("${_templatePrefix}.view.button.cancel")</button>
     </div>
 </form>
-    #parse("fragments/poller")
-    #parse("consentor/bankid-signing-consentor/handle-auto-start-uri")
-    #parse("fragments/consentor-signing-app-launcher")
-## if the cancel button is clicked then the form is posted with cancelled flag equal to true
-## then the backend handles the cancellation of the flow
-<script type="application/javascript" $nonceAttr>
-    jQuery(document).ready(function ($) {
-        $("#cancelButton").on('click', function (e) {
-            $("#cancelled").val("true");
-            $("#pollerForm").submit();
-        })
-    })
-</script>
+    #if($!bankidConsentorLaunchVersion2)
+        #set($bankidKeyPrefix = "authenticator.bankid.service")
+        #parse("fragments/logger")
+        #parse("fragments/bankid/bankid-poller")
+        #parse("consentor/bankid-signing-consentor/bankid-polling-settings")
+        #parse("fragments/bankid/bankid-app-launcher")
+    #else
+        #parse("fragments/poller")
+        #parse("consentor/bankid-signing-consentor/handle-auto-start-uri")
+        #parse("fragments/consentor-signing-app-launcher")
+        ## if the cancel button is clicked then the form is posted with cancelled flag equal to true
+        ## then the backend handles the cancellation of the flow
+        <script type="application/javascript" $nonceAttr>
+            jQuery(document).ready(function ($) {
+                $("#cancelButton").on('click', function (e) {
+                    $("#cancelled").val("true");
+                    $("#pollerForm").submit();
+                })
+            })
+        </script>
+    #end
 ## NOTE: In case the user refreshes the page while this form is shown and polling for status, then any progress will be lost.
 ## Depending on the context, the browser will show a default pop up message upon refresh, mentioning that any progress
 ## will be lost if continuing with refresh. Otherwise, the relevant event upon refreshing should be handled in order to

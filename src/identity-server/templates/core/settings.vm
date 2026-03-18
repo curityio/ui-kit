@@ -171,6 +171,9 @@ should not be used
 ## Use the new version of the launch template
 ##set($bankidLaunchVersion2 = false)
 
+## Use the new version of the launch template for the BankID Signing Consentor
+##set($bankidConsentorLaunchVersion2 = true)
+
 ## Never try to auto start the app
 ## This will be effective for all browsers. If specific browsers should not autostart, add
 ## an override for the intended browser
