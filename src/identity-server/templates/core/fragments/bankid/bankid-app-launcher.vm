@@ -9,14 +9,31 @@
  * For further information, please contact Curity AB.
  *###
 
+## Shared BankID app launcher fragment.
+## Requires:
+##   Velocity variables:
+##     $!authncomplete        - Whether authentication is already complete
+##     $!_userCancelled       - Whether the user cancelled in the BankID app
+##     $!bankidNeverAutoStart - Never auto-launch the app (configuration)
+##     $!_skipAutoLaunch      - Skip auto-launch (e.g. user previously cancelled)
+##   JS object: se.curity.bankid.pollingSettings (defined in a <script> tag before this fragment is parsed)
+##     .manualStartSelector   - CSS selector for manual start link
+##     .cancelFormSelector    - CSS selector for cancel form/button
+##     .cancelFormEvent       - Event type for cancel trigger (e.g. "submit" or "click")
+##     .onSuccess()           - Callback on authentication success
+##     .onBankidUserCancel()  - Callback on user cancel in BankID app
+##     .onCancelButton()      - Additional callback on cancel button click (e.g. set cancelled flag)
+
 <script type="text/javascript" $!nonceAttr>
 
     $(document).ready(function () {
 
+        const pollingSettings = se.curity.bankid.pollingSettings;
+
         const authnComplete = '$!authncomplete' === 'true';
         if (authnComplete) {
             logger.debug("Authentication was complete");
-            $('#pollingDone').submit();
+            pollingSettings.onSuccess();
             return;
         } else {
             logger.debug("Authentication is not yet completed. ")
@@ -25,17 +42,17 @@
         const userCancelled = '$!_userCancelled' === 'true'
         if (userCancelled) {
             logger.debug("User cancelled in app");
-            $("form[name='cancel']").submit();
+            pollingSettings.onBankidUserCancel();
             return;
         }
 
-        const poller = new se.curity.bankid.Poller();
+        const poller = new se.curity.bankid.Poller(pollingSettings);
 
         ## Poll once before setting up to check status of transaction. If this is a page reload,
         ## the poll should determine if authentication was completed or cancelled
         poller.checkStatus(() => {
             logger.debug("Check status poll completed");
-            #parse("authenticator/bankid/launch/check-platform-capabilities.js")
+            #parse("fragments/bankid/check-platform-capabilities.js")
 
             let browserStrategy = getBrowserStrategy();
             se.curity.bankid.launch = {'browserStrategy': browserStrategy};
@@ -47,13 +64,17 @@
                     ## *OBS* Cancel in the BankID app will break the user out of the frame because we can't access
                     ## window.top.location across origins
                     logger.debug("Page is framed. Auto launching the BankID app will likely not work");
-                    $("#manualStart").attr("target", "_top");
+                    $(pollingSettings.manualStartSelector).attr("target", "_top");
                 }
             }
 
             ## Cancel poller on cancel
             let cancelFunction = poller.start();
-            $("form[name='cancel']").submit(cancelFunction);
+            $(pollingSettings.cancelFormSelector).on(pollingSettings.cancelFormEvent, function() {
+                if (cancelFunction()) {
+                    pollingSettings.onCancelButton();
+                }
+            });
 
             ## Cancel poller on click on Extend link
             $('#qr-time-extend').click(() => { cancelFunction(); return true;})
@@ -70,7 +91,7 @@
                 }
             #end
 
-            $('#manualStart').attr('href', browserStrategy.launchUrl());
+            $(pollingSettings.manualStartSelector).attr('href', browserStrategy.launchUrl());
 
         });
     });
