@@ -4,11 +4,10 @@
 
 **Customize the look and feel of your applications**
 
-<img
-   src="src/common/assets/images/ui-kit-start.jpg"
-   alt="Curity UI Kit"
-   width="800"
-/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="src/common/assets/images/ui-kit-start-dark.svg">
+  <img alt="Curity UI Kit" src="src/common/assets/images/ui-kit-start.svg" width="800">
+</picture>
 
 
 This monorepo contains:
@@ -67,7 +66,6 @@ Then you can access the projects at:
 
 - Curity Identity Server Templates: [http://localhost:3000](http://localhost:3000)
 - Self Service Portal: [http://localhost:5173/previewer](http://localhost:5173/previewer)
-- Curity CSS Docs: [http://localhost:4321/](http://localhost:4321/)
 
 To start projects individually, run:
 
