@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import https from 'node:https';
 import crypto from 'node:crypto';
+import readline from 'node:readline';
 
 async function main() {
     const version = '1.0.0';
@@ -38,8 +39,26 @@ async function main() {
     const presence = path.join(target, presenceFile);
 
     if (fs.existsSync(presence)) {
-        console.log('UI Kit runtime already unzipped. Skipping...');
-        return;
+        const installedVersion = detectInstalledVersion(target, assetSuffix);
+
+        if (installedVersion === version) {
+            console.log(`UI Kit runtime v${version} already installed. Skipping...`);
+            return;
+        }
+
+        if (installedVersion) {
+            const shouldUpgrade = await promptUser(
+                `UI Kit runtime v${installedVersion} is installed. Upgrade to v${version}? [y/N] `
+            );
+
+            if (!shouldUpgrade) {
+                console.log('Upgrade skipped.');
+                return;
+            }
+
+            console.log(`Removing old version v${installedVersion}...`);
+            cleanOldVersion(target, installedVersion, assetSuffix);
+        }
     }
 
     if (!fs.existsSync(source)) {
@@ -59,6 +78,70 @@ async function main() {
     console.log(`Unzipped ${source} to ${target}`);
 
     await extractNestedZip(target, `ui-kit-runtime-${version}.zip`);
+}
+
+/**
+ * Detects the currently installed version by looking for existing previewer zip files in the target directory.
+ */
+function detectInstalledVersion(targetDir, assetSuffix) {
+    const prefix = 'curity-ui-kit-previewer-';
+    const suffix = `-${assetSuffix}.zip`;
+
+    try {
+        const files = fs.readdirSync(targetDir);
+        for (const file of files) {
+            if (file.startsWith(prefix) && file.endsWith(suffix)) {
+                return file.slice(prefix.length, -suffix.length);
+            }
+        }
+    } catch {
+        // Directory doesn't exist or can't be read
+    }
+
+    return null;
+}
+
+/**
+ * Removes files from a previous version installation.
+ */
+function cleanOldVersion(targetDir, oldVersion, assetSuffix) {
+    const filesToRemove = [
+        `curity-ui-kit-previewer-${oldVersion}-${assetSuffix}.zip`,
+        `ui-kit-runtime-${oldVersion}.zip`,
+        'ui-kit-runtime.zip',
+        'run-ui-kit-server.sh',
+        'run-ui-kit-server.cmd',
+    ];
+    const dirsToRemove = ['jre-image', 'lib'];
+
+    for (const file of filesToRemove) {
+        const filePath = path.join(targetDir, file);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log(`  Removed ${file}`);
+        }
+    }
+
+    for (const dir of dirsToRemove) {
+        const dirPath = path.join(targetDir, dir);
+        if (fs.existsSync(dirPath)) {
+            fs.rmSync(dirPath, { recursive: true, force: true });
+            console.log(`  Removed ${dir}/`);
+        }
+    }
+}
+
+/**
+ * Prompts the user with a yes/no question. Returns true if the user answers 'y' or 'yes'.
+ */
+function promptUser(question) {
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    return new Promise(resolve => {
+        rl.question(question, answer => {
+            rl.close();
+            resolve(answer.trim().toLowerCase().startsWith('y'));
+        });
+    });
 }
 
 function resolveAssetSuffix() {
