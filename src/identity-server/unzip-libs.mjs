@@ -18,12 +18,12 @@ import crypto from 'node:crypto';
 import readline from 'node:readline';
 
 async function main() {
-    const version = '1.0.0';
+    const version = '1.1.0';
     const expectedSha256BySuffix = {
-        "linux-arm64": '69be61326f5d305ed5b0d27659bb5a6ecf2fc9fc517a1f7a1ed4a560011591dd',
-        "linux-x64": '6050d404473c3fbba707513d8f99d3f10fc953e6fe6cc8a118b2a22c99ea1729',
-        "macos-arm64": 'b9c227f429adbb7089b6b88ad1676e546bb57faf5c9abe5f22cdbafe90c61e1e',
-        "windows-x64": 'e572cc627d7aee9fd7f3928ba9bd9004da367ce83cb58e54616d2a17872b2c5e',
+        "linux-arm64": '9a289f15fb76846531e3942ba78cf8c56d06b67a6c2931f632b2bf75abcdbac7',
+        "linux-x64": '5f0c02720ca620f5c4813b50824330cb21eab54e5427c4e5ddc3ec5254322896',
+        "macos-arm64": '4a1bc63649476df3d440596480d8416e89f6b8de7e3097cabb1036c728dace85',
+        "windows-x64": '42479d39ba9be22d9103ce14646ef6b94c0e14639aa3ffbfa9d82be90c80d529',
     };
     const assetSuffix = resolveAssetSuffix();
     const expectedSha256 = expectedSha256BySuffix[assetSuffix];
