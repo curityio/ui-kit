@@ -1,0 +1,40 @@
+name: Node.js CI (Standalone SPA)
+
+on:
+  push:
+    # Triggers on any branch push
+  pull_request:
+    # Triggers for PRs targeting any branch
+  workflow_dispatch: 
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      # No submodules needed if we are in the standalone repo
+
+    - name: Use Node.js 22
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Prettier Check
+      run: npm run prettier-check
+
+    - name: Lint Code
+      run: npm run lint
+
+    - name: Build Project
+      # Confirms the SPA bundles correctly (tsc + vite)
+      run: npm run build
+
+    - name: Run Unit Tests
+      # Runs Vitest with your mocked BE responses
+      run: npm test
