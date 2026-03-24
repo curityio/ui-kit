@@ -1,0 +1,26 @@
+.header {
+  background-color: var(--color-primary-dark);
+  color: white;
+  padding: 0 var(--space-2);
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  backdrop-filter: blur(8px);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logoText {
+  font-variant: small-caps;
+  color: var(--color-tertiary);
+
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-family: var(--type-medium);
+  letter-spacing: 0.085em;
+  -webkit-font-smoothing: antialiased;
+  white-space: nowrap;
+}

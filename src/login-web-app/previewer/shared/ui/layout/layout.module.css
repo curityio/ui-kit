@@ -1,0 +1,11 @@
+.layout {
+  --sidebarWidth: 360px;
+  display: grid;
+  grid-template-columns: var(--sidebarWidth) 1fr;
+  min-height: calc(100vh - 80px);
+  gap: 0;
+}
+
+.mainContent section {
+  min-height: calc(100dvh - var(--header-height));
+}

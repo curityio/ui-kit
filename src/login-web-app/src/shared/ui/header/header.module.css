@@ -1,0 +1,7 @@
+.header {
+  height: var(--header-height);
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 2;
+}

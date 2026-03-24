@@ -1,0 +1,50 @@
+@Library("jenkins-shared-library") _
+
+import se.curity.buildtools.NexusUtils
+import se.curity.utils.PipelineUtils
+import se.curity.buildtools.NpmUtils
+
+PipelineUtils pipelineUtils = new PipelineUtils()
+NexusUtils nexusUtils = new NexusUtils()
+NpmUtils npmUtils = new NpmUtils()
+
+// Set properties for building this branch
+properties([
+    parameters([
+        booleanParam(name: 'RUN_NEXUS_IQ_CLI_SCAN', defaultValue: false, description: 'Run Nexus IQ CLI scan')
+    ])
+])
+
+nexusUtils.withNexusCreds() {
+    npmUtils.withNpmCreds() {
+        pipelineUtils.withDefaultConfig([nodeLabel: 'CuritySlavev12']) {
+            currentBuild.description = "Login App - ${env.NODE} - ${env.hostname}"
+            // Checkout the code
+            stage('Checkout') {
+                pipelineUtils.curityCliLogin()
+                checkout scm
+            }
+            // Install dependencies and run build
+            stage('Build') {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+            // Run Sonatype IQ Scan Analysis
+            pipelineUtils.optionalStage('Run Nexus IQ CLI Scan', params.RUN_NEXUS_IQ_CLI_SCAN) {
+                withCredentials([usernamePassword(credentialsId: 'nexus-iq-server-creds', usernameVariable: 'NEXUS_IQ_USER', passwordVariable: 'NEXUS_IQ_PASS')]) {
+                    sh "java -jar /usr/share/nexus-iq-cli/jars/nexus-iq-cli.jar -i login-web-app -s http://sonatype-iq-server.curityio.net:8070 -a ${NEXUS_IQ_USER}:${NEXUS_IQ_PASS} . -r nexus_iq_scan_reports.json"
+                }
+                archiveArtifacts artifacts: 'nexus_iq_scan_reports.json', allowEmptyArchive: true, fingerprint: true
+            }
+            // Run Lint
+            stage('Lint') {
+                sh 'npm run lint'
+                sh 'npm run prettier-check'
+            }
+            // Run unit tests
+            stage('Test') {
+                sh 'npm run test'
+            }
+        }
+    }
+}

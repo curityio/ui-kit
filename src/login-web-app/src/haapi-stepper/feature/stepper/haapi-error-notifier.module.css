@@ -1,0 +1,17 @@
+.haapi-error-notifier-toast {
+  position: fixed;
+  inset-block-start: calc(var(--header-height) + var(--space-2));
+  inset-inline-end: var(--space-1);
+  background-color: color-mix(in srgb, var(--color-danger) 8%, white);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 30%, transparent);
+  color: var(--color-danger);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  border-radius: var(--form-field-border-radius);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  max-inline-size: 384px;
+  min-inline-size: 300px;
+}
