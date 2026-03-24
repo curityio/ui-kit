@@ -141,21 +141,29 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 |-------|---------|---------|
 | `.haapi-stepper-selector` | `HaapiSelector` | Selector action container |
 | `.haapi-stepper-messages` | `Messages` | Messages container |
-| `.haapi-form-input` | `Form` | Text/password input fields |
-| `.haapi-form-checkbox` | `Form` | Checkbox inputs |
-| `.haapi-form-field-label` | `Form` | Form field labels |
-| `.haapi-form-field-checkbox-label` | `Form` | Checkbox-specific labels |
-| `.haapi-stepper-button` | `Form` | Primary submit buttons |
-| `.haapi-stepper-button-outline` | `Form` | Outline/cancel buttons |
+| `.haapi-stepper-form-field-text-input` | `HaapiStepperTextFormField` | Text/password input fields |
+| `.haapi-stepper-form-field-text-label` | `HaapiStepperTextFormField` | Form field labels |
+| `.haapi-stepper-form-field-checkbox-input` | `HaapiStepperCheckboxFormField` | Checkbox inputs |
+| `.haapi-stepper-form-field-checkbox-label` | `HaapiStepperCheckboxFormField` | Checkbox-specific labels |
+| `.haapi-stepper-form-field-select-input` | `HaapiStepperSelectFormField` | Select inputs |
+| `.haapi-stepper-form-field-select-label` | `HaapiStepperSelectFormField` | Select-specific labels |
+| `.haapi-stepper-form-field-password-wrapper` | `HaapiStepperPasswordFormField` | Password input container |
+| `.haapi-stepper-form-field-password-label` | `HaapiStepperPasswordFormField` | Password label |
+| `.haapi-stepper-form-field-password-input` | `HaapiStepperPasswordFormField` | Password input |
+| `.haapi-stepper-form-field-password-visibility-toggle` | `HaapiStepperPasswordFormField` | Password visibility toggle button |
+| `.haapi-stepper-button` | `HaapiStepperForm` | Primary submit buttons |
+| `.haapi-stepper-button-outline` | `HaapiStepperForm` | Outline/cancel buttons |
 | `.haapi-stepper-well` | `Well` | Styled content container |
 | `.haapi-stepper-links` | `Links` | Links container |
 | `.haapi-stepper-link` | `Link` | Link element |
-| `.haapi-stepper-link-image` | `Link` | Linkselement |
+| `.haapi-stepper-link-image` | `Link` | Link image (e.g. BankId QR code) |
+| `.haapi-stepper-link-image-title` | `Link` | Link image's title |
 | `.haapi-stepper-actions` | `Actions` | Actions container |
 | `.haapi-stepper-heading` | `Messages` | Heading messages |
 | `.haapi-stepper-userName` | `Messages` | User name display |
 | `.haapi-stepper-userCode` | `Messages` | User code display (e.g. recovery codes) |
 | `.haapi-stepper-polling-progress` | `ClientOperation` | Remaining polling time indicator (e.g. recovery codes) |
+
 
 
 ## Error Handling

@@ -16,17 +16,19 @@ import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
 export function HaapiStepperSelectFormField({ field }: { field: HaapiSelectFormField }): ReactElement {
   const { formState } = useHaapiStepperForm();
-  const selectId = `${field.name}-input`;
+  const { action } = useHaapiStepperForm();
+  const selectId = `${action.id}-${field.name}-input`;
 
   return (
-    <label className="label block" htmlFor={selectId}>
-      {field.label ?? field.name}:
+    <label className="haapi-stepper-form-field-select-label" htmlFor={selectId}>
+      {field.label ?? field.name}
       <select
         id={selectId}
         data-testid={`haapi-form-field-select-${field.name}`}
         name={field.name}
         value={formState.get(field)}
         onChange={e => formState.set(field, e.target.value)}
+        className="haapi-stepper-form-field-select-input"
       >
         {field.options.map(option => (
           <option key={option.value + '_' + option.label} value={option.value}>
