@@ -1,21 +1,21 @@
-name: Node.js CI (LWA Subfolder)
+name: Node.js CI (Login Web App)
 
 on:
   push:
     paths:
-      - 'uikit/lwa/**' # Only trigger if files in this folder change
+      - 'ui-kit/src/login-web-app/**'
   pull_request:
     paths:
-      - 'uikit/lwa/**' # Only trigger if the PR touches this folder
+      - 'ui-kit/src/login-web-app/**'
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
-    # This ensures all 'run' commands happen inside the subfolder
     defaults:
       run:
-        working-directory: uikit/lwa
+        # This matches the folder highlighted in your screenshot
+        working-directory: ui-kit/src/login-web-app
 
     steps:
     - name: Checkout Code
@@ -28,11 +28,14 @@ jobs:
       with:
         node-version: '22'
         cache: 'npm'
-        # Tells the cacher where to find the lockfile
-        cache-dependency-path: uikit/lwa/package-lock.json
+        # Crucial: path to the nested lockfile
+        cache-dependency-path: ui-kit/src/login-web-app/package-lock.json
 
     - name: Install Dependencies
       run: npm ci
+
+    - name: Prettier Check
+      run: npm run prettier-check
 
     - name: Lint Code
       run: npm run lint
