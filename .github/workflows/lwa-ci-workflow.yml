@@ -1,47 +1,28 @@
 name: Node.js CI (Login Web App)
 
-on:
-  push:
-    paths:
-      - 'ui-kit/src/login-web-app/**'
-  pull_request:
-    paths:
-      - 'ui-kit/src/login-web-app/**'
-
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        # This matches the folder highlighted in your screenshot
-        working-directory: ui-kit/src/login-web-app
-
-    steps:
-        node-version-file: '.nvmrc'
+steps:
+    - name: Checkout Code
       uses: actions/checkout@v4
       with:
-        submodules: recursive 
+        submodules: recursive
 
-    - name: Use Node.js 22
+    - name: Setup Node.js from .nvmrc
       uses: actions/setup-node@v4
       with:
-        node-version: '22'
+        node-version-file: '.nvmrc'
         cache: 'npm'
-        # Crucial: path to the nested lockfile
-        cache-dependency-path: ui-kit/src/login-web-app/package-lock.json
 
     - name: Install Dependencies
       run: npm ci
 
     - name: Prettier Check
-      run: npm run prettier-check
+      run: npx prettier --check src/login-web-app
 
     - name: Lint Code
-      run: npm run lint
+      run: npm run lint -w src/login-web-app
 
     - name: Build Project
-      run: npm run build
+      run: npm run build:login-web-app
 
     - name: Run Tests
-      run: npm test
+      run: npm test -w src/login-web-app
