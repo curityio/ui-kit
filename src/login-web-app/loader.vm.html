@@ -1,0 +1,31 @@
+<!--
+  ~ Copyright (C) 2025 Curity AB. All rights reserved.
+  ~
+  ~ The contents of this file are the property of Curity AB.
+  ~ You may not copy or use this file, in either source code
+  ~ or executable form, except in compliance with terms
+  ~ set by Curity AB.
+  ~
+  ~ For further information, please contact Curity AB.
+  -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <script>
+      window.__CONFIG__ = {
+        haapi: {
+          clientId: '$_apiDrivenClientInfo.clientId',
+          tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        },
+      };
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

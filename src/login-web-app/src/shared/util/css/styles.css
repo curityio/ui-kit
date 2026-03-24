@@ -1,0 +1,101 @@
+@import './index.css';
+
+.haapi-stepper-selector {
+  @extend .center, .py2;
+}
+
+.haapi-stepper-messages {
+  @extend .center, .py2;
+}
+
+.haapi-form-input {
+  @extend .field, .w100, mt2;
+  font-family: var(--type-regular);
+}
+
+.haapi-form-checkbox {
+}
+
+.haapi-form-field-label {
+  @extend .left-align, .label, .block, .mt2;
+
+  &:has(input[type='checkbox'], input[type='radio']) {
+    display: flex;
+
+    input {
+      order: -1;
+    }
+  }
+}
+
+.haapi-form-field-checkbox-label {
+  @extend .left-align, .label, .mt2;
+}
+
+.haapi-stepper-button {
+  @extend .button, .button-medium, .button-primary, .w100, .mt2;
+}
+
+.haapi-stepper-button-outline {
+  @extend .button, .button-medium, .button-primary-outline, .w100, .mt2;
+}
+
+.haapi-stepper-well {
+  @extend .p3, .mx-auto, .bg-white, .br-8;
+  width: clamp(280px, 90%, 560px);
+  box-shadow: 0 4px 24px var(--color-grey-light);
+  margin: 0 auto;
+}
+
+.haapi-stepper-links {
+  @extend .center, .py3, .flex, .flex-column;
+}
+
+.haapi-stepper-link {
+  @extend .button, .button-small, .button-link;
+}
+
+.haapi-stepper-actions {
+  @extend .center, .flex, .flex-column;
+}
+
+.haapi-stepper-heading {
+  &:is(h1) {
+    font-size: calc(var(--type-base-size) * 1.75);
+
+    &:is(:first-of-type) {
+      margin-top: 0;
+    }
+  }
+}
+
+.haapi-stepper-userName {
+}
+
+.haapi-stepper-userCode {
+  display: inline-block;
+  width: min(100%, 100px);
+}
+
+.haapi-stepper-polling-progress {
+  border-radius: var(--form-field-border-radius);
+  background-color: var(--color-grey-subtle);
+  outline: 1px solid var(--color-grey-light);
+  outline-offset: 2px;
+  border: none;
+
+  &::-webkit-progress-bar {
+    background-color: var(--color-grey-subtle);
+    border-radius: var(--form-field-border-radius);
+  }
+
+  &::-webkit-progress-value {
+    background-color: var(--color-spot);
+    border-radius: var(--form-field-border-radius);
+  }
+
+  &::-moz-progress-bar {
+    background-color: var(--color-spot);
+    border-radius: var(--form-field-border-radius);
+  }
+}

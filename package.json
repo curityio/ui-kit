@@ -20,7 +20,8 @@
     "src/common/css/docs",
     "src/common/icons",
     "src/identity-server",
-    "src/self-service-portal/app"
+    "src/self-service-portal/app",
+    "src/login-web-app"
   ],
   "scripts": {
     "prestart": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css-lib --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library --workspace @curity/ui-kit-identity-server && npm run unzip-libs --workspace @curity/ui-kit-identity-server",
@@ -30,6 +31,8 @@
     "start:component-library": "npm run -w src/common/component-library start",
     "start:identity-server": "npm run -w src/identity-server start",
     "build:identity-server": "npm run -w src/identity-server build",
+    "start:login-web-app": "npm run -w src/login-web-app start",
+    "build:login-web-app": "npm run -w src/login-web-app build",
     "build:ssp": "npm run -w src/self-service-portal/app build",
     "build:css": "npm run -w src/common/css build",
     "build:component-library": "npm run -w src/common/component-library build",

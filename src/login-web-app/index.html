@@ -1,0 +1,49 @@
+<!--
+  ~ Copyright (C) 2025 Curity AB. All rights reserved.
+  ~
+  ~ The contents of this file are the property of Curity AB.
+  ~ You may not copy or use this file, in either source code
+  ~ or executable form, except in compliance with terms
+  ~ set by Curity AB.
+  ~
+  ~ For further information, please contact Curity AB.
+  -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <script>
+      const args = new URL(window.location.href).searchParams;
+
+      function arg(name) {
+        const value = args.get(name);
+        if (value) {
+          return value;
+        }
+        throw new Error(`Missing argument '${name}'`);
+      }
+
+      const originalUrl = arg('originalUrl');
+      const haapi = {
+        clientId: arg('haapi_clientId'),
+        tokenEndpoint: arg('haapi_tokenEndpoint'),
+      };
+
+      // Change the current URL to match the original request to Identity Server, so that it looks like the
+      // application was loaded directly by the server's template
+      window.history.replaceState(undefined, '', originalUrl);
+      // Set the configuration object expected by the application
+      window.__CONFIG__ = {
+        requestDelay: '%MODE%' === 'development' ? 500 : 0,
+        haapi,
+      };
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

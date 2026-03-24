@@ -1,0 +1,11 @@
+.sectionLightGradient {
+  --a: #eee7f9;
+  --a-shape: ellipse 30% 30% at 29% 27%;
+  --b: #fff4ff;
+  --b-shape: ellipse 35% 30% at 66% 17%;
+  --c: #fdf1fa;
+  --c-shape: ellipse 40% 25% at 50% 40%;
+  background:
+    radial-gradient(var(--a-shape), var(--a), transparent), radial-gradient(var(--b-shape), var(--b), white),
+    radial-gradient(var(--c-shape), var(--c), transparent);
+}

@@ -1,0 +1,8 @@
+:root {
+  --page-background-color: white;
+  --header-height: 50px;
+}
+
+img[alt='Curity Login Web App'] {
+  max-width: 1200px;
+}
