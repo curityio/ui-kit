@@ -18,7 +18,7 @@ jobs:
         working-directory: ui-kit/src/login-web-app
 
     steps:
-    - name: Checkout Code
+        node-version-file: '.nvmrc'
       uses: actions/checkout@v4
       with:
         submodules: recursive 
