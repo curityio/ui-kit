@@ -156,6 +156,7 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 | `.haapi-stepper-userName` | `Messages` | User name display |
 | `.haapi-stepper-userCode` | `Messages` | User code display (e.g. recovery codes) |
 | `.haapi-stepper-polling-progress` | `ClientOperation` | Remaining polling time indicator (e.g. recovery codes) |
+| `.haapi-stepper-error-boundary-fallback` | `DefaultErrorFallback` | Error boundary fallback container |
 
 
 ## Error Handling
