@@ -15,14 +15,15 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import https from 'node:https';
 import crypto from 'node:crypto';
+import readline from 'node:readline';
 
 async function main() {
-    const version = '1.0.0';
+    const version = '1.1.0';
     const expectedSha256BySuffix = {
-        "linux-arm64": '69be61326f5d305ed5b0d27659bb5a6ecf2fc9fc517a1f7a1ed4a560011591dd',
-        "linux-x64": '6050d404473c3fbba707513d8f99d3f10fc953e6fe6cc8a118b2a22c99ea1729',
-        "macos-arm64": 'b9c227f429adbb7089b6b88ad1676e546bb57faf5c9abe5f22cdbafe90c61e1e',
-        "windows-x64": 'e572cc627d7aee9fd7f3928ba9bd9004da367ce83cb58e54616d2a17872b2c5e',
+        "linux-arm64": '9a289f15fb76846531e3942ba78cf8c56d06b67a6c2931f632b2bf75abcdbac7',
+        "linux-x64": '5f0c02720ca620f5c4813b50824330cb21eab54e5427c4e5ddc3ec5254322896',
+        "macos-arm64": '4a1bc63649476df3d440596480d8416e89f6b8de7e3097cabb1036c728dace85',
+        "windows-x64": '42479d39ba9be22d9103ce14646ef6b94c0e14639aa3ffbfa9d82be90c80d529',
     };
     const assetSuffix = resolveAssetSuffix();
     const expectedSha256 = expectedSha256BySuffix[assetSuffix];
@@ -38,8 +39,26 @@ async function main() {
     const presence = path.join(target, presenceFile);
 
     if (fs.existsSync(presence)) {
-        console.log('UI Kit runtime already unzipped. Skipping...');
-        return;
+        const installedVersion = detectInstalledVersion(target, assetSuffix);
+
+        if (installedVersion === version) {
+            console.log(`UI Kit runtime v${version} already installed. Skipping...`);
+            return;
+        }
+
+        if (installedVersion) {
+            const shouldUpgrade = await promptUser(
+                `UI Kit runtime v${installedVersion} is installed. Upgrade to v${version}? [y/N] `
+            );
+
+            if (!shouldUpgrade) {
+                console.log('Upgrade skipped.');
+                return;
+            }
+
+            console.log(`Removing old version v${installedVersion}...`);
+            cleanOldVersion(target, installedVersion, assetSuffix);
+        }
     }
 
     if (!fs.existsSync(source)) {
@@ -59,6 +78,70 @@ async function main() {
     console.log(`Unzipped ${source} to ${target}`);
 
     await extractNestedZip(target, `ui-kit-runtime-${version}.zip`);
+}
+
+/**
+ * Detects the currently installed version by looking for existing previewer zip files in the target directory.
+ */
+function detectInstalledVersion(targetDir, assetSuffix) {
+    const prefix = 'curity-ui-kit-previewer-';
+    const suffix = `-${assetSuffix}.zip`;
+
+    try {
+        const files = fs.readdirSync(targetDir);
+        for (const file of files) {
+            if (file.startsWith(prefix) && file.endsWith(suffix)) {
+                return file.slice(prefix.length, -suffix.length);
+            }
+        }
+    } catch {
+        // Directory doesn't exist or can't be read
+    }
+
+    return null;
+}
+
+/**
+ * Removes files from a previous version installation.
+ */
+function cleanOldVersion(targetDir, oldVersion, assetSuffix) {
+    const filesToRemove = [
+        `curity-ui-kit-previewer-${oldVersion}-${assetSuffix}.zip`,
+        `ui-kit-runtime-${oldVersion}.zip`,
+        'ui-kit-runtime.zip',
+        'run-ui-kit-server.sh',
+        'run-ui-kit-server.cmd',
+    ];
+    const dirsToRemove = ['jre-image', 'lib'];
+
+    for (const file of filesToRemove) {
+        const filePath = path.join(targetDir, file);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log(`  Removed ${file}`);
+        }
+    }
+
+    for (const dir of dirsToRemove) {
+        const dirPath = path.join(targetDir, dir);
+        if (fs.existsSync(dirPath)) {
+            fs.rmSync(dirPath, { recursive: true, force: true });
+            console.log(`  Removed ${dir}/`);
+        }
+    }
+}
+
+/**
+ * Prompts the user with a yes/no question. Returns true if the user answers 'y' or 'yes'.
+ */
+function promptUser(question) {
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    return new Promise(resolve => {
+        rl.question(question, answer => {
+            rl.close();
+            resolve(answer.trim().toLowerCase().startsWith('y'));
+        });
+    });
 }
 
 function resolveAssetSuffix() {
