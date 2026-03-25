@@ -44,6 +44,7 @@ describe('HaapiStepper', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    mockHaapiFetch.mockReset();
   });
 
   describe('Steps', () => {
