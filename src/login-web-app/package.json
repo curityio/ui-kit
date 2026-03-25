@@ -14,8 +14,8 @@
     "dist"
   ],
   "scripts": {
-    "start": "vite --open /start.html",
-    "dev": "vite",
+    "start": "npm run previewer",
+    "dev": "vite --open /start.html",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest",
