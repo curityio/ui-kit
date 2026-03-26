@@ -19,6 +19,7 @@
   <body>
     <script>
       window.__CONFIG__ = {
+        initialUrl: #if ($_apiDrivenInitialUrl) '$_apiDrivenInitialUrl' #else undefined #end,
         haapi: {
           clientId: '$_apiDrivenClientInfo.clientId',
           tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',

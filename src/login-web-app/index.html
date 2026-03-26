@@ -20,12 +20,19 @@
     <script>
       const args = new URL(window.location.href).searchParams;
 
-      function arg(name) {
+      function arg(name, required) {
+        if (required === undefined) {
+          required = true;
+        }
+
         const value = args.get(name);
         if (value) {
           return value;
         }
-        throw new Error(`Missing argument '${name}'`);
+
+        if (required) {
+          throw new Error(`Missing argument '${name}'`);
+        }
       }
 
       const originalUrl = arg('originalUrl');
@@ -40,6 +47,7 @@
       // Set the configuration object expected by the application
       window.__CONFIG__ = {
         requestDelay: '%MODE%' === 'development' ? 500 : 0,
+        initialUrl: arg('initialUrl', false),
         haapi,
       };
     </script>

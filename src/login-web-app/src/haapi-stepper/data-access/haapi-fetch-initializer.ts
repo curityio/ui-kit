@@ -9,18 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import { createHaapiFetch, FetchLike, HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
-
-interface GlobalConfiguration {
-  requestDelay?: number;
-  haapi: HaapiConfiguration;
-}
-
-// @ts-expect-error Usage of 'any' due to global variable
-const config = window.__CONFIG__ as GlobalConfiguration | undefined;
-if (!config) {
-  throw new Error('Configuration not set');
-}
+import { createHaapiFetch, FetchLike } from '@curity/identityserver-haapi-web-driver';
+import { configuration } from './bootstrap-configuration';
 
 function withDelay(f: FetchLike, d: number): FetchLike {
   const delayed = async (link: Parameters<FetchLike>[0], init: Parameters<FetchLike>[1]): ReturnType<FetchLike> => {
@@ -32,8 +22,10 @@ function withDelay(f: FetchLike, d: number): FetchLike {
   return delayed;
 }
 
-const mainHaapiFetch = createHaapiFetch(config.haapi);
+const mainHaapiFetch = createHaapiFetch(configuration.haapi);
 const haapiFetch =
-  config.requestDelay && config.requestDelay > 0 ? withDelay(mainHaapiFetch, config.requestDelay) : mainHaapiFetch;
+  configuration.requestDelay && configuration.requestDelay > 0
+    ? withDelay(mainHaapiFetch, configuration.requestDelay)
+    : mainHaapiFetch;
 
 export default haapiFetch;

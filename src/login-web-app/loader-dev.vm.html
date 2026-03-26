@@ -18,12 +18,17 @@
   </head>
   <body>
     <script>
-      const redirect = new URL('/', window.location.href);
-      redirect.search = new URLSearchParams({
+      const query = new URLSearchParams({
         originalUrl: window.location.href,
         haapi_clientId: '$_apiDrivenClientInfo.clientId',
         haapi_tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
-      }).toString();
+      });
+      #if ($_apiDrivenInitialUrl)
+      query.append('initialUrl', '$_apiDrivenInitialUrl');
+      #end
+
+      const redirect = new URL('/', window.location.href);
+      redirect.search = query.toString();
 
       window.location.href = redirect.toString();
     </script>

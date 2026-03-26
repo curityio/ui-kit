@@ -10,25 +10,25 @@
  */
 import { render, screen, waitFor } from '@testing-library/react';
 import { HaapiStepper } from './HaapiStepper';
-import { HAAPI_STEPS, HAAPI_PROBLEM_STEPS, HAAPI_POLLING_STATUS } from '../../data-access/types/haapi-step.types';
+import { HAAPI_POLLING_STATUS, HAAPI_PROBLEM_STEPS, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
 import { HAAPI_ACTION_TYPES, HAAPI_FORM_ACTION_KINDS } from '../../data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import {
   authenticationStep,
-  redirectionStep,
-  pollingPendingStep,
-  pollingBankIdStep,
   completedWithSuccessStep,
-  createProblemStep,
   continueSameStep,
+  createProblemStep,
   createRegistrationStep,
+  pollingBankIdStep,
+  pollingPendingStep,
+  redirectionStep,
 } from '../../../shared/util/api-responses';
 import { act } from 'react';
-import { Mock } from 'vitest';
 import { useHaapiStepper } from './HaapiStepperHook';
 import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
+import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 
 describe('HaapiStepper', () => {
   const initializationHref = 'https://example.com/auth';
@@ -48,20 +48,41 @@ describe('HaapiStepper', () => {
   });
 
   describe('Steps', () => {
-    it('should initialize the first step with the current location and render the children', async () => {
-      render(
-        <HaapiStepper>
-          <TestComponent />
-        </HaapiStepper>
-      );
+    describe('initialization', () => {
+      afterEach(() => {
+        delete mockConfiguration.initialUrl;
+      });
 
-      expect(mockHaapiFetch).toHaveBeenCalledWith(initializationHref, { method: 'GET' });
+      it('should initialize the first step with the current location and render the children', async () => {
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        );
 
-      const stepRendered = await screen.findByTestId('step-type');
+        expect(mockHaapiFetch).toHaveBeenCalledWith(initializationHref, { method: 'GET' });
 
-      expect(stepRendered).toHaveTextContent(initialStepType);
-      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+        const stepRendered = await screen.findByTestId('step-type');
+
+        expect(stepRendered).toHaveTextContent(initialStepType);
+        expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+      });
+
+      it('should initialize the first step with the bootstrap initial URL', async () => {
+        const initialUrl = 'https://example.com/other';
+        mockConfiguration.initialUrl = initialUrl;
+
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        );
+
+        await waitFor(() => {
+          expect(mockHaapiFetch).toHaveBeenCalledWith(initialUrl, { method: 'GET' });
+        });
+      });
     });
 
     it('should go to the next step and provide the updated current step', async () => {
@@ -630,28 +651,29 @@ describe('HaapiStepper', () => {
   });
 });
 
-// eslint-disable-next-line no-var
-var mockHaapiFetch: Mock;
-
+const mockHaapiFetch = vi.hoisted(() => vi.fn());
 vi.mock('../../data-access/haapi-fetch-initializer', () => {
-  mockHaapiFetch = vi.fn();
-
   return {
     default: mockHaapiFetch,
   };
 });
 
-const mockThrowErrorToAppErrorBoundary = vi.fn();
+const mockConfiguration: Partial<BootstrapConfiguration> = vi.hoisted(() => {
+  return {};
+});
+vi.mock('../../data-access/bootstrap-configuration', () => {
+  return {
+    configuration: mockConfiguration,
+  };
+});
 
+const mockThrowErrorToAppErrorBoundary = vi.fn();
 vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({
   useThrowErrorToAppErrorBoundary: () => mockThrowErrorToAppErrorBoundary,
 }));
 
-// eslint-disable-next-line no-var
-var mockOpenBankIdApp: Mock;
-
+const mockOpenBankIdApp = vi.hoisted(() => vi.fn());
 vi.mock('../actions/client-operation/openBankIdApp', () => {
-  mockOpenBankIdApp = vi.fn();
   return {
     openBankIdApp: mockOpenBankIdApp,
   };
