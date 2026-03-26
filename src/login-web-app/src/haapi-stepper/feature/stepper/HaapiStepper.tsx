@@ -339,11 +339,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
 
   const contextValue = useMemo(
       () => ({ currentStep, loading, error, nextStep, history }),
-<<<<<<< HEAD
       [currentStep, loading, error, nextStep, history]
-=======
-      [currentStep, loading, error, history]
->>>>>>> 7f573307700c8c9c9d4d0bbeb72690fedf6b71fd
   );
 
   return (
