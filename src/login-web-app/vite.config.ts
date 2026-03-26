@@ -1,10 +1,9 @@
-/// <reference types="vitest" />
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 import * as path from 'node:path';
 import postcssExtendRule from 'postcss-extend-rule';
 import postcssImport from 'postcss-import';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 // https://vite.dev/config/
 export default defineConfig({

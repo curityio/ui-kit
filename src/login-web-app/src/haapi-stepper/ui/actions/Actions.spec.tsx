@@ -13,12 +13,13 @@ import { HAAPI_STEPPER_ELEMENT_TYPES } from '../../data-access/types/haapi-step.
 import {
   HaapiStepperClientOperationAction,
   HaapiStepperFormAction,
+  HaapiStepperNextStep,
   HaapiStepperSelectorAction,
 } from '../../feature/stepper/haapi-stepper.types';
 import { Actions } from './Actions';
 
 describe('Actions', () => {
-  let onAction: ReturnType<typeof vi.fn>;
+  let onAction: HaapiStepperNextStep<HaapiStepperFormAction | HaapiStepperClientOperationAction>;
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
