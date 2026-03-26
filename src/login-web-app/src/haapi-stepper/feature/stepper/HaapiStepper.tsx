@@ -314,6 +314,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
 
       setCurrentStepAndUpdateHistory(nextStepData, action, payload);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- nextStep is a stable ref via useRefCallback, defined below
     [configResult, currentStep, history, setCurrentStepAndUpdateHistory]
   );
 
@@ -333,18 +334,16 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
 
   useEffect(() => {
     nextStep(getInitialStepLink());
+    return () => cancelPendingOperation(pendingOperation);
   }, [nextStep]);
 
+  const contextValue = useMemo(
+      () => ({ currentStep, loading, error, nextStep, history }),
+      [currentStep, loading, error, history]
+  );
+
   return (
-    <HaapiStepperContext
-      value={{
-        currentStep,
-        loading,
-        error,
-        nextStep,
-        history,
-      }}
-    >
+    <HaapiStepperContext value={contextValue}>
       {children}
     </HaapiStepperContext>
   );

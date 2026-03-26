@@ -18,37 +18,34 @@ export function HaapiStepperErrorNotifier({
   errorFormatter = error => error.title ?? 'An error occurred',
 }: HaapiErrorNotifierProps) {
   const { error } = useHaapiStepper();
-  const [notificationError, setNotificationError] = useState<HaapiStepperAppError | HaapiStepperInputError | null>();
-  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+  const currentError = error?.app ?? (showInputErrorNotifications ? error?.input : null);
+  const [dismissedError, setDismissedError] = useState<HaapiStepperAppError | HaapiStepperInputError | null>(null);
 
   useEffect(() => {
-    const notificationError = error?.app ?? (showInputErrorNotifications ? error?.input : null);
-
-    if (notificationError) {
-      setNotificationError(notificationError);
-      setIsNotificationVisible(true);
-
-      const timer = setTimeout(() => {
-        setIsNotificationVisible(false);
-        setNotificationError(null);
-      }, notificationDuration);
-
-      return () => clearTimeout(timer);
+    if (!currentError) {
+      return;
     }
-  }, [error?.app, error?.input, showInputErrorNotifications, notificationDuration]);
 
-  const handleDismiss = () => {
-    setIsNotificationVisible(false);
-  };
+    const timeout = setTimeout(() => {
+      setDismissedError(currentError);
+    }, notificationDuration);
+
+    return () => clearTimeout(timeout);
+  }, [currentError, notificationDuration]);
+
+  const isNotificationVisible = currentError && dismissedError !== currentError;
+  const notificationMessages = currentError?.dataHelpers.messages ?? [];
+  const handleDismiss = () => setDismissedError(currentError ?? null);
+
 
   return (
     <>
-      {isNotificationVisible && notificationError && (
+      {isNotificationVisible && (
         <div className={styles['haapi-error-notifier-toast']} data-testid="haapi-error-toast" role="alert">
           <div>
             <div className="flex flex-gap-2 flex-center justify-between">
               <h4 className="m0" data-testid="haapi-error-haapi-error-notifier-toast-title">
-                {errorFormatter(notificationError)}
+                {errorFormatter(currentError)}
               </h4>
 
               <button
@@ -62,9 +59,9 @@ export function HaapiStepperErrorNotifier({
               </button>
             </div>
 
-            {notificationError.dataHelpers.messages.length && (
+            {notificationMessages.length && (
               <div data-testid="haapi-error-haapi-error-notifier-toast-messages">
-                {notificationError.dataHelpers.messages.map(message => (
+                {notificationMessages.map(message => (
                   <p key={message.id}>{message.text}</p>
                 ))}
               </div>

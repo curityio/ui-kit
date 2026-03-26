@@ -223,7 +223,7 @@ function OnDemandErrorThrowerComponent({
   }
 
   return (
-    <button data-testid={testId} onClick={() => setShouldThrow(true)}>
+    <button type="button" data-testid={testId} onClick={() => setShouldThrow(true)}>
       Throw Error
     </button>
   );
@@ -260,6 +260,7 @@ function AsyncErrorToErrorBoundaryThrowerComponent({ errorMessage }: { errorMess
   return (
     <div data-testid="async-error-to-error-boundary-thrower-container">
       <button
+        type="button"
         data-testid="async-error-to-error-boundary-thrower-button"
         onClick={() => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -277,7 +278,7 @@ function CustomErrorFallbackComponent({ error, resetError }: { error?: Error; re
     <div>
       <h2>Custom Error UI</h2>
       <p data-testid="custom-error-message">{error?.message}</p>
-      <button onClick={resetError} data-testid="custom-reset-button">
+      <button type="button" onClick={resetError} data-testid="custom-reset-button">
         Reset Custom
       </button>
     </div>
