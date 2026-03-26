@@ -20,12 +20,10 @@ export function App() {
   return (
     <ErrorBoundary>
       <HaapiStepper>
-        <HaapiStepperErrorNotifier>
           <Layout>
             <DevBar />
             <HaapiStepperStepUI />
           </Layout>
-        </HaapiStepperErrorNotifier>
       </HaapiStepper>
     </ErrorBoundary>
   );
