@@ -1,28 +1,40 @@
 name: Node.js CI (Login Web App)
 
-steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+on:
+  push:
+    paths:
+      - 'src/login-web-app/**'
+  pull_request:
+    paths:
+      - 'src/login-web-app/**'
+  workflow_dispatch:
 
-    - name: Setup Node.js from .nvmrc
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: '.nvmrc'
-        cache: 'npm'
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: Install Dependencies
-      run: npm ci
+      - name: Setup Node.js from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
 
-    - name: Prettier Check
-      run: npx prettier --check src/login-web-app
+      - name: Install Dependencies
+        run: npm ci
 
-    - name: Lint Code
-      run: npm run lint -w src/login-web-app
+      - name: Prettier Check
+        run: npx prettier --check src/login-web-app
 
-    - name: Build Project
-      run: npm run build:login-web-app
+      - name: Lint Code
+        run: npm run lint -w src/login-web-app
 
-    - name: Run Tests
-      run: npm test -w src/login-web-app
+      - name: Build Project
+        run: npm run build:login-web-app
+
+      - name: Run Tests
+        run: npm run test -w src/login-web-app -- run
