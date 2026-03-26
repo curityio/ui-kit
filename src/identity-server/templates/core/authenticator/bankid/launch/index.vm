@@ -121,9 +121,11 @@
 </form>
     #set($keyPrefix = "authenticator.bankid.service")
     #if($_secureStartEnabled && $!bankidLaunchVersion2)
+        #set($bankidKeyPrefix = "authenticator.bankid.service")
         #parse("fragments/logger")
-        #parse("authenticator/bankid/launch/bankid-poller")
-        #parse("authenticator/bankid/launch/bankid-app-launcher")
+        #parse("fragments/bankid/bankid-poller")
+        #parse("authenticator/bankid/launch/bankid-polling-settings")
+        #parse("fragments/bankid/bankid-app-launcher")
     #else
         #parse("fragments/generic-poller")
         #parse("authenticator/bankid/launch/handle-auto-start-uri")

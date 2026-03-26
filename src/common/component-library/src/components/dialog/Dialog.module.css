@@ -16,13 +16,14 @@
   box-sizing: border-box;
   min-height: 0;
   animation: dialog-enter 0.2s var(--reveal-animation-timing-function) forwards;
+  z-index: 11;
 }
 
 .dialog header {
   z-index: 1;
 }
 
-:global([data-reach-dialog-overlay]) {
+.overlay {
   background-color: hsla(0, 0%, 0%, 0.33);
   position: fixed;
   top: 0;
