@@ -9,6 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
+import { useCallback, useMemo } from 'react';
 import { HAAPI_FORM_FIELDS, VisibleHaapiFormField } from '../../../data-access/types/haapi-form.types';
 import { applyRenderInterceptor } from '../../../util/generic-render-interceptor';
 import type {
@@ -181,9 +182,10 @@ export function HaapiStepperForm({ action, onSubmit, formFieldRenderInterceptor,
     field => field.type !== HAAPI_FORM_FIELDS.HIDDEN && field.type !== HAAPI_FORM_FIELDS.CONTEXT
   );
   const haapiStepperFormAPI: HaapiStepperFormAPI = { fields: visibleFields, formState };
-  const submit = () => {
+  const submit = useCallback(() => {
     onSubmit(action, formState.values);
-  };
+  }, [onSubmit, action, formState]);
+  const formContextValue = useMemo(() => ({ formState, action, submit }), [formState, action, submit]);
 
   const formContentElements = applyRenderInterceptor(
     [haapiStepperFormAPI],
@@ -193,7 +195,7 @@ export function HaapiStepperForm({ action, onSubmit, formFieldRenderInterceptor,
   const formContentElement = formContentElements[0] ?? null;
 
   return (
-    <HaapiStepperFormContext value={{ formState, action, submit }}>
+    <HaapiStepperFormContext value={formContextValue}>
       <form
         data-testid="form-action"
         id={action.id}

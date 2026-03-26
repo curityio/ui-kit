@@ -1141,6 +1141,7 @@ describe('HaapiStepperStepUI', () => {
             if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
               formState.set(field, prefilledUsernameValue);
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
           }, [field]);
 
           return (
