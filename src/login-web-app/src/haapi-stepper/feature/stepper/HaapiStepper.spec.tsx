@@ -476,7 +476,7 @@ describe('HaapiStepper', () => {
       const secondStep = HAAPI_STEPS.REGISTRATION;
       const thirdStep = HAAPI_STEPS.COMPLETED_WITH_SUCCESS;
       let history = await screen.findByTestId('history');
-      let historyData = JSON.parse(history.textContent ?? '[]') as HaapiStepperHistoryEntry[];
+      let historyData = JSON.parse(history.textContent) as HaapiStepperHistoryEntry[];
       let previousStepTriggerActionKind = bootstrapLinkAction;
 
       expect(historyData).toHaveLength(1);
@@ -490,7 +490,7 @@ describe('HaapiStepper', () => {
       await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(secondStep));
 
       history = screen.getByTestId('history');
-      historyData = JSON.parse(history.textContent ?? '[]') as HaapiStepperHistoryEntry[];
+      historyData = JSON.parse(history.textContent) as HaapiStepperHistoryEntry[];
       // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       previousStepTriggerActionKind = getStepMock(initialStep).actions[0].kind;
@@ -506,7 +506,7 @@ describe('HaapiStepper', () => {
       await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(thirdStep));
 
       history = screen.getByTestId('history');
-      historyData = JSON.parse(history.textContent ?? '[]') as HaapiStepperHistoryEntry[];
+      historyData = JSON.parse(history.textContent) as HaapiStepperHistoryEntry[];
       // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       previousStepTriggerActionKind = getStepMock(secondStep).actions[0].kind;
@@ -541,7 +541,7 @@ describe('HaapiStepper', () => {
       });
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = JSON.parse(history.textContent) as unknown as HaapiStepperHistoryEntry[];
 
       // Should have authentication twice - once initially, once after continue same
       // The continue same step itself is NOT in history, but the updated authentication step is
@@ -567,7 +567,7 @@ describe('HaapiStepper', () => {
       );
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = JSON.parse(history.textContent) as unknown as HaapiStepperHistoryEntry[];
 
       expect(historyData).toHaveLength(2);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
@@ -594,7 +594,7 @@ describe('HaapiStepper', () => {
       });
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = JSON.parse(history.textContent) as unknown as HaapiStepperHistoryEntry[];
 
       expect(historyData).toHaveLength(1);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
@@ -621,7 +621,7 @@ describe('HaapiStepper', () => {
       });
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = JSON.parse(history.textContent) as unknown as HaapiStepperHistoryEntry[];
 
       expect(historyData).toHaveLength(1);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);

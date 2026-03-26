@@ -28,7 +28,9 @@ function withDelay(f: FetchLike, d: number): FetchLike {
     return await f(link, init);
   };
   delayed.init = () => f.init();
-  delayed.close = () => f.close();
+  delayed.close = () => {
+    f.close();
+  };
   return delayed;
 }
 
