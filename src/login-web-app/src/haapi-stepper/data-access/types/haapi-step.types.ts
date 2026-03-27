@@ -167,9 +167,11 @@ export interface HaapiPollingStepProperties {
   /** Subject who is expected to perform some action while the client polls waiting for such action. */
   recipientOfCommunication?: string;
   /** Polling session maximum time in seconds before the session expires. */
-  maxWaitTime?: number;
+  maxWaitTime?: string;
   /** Polling session remaining time in seconds before the session expires. */
-  maxWaitRemainingTime?: number;
+  maxWaitRemainingTime?: string;
+  /** Recommended polling interval (in milliseconds). */
+  interval?: string;
 }
 
 /**
