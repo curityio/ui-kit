@@ -48,13 +48,13 @@ const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
 };
 
 export interface HaapiStepperConfig {
-  pollingInterval?: number;
-  bankIdAutostart?: boolean;
+  pollingInterval: number;
+  bankIdAutostart: boolean;
 }
 
 interface HaapiStepperProps {
   children: ReactNode;
-  config?: HaapiStepperConfig;
+  config?: Partial<HaapiStepperConfig>;
 }
 
 type SetCurrentStepAndUpdateHistoryFn = (

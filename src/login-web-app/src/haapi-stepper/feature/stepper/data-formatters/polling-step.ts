@@ -25,7 +25,9 @@ export function handlePollingStep(
 } {
   const formattedPollingStep = formatNextStepData(pollingStep);
   const pollingStatus = pollingStep.properties.status;
-  let pollingInterval = config.pollingInterval;
+  const pollingInterval = pollingStep.properties.interval
+    ? Number(pollingStep.properties.interval)
+    : config.pollingInterval;
 
   switch (pollingStatus) {
     case HAAPI_POLLING_STATUS.DONE: {
@@ -55,9 +57,6 @@ export function handlePollingStep(
       const formattedNextStepData = formatNextStepData(stepWithoutPollingAction);
 
       if (isBankIdPollingSession(formattedPollingStep)) {
-        // Bankid QR code and expiration time bar require a faster polling
-        pollingInterval = 500;
-
         if (config.bankIdAutostart) {
           manageBankIdAutoStart(pollingStep, history);
         }
