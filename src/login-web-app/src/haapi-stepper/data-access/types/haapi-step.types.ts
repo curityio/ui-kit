@@ -171,7 +171,7 @@ export interface HaapiPollingStepProperties {
   /** Polling session remaining time in seconds before the session expires. */
   maxWaitRemainingTime?: string;
   /** Recommended polling interval (in milliseconds). */
-   interval?: string;
+  interval?: string;
 }
 
 /**
