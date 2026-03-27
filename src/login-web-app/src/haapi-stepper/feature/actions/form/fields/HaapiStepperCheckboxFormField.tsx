@@ -16,11 +16,12 @@ import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
 export function HaapiStepperCheckboxFormField({ field }: { field: HaapiCheckboxFormField }): ReactElement {
   const { formState } = useHaapiStepperForm();
-  const inputId = `${field.name}-input`;
+  const { action } = useHaapiStepperForm();
+  const inputId = `${action.id}-${field.name}-input`;
 
   return (
-    <label className="label block" htmlFor={inputId}>
-      {field.label ?? field.name}:
+    <label className="haapi-stepper-form-field-checkbox-label" htmlFor={inputId}>
+      {field.label ?? field.name}
       <input
         id={inputId}
         data-testid={`haapi-form-field-checkbox-${field.name}`}
@@ -29,6 +30,7 @@ export function HaapiStepperCheckboxFormField({ field }: { field: HaapiCheckboxF
         checked={formState.get(field)}
         disabled={field.readonly ?? false}
         onChange={e => formState.set(field, e.target.checked)}
+        className="haapi-stepper-form-field-checkbox-input"
       />
     </label>
   );
