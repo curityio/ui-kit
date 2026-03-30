@@ -12,11 +12,11 @@
 import { ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { HaapiClientOperationAction, HaapiFormAction } from '../../data-access/types/haapi-action.types';
 import {
+  HAAPI_PROBLEM_STEPS,
+  HAAPI_STEPPER_ELEMENT_TYPES,
   HAAPI_STEPS,
   HaapiLink,
   HaapiStep,
-  HAAPI_PROBLEM_STEPS,
-  HAAPI_STEPPER_ELEMENT_TYPES,
 } from '../../data-access/types/haapi-step.types';
 
 import { HaapiStepperContext } from './HaapiStepperContext';
@@ -26,17 +26,18 @@ import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
 import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
+import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
-  HaapiStepperNextStep,
-  HaapiStepperNextStepAsync,
-  HaapiStepperError,
-  HaapiStepperHistoryEntry,
-  HaapiStepperNextStepPayload,
-  HaapiStepperNextStepAction,
-  HaapiStepperStep,
-  HaapiStepperLink,
-  HaapiStepperFormAction,
   HaapiStepperClientOperationAction,
+  HaapiStepperError,
+  HaapiStepperFormAction,
+  HaapiStepperHistoryEntry,
+  HaapiStepperLink,
+  HaapiStepperNextStep,
+  HaapiStepperNextStepAction,
+  HaapiStepperNextStepAsync,
+  HaapiStepperNextStepPayload,
+  HaapiStepperStep,
 } from './haapi-stepper.types';
 import { useThrowErrorToAppErrorBoundary } from '../../util/useThrowErrorToAppErrorBoundary';
 import { useRefCallback } from '../../util/useRefCallBack';
@@ -47,13 +48,13 @@ const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
 };
 
 export interface HaapiStepperConfig {
-  pollingInterval?: number;
-  bankIdAutostart?: boolean;
+  pollingInterval: number;
+  bankIdAutostart: boolean;
 }
 
 interface HaapiStepperProps {
   children: ReactNode;
-  config?: HaapiStepperConfig;
+  config?: Partial<HaapiStepperConfig>;
 }
 
 type SetCurrentStepAndUpdateHistoryFn = (
@@ -442,7 +443,7 @@ function cancelPendingOperation(pendingOperation: RefObject<AbortController | No
 }
 
 function getInitialStepLink() {
-  const initialUrl = window.location.href;
+  const initialUrl = configuration.initialUrl ?? window.location.href;
   const initialStepLink: HaapiStepperLink = {
     href: initialUrl,
     rel: 'self',
