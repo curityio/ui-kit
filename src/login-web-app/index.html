@@ -18,13 +18,12 @@
   </head>
   <body>
     <script>
-      const args = new URL(window.location.href).searchParams;
-
       function arg(name, required) {
         if (required === undefined) {
           required = true;
         }
 
+        const args = new URL(window.location.href).searchParams;
         const value = args.get(name);
         if (value) {
           return value;
