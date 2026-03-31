@@ -15,8 +15,7 @@ import type { HaapiSelectFormField } from '../../../../data-access/types/haapi-f
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
 export function HaapiStepperSelectFormField({ field }: { field: HaapiSelectFormField }): ReactElement {
-  const { formState } = useHaapiStepperForm();
-  const { action } = useHaapiStepperForm();
+  const { formState, action } = useHaapiStepperForm();
   const selectId = `${action.id}-${field.name}-input`;
 
   return (

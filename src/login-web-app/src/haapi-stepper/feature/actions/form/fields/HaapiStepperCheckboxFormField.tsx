@@ -15,8 +15,7 @@ import type { HaapiCheckboxFormField } from '../../../../data-access/types/haapi
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
 export function HaapiStepperCheckboxFormField({ field }: { field: HaapiCheckboxFormField }): ReactElement {
-  const { formState } = useHaapiStepperForm();
-  const { action } = useHaapiStepperForm();
+  const { formState, action } = useHaapiStepperForm();
   const inputId = `${action.id}-${field.name}-input`;
 
   return (

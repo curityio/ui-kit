@@ -141,7 +141,7 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 |-------|---------|---------|
 | `.haapi-stepper-selector` | `HaapiSelector` | Selector action container |
 | `.haapi-stepper-messages` | `Messages` | Messages container |
-| `.haapi-stepper-form-field-text-input` | `HaapiStepperTextFormField` | Text/password input fields |
+| `.haapi-stepper-form-field-text-input` | `HaapiStepperTextFormField` | Text input fields |
 | `.haapi-stepper-form-field-text-label` | `HaapiStepperTextFormField` | Form field labels |
 | `.haapi-stepper-form-field-checkbox-input` | `HaapiStepperCheckboxFormField` | Checkbox inputs |
 | `.haapi-stepper-form-field-checkbox-label` | `HaapiStepperCheckboxFormField` | Checkbox-specific labels |
