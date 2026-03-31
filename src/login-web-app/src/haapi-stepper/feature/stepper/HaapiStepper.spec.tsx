@@ -384,7 +384,7 @@ describe('HaapiStepper', () => {
             await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
 
             const startButton = await screen.findByRole('button', { name: 'Start BankID' });
-
+            
             act(() => startButton.click());
 
             await waitFor(() => {
@@ -497,7 +497,7 @@ describe('HaapiStepper', () => {
       const secondStep = HAAPI_STEPS.REGISTRATION;
       const thirdStep = HAAPI_STEPS.COMPLETED_WITH_SUCCESS;
       let history = await screen.findByTestId('history');
-      let historyData = JSON.parse(history.textContent ?? '[]') as HaapiStepperHistoryEntry[];
+      let historyData = getHistoryData(history);
       let previousStepTriggerActionKind = bootstrapLinkAction;
 
       expect(historyData).toHaveLength(1);
@@ -511,7 +511,7 @@ describe('HaapiStepper', () => {
       await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(secondStep));
 
       history = screen.getByTestId('history');
-      historyData = JSON.parse(history.textContent ?? '[]') as HaapiStepperHistoryEntry[];
+      historyData = getHistoryData(history);
       // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       previousStepTriggerActionKind = getStepMock(initialStep).actions[0].kind;
@@ -527,7 +527,7 @@ describe('HaapiStepper', () => {
       await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(thirdStep));
 
       history = screen.getByTestId('history');
-      historyData = JSON.parse(history.textContent ?? '[]') as HaapiStepperHistoryEntry[];
+      historyData = getHistoryData(history);
       // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       previousStepTriggerActionKind = getStepMock(secondStep).actions[0].kind;
@@ -562,7 +562,7 @@ describe('HaapiStepper', () => {
       });
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = getHistoryData(history);
 
       // Should have authentication twice - once initially, once after continue same
       // The continue same step itself is NOT in history, but the updated authentication step is
@@ -588,7 +588,7 @@ describe('HaapiStepper', () => {
       );
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = getHistoryData(history);
 
       expect(historyData).toHaveLength(2);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
@@ -615,7 +615,7 @@ describe('HaapiStepper', () => {
       });
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = getHistoryData(history);
 
       expect(historyData).toHaveLength(1);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
@@ -642,7 +642,7 @@ describe('HaapiStepper', () => {
       });
 
       const history = screen.getByTestId('history');
-      const historyData = JSON.parse(history.textContent ?? '[]') as unknown as HaapiStepperHistoryEntry[];
+      const historyData = getHistoryData(history);
 
       expect(historyData).toHaveLength(1);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
@@ -669,6 +669,7 @@ vi.mock('../../data-access/bootstrap-configuration', () => {
 
 const mockThrowErrorToAppErrorBoundary = vi.fn();
 vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({
+  // eslint-disable-next-line @eslint-react/hooks-extra/no-unnecessary-use-prefix
   useThrowErrorToAppErrorBoundary: () => mockThrowErrorToAppErrorBoundary,
 }));
 
@@ -847,3 +848,13 @@ const clickNextStepButton = async () => {
 
   act(() => nextStepButton.click());
 };
+
+function getTextContent(element: HTMLElement): string {
+  const content: string | null = element.textContent;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- textContent is string|null per DOM types but the linter narrows it to string
+  return content ?? '';
+}
+
+function getHistoryData(element: HTMLElement): HaapiStepperHistoryEntry[] {
+  return JSON.parse(getTextContent(element)) as HaapiStepperHistoryEntry[];
+}

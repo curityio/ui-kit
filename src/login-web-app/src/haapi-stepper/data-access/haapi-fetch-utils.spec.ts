@@ -95,7 +95,7 @@ describe(createRequestForForm.name, () => {
         b: 'b',
       };
 
-      expect(() => createRequestForForm({ action, payload })).toThrowError();
+      expect(() => createRequestForForm({ action, payload })).toThrow();
     });
   });
 
@@ -123,7 +123,7 @@ describe(createRequestForForm.name, () => {
       const action = formAction(HTTP_METHODS.GET, '/example/path', { a: '1' }, MEDIA_TYPES.JSON);
       const payload = { a: 'a' };
 
-      expect(() => createRequestForForm({ action, payload })).toThrowError();
+      expect(() => createRequestForForm({ action, payload })).toThrow();
     });
   });
 });

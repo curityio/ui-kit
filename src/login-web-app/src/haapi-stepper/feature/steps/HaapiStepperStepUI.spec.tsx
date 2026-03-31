@@ -416,7 +416,6 @@ describe('HaapiStepperStepUI', () => {
             ...rest
           }) => {
             if (error?.app) {
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               errorTracker('error_occurred', {
                 type: error.app.type,
                 title: error.app.title,
@@ -463,7 +462,6 @@ describe('HaapiStepperStepUI', () => {
         const selectorAction = screen.getByTestId('selector-action');
         const selectorFormActions = within(selectorAction).queryAllByTestId('form-action');
 
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         expect(standaloneFormAction.textContent).toContain('Login Form');
         expect(selectorAction.textContent).toContain('Choose Authenticator');
         expect(selectorFormActions).toHaveLength(2);
@@ -1143,6 +1141,7 @@ describe('HaapiStepperStepUI', () => {
             if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
               formState.set(field, prefilledUsernameValue);
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
           }, [field]);
 
           return (
