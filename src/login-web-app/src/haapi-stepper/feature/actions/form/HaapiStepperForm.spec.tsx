@@ -113,6 +113,7 @@ describe('HaapiStepperForm', () => {
 
       render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const passwordInput = screen.getByTestId(
         formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName)
       ) as HTMLInputElement;
