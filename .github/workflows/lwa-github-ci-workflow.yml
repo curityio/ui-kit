@@ -1,0 +1,126 @@
+name: Login Web App CI Workflow
+
+on:
+  push:
+    paths:
+      - 'src/login-web-app/**'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, closed]
+    paths:
+      - 'src/login-web-app/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    if: ${{ github.event.pull_request.draft != true || github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+        
+      - name: Lint Code
+        run: npm run lint -w src/login-web-app
+
+      - name: Build Project
+        run: npm run build:login-web-app
+
+      - name: Run Tests
+        run: npm run test -w src/login-web-app -- run
+
+  notify-slack:
+    name: Notify Slack
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: ${{ always() && github.event_name == 'pull_request' }}
+    strategy:
+      matrix:
+        webhook_secret: [LWA_SLACK_WEBHOOK_URL, LWA_SLACK_WEBHOOK_URL_FE_CHANNEL]
+    steps:
+      - name: Extract Jira ticket from branch name
+        id: jira
+        run: |
+          TICKET=$(echo "${{ github.head_ref }}" | grep -oE '[A-Z]+-[0-9]+' | head -1)
+          if [ -n "$TICKET" ]; then
+            echo "link=*Jira:* <https://curity.atlassian.net/browse/$TICKET|$TICKET>" >> $GITHUB_OUTPUT
+          else
+            echo "link=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify new pull request
+        if: ${{ (github.event.action == 'opened' && github.event.pull_request.draft == false) || github.event.action == 'ready_for_review' }}
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": ":rocket: PR ready for review in `${{ github.repository }}`",
+              "attachments": [
+                {
+                  "color": "${{ needs.build-and-test.result == 'success' && '#2EB67D' || '#E01E5A' }}",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.actor }}\n*Status:* ${{ needs.build-and-test.result == 'success' && ':white_check_mark: Passed' || ':x: Failed' }}\n*PR:* <${{ github.event.pull_request.html_url }}|View Pull Request> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Workflow Logs>${{ steps.jira.outputs.link && format('\n{0}', steps.jira.outputs.link) || '' }}"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ${{ toJSON(format('*Description:*{0}{1}', fromJSON('"\n"'), github.event.pull_request.body || 'No description provided.')) }}
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets[matrix.webhook_secret] }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Notify merged pull request
+        if: ${{ github.event.action == 'closed' && github.event.pull_request.merged == true }}
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": ":tada: PR merged in `${{ github.repository }}`",
+              "attachments": [
+                {
+                  "color": "${{ needs.build-and-test.result == 'success' && '#2EB67D' || '#E01E5A' }}",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Title:* ${{ github.event.pull_request.title }}\n*Merged by:* ${{ github.actor }}\n*Status:* ${{ needs.build-and-test.result == 'success' && ':white_check_mark: Passed' || ':x: Failed' }}\n*PR:* <${{ github.event.pull_request.html_url }}|View Pull Request> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Workflow Logs>${{ steps.jira.outputs.link && format('\n{0}', steps.jira.outputs.link) || '' }}"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ${{ toJSON(format('*Description:*{0}{1}', fromJSON('"\n"'), github.event.pull_request.body || 'No description provided.')) }}
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets[matrix.webhook_secret] }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
