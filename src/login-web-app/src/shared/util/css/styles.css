@@ -100,6 +100,53 @@
     }
 }
 
+.haapi-stepper-link-qr-code-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.haapi-stepper-link-qr-code {
+    margin: 0;
+}
+
+.haapi-stepper-link-qr-code img {
+    display: block;
+    margin: 0 auto;
+    max-width: 250px;
+}
+
+.haapi-stepper-link-qr-code-title {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.haapi-stepper-link-qr-code-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgb(0 0 0 / 80%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.haapi-stepper-link-qr-code-overlay-button {
+    background: none;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.haapi-stepper-link-qr-code-overlay-image {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+}
+
 .haapi-stepper-error-boundary-fallback {
     min-height: 100dvh;
     @extend .flex, .flex-column, .flex-center, .justify-center, .h100;

@@ -9,10 +9,11 @@
  * For further information, please contact Curity AB.
  */
 
-import { ReactElement } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 import { HaapiStepperLink, HaapiStepperNextStep } from '../../feature/stepper/haapi-stepper.types';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { defaultHaapiStepperLinkElementFactory } from './defaultHaapiStepperLinkElementFactory';
+import { HaapiStepperQrCodeLinkOverlay } from './HaapiStepperQrCodeLinkOverlay';
 
 interface LinksProps {
   links?: HaapiStepperLink[];
@@ -43,13 +44,30 @@ interface LinksProps {
  * ```
  */
 export function Links({ links, onClick, renderInterceptor }: LinksProps) {
-  const linkElements = applyRenderInterceptor(links, renderInterceptor, link =>
-    defaultHaapiStepperLinkElementFactory(link, onClick)
+  const [showQrCodeExpanded, setShowQrCodeExpanded] = useState(false);
+
+  const currentQRCodeLink = links?.find((link) => link.subtype?.startsWith('image/'));
+
+  const handleExpandQrCode = useCallback(() => {
+    setShowQrCodeExpanded(true);
+  }, []);
+
+  const handleCloseQrCodeOverlay = useCallback(() => {
+    setShowQrCodeExpanded(false);
+  }, []);
+  
+  const showQRCodeOverlay = showQrCodeExpanded && currentQRCodeLink;
+  const linkElements = applyRenderInterceptor(links, renderInterceptor, (link) =>
+    defaultHaapiStepperLinkElementFactory(link, onClick, handleExpandQrCode)
   );
+  
 
   return linkElements.length ? (
     <div className="haapi-stepper-links" data-testid="links">
       {linkElements}
+      {showQRCodeOverlay && (
+        <HaapiStepperQrCodeLinkOverlay link={currentQRCodeLink} onClose={handleCloseQrCodeOverlay} />
+      )}
     </div>
   ) : null;
 }

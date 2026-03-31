@@ -3,5 +3,6 @@ import { Link } from './Link';
 
 export const defaultHaapiStepperLinkElementFactory = (
   link: HaapiStepperLink,
-  onClick: (link: HaapiStepperLink) => void
-) => <Link link={link} onClick={onClick} />;
+  onClick: (link: HaapiStepperLink) => void,
+  onExpandImage?: () => void
+) => <Link link={link} onClick={onClick} onExpandImage={onExpandImage} />;
