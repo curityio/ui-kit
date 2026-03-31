@@ -384,7 +384,7 @@ describe('HaapiStepper', () => {
             await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
 
             const startButton = await screen.findByRole('button', { name: 'Start BankID' });
-                        
+            
             act(() => startButton.click());
 
             await waitFor(() => {
