@@ -56,10 +56,6 @@ export function HaapiStepperPasswordFormField({ field }: { field: HaapiPasswordF
 const getPasswordAutoComplete = (
   actionKind: HAAPI_FORM_ACTION_KINDS_TYPE
 ): 'current-password' | 'new-password' => {
-  // TODO: Is it safe to assume that any registration flow will require a new password and any
-  // non-registration flow will require the current password? If not, we may need to add a more
-  // explicit way to determine the appropriate autoComplete value.
-  // TODO: Should we rely on Step.type (HAAPI_STEPS.REGISTRATION) instead of Action.kind?
   const isRegistrationFlow = actionKind === HAAPI_FORM_ACTION_KINDS.USER_REGISTER;
 
   if (isRegistrationFlow) {
