@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { useCallback, useEffect, useRef } from 'react';
+import { type KeyboardEvent, useCallback, useEffect, useRef } from 'react';
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 
 interface HaapiStepperQrCodeLinkOverlayProps {
@@ -21,8 +21,8 @@ export function HaapiStepperQrCodeLinkOverlay({ link, onClose }: HaapiStepperQrC
   const overlayButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Escape') {
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
         onClose();
       }
     },
