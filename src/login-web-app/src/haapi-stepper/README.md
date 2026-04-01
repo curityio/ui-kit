@@ -153,9 +153,8 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 | `.haapi-stepper-link-qr-code` | `Link` | QR code link figure wrapper |
 | `.haapi-stepper-link-qr-code-title` | `Link` | QR code link figcaption |
 | `.haapi-stepper-link-qr-code-button` | `Link` | QR code link expand button |
-| `.haapi-stepper-link-qr-code-overlay` | `HaapiStepperQrCodeLinkOverlay` | Fullscreen QR code overlay container |
-| `.haapi-stepper-link-qr-code-overlay-button` | `HaapiStepperQrCodeLinkOverlay` | Fullscreen QR code overlay dismiss button |
-| `.haapi-stepper-link-qr-code-overlay-image` | `HaapiStepperQrCodeLinkOverlay` | Fullscreen QR code overlay image |
+| `.haapi-stepper-link-qr-code-dialog` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog |
+| `.haapi-stepper-link-qr-code-dialog-image` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog image |
 | `.haapi-stepper-actions` | `Actions` | Actions container |
 | `.haapi-stepper-heading` | `Messages` | Heading messages |
 | `.haapi-stepper-userName` | `Messages` | User name display |

@@ -13,7 +13,7 @@ import { ReactElement } from 'react';
 import { HaapiStepperLink, HaapiStepperNextStep } from '../../feature/stepper/haapi-stepper.types';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { defaultHaapiStepperLinkElementFactory } from './defaultHaapiStepperLinkElementFactory';
-import { HaapiStepperQrCodeLinkOverlay } from './HaapiStepperQrCodeLinkOverlay';
+import { HaapiStepperQrCodeLinkDialog } from './HaapiStepperQrCodeLinkDialog';
 
 interface LinksProps {
   links?: HaapiStepperLink[];
@@ -45,10 +45,14 @@ interface LinksProps {
  */
 export function Links({ links, onClick, renderInterceptor }: LinksProps) {
   return (
-    <HaapiStepperQrCodeLinkOverlay links={links}>
-      {(displayQrCodeInOverlay) => {
+    <HaapiStepperQrCodeLinkDialog links={links}>
+      {(displayQrCodeInDialog) => {
         const handleLinkClick = (link: HaapiStepperLink) => {
-          link.subtype?.startsWith('image/') ? displayQrCodeInOverlay(link) : onClick(link);
+          if (link.subtype?.startsWith('image/')) {
+            displayQrCodeInDialog(link);
+          } else {
+            onClick(link);
+          }
         };
 
         const linkElements = applyRenderInterceptor(links, renderInterceptor, (link) =>
@@ -61,6 +65,6 @@ export function Links({ links, onClick, renderInterceptor }: LinksProps) {
           </div>
         ) : null;
       }}
-    </HaapiStepperQrCodeLinkOverlay>
+    </HaapiStepperQrCodeLinkDialog>
   );
 }
