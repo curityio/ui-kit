@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { ReactElement, useCallback, useState } from 'react';
+import { ReactElement } from 'react';
 import { HaapiStepperLink, HaapiStepperNextStep } from '../../feature/stepper/haapi-stepper.types';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { defaultHaapiStepperLinkElementFactory } from './defaultHaapiStepperLinkElementFactory';
@@ -44,30 +44,23 @@ interface LinksProps {
  * ```
  */
 export function Links({ links, onClick, renderInterceptor }: LinksProps) {
-  const [showQrCodeExpanded, setShowQrCodeExpanded] = useState(false);
+  return (
+    <HaapiStepperQrCodeLinkOverlay links={links}>
+      {(displayQrCodeInOverlay) => {
+        const handleLinkClick = (link: HaapiStepperLink) => {
+          link.subtype?.startsWith('image/') ? displayQrCodeInOverlay(link) : onClick(link);
+        };
 
-  const currentQRCodeLink = links?.find((link) => link.subtype?.startsWith('image/'));
+        const linkElements = applyRenderInterceptor(links, renderInterceptor, (link) =>
+          defaultHaapiStepperLinkElementFactory(link, handleLinkClick)
+        );
 
-  const handleExpandQrCode = useCallback(() => {
-    setShowQrCodeExpanded(true);
-  }, []);
-
-  const handleCloseQrCodeOverlay = useCallback(() => {
-    setShowQrCodeExpanded(false);
-  }, []);
-  
-  const showQRCodeOverlay = showQrCodeExpanded && currentQRCodeLink;
-  const linkElements = applyRenderInterceptor(links, renderInterceptor, (link) =>
-    defaultHaapiStepperLinkElementFactory(link, onClick, handleExpandQrCode)
+        return linkElements.length ? (
+          <div className="haapi-stepper-links" data-testid="links">
+            {linkElements}
+          </div>
+        ) : null;
+      }}
+    </HaapiStepperQrCodeLinkOverlay>
   );
-  
-
-  return linkElements.length ? (
-    <div className="haapi-stepper-links" data-testid="links">
-      {linkElements}
-      {showQRCodeOverlay && (
-        <HaapiStepperQrCodeLinkOverlay link={currentQRCodeLink} onClose={handleCloseQrCodeOverlay} />
-      )}
-    </div>
-  ) : null;
 }

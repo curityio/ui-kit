@@ -11,13 +11,7 @@
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 
-interface LinkProps {
-    link: HaapiStepperLink;
-    onClick: (action: HaapiStepperLink) => void;
-    onExpandImage?: () => void;
-}
-
-export const Link = ({ link, onClick, onExpandImage }: LinkProps) => {
+export const Link = ({ link, onClick }: { link: HaapiStepperLink; onClick: (action: HaapiStepperLink) => void }) => {
     const isQRCodeLink = link.subtype?.startsWith('image/');
 
     if (isQRCodeLink) {
@@ -26,7 +20,7 @@ export const Link = ({ link, onClick, onExpandImage }: LinkProps) => {
                 type="button"
                 className="haapi-stepper-link-qr-code-button"
                 data-testid="qr-code-button"
-                onClick={onExpandImage}
+                onClick={() => onClick(link)}
                 aria-label="QR code, click to expand"
             >
                 <figure className="haapi-stepper-link-qr-code">

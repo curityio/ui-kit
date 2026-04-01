@@ -57,7 +57,7 @@ describe('Link', () => {
       });
 
       it('renders a button wrapping the QR image', () => {
-        render(<Link link={imageLink} onClick={onClick} onExpandImage={vi.fn()} />);
+        render(<Link link={imageLink} onClick={onClick} />);
 
         const button = screen.getByRole('button', { name: 'QR code, click to expand' });
         expect(button).toHaveClass('haapi-stepper-link-qr-code-button');
@@ -65,7 +65,7 @@ describe('Link', () => {
       });
 
       it('shows alt text from link title', () => {
-        render(<Link link={imageLink} onClick={onClick} onExpandImage={vi.fn()} />);
+        render(<Link link={imageLink} onClick={onClick} />);
 
         expect(screen.getByAltText('QR Code')).toBeInTheDocument();
       });
@@ -77,7 +77,7 @@ describe('Link', () => {
           title: undefined,
           rel: 'qr-code',
         });
-        render(<Link link={imageLink} onClick={onClick} onExpandImage={vi.fn()} />);
+        render(<Link link={imageLink} onClick={onClick} />);
 
         expect(screen.getByAltText('QR code, click to expand')).toBeInTheDocument();
       });
@@ -93,19 +93,17 @@ describe('Link', () => {
       expect(onClick).toHaveBeenCalledWith(link);
     });
 
-    it('calls onExpandImage when an image link is clicked', async () => {
+    it('calls onClick when an image link is clicked', async () => {
       const imageLink = createMockLink({
         href: 'data:image/svg+xml;base64,abc',
         subtype: 'image/svg+xml',
         title: 'QR Code',
         rel: 'qr-code',
       });
-      const onExpandImage = vi.fn();
-      render(<Link link={imageLink} onClick={onClick} onExpandImage={onExpandImage} />);
+      render(<Link link={imageLink} onClick={onClick} />);
 
       await user.click(screen.getByRole('button', { name: 'QR code, click to expand' }));
-      expect(onExpandImage).toHaveBeenCalled();
-      expect(onClick).not.toHaveBeenCalled();
+      expect(onClick).toHaveBeenCalledWith(imageLink);
     });
   });
 });

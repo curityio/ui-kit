@@ -175,7 +175,17 @@ describe('Links', () => {
         expect(screen.getByTestId('qr-code-overlay-button')).toHaveFocus();
       });
 
-      it('overlay uses the current image href from props', async () => {
+      it('restores focus to QR button when overlay is closed', async () => {
+        render(<Links links={links} onClick={onClick} />);
+
+        await user.click(screen.getByTestId('qr-code-button'));
+        expect(screen.getByTestId('qr-code-overlay-button')).toHaveFocus();
+
+        await user.click(screen.getByTestId('qr-code-overlay-button'));
+        expect(screen.getByTestId('qr-code-button')).toHaveFocus();
+      });
+
+      it('overlay uses the current image href from links prop', async () => {
         const { rerender } = render(<Links links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
