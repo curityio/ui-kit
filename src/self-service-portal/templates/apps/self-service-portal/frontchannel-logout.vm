@@ -1,0 +1,26 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *###
+#*
+ * Minimal HTML page rendered inside a hidden iframe during OIDC Front-Channel Logout.
+ * The purpose of this page is simply to exist as a loadable resource so that:
+ * 1. The browser sends (and clears) the token handler cookies via Set-Cookie response headers
+ * 2. The iframe's onload event fires, signaling the OP's front-channel logout page that this RP has been logged out
+ *###
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Logged Out</title>
+</head>
+<body>
+</body>
+</html>
+
