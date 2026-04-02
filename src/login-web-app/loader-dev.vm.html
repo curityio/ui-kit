@@ -20,12 +20,10 @@
     <script>
       const query = new URLSearchParams({
         originalUrl: window.location.href,
+        initialUrl: '$_apiDrivenInitialUrl',
         haapi_clientId: '$_apiDrivenClientInfo.clientId',
         haapi_tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
       });
-      #if ($_apiDrivenInitialUrl)
-      query.append('initialUrl', '$_apiDrivenInitialUrl');
-      #end
 
       const redirect = new URL('/', window.location.href);
       redirect.search = query.toString();

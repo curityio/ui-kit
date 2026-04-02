@@ -1,7 +1,7 @@
 import { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 
 export interface BootstrapConfiguration {
-  initialUrl?: string;
+  initialUrl: string;
   haapi: HaapiConfiguration;
 }
 

@@ -31,14 +31,10 @@ import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.
 import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 
 describe('HaapiStepper', () => {
-  const initializationHref = 'https://example.com/auth';
   const initialStepType = HAAPI_STEPS.AUTHENTICATION;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubGlobal('location', {
-      href: initializationHref,
-    });
     mockHaapiFetchStep(initialStepType);
   });
 
@@ -48,41 +44,20 @@ describe('HaapiStepper', () => {
   });
 
   describe('Steps', () => {
-    describe('initialization', () => {
-      afterEach(() => {
-        delete mockConfiguration.initialUrl;
-      });
+    it('should initialize the first step with the bootstrap initial URL and render the children', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
 
-      it('should initialize the first step with the current location and render the children', async () => {
-        render(
-          <HaapiStepper>
-            <TestComponent />
-          </HaapiStepper>
-        );
+      expect(mockHaapiFetch).toHaveBeenCalledWith(mockConfiguration.initialUrl, { method: 'GET' });
 
-        expect(mockHaapiFetch).toHaveBeenCalledWith(initializationHref, { method: 'GET' });
+      const stepRendered = await screen.findByTestId('step-type');
 
-        const stepRendered = await screen.findByTestId('step-type');
-
-        expect(stepRendered).toHaveTextContent(initialStepType);
-        expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('error')).not.toBeInTheDocument();
-      });
-
-      it('should initialize the first step with the bootstrap initial URL', async () => {
-        const initialUrl = 'https://example.com/other';
-        mockConfiguration.initialUrl = initialUrl;
-
-        render(
-          <HaapiStepper>
-            <TestComponent />
-          </HaapiStepper>
-        );
-
-        await waitFor(() => {
-          expect(mockHaapiFetch).toHaveBeenCalledWith(initialUrl, { method: 'GET' });
-        });
-      });
+      expect(stepRendered).toHaveTextContent(initialStepType);
+      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('error')).not.toBeInTheDocument();
     });
 
     it('should go to the next step and provide the updated current step', async () => {
@@ -384,7 +359,7 @@ describe('HaapiStepper', () => {
             await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
 
             const startButton = await screen.findByRole('button', { name: 'Start BankID' });
-            
+
             act(() => startButton.click());
 
             await waitFor(() => {
@@ -502,8 +477,13 @@ describe('HaapiStepper', () => {
 
       expect(historyData).toHaveLength(1);
       expect(historyData[0].step.type).toBe(initialStep);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      expect(historyData[0].triggeredByAction).toEqual({ ...previousStepTriggerActionKind, id: expect.anything() });
+      expect(historyData[0].triggeredByAction).toEqual({
+        ...previousStepTriggerActionKind,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        id: expect.anything(),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        href: expect.anything(),
+      });
       expect(historyData[0].triggeredByPayload).toBeUndefined();
 
       await goToNextStep(secondStep);
@@ -659,7 +639,9 @@ vi.mock('../../data-access/haapi-fetch-initializer', () => {
 });
 
 const mockConfiguration: Partial<BootstrapConfiguration> = vi.hoisted(() => {
-  return {};
+  return {
+    initialUrl: 'https://example.com/auth',
+  };
 });
 vi.mock('../../data-access/bootstrap-configuration', () => {
   return {
