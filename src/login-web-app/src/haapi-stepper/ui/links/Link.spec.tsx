@@ -70,6 +70,12 @@ describe('Link', () => {
         expect(screen.getByAltText('QR Code')).toBeInTheDocument();
       });
 
+      it('shows visible title text from link title', () => {
+        render(<Link link={imageLink} onClick={onClick} />);
+
+        expect(screen.getByText('QR Code')).toBeInTheDocument();
+      });
+
       it('falls back to default alt text when title is missing', () => {
         imageLink = createMockLink({
           href: 'data:image/svg+xml;base64,abc',
@@ -80,6 +86,18 @@ describe('Link', () => {
         render(<Link link={imageLink} onClick={onClick} />);
 
         expect(screen.getByAltText('QR code, click to expand')).toBeInTheDocument();
+      });
+
+      it('does not render visible title when title is missing', () => {
+        imageLink = createMockLink({
+          href: 'data:image/svg+xml;base64,abc',
+          subtype: 'image/svg+xml',
+          title: undefined,
+          rel: 'qr-code',
+        });
+        render(<Link link={imageLink} onClick={onClick} />);
+
+        expect(screen.queryByText('qr-code')).not.toBeInTheDocument();
       });
     });
   });

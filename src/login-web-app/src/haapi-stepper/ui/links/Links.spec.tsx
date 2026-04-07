@@ -123,7 +123,7 @@ describe('Links', () => {
       });
     });
 
-    describe('QR code overlay', () => {
+    describe('QR code dialog', () => {
       let links: HaapiStepperLink[];
 
       beforeEach(() => {
@@ -138,54 +138,33 @@ describe('Links', () => {
         ];
       });
 
-      it('opens overlay when QR button is clicked', async () => {
+      it('opens dialog when QR button is clicked', async () => {
         render(<Links links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
-        expect(screen.getByTestId('qr-code-overlay')).toBeInTheDocument();
-        expect(screen.getByTestId('qr-code-overlay-button')).toBeInTheDocument();
+        expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
       });
 
-      it('closes overlay when overlay button is clicked', async () => {
-        render(<Links links={links} onClick={onClick} />);
-
-        await user.click(screen.getByTestId('qr-code-button'));
-        expect(screen.getByTestId('qr-code-overlay')).toBeInTheDocument();
-
-        await user.click(screen.getByTestId('qr-code-overlay-button'));
-        expect(screen.queryByTestId('qr-code-overlay')).not.toBeInTheDocument();
-      });
-
-      it('closes overlay on Escape key', async () => {
-        render(<Links links={links} onClick={onClick} />);
-
-        await user.click(screen.getByTestId('qr-code-button'));
-        expect(screen.getByTestId('qr-code-overlay')).toBeInTheDocument();
-
-        await user.keyboard('{Escape}');
-        expect(screen.queryByTestId('qr-code-overlay')).not.toBeInTheDocument();
-      });
-
-      it('focuses overlay button when expanded', async () => {
+      it('does not call onClick when QR button is clicked', async () => {
         render(<Links links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
-        expect(screen.getByTestId('qr-code-overlay-button')).toHaveFocus();
+        expect(onClick).not.toHaveBeenCalled();
       });
 
-      it('restores focus to QR button when overlay is closed', async () => {
+      it('closes dialog when QR image is clicked', async () => {
         render(<Links links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
-        expect(screen.getByTestId('qr-code-overlay-button')).toHaveFocus();
+        expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
 
-        await user.click(screen.getByTestId('qr-code-overlay-button'));
-        expect(screen.getByTestId('qr-code-button')).toHaveFocus();
+        await user.click(screen.getByTestId('qr-code-dialog').querySelector('img')!);
+        expect(screen.getByTestId('qr-code-dialog')).not.toHaveAttribute('open');
       });
 
-      it('overlay uses the current image href from links prop', async () => {
+      it('dialog uses the current image href from links prop', async () => {
         const { rerender } = render(<Links links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
@@ -201,15 +180,15 @@ describe('Links', () => {
         ];
         rerender(<Links links={updatedLinks} onClick={onClick} />);
 
-        const overlayImg = screen.getByTestId('qr-code-overlay-button').querySelector('img')!;
-        expect(overlayImg).toHaveAttribute('src', 'data:image/svg+xml;base64,UPDATED');
+        const dialogImg = screen.getByTestId('qr-code-dialog').querySelector('img')!;
+        expect(dialogImg).toHaveAttribute('src', 'data:image/svg+xml;base64,UPDATED');
       });
 
-      it('overlay stays open across re-renders with new links', async () => {
+      it('dialog stays open across re-renders with new links', async () => {
         const { rerender } = render(<Links links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
-        expect(screen.getByTestId('qr-code-overlay')).toBeInTheDocument();
+        expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
 
         const updatedLinks = [
           createMockLink({
@@ -222,7 +201,7 @@ describe('Links', () => {
         ];
         rerender(<Links links={updatedLinks} onClick={onClick} />);
 
-        expect(screen.getByTestId('qr-code-overlay')).toBeInTheDocument();
+        expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
       });
     });
   });
