@@ -39,7 +39,6 @@ export function HaapiStepperErrorNotifier({
     setDismissedError(currentError ?? null);
   };
 
-
   return (
     <>
       {isNotificationVisible && (

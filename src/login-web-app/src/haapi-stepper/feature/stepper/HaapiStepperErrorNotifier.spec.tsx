@@ -179,11 +179,16 @@ describe('HaapiStepperErrorNotifier', () => {
       </HaapiStepperErrorNotifier>
     );
 
-    expect(screen.getByTestId('haapi-error-haapi-error-notifier-toast-title')).toHaveTextContent(`Custom: ${APP_ERROR_TITLE}`);
+    expect(screen.getByTestId('haapi-error-haapi-error-notifier-toast-title')).toHaveTextContent(
+      `Custom: ${APP_ERROR_TITLE}`
+    );
   });
 });
 
-function createAppError({ title = DEFAULT_APP_ERROR_TITLE, messages = [DEFAULT_APP_ERROR_MESSAGE] }: { title?: string; messages?: string[] } = {}) {
+function createAppError({
+  title = DEFAULT_APP_ERROR_TITLE,
+  messages = [DEFAULT_APP_ERROR_MESSAGE],
+}: { title?: string; messages?: string[] } = {}) {
   return {
     title,
     dataHelpers: {

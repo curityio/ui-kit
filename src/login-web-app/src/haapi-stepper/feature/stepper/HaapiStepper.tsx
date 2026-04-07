@@ -342,15 +342,11 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   }, [nextStep]);
 
   const contextValue = useMemo(
-      () => ({ currentStep, loading, error, nextStep, history }),
-      [currentStep, loading, error, nextStep, history]
+    () => ({ currentStep, loading, error, nextStep, history }),
+    [currentStep, loading, error, nextStep, history]
   );
 
-  return (
-    <HaapiStepperContext value={contextValue}>
-      {children}
-    </HaapiStepperContext>
-  );
+  return <HaapiStepperContext value={contextValue}>{children}</HaapiStepperContext>;
 }
 
 async function processHaapiNextStep(
