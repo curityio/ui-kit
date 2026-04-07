@@ -36,6 +36,12 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
     ? (links?.find((link) => getLinkKey(link) === displayedQrCodeKey) ?? null)
     : null;
 
+  const restoreFocusToOpenedQrCodeLink = (currentQrCodeLink: HaapiStepperLink | null) => {
+      if (currentQrCodeLink) {
+          document.getElementById(currentQrCodeLink.id)?.focus();
+      }
+  };
+
   return (
     <>
       {children(displayQrCodeInDialog)}
@@ -44,7 +50,10 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
         className="haapi-stepper-link-qr-code-dialog"
         data-testid="qr-code-dialog"
         aria-label="Expanded QR code"
-        onClose={() => setDisplayedQrCodeKey(null)}
+        onClose={() => {
+          setDisplayedQrCodeKey(null);
+          restoreFocusToOpenedQrCodeLink(currentQrCodeLink);
+        }}
         onClick={() => dialogRef.current?.close()}
       >
         {currentQrCodeLink && (

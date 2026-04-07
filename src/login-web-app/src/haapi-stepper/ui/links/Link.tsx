@@ -18,6 +18,7 @@ export const Link = ({ link, onClick }: { link: HaapiStepperLink; onClick: (acti
         return (
             <button
                 type="button"
+                id={link.id}
                 className="haapi-stepper-link-qr-code-button"
                 data-testid="qr-code-button"
                 onClick={() => onClick(link)}
