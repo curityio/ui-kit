@@ -18,7 +18,7 @@ import type {
   HaapiStepperStep,
   HaapiStepperHistoryEntry,
 } from '../haapi-stepper.types';
-import { formatNextStepData } from './format-next-step-data';
+import { formatNextStepData } from '../data-formatters/format-next-step-data';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { isBankIdClientOperation, openBankIdApp } from '../../actions/client-operation/operations/bankid';
 import { HaapiStepperPollingStep } from '../haapi-stepper.types';
