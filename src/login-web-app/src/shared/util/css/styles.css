@@ -8,54 +8,62 @@
     @extend .center, .py2;
 }
 
-
 .haapi-stepper-form-field-text-input {
-  @extend .field, .w100, mt2;
-  font-family: var(--type-regular);
+    @extend .field, .w100, mt2;
+    font-family: var(--type-regular);
 }
 
-
-
 .haapi-stepper-form-field-password-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
 }
 
 .haapi-stepper-form-field-password-input {
-  @extend .haapi-stepper-form-field-text-input;
-  flex: 1;
+    @extend .haapi-stepper-form-field-text-input;
+    flex: 1;
 }
 
 .haapi-stepper-form-field-password-visibility-toggle {
-  background: transparent;
-  border: none;
-  color: var(--color-primary, #0055ff);
-  cursor: pointer;
-  font: inherit;
-  padding: 0.25rem 0.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    height: calc(var(--form-field-height) / 2);
+    width: calc(var(--form-field-height) / 2);
+    padding: unset;
+    position: absolute;
+    right: var(--space-1);
+    vertical-align: middle;
 }
 
 .haapi-stepper-form-field-password-visibility-toggle:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+  border-color: var(--form-field-border-color-focus);
+  box-shadow: var(--form-field-box-shadow-focus);
+  outline: none;
 }
 
-.haapi-stepper-form-field-checkbox-input {}
+.haapi-stepper-form-field-checkbox-input {
+}
 
-.haapi-stepper-form-field-text-label, .haapi-stepper-form-field-checkbox-label, .haapi-stepper-form-field-select-label, .haapi-stepper-form-field-password-label{
-  @extend .left-align, .label, .block, .mt2;
+.haapi-stepper-form-field-text-label,
+.haapi-stepper-form-field-checkbox-label,
+.haapi-stepper-form-field-select-label,
+.haapi-stepper-form-field-password-label {
+    @extend .left-align, .label, .block, .mt2;
 }
 
 .haapi-stepper-form-field-checkbox-label {
-  display: flex;
+    display: flex;
 
-  input {
-    order: -1;
-  }
+    input {
+        order: -1;
+    }
 }
 
-.haapi-stepper-form-field-select-input {}
+.haapi-stepper-form-field-select-input {
+}
 
 .haapi-stepper-button {
     @extend .button, .button-medium, .button-primary, .w100, .mt2;
@@ -80,9 +88,11 @@
     @extend .button, .button-small, .button-link;
 }
 
-.haapi-stepper-link-image {}
+.haapi-stepper-link-image {
+}
 
-.haapi-stepper-link-image-title {}
+.haapi-stepper-link-image-title {
+}
 
 .haapi-stepper-actions {
     @extend .center, .flex, .flex-column;

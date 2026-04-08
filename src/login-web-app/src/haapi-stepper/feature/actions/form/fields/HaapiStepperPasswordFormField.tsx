@@ -11,6 +11,7 @@
 
 import type { ReactElement } from 'react';
 import { useState } from 'react';
+import { IconGeneralEye, IconGeneralEyeHide } from '@curity/ui-kit-icons';
 
 import { HAAPI_FORM_ACTION_KINDS, HAAPI_FORM_ACTION_KINDS_TYPE } from '../../../../data-access/types/haapi-action.types';
 import { HAAPI_FORM_FIELDS, HaapiPasswordFormField } from '../../../../data-access/types/haapi-form.types';
@@ -46,7 +47,7 @@ export function HaapiStepperPasswordFormField({ field }: { field: HaapiPasswordF
           aria-controls={inputId}
           onClick={() => setIsVisible(current => !current)}
         >
-          {isVisible ? 'Hide' : 'Show'}
+          {isVisible ? <IconGeneralEyeHide /> : <IconGeneralEye />}
         </button>
       </div>
     </label>
