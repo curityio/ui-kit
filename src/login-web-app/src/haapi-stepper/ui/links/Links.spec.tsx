@@ -154,6 +154,22 @@ describe('Links', () => {
         expect(onClick).not.toHaveBeenCalled();
       });
 
+      it('renders a close button with accessible label inside the dialog', async () => {
+        render(<Links links={links} onClick={onClick} />);
+
+        await user.click(screen.getByTestId('qr-code-button'));
+
+        expect(screen.getByRole('button', { name: 'Close expanded QR code' })).toBeInTheDocument();
+      });
+
+      it('focuses the close button when dialog opens', async () => {
+        render(<Links links={links} onClick={onClick} />);
+
+        await user.click(screen.getByTestId('qr-code-button'));
+
+        expect(screen.getByRole('button', { name: 'Close expanded QR code' })).toHaveFocus();
+      });
+
       it('closes dialog when QR image is clicked', async () => {
         render(<Links links={links} onClick={onClick} />);
 

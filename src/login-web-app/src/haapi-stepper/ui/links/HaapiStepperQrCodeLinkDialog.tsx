@@ -20,6 +20,7 @@ interface HaapiStepperQrCodeLinkDialogProps {
 export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQrCodeLinkDialogProps) {
   const [displayedQrCodeKey, setDisplayedQrCodeKey] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const displayQrCodeInDialog = useCallback((link: HaapiStepperLink) => {
     setDisplayedQrCodeKey(getLinkKey(link));
@@ -28,6 +29,7 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
   useEffect(() => {
     if (displayedQrCodeKey) {
       dialogRef.current?.showModal();
+      closeButtonRef.current?.focus();
     }
   }, [displayedQrCodeKey]);
 
@@ -57,11 +59,19 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
         onClick={() => dialogRef.current?.close()}
       >
         {currentQrCodeLink && (
-          <img
-            src={currentQrCodeLink.href}
-            alt={currentQrCodeLink.title ?? 'QR code, click to close'}
-            className="haapi-stepper-link-qr-code-dialog-image"
-          />
+          <button
+            ref={closeButtonRef}
+            type="button"
+            className="haapi-stepper-link-qr-code-dialog-close-button"
+            aria-label="Close expanded QR code"
+          >
+            <img
+              src={currentQrCodeLink.href}
+              alt=""
+              role="presentation"
+              className="haapi-stepper-link-qr-code-dialog-image"
+            />
+          </button>
         )}
       </dialog>
     </>
