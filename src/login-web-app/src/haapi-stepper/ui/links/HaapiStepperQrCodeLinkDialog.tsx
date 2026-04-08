@@ -37,9 +37,9 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
     : null;
 
   const restoreFocusToOpenedQrCodeLink = (currentQrCodeLink: HaapiStepperLink | null) => {
-      if (currentQrCodeLink) {
-          document.getElementById(currentQrCodeLink.id)?.focus();
-      }
+    if (currentQrCodeLink) {
+      document.getElementById(currentQrCodeLink.id)?.focus();
+    }
   };
 
   return (
