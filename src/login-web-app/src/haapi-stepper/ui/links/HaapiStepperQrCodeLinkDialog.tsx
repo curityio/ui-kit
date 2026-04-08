@@ -67,7 +67,7 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
           >
             <img
               src={currentQrCodeLink.href}
-              alt="QR code, click to close"
+              alt={currentQrCodeLink.title ?? 'QR code, click to expand'}
               role="presentation"
               className="haapi-stepper-link-qr-code-dialog-image"
             />
@@ -78,6 +78,6 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
   );
 }
 
-function getLinkKey(link: HaapiStepperLink) {
+const getLinkKey = (link: HaapiStepperLink) => {
   return `${link.rel}:${link.title ?? ''}`;
-}
+};
