@@ -61,7 +61,6 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
             src={currentQrCodeLink.href}
             alt={currentQrCodeLink.title ?? 'QR code, click to close'}
             className="haapi-stepper-link-qr-code-dialog-image"
-            onClick={() => dialogRef.current?.close()}
           />
         )}
       </dialog>
