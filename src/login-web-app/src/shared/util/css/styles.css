@@ -16,7 +16,7 @@
 .haapi-stepper-form-field-password-wrapper {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-1);
     position: relative;
 }
 
