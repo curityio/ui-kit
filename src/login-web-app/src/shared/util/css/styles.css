@@ -112,20 +112,19 @@
 }
 
 .haapi-stepper-link-qr-code img {
-    display: block;
-    margin: 0 auto;
+    margin-inline: auto;
     max-width: 250px;
 }
 
 .haapi-stepper-link-qr-code-title {
     text-align: center;
-    margin-top: 0.5rem;
+    margin-top: var(--space-1);
 }
 
 .haapi-stepper-link-qr-code-dialog {
     border: none;
     background: transparent;
-    padding: 1rem;
+    padding: var(--space-2);
 }
 
 .haapi-stepper-link-qr-code-dialog::backdrop {
@@ -133,9 +132,7 @@
 }
 
 .haapi-stepper-link-qr-code-dialog-image {
-    max-width: 90vw;
-    max-height: 90vh;
-    width: auto;
+    width: min(90vw, 400px);
     height: auto;
     cursor: pointer;
 }
