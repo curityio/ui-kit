@@ -31,9 +31,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Icons
-        run: npm run build -w src/common/icons
-
       - name: Lint Code
         run: npm run lint -w src/login-web-app
 

@@ -16,6 +16,7 @@
   "scripts": {
     "start": "npm run previewer",
     "dev": "vite --open /start.html",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest",
