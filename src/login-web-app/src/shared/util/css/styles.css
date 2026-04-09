@@ -89,12 +89,6 @@
     @extend .button, .button-small, .button-link;
 }
 
-.haapi-stepper-link-image {
-}
-
-.haapi-stepper-link-image-title {
-}
-
 .haapi-stepper-actions {
     @extend .center, .flex, .flex-column;
 }
