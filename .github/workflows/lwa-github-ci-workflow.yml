@@ -5,7 +5,7 @@ on:
     paths:
       - 'src/login-web-app/**'
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, closed]
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - 'src/login-web-app/**'
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
     if: ${{ always() && github.event_name == 'pull_request' }}
     strategy:
       matrix:
-        webhook_secret: [LWA_SLACK_WEBHOOK_URL, LWA_SLACK_WEBHOOK_URL_FE_CHANNEL]
+        webhook_secret: [LWA_SLACK_WEBHOOK_URL]
     steps:
       - name: Extract Jira ticket from branch name
         id: jira
@@ -92,35 +92,3 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets[matrix.webhook_secret] }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
-      - name: Notify merged pull request
-        if: ${{ github.event.action == 'closed' && github.event.pull_request.merged == true }}
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "text": ":tada: PR merged in `${{ github.repository }}`",
-              "attachments": [
-                {
-                  "color": "${{ needs.build-and-test.result == 'success' && '#2EB67D' || '#E01E5A' }}",
-                  "blocks": [
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "*Title:* ${{ github.event.pull_request.title }}\n*Merged by:* ${{ github.actor }}\n*Status:* ${{ needs.build-and-test.result == 'success' && ':white_check_mark: Passed' || ':x: Failed' }}\n*PR:* <${{ github.event.pull_request.html_url }}|View Pull Request> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Workflow Logs>${{ steps.jira.outputs.link && format('\n{0}', steps.jira.outputs.link) || '' }}"
-                      }
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": ${{ toJSON(format('*Description:*{0}{1}', fromJSON('"\n"'), github.event.pull_request.body || 'No description provided.')) }}
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets[matrix.webhook_secret] }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
