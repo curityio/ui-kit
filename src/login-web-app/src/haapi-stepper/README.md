@@ -156,8 +156,11 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 | `.haapi-stepper-well` | `Well` | Styled content container |
 | `.haapi-stepper-links` | `Links` | Links container |
 | `.haapi-stepper-link` | `Link` | Link element |
-| `.haapi-stepper-link-image` | `Link` | Link image (e.g. BankId QR code) |
-| `.haapi-stepper-link-image-title` | `Link` | Link image's title |
+| `.haapi-stepper-link-qr-code` | `Link` | QR code link figure wrapper |
+| `.haapi-stepper-link-qr-code-title` | `Link` | QR code link figcaption |
+| `.haapi-stepper-link-qr-code-button` | `Link` | QR code link expand button |
+| `.haapi-stepper-link-qr-code-dialog` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog |
+| `.haapi-stepper-link-qr-code-dialog-image` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog image |
 | `.haapi-stepper-actions` | `Actions` | Actions container |
 | `.haapi-stepper-heading` | `Messages` | Heading messages |
 | `.haapi-stepper-userName` | `Messages` | User name display |

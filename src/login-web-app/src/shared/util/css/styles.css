@@ -89,12 +89,6 @@
     @extend .button, .button-small, .button-link;
 }
 
-.haapi-stepper-link-image {
-}
-
-.haapi-stepper-link-image-title {
-}
-
 .haapi-stepper-actions {
     @extend .center, .flex, .flex-column;
 }
@@ -138,6 +132,43 @@
         background-color: var(--color-spot);
         border-radius: var(--form-field-border-radius);
     }
+}
+
+.haapi-stepper-link-qr-code-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.haapi-stepper-link-qr-code {
+    margin: 0;
+}
+
+.haapi-stepper-link-qr-code img {
+    margin-inline: auto;
+    max-width: 250px;
+}
+
+.haapi-stepper-link-qr-code-title {
+    text-align: center;
+    margin-top: var(--space-1);
+}
+
+.haapi-stepper-link-qr-code-dialog {
+    border: none;
+    background: transparent;
+    padding: var(--space-2);
+}
+
+.haapi-stepper-link-qr-code-dialog::backdrop {
+    background: rgb(0 0 0 / 80%);
+}
+
+.haapi-stepper-link-qr-code-dialog-image {
+    width: min(90vw, 400px);
+    height: auto;
+    cursor: pointer;
 }
 
 .haapi-stepper-error-boundary-fallback {

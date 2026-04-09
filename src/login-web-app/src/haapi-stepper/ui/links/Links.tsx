@@ -13,6 +13,7 @@ import { ReactElement } from 'react';
 import { HaapiStepperLink, HaapiStepperNextStep } from '../../feature/stepper/haapi-stepper.types';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { defaultHaapiStepperLinkElementFactory } from './defaultHaapiStepperLinkElementFactory';
+import { HaapiStepperQrCodeLinkDialog } from './HaapiStepperQrCodeLinkDialog';
 
 interface LinksProps {
   links?: HaapiStepperLink[];
@@ -43,13 +44,27 @@ interface LinksProps {
  * ```
  */
 export function Links({ links, onClick, renderInterceptor }: LinksProps) {
-  const linkElements = applyRenderInterceptor(links, renderInterceptor, link =>
-    defaultHaapiStepperLinkElementFactory(link, onClick)
-  );
+  return (
+    <HaapiStepperQrCodeLinkDialog links={links}>
+      {(displayQrCodeInDialog) => {
+        const handleLinkClick = (link: HaapiStepperLink) => {
+          if (link.subtype?.startsWith('image/')) {
+            displayQrCodeInDialog(link);
+          } else {
+            onClick(link);
+          }
+        };
 
-  return linkElements.length ? (
-    <div className="haapi-stepper-links" data-testid="links">
-      {linkElements}
-    </div>
-  ) : null;
+        const linkElements = applyRenderInterceptor(links, renderInterceptor, (link) =>
+          defaultHaapiStepperLinkElementFactory(link, handleLinkClick)
+        );
+
+        return linkElements.length ? (
+          <div className="haapi-stepper-links" data-testid="links">
+            {linkElements}
+          </div>
+        ) : null;
+      }}
+    </HaapiStepperQrCodeLinkDialog>
+  );
 }
