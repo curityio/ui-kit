@@ -47,7 +47,7 @@ jobs:
     if: ${{ always() && github.event_name == 'pull_request' }}
     strategy:
       matrix:
-        webhook_secret: [LWA_SLACK_WEBHOOK_URL, LWA_SLACK_WEBHOOK_URL_FE_CHANNEL]
+        webhook_secret: [LWA_SLACK_WEBHOOK_URL]
     steps:
       - name: Extract Jira ticket from branch name
         id: jira
