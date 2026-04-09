@@ -159,7 +159,7 @@ describe('Links', () => {
 
         await user.click(screen.getByTestId('qr-code-button'));
 
-        expect(screen.getByRole('button', { name: 'Close expanded QR code' })).toBeInTheDocument();
+        expect(screen.getByTestId('qr-code-dialog-close-button')).toBeInTheDocument();
       });
 
       it('focuses the close button when dialog opens', async () => {
@@ -167,7 +167,7 @@ describe('Links', () => {
 
         await user.click(screen.getByTestId('qr-code-button'));
 
-        expect(screen.getByRole('button', { name: 'Close expanded QR code' })).toHaveFocus();
+        expect(screen.getByTestId('qr-code-dialog-close-button')).toHaveFocus();
       });
 
       it('closes dialog when QR image is clicked', async () => {

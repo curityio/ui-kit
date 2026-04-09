@@ -63,6 +63,7 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
             ref={closeButtonRef}
             type="button"
             className="haapi-stepper-link-qr-code-dialog-close-button"
+            data-testid="qr-code-dialog-close-button"
             aria-label="Click to close expanded QR code"
           >
             <img
