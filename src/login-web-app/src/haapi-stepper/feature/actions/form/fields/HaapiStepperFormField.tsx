@@ -15,6 +15,7 @@ import { HaapiFormField, HAAPI_FORM_FIELDS } from '../../../../data-access/types
 import { HaapiStepperCheckboxFormField } from './HaapiStepperCheckboxFormField';
 import { HaapiStepperSelectFormField } from './HaapiStepperSelectFormField';
 import { HaapiStepperTextFormField } from './HaapiStepperTextFormField';
+import { HaapiStepperPasswordFormField } from './HaapiStepperPasswordFormField';
 
 export function HaapiStepperFormField({ field }: { field: HaapiFormField }): ReactElement {
   switch (field.type) {
@@ -22,6 +23,8 @@ export function HaapiStepperFormField({ field }: { field: HaapiFormField }): Rea
       return <HaapiStepperSelectFormField field={field} />;
     case HAAPI_FORM_FIELDS.CHECKBOX:
       return <HaapiStepperCheckboxFormField field={field} />;
+    case HAAPI_FORM_FIELDS.PASSWORD:
+      return <HaapiStepperPasswordFormField field={field} />;
     default:
       return <HaapiStepperTextFormField field={field} />;
   }

@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 
 import { HaapiStepperForm } from './HaapiStepperForm';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS, VisibleHaapiFormField } from '../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { HAAPI_PROBLEM_STEPS } from '../../../data-access/types/haapi-step.types';
 import { HaapiStepperFormField } from './fields/HaapiStepperFormField';
 import { useHaapiStepper } from '../../stepper/HaapiStepperHook';
@@ -104,6 +105,74 @@ describe('HaapiStepperForm', () => {
       });
       expect(screen.getByText(validationMissingUsernameMessage)).toBeInTheDocument();
       expect(screen.getByText(validationInvalidPasswordMessage)).toBeInTheDocument();
+    });
+
+    it('should allow showing and hiding password fields without losing their values', async () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const passwordInput = screen.getByTestId(
+        formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName)
+      ) as HTMLInputElement;
+      const showButton = screen.getByRole('button', { name: 'Show password' });
+
+      expect(passwordInput).toHaveAttribute('type', 'password');
+      await user.type(passwordInput, passwordValue);
+
+      await user.click(showButton);
+      const hideButton = screen.getByRole('button', { name: 'Hide password' });
+      expect(passwordInput).toHaveAttribute('type', 'text');
+      expect(hideButton).toHaveAttribute('aria-pressed', 'true');
+      expect(passwordInput.value).toBe(passwordValue);
+
+      await user.click(hideButton);
+      expect(passwordInput).toHaveAttribute('type', 'password');
+      expect(screen.getByRole('button', { name: 'Show password' })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('should expose HTML autocomplete hints for registration fields', () => {
+      const action = createMockFormAction({
+        kind: HAAPI_FORM_ACTION_KINDS.USER_REGISTER,
+        model: {
+          href: '/register',
+          method: HTTP_METHODS.POST,
+          fields: [
+            { type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
+            { type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
+          ],
+        },
+      });
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
+        'autocomplete',
+        'username'
+      );
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toHaveAttribute(
+        'autocomplete',
+        'new-password'
+      );
+    });
+
+    it('should expose HTML autocomplete hints for login fields', () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
+        'autocomplete',
+        'username'
+      );
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toHaveAttribute(
+        'autocomplete',
+        'current-password'
+      );
     });
   });
 
@@ -595,6 +664,7 @@ const createLoginFormAction = () =>
   createMockFormAction({
     id: loginFormId,
     title: loginFormTitle,
+    kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
     model: {
       href: loginFormActionHref,
       method: HTTP_METHODS.POST,

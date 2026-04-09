@@ -5,6 +5,7 @@ export { default as IconGeneralChevron } from './IconGeneralChevron';
 export { default as IconGeneralClose } from './IconGeneralClose';
 export { default as IconGeneralDownload } from './IconGeneralDownload';
 export { default as IconGeneralEdit } from './IconGeneralEdit';
+export { default as IconGeneralEye } from './IconGeneralEye';
 export { default as IconGeneralEyeHide } from './IconGeneralEyeHide';
 export { default as IconGeneralKebabMenu } from './IconGeneralKebabMenu';
 export { default as IconGeneralLocation } from './IconGeneralLocation';
