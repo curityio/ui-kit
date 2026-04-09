@@ -61,7 +61,7 @@ export function HaapiStepperErrorNotifier({
               </button>
             </div>
 
-            {notificationMessages.length && (
+            {notificationMessages.length > 0 && (
               <div data-testid="haapi-error-haapi-error-notifier-toast-messages">
                 {notificationMessages.map(message => (
                   <p key={message.id}>{message.text}</p>

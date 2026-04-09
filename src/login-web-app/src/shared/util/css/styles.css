@@ -8,28 +8,62 @@
     @extend .center, .py2;
 }
 
-.haapi-form-input {
+.haapi-stepper-form-field-text-input {
     @extend .field, .w100, mt2;
     font-family: var(--type-regular);
 }
 
-.haapi-form-checkbox {
+.haapi-stepper-form-field-password-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    position: relative;
 }
 
-.haapi-form-field-label {
+.haapi-stepper-form-field-password-input {
+    @extend .haapi-stepper-form-field-text-input;
+    flex: 1;
+}
+
+.haapi-stepper-form-field-password-visibility-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    height: calc(var(--form-field-height) / 2);
+    width: calc(var(--form-field-height) / 2);
+    padding: unset;
+    position: absolute;
+    right: var(--space-1);
+    vertical-align: middle;
+}
+
+.haapi-stepper-form-field-password-visibility-toggle:focus-visible {
+  border-color: var(--form-field-border-color-focus);
+  box-shadow: var(--form-field-box-shadow-focus);
+  outline: none;
+}
+
+.haapi-stepper-form-field-checkbox-input {
+}
+
+.haapi-stepper-form-field-text-label,
+.haapi-stepper-form-field-checkbox-label,
+.haapi-stepper-form-field-select-label,
+.haapi-stepper-form-field-password-label {
     @extend .left-align, .label, .block, .mt2;
+}
 
-    &:has(input[type='checkbox'], input[type='radio']) {
-        display: flex;
+.haapi-stepper-form-field-checkbox-label {
+    display: flex;
+    gap: var(--space-1);
 
-        input {
-            order: -1;
-        }
+    input {
+        order: -1;
     }
 }
 
-.haapi-form-field-checkbox-label {
-    @extend .left-align, .label, .mt2;
+.haapi-stepper-form-field-select-input {
 }
 
 .haapi-stepper-button {
@@ -53,6 +87,12 @@
 
 .haapi-stepper-link {
     @extend .button, .button-small, .button-link;
+}
+
+.haapi-stepper-link-image {
+}
+
+.haapi-stepper-link-image-title {
 }
 
 .haapi-stepper-actions {

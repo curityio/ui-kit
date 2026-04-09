@@ -19,7 +19,7 @@ set -e
 # - Set the listening port of the first service role to 9443
 # - Copy the development loader template to template overrides directory
 
-IDSVR_HOME=${IDSVR_HOME:-"../identity-server/dist"}
+IDSVR_HOME=${IDSVR_HOME:-"../../../dist"}
 IDSH="$IDSVR_HOME/bin/idsh"
 
 # Check for required commands

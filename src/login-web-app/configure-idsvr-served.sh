@@ -12,7 +12,7 @@ set -e
 # - Enables API-driven UI in the server
 # - Copy the application assets to the corresponding directories
 
-IDSVR_HOME=${IDSVR_HOME:-"../identity-server/dist"}
+IDSVR_HOME=${IDSVR_HOME:-"../../../dist"}
 IDSH="$IDSVR_HOME/bin/idsh"
 
 # Check for required commands
