@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "prettier": "^3.4.2",
-    "vite": "^6.4.2"
+    "vite": "^7.3.2"
   },
   "dependencies": {
     "concurrently": "^8.2.0"
