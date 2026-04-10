@@ -36,7 +36,6 @@ import {
   HaapiSelectFormField,
   HaapiTextFormField,
   HaapiUsernameFormField,
-  VisibleHaapiFormField,
 } from '../../data-access';
 
 /**
@@ -156,7 +155,10 @@ export interface HaapiStepperHistoryEntry<T extends HaapiStepperStep = HaapiStep
  * FORM TYPINGS
  */
 export type HaapiStepperFormField = HaapiFormField & HaapiStepperFormFieldDataHelpers;
-export type HaapiStepperVisibleFormField = VisibleHaapiFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperVisibleFormField = Exclude<
+    HaapiStepperFormField,
+    HaapiStepperHiddenFormField | HaapiStepperContextFormField
+>;
 export type HaapiStepperTextFormField = HaapiTextFormField & HaapiStepperFormFieldDataHelpers;
 export type HaapiStepperPasswordFormField = HaapiPasswordFormField & HaapiStepperFormFieldDataHelpers;
 export type HaapiStepperUsernameFormField = HaapiUsernameFormField & HaapiStepperFormFieldDataHelpers;

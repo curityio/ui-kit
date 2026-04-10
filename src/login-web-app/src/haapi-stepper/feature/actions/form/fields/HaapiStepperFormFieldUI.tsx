@@ -12,13 +12,13 @@
 import type { ReactElement } from 'react';
 
 import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
-import type { HaapiStepperFormField, HaapiStepperTextFormField, HaapiStepperUsernameFormField } from '../../../stepper/haapi-stepper.types';
+import type { HaapiStepperVisibleFormField } from '../../../stepper/haapi-stepper.types';
 import { HaapiStepperCheckboxFormFieldUI } from './HaapiStepperCheckboxFormFieldUI';
 import { HaapiStepperSelectFormFieldUI } from './HaapiStepperSelectFormFieldUI';
 import { HaapiStepperTextFormFieldUI } from './HaapiStepperTextFormFieldUI';
 import { HaapiStepperPasswordFormFieldUI } from './HaapiStepperPasswordFormFieldUI';
 
-export function HaapiStepperFormFieldUI({ field }: { field: HaapiStepperFormField }): ReactElement {
+export function HaapiStepperFormFieldUI({ field }: { field: HaapiStepperVisibleFormField }): ReactElement {
   switch (field.type) {
     case HAAPI_FORM_FIELDS.SELECT:
       return <HaapiStepperSelectFormFieldUI field={field} />;
@@ -27,6 +27,6 @@ export function HaapiStepperFormFieldUI({ field }: { field: HaapiStepperFormFiel
     case HAAPI_FORM_FIELDS.PASSWORD:
       return <HaapiStepperPasswordFormFieldUI field={field} />;
     default:
-      return <HaapiStepperTextFormFieldUI field={field as HaapiStepperTextFormField | HaapiStepperUsernameFormField} />;
+      return <HaapiStepperTextFormFieldUI field={field} />;
   }
 }

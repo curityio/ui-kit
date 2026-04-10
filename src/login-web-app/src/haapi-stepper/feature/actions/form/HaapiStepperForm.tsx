@@ -180,7 +180,7 @@ export function HaapiStepperForm({ action, onSubmit, formFieldRenderInterceptor,
   const fields = action.model.fields ?? [];
   const formState = useHaapiStepperFormState(fields);
   const visibleFields = fields.filter(
-    (field): field is HaapiStepperVisibleFormField =>
+    (field) =>
       field.type !== HAAPI_FORM_FIELDS.HIDDEN && field.type !== HAAPI_FORM_FIELDS.CONTEXT
   );
   const haapiStepperFormAPI: HaapiStepperFormAPI = { fields: visibleFields, formState };
