@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 
 import { HaapiStepperForm } from './HaapiStepperForm';
-import { HAAPI_FORM_FIELDS, HTTP_METHODS, VisibleHaapiFormField } from '../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../../data-access/types/haapi-form.types';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { HAAPI_PROBLEM_STEPS } from '../../../data-access/types/haapi-step.types';
-import { HaapiStepperFormField } from './fields/HaapiStepperFormField';
+import { HaapiStepperFormFieldUI } from './fields/HaapiStepperFormFieldUI';
 import { useHaapiStepper } from '../../stepper/HaapiStepperHook';
 import { createHaapiStepperApiMock, createMockFormAction } from '../../../util/tests/mocks';
 import { useEffect } from 'react';
@@ -15,6 +15,7 @@ import {
   HaapiStepperFormState,
   HaapiStepperInputError,
   HaapiStepperNextStep,
+  HaapiStepperVisibleFormField,
 } from '../../stepper/haapi-stepper.types';
 import { HaapiStepperFormSubmitButton } from './HaapiStepperFormSubmitButton';
 import userEvent from '@testing-library/user-event';
@@ -291,7 +292,7 @@ describe('HaapiStepperForm', () => {
             if (field.name === countryFieldName) {
               return (
                 <div data-testid="interceptor-country-wrapper">
-                  <HaapiStepperFormField field={field} />
+                  <HaapiStepperFormFieldUI field={field} />
                   <p data-testid="interceptor-extra-element">{helperTextBetweenFields}</p>
                 </div>
               );
@@ -327,7 +328,7 @@ describe('HaapiStepperForm', () => {
             field,
             formState,
           }: {
-            field: VisibleHaapiFormField;
+            field: HaapiStepperVisibleFormField;
             formState: HaapiStepperFormState;
           }) => {
             useEffect(() => {
@@ -339,7 +340,7 @@ describe('HaapiStepperForm', () => {
 
             return (
               <div>
-                <HaapiStepperFormField field={field} />
+                <HaapiStepperFormFieldUI field={field} />
               </div>
             );
           };
@@ -395,7 +396,7 @@ describe('HaapiStepperForm', () => {
 
                     return (
                       <div key={field.name}>
-                        <HaapiStepperFormField field={customizedField} />
+                        <HaapiStepperFormFieldUI field={customizedField} />
                       </div>
                     );
                   })}
@@ -420,7 +421,7 @@ describe('HaapiStepperForm', () => {
                 <>
                   {fields.map(field => (
                     <div key={field.name}>
-                      <HaapiStepperFormField field={field} />
+                      <HaapiStepperFormFieldUI field={field} />
                     </div>
                   ))}
                   <HaapiStepperFormSubmitButton />
@@ -452,7 +453,7 @@ describe('HaapiStepperForm', () => {
                 <>
                   {fields.map(field => (
                     <div key={field.name}>
-                      <HaapiStepperFormField field={field} />
+                      <HaapiStepperFormFieldUI field={field} />
                     </div>
                   ))}
                   <button type="submit">{submitButtonLabel}</button>
@@ -500,7 +501,7 @@ describe('HaapiStepperForm', () => {
                     </div>
                     {otherVisibleFields.map(field => (
                       <div key={field.name}>
-                        <HaapiStepperFormField field={field} />
+                        <HaapiStepperFormFieldUI field={field} />
                       </div>
                     ))}
                     <HaapiStepperFormSubmitButton />
@@ -546,7 +547,7 @@ describe('HaapiStepperForm', () => {
                     .filter(field => field.type !== HAAPI_FORM_FIELDS.PASSWORD)
                     .map(field => (
                       <div key={field.name}>
-                        <HaapiStepperFormField field={field} />
+                        <HaapiStepperFormFieldUI field={field} />
                       </div>
                     ))}
                   <HaapiStepperFormSubmitButton />
@@ -583,7 +584,7 @@ describe('HaapiStepperForm', () => {
                     <div key={field.name}>
                       <label className="label block">
                         {field.label ?? field.name}:
-                        <HaapiStepperFormField field={field} />
+                        <HaapiStepperFormFieldUI field={field} />
                       </label>
                       {field.type === HAAPI_FORM_FIELDS.USERNAME && (
                         <p data-testid={composedExtraElementTestId}>{helperTextBetweenFields}</p>
@@ -622,7 +623,7 @@ describe('HaapiStepperForm', () => {
                 <>
                   {fields.map(field => (
                     <div key={field.name}>
-                      <HaapiStepperFormField field={field} />
+                      <HaapiStepperFormFieldUI field={field} />
                     </div>
                   ))}
                   <button type="submit">{submitButtonLabel}</button>

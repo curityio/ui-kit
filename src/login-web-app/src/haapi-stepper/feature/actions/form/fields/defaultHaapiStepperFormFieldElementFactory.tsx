@@ -9,16 +9,16 @@
  * For further information, please contact Curity AB.
  */
 
-import { VisibleHaapiFormField } from '../../../../data-access';
+import type { HaapiStepperVisibleFormField } from '../../../stepper/haapi-stepper.types';
 import { HaapiStepperFormValidationErrorInputWrapper } from '../HaapiStepperFormValidationErrorInputWrapper';
-import { HaapiStepperFormField } from './HaapiStepperFormField';
+import { HaapiStepperFormFieldUI } from './HaapiStepperFormFieldUI';
 
-export const defaultHaapiStepperFormFieldElementFactory = (field: VisibleHaapiFormField) => {
+export const defaultHaapiStepperFormFieldElementFactory = (field: HaapiStepperVisibleFormField) => {
   const fieldKey = `${field.name}-validation-error`;
 
   return (
     <HaapiStepperFormValidationErrorInputWrapper fieldName={field.name} key={fieldKey}>
-      <HaapiStepperFormField field={field} />
+      <HaapiStepperFormFieldUI field={field} />
     </HaapiStepperFormValidationErrorInputWrapper>
   );
 };
