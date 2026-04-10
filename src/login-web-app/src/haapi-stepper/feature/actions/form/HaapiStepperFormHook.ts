@@ -10,15 +10,15 @@
  */
 
 import { useState } from 'react';
-import { HaapiFormField, HAAPI_FORM_FIELDS } from '../../../data-access/types/haapi-form.types';
-import { HaapiStepperFormState } from '../../stepper/haapi-stepper.types';
+import { HAAPI_FORM_FIELDS } from '../../../data-access/types/haapi-form.types';
+import { HaapiStepperFormField, HaapiStepperFormState } from '../../stepper/haapi-stepper.types';
 
 /**
  * Hook to manage form state. Returns an array with two values:
  * 1. a convenience {@link HaapiStepperFormState} object that can be used to get and set field values
  * 2. a map of the current form values that can be used to submit the form
  */
-export function useHaapiStepperFormState(fields: HaapiFormField[]): HaapiStepperFormState {
+export function useHaapiStepperFormState(fields: HaapiStepperFormField[]): HaapiStepperFormState {
   // State to hold values of form fields. Initial value is calculated once, lazily.
   const [formValues, setFormValues] = useState(() => getInitialValues(fields));
 
@@ -26,16 +26,16 @@ export function useHaapiStepperFormState(fields: HaapiFormField[]): HaapiStepper
     values: formValues,
 
     // @ts-expect-error TS can't fully resolve return types of function overloads in this case
-    get(field: HaapiFormField) {
+    get(field: HaapiStepperFormField) {
       return getValue(field, formValues);
     },
-    set(field: HaapiFormField, value: string | boolean) {
+    set(field: HaapiStepperFormField, value: string | boolean) {
       setFormValues(currentValues => setValue(field, value, currentValues));
     },
   };
 }
 
-function getInitialValues(fields: HaapiFormField[]): Map<string, string> {
+function getInitialValues(fields: HaapiStepperFormField[]): Map<string, string> {
   const initialValues = new Map<string, string>();
   fields.forEach(f => {
     switch (f.type) {
@@ -64,7 +64,7 @@ function getInitialValues(fields: HaapiFormField[]): Map<string, string> {
   return initialValues;
 }
 
-function getValue(field: HaapiFormField, currentValues: Map<string, string>): string | boolean {
+function getValue(field: HaapiStepperFormField, currentValues: Map<string, string>): string | boolean {
   if (field.type === HAAPI_FORM_FIELDS.CHECKBOX) {
     return currentValues.has(field.name);
   }
@@ -72,7 +72,7 @@ function getValue(field: HaapiFormField, currentValues: Map<string, string>): st
 }
 
 function setValue(
-  field: HaapiFormField,
+  field: HaapiStepperFormField,
   value: string | boolean,
   currentValues: Map<string, string>
 ): Map<string, string> {

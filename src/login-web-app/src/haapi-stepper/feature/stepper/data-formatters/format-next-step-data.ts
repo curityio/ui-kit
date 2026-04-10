@@ -68,6 +68,16 @@ function addActionDataHelpers(
 ): HaapiStepperAction {
   const actionWithDataHelpers = getElementWithDataHelpers(action);
 
+  if (actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.FORM && actionWithDataHelpers.model.fields) {
+    return {
+      ...actionWithDataHelpers,
+      model: {
+        ...actionWithDataHelpers.model,
+        fields: actionWithDataHelpers.model.fields.map(field => ({ ...field, id: crypto.randomUUID() })),
+      },
+    };
+  }
+
   if (action.template === HAAPI_ACTION_TYPES.SELECTOR) {
     return {
       ...actionWithDataHelpers,
