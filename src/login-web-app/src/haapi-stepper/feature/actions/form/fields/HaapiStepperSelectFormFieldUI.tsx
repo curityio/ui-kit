@@ -11,10 +11,10 @@
 
 import type { ReactElement } from 'react';
 
-import type { HaapiSelectFormField } from '../../../../data-access/types/haapi-form.types';
+import type { HaapiStepperSelectFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
-export function HaapiStepperSelectFormField({ field }: { field: HaapiSelectFormField }): ReactElement {
+export function HaapiStepperSelectFormFieldUI({ field }: { field: HaapiStepperSelectFormField }): ReactElement {
   const { formState } = useHaapiStepperForm();
   const selectId = `${field.name}-input`;
 

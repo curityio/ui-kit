@@ -11,17 +11,11 @@
 
 import type { ReactElement } from 'react';
 
-import {
-  HAAPI_FORM_FIELDS,
-  HaapiCheckboxFormField,
-  HaapiFormField,
-  HaapiSelectFormField,
-} from '../../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
+import type { HaapiStepperTextFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
-export type TextLikeFormField = Exclude<HaapiFormField, HaapiCheckboxFormField | HaapiSelectFormField>;
-
-export function HaapiStepperTextFormField({ field }: { field: TextLikeFormField }): ReactElement {
+export function HaapiStepperTextFormFieldUI({ field }: { field: HaapiStepperTextFormField }): ReactElement {
   const { formState } = useHaapiStepperForm();
   const inputType = field.type === HAAPI_FORM_FIELDS.PASSWORD ? field.type : 'text';
   const autoComplete =

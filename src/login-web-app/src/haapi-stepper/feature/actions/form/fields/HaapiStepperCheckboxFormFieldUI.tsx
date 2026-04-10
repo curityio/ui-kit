@@ -11,10 +11,10 @@
 
 import type { ReactElement } from 'react';
 
-import type { HaapiCheckboxFormField } from '../../../../data-access/types/haapi-form.types';
+import type { HaapiStepperCheckboxFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
-export function HaapiStepperCheckboxFormField({ field }: { field: HaapiCheckboxFormField }): ReactElement {
+export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepperCheckboxFormField }): ReactElement {
   const { formState } = useHaapiStepperForm();
   const inputId = `${field.name}-input`;
 
