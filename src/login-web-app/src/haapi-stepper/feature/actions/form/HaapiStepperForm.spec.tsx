@@ -141,8 +141,8 @@ describe('HaapiStepperForm', () => {
           href: '/register',
           method: HTTP_METHODS.POST,
           fields: [
-            { type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
-            { type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
+            { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
+            { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
           ],
         },
       });
@@ -671,15 +671,17 @@ const createLoginFormAction = () =>
       method: HTTP_METHODS.POST,
       actionTitle: loginFormActionTitle,
       fields: [
-        { type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
-        { type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
+        { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
+        { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
         {
+          id: crypto.randomUUID(),
           type: HAAPI_FORM_FIELDS.CHECKBOX,
           name: rememberMeFieldName,
           label: 'Remember me',
           value: rememberValue,
         },
         {
+          id: crypto.randomUUID(),
           type: HAAPI_FORM_FIELDS.SELECT,
           name: countryFieldName,
           label: 'Country',
@@ -688,7 +690,7 @@ const createLoginFormAction = () =>
             { label: 'Canada', value: countryCanadaValue },
           ],
         },
-        { type: HAAPI_FORM_FIELDS.HIDDEN, name: contextFieldName, value: hiddenContextValue },
+        { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.HIDDEN, name: contextFieldName, value: hiddenContextValue },
       ],
     },
   });

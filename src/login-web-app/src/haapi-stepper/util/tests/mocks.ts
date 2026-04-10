@@ -56,11 +56,13 @@ export const createMockFormAction = (overrides: Partial<HaapiStepperFormAction> 
     type: MEDIA_TYPES.FORM_URLENCODED,
     fields: [
       {
+        id: crypto.randomUUID(),
         type: HAAPI_FORM_FIELDS.USERNAME,
         name: 'username',
         label: 'Username',
       },
       {
+        id: crypto.randomUUID(),
         type: HAAPI_FORM_FIELDS.PASSWORD,
         name: 'password',
         label: 'Password',

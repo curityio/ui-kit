@@ -47,7 +47,7 @@ import {
   HaapiBaseClientOperationModel,
 } from '../../data-access/types/haapi-action.types';
 import { HAAPI_STEPS, HAAPI_PROBLEM_STEPS } from '../../data-access/types/haapi-step.types';
-import { HaapiFormActionModel, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
+import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { HaapiStepperStepUI } from './HaapiStepperStepUI';
 import {
   createMockClientOperationAction,
@@ -1100,10 +1100,12 @@ describe('HaapiStepperStepUI', () => {
                 type: MEDIA_TYPES.FORM_URLENCODED,
                 fields: [
                   {
+                    id: crypto.randomUUID(),
                     type: HAAPI_FORM_FIELDS.USERNAME,
                     name: 'username',
                   },
                   {
+                    id: crypto.randomUUID(),
                     type: HAAPI_FORM_FIELDS.SELECT,
                     name: 'country',
                     options: [
@@ -1676,12 +1678,12 @@ describe('HaapiStepperStepUI', () => {
               createMockFormAction({
                 title: 'Login',
                 kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
-                model: { actionTitle: 'Login' } as HaapiFormActionModel,
+                model: { actionTitle: 'Login' } as HaapiStepperFormAction['model'],
               }),
               createMockFormAction({
                 title: 'Cancel',
                 kind: HAAPI_FORM_ACTION_KINDS.CANCEL,
-                model: { actionTitle: 'Cancel' } as HaapiFormActionModel,
+                model: { actionTitle: 'Cancel' } as HaapiStepperFormAction['model'],
               }),
             ],
           });
