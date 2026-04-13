@@ -9,8 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import { HaapiCompletedWithSuccessStep, HaapiLink } from '../../../data-access/types/haapi-step.types';
-import { HaapiStepperConfig } from '../HaapiStepper';
+import type { HaapiCompletedWithSuccessStep } from '../../../data-access/types/haapi-step.types';
+import type { HaapiStepperConfig } from '../HaapiStepper';
 import { formatNextStepData } from '../data-formatters/format-next-step-data';
 
 export function handleCompletedWithSuccessStep(
@@ -19,7 +19,7 @@ export function handleCompletedWithSuccessStep(
 ) {
   if (config.redirectOnAuthenticationCompletedWithSuccess) {
     const redirectHref = nextStepResponse.links?.find(
-      (link: HaapiLink) => link.rel === 'authorization-response'
+      (link) => link.rel === 'authorization-response'
     )?.href;
 
     if (redirectHref) {
