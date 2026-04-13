@@ -427,7 +427,7 @@ describe('HaapiStepper', () => {
 
           await waitFor(() => {
             expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
-              'No authorization-response link found in completed-with-success step'
+              'redirectOnAuthenticationCompletedWithSuccess is enabled, but the completed-with-success step did not include an authorization-response link.'
             );
           });
         });
