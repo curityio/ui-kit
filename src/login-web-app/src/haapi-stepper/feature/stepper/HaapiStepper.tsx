@@ -442,9 +442,8 @@ function cancelPendingOperation(pendingOperation: RefObject<AbortController | No
 }
 
 function getInitialStepLink() {
-  const initialUrl = configuration.initialUrl ?? window.location.href;
   const initialStepLink: HaapiStepperLink = {
-    href: initialUrl,
+    href: configuration.initialUrl,
     rel: 'self',
     type: HAAPI_STEPPER_ELEMENT_TYPES.LINK,
     subtype: 'initial-link',
