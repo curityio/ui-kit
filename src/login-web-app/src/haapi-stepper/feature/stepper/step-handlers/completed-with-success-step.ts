@@ -22,10 +22,14 @@ export function handleCompletedWithSuccessStep(
       (link) => link.rel === 'authorization-response'
     )?.href;
 
-    if (redirectHref) {
-      window.location.href = redirectHref;
-      return { nextStepData: undefined };
+    if (!redirectHref) {
+      throw new Error(
+        'redirectOnAuthenticationCompletedWithSuccess is enabled, but the completed-with-success step did not include an authorization-response link.'
+      );
     }
+
+    window.location.href = redirectHref;
+    return { nextStepData: undefined };
   }
 
   return { nextStepData: formatNextStepData(nextStepResponse) };
