@@ -17,6 +17,7 @@ import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import {
   authenticationStep,
   completedWithSuccessStep,
+  completedWithSuccessStepWithoutLinks,
   continueSameStep,
   createProblemStep,
   createRegistrationStep,
@@ -414,6 +415,23 @@ describe('HaapiStepper', () => {
           });
         });
 
+        it('should throw error to the error boundary when no authorization-response link exists', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS, { noLinks: true });
+
+          await waitFor(() => {
+            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+              'No authorization-response link found in completed-with-success step'
+            );
+          });
+        });
+
         it('should not update the current step when redirecting', async () => {
           render(
             <HaapiStepper>
@@ -807,7 +825,7 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       }
       break;
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-      stepMock = completedWithSuccessStep;
+      stepMock = config?.noLinks ? completedWithSuccessStepWithoutLinks : completedWithSuccessStep;
       break;
     case HAAPI_STEPS.REGISTRATION:
       stepMock = createRegistrationStep();
