@@ -16,22 +16,22 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
-    "@astrojs/partytown": "^2.1.6",
-    "@astrojs/react": "^5.0.2",
+    "@astrojs/partytown": "^2.1.7",
+    "@astrojs/react": "^5.0.3",
     "@curity/ui-kit-css": "*",
     "@curity/ui-kit-icons": "*",
-    "astro": "^6.1.1",
-    "mdast-util-to-string": "^4.0.0",
-    "react": "^19.2.4",
-    "react-compiler-runtime": "^1.0.0",
-    "react-dom": "^19.2.4",
-    "rollup": "^4.60.1"
+    "astro": "^6.1.6",
+    "mdast-util-to-string": "3.2.0",
+    "react": "19.1.0",
+
+    "react-dom": "19.1.0",
+    "rollup": "^4.40.0"
   },
   "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@typescript/twoslash": "^3.2.12",
-    "prettier": "^3.8.1",
-    "prettier-plugin-astro": "^0.14.1"
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "@typescript/twoslash": "^3.2.9",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.12.3"
   }
 }
