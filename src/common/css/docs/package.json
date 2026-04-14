@@ -23,7 +23,6 @@
     "astro": "^6.1.6",
     "mdast-util-to-string": "3.2.0",
     "react": "19.1.0",
-
     "react-dom": "19.1.0",
     "rollup": "^4.40.0"
   },
