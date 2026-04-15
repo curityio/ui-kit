@@ -13,15 +13,24 @@ import type { ReactElement } from 'react';
 
 import type { HaapiStepperCheckboxFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
+import type { HaapiStepperGenericFormFieldInputProps } from './HaapiStepperFormFieldUI';
 
-export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepperCheckboxFormField }): ReactElement {
+export function HaapiStepperCheckboxFormFieldUI({
+  field,
+  inputProps,
+}: {
+  field: HaapiStepperCheckboxFormField;
+  inputProps?: HaapiStepperGenericFormFieldInputProps;
+}): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const inputId = `${action.id}-${field.name}-input`;
+  const inputPropsClassName = inputProps?.className;
 
   return (
     <label className="haapi-stepper-form-field-checkbox-label" htmlFor={inputId}>
       {field.label ?? field.name}
       <input
+        {...inputProps}
         id={inputId}
         data-testid={`haapi-form-field-checkbox-${field.name}`}
         type="checkbox"
@@ -29,7 +38,7 @@ export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepper
         checked={formState.get(field)}
         disabled={field.readonly ?? false}
         onChange={e => formState.set(field, e.target.checked)}
-        className="haapi-stepper-form-field-checkbox-input"
+        className={['haapi-stepper-form-field-checkbox-input', inputPropsClassName].filter(Boolean).join(' ')}
       />
     </label>
   );
