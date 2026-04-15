@@ -13,8 +13,8 @@ import type { InputHTMLAttributes, ReactElement, SelectHTMLAttributes } from 're
 
 import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
 import type {
-  HaapiStepperFormField,
   HaapiStepperSelectFormField,
+  HaapiStepperVisibleFormField,
 } from '../../../stepper/haapi-stepper.types';
 import { HaapiStepperCheckboxFormFieldUI } from './HaapiStepperCheckboxFormFieldUI';
 import { HaapiStepperSelectFormFieldUI } from './HaapiStepperSelectFormFieldUI';
@@ -26,11 +26,11 @@ type InputDataAttributes = Record<`data-${string}`, unknown>;
 export type HaapiStepperSelectFormFieldInputProps = SelectHTMLAttributes<HTMLSelectElement> & InputDataAttributes;
 export type HaapiStepperGenericFormFieldInputProps = InputHTMLAttributes<HTMLInputElement> & InputDataAttributes;
 
-type InputPropsFor<F extends HaapiStepperFormField> = F extends HaapiStepperSelectFormField
+type InputPropsFor<F extends HaapiStepperVisibleFormField> = F extends HaapiStepperSelectFormField
   ? HaapiStepperSelectFormFieldInputProps
   : HaapiStepperGenericFormFieldInputProps;
 
-interface HaapiStepperFormFieldUIProps<F extends HaapiStepperFormField> {
+interface HaapiStepperFormFieldUIProps<F extends HaapiStepperVisibleFormField> {
   field: F;
   inputProps?: InputPropsFor<F>;
 }
@@ -81,7 +81,7 @@ interface HaapiStepperFormFieldUIProps<F extends HaapiStepperFormField> {
  * />
  * ```
  */
-export function HaapiStepperFormFieldUI<F extends HaapiStepperFormField>({
+export function HaapiStepperFormFieldUI<F extends HaapiStepperVisibleFormField>({
   field,
   inputProps,
 }: HaapiStepperFormFieldUIProps<F>): ReactElement {
