@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import '@css/index.css';
+import '@curity/ui-kit-css/lib/dist/index.css';
 import '@css/styles.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
