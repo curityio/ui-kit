@@ -14,7 +14,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { required } from './shared/util/type-utils';
 
-import '@css/index.css';
+import '@curity/ui-kit-css/lib/dist/index.css';
 import '@css/styles.css';
 import '@styles/index.css';
 
