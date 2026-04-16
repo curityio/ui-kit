@@ -14,6 +14,7 @@
     "dist"
   ],
   "scripts": {
+    "prestart": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
     "start": "npm run previewer",
     "dev": "vite --open /start.html",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
@@ -22,7 +23,8 @@
     "test": "vitest",
     "lint": "eslint .",
     "prettier-check": "prettier --check .",
-    "previewer": "vite serve previewer --open"
+    "previewer": "vite serve previewer --open",
+    "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib"
   },
   "dependencies": {
     "@curity/identityserver-haapi-web-driver": "^1.3.0",
