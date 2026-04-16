@@ -15,8 +15,7 @@
 
 .logoText {
   font-variant: small-caps;
-  color: var(--color-tertiary);
-
+  color: var(--color-yellow);
   font-size: 0.75rem;
   text-transform: uppercase;
   font-family: var(--type-medium);
