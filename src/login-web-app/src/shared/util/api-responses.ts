@@ -307,6 +307,18 @@ export const completedWithSuccessStep = {
   },
 } as HaapiCompletedWithSuccessStep;
 
+export const completedWithSuccessStepWithoutLinks = {
+  type: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+  metadata: {
+    viewName: 'templates/oauth/success-authorization-response',
+  },
+  properties: {
+    code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
+    iss: 'https://localhost:8443/dev/oauth/anonymous',
+    state: 'foo',
+  },
+} as HaapiCompletedWithSuccessStep;
+
 export const completedWithErrorStep = {
   type: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
   title: 'Authorization Error',

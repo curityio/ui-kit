@@ -17,6 +17,7 @@ import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import {
   authenticationStep,
   completedWithSuccessStep,
+  completedWithSuccessStepWithoutLinks,
   continueSameStep,
   createProblemStep,
   createRegistrationStep,
@@ -77,10 +78,10 @@ describe('HaapiStepper', () => {
         expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
       });
 
-      await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+      await goToNextStep(HAAPI_STEPS.REGISTRATION);
 
       await waitFor(() => {
-        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
       });
     });
 
@@ -164,11 +165,11 @@ describe('HaapiStepper', () => {
         expect(stepRendered).toHaveTextContent(initialStepType);
 
         // Redirection steps are handled internally, triggering automatically a request to
-        // get the next step, which we mock to be the COMPLETED step in mockHaapiFetchStep
+        // get the next step, which we mock to be a registration step in mockHaapiFetchStep
         await goToNextStep(HAAPI_STEPS.REDIRECTION);
 
         await waitFor(() => {
-          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
         });
       });
     });
@@ -226,7 +227,7 @@ describe('HaapiStepper', () => {
         // Mock the next poll request to return DONE and advance timers
         // This is an automatic poll request (setTimeout, no user action)
         mockHaapiFetchStep(HAAPI_STEPS.POLLING, { status: HAAPI_POLLING_STATUS.DONE });
-        mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+        mockHaapiFetchStep(HAAPI_STEPS.AUTHENTICATION);
         await vi.advanceTimersByTimeAsync(pollingInterval);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         vi.runAllTimersAsync();
@@ -239,7 +240,7 @@ describe('HaapiStepper', () => {
         expect(mockHaapiFetch).toHaveBeenNthCalledWith(5, '/polldone', { method: 'GET' });
 
         await waitFor(() => {
-          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
         });
       });
 
@@ -369,6 +370,80 @@ describe('HaapiStepper', () => {
         });
       });
     });
+
+    describe('Completed With Success Step', () => {
+      const authorizationResponseUrl = completedWithSuccessStep.links?.find(link => link.rel === 'authorization-response')?.href;
+
+      describe('redirectOnAuthenticationCompletedWithSuccess enabled (default)', () => {
+        it('should redirect to the authorization-response URL', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+
+          await waitFor(() => {
+            expect(window.location.href).toBe(authorizationResponseUrl);
+          });
+        });
+
+        it('should throw error to the error boundary when no authorization-response link exists', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS, { noLinks: true });
+
+          await waitFor(() => {
+            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+              'redirectOnAuthenticationCompletedWithSuccess is enabled, but the completed-with-success step did not include an authorization-response link.'
+            );
+          });
+        });
+
+        it('should not update the current step when redirecting', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+
+          await waitFor(() => {
+            expect(window.location.href).toBe(authorizationResponseUrl);
+          });
+
+          expect(screen.getByTestId('step-type')).toHaveTextContent(initialStepType);
+        });
+      });
+
+      describe('redirectOnAuthenticationCompletedWithSuccess disabled', () => {
+        it('should render the completed step instead of redirecting', async () => {
+          render(
+            <HaapiStepper config={{ redirectOnAuthenticationCompletedWithSuccess: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          });
+
+          expect(window.location.href).not.toBe(authorizationResponseUrl);
+        });
+      });
+    });
   });
 
   describe('Error handling', () => {
@@ -443,11 +518,11 @@ describe('HaapiStepper', () => {
 
       expect(await screen.findByTestId('step-type')).toHaveTextContent(initialStepType);
 
-      await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+      await goToNextStep(HAAPI_STEPS.REGISTRATION);
 
       await waitFor(() => expect(screen.getByTestId('loading')).toBeInTheDocument());
 
-      expect(await screen.findByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+      expect(await screen.findByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
 
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
     });
@@ -470,7 +545,7 @@ describe('HaapiStepper', () => {
 
       const initialStep = HAAPI_STEPS.AUTHENTICATION;
       const secondStep = HAAPI_STEPS.REGISTRATION;
-      const thirdStep = HAAPI_STEPS.COMPLETED_WITH_SUCCESS;
+      const thirdStep = HAAPI_STEPS.POLLING;
       let history = await screen.findByTestId('history');
       let historyData = getHistoryData(history);
       let previousStepTriggerActionKind = bootstrapLinkAction;
@@ -562,9 +637,9 @@ describe('HaapiStepper', () => {
 
       await goToNextStep(HAAPI_STEPS.REDIRECTION);
 
-      // Redirection steps are mocked in test to return HAAPI_STEPS.COMPLETED_WITH_SUCCESS
+      // Redirection steps are mocked in test to return HAAPI_STEPS.REGISTRATION
       await waitFor(() =>
-        expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS)
+        expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION)
       );
 
       const history = screen.getByTestId('history');
@@ -572,7 +647,7 @@ describe('HaapiStepper', () => {
 
       expect(historyData).toHaveLength(2);
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
-      expect(historyData[1].step.type).toBe(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+      expect(historyData[1].step.type).toBe(HAAPI_STEPS.REGISTRATION);
     });
 
     it('should not include input error problem steps in history', async () => {
@@ -686,7 +761,7 @@ const mockHaapiFetchStep = (step: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config: Rec
 
   if (step === HAAPI_STEPS.REDIRECTION) {
     // For redirection steps, we need to mock the next step fetch as well to avoid loops
-    mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+    mockHaapiFetchStep(HAAPI_STEPS.REGISTRATION);
   }
 };
 
@@ -732,7 +807,7 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       }
       break;
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-      stepMock = completedWithSuccessStep;
+      stepMock = config?.noLinks ? completedWithSuccessStepWithoutLinks : completedWithSuccessStep;
       break;
     case HAAPI_STEPS.REGISTRATION:
       stepMock = createRegistrationStep();

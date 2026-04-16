@@ -25,6 +25,7 @@ import { formatContinueSameStepData } from './data-formatters/continue-same-step
 import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
+import { handleCompletedWithSuccessStep } from './step-handlers/completed-with-success-step';
 import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
 import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
@@ -45,11 +46,13 @@ import { useRefCallback } from '../../util/useRefCallBack';
 const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
   pollingInterval: 3000,
   bankIdAutostart: true,
+  redirectOnAuthenticationCompletedWithSuccess: true,
 };
 
 export interface HaapiStepperConfig {
   pollingInterval: number;
   bankIdAutostart: boolean;
+  redirectOnAuthenticationCompletedWithSuccess: boolean;
 }
 
 interface HaapiStepperProps {
@@ -405,11 +408,13 @@ async function processHaapiNextStep(
     case HAAPI_STEPS.POLLING:
       return handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
 
+    case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
+      return handleCompletedWithSuccessStep(nextStepResponse, config);
+
     case HAAPI_STEPS.AUTHENTICATION:
     case HAAPI_STEPS.REGISTRATION:
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-    case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
       return { nextStepData: formatNextStepData(nextStepResponse) };
 
@@ -440,6 +445,7 @@ function cancelPendingOperation(pendingOperation: RefObject<AbortController | No
     pendingOperation.current = null;
   }
 }
+
 
 function getInitialStepLink() {
   const initialStepLink: HaapiStepperLink = {
