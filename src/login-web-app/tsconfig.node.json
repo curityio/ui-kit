@@ -24,10 +24,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@shared/*": ["src/shared/*"],
-      "@styles/*": ["src/shared/styles/*"],
       "@util/*": ["src/util/*"],
-      "@packages/*": ["src/shared/packages/*"],
-      "@icons/*": ["src/shared/ui/icons/*"]
     }
   },
   "include": ["vite.config.ts", "postcss.d.ts"]
