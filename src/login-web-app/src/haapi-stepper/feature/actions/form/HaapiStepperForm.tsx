@@ -10,7 +10,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { HAAPI_FORM_FIELDS, VisibleHaapiFormField } from '../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_FIELDS } from '../../../data-access/types/haapi-form.types';
 import { applyRenderInterceptor } from '../../../util/generic-render-interceptor';
 import type {
   HaapiStepperFormAPI,
@@ -18,6 +18,7 @@ import type {
   HaapiStepperFormFieldRenderInterceptor,
   HaapiStepperFormState,
   HaapiStepperNextStep,
+  HaapiStepperVisibleFormField,
 } from '../../stepper/haapi-stepper.types';
 import { HaapiStepperFormAction } from '../../stepper/haapi-stepper.types';
 import { HaapiStepperFormContext } from './HaapiStepperFormContext';
@@ -179,7 +180,8 @@ export function HaapiStepperForm({ action, onSubmit, formFieldRenderInterceptor,
   const fields = action.model.fields ?? [];
   const formState = useHaapiStepperFormState(fields);
   const visibleFields = fields.filter(
-    field => field.type !== HAAPI_FORM_FIELDS.HIDDEN && field.type !== HAAPI_FORM_FIELDS.CONTEXT
+    (field) =>
+      field.type !== HAAPI_FORM_FIELDS.HIDDEN && field.type !== HAAPI_FORM_FIELDS.CONTEXT
   );
   const haapiStepperFormAPI: HaapiStepperFormAPI = { fields: visibleFields, formState };
   const submit = useCallback(() => {
@@ -221,7 +223,7 @@ const defaultFormContentFactory =
   );
 
 const getFormFieldElements = (
-  fieldsToRender: VisibleHaapiFormField[],
+  fieldsToRender: HaapiStepperVisibleFormField[],
   formState: HaapiStepperFormState,
   formFieldRenderInterceptor?: HaapiStepperFormFieldRenderInterceptor
 ) =>

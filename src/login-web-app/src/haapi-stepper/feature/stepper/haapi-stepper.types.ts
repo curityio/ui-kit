@@ -27,7 +27,16 @@ import {
   HaapiAuthenticationFailedProblemStep,
 } from '../../data-access/types/haapi-step.types';
 import { HaapiFetchPayload } from '../../data-access/types/haapi-fetch.types';
-import { HaapiCheckboxFormField, HaapiFormField, VisibleHaapiFormField } from '../../data-access';
+import {
+  HaapiCheckboxFormField,
+  HaapiContextFormField,
+  HaapiFormField,
+  HaapiHiddenFormField,
+  HaapiPasswordFormField,
+  HaapiSelectFormField,
+  HaapiTextFormField,
+  HaapiUsernameFormField,
+} from '../../data-access';
 
 /**
  * Public API provided by the `HaapiStepper`, accessed via the `useHaapiStepper` hook.
@@ -77,8 +86,12 @@ export type HaapiStepperAction =
   | HaapiStepperFormAction
   | HaapiStepperSelectorAction
   | HaapiStepperClientOperationAction;
-export type HaapiStepperFormAction = HaapiFormAction &
-  HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.ACTION, HAAPI_ACTION_TYPES.FORM>;
+export type HaapiStepperFormAction = Omit<HaapiFormAction, 'model'> &
+  HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.ACTION, HAAPI_ACTION_TYPES.FORM> & {
+    model: Omit<HaapiFormAction['model'], 'fields'> & {
+      fields?: HaapiStepperFormField[];
+    };
+  };
 export type HaapiStepperSelectorAction = Omit<HaapiSelectorAction, 'model'> &
   HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.ACTION, HAAPI_ACTION_TYPES.SELECTOR> & {
     model: {
@@ -141,8 +154,25 @@ export interface HaapiStepperHistoryEntry<T extends HaapiStepperStep = HaapiStep
 /*
  * FORM TYPINGS
  */
+export type HaapiStepperFormField = HaapiFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperVisibleFormField = Exclude<
+    HaapiStepperFormField,
+    HaapiStepperHiddenFormField | HaapiStepperContextFormField
+>;
+export type HaapiStepperTextFormField = HaapiTextFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperPasswordFormField = HaapiPasswordFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperUsernameFormField = HaapiUsernameFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperSelectFormField = HaapiSelectFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperCheckboxFormField = HaapiCheckboxFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperHiddenFormField = HaapiHiddenFormField & HaapiStepperFormFieldDataHelpers;
+export type HaapiStepperContextFormField = HaapiContextFormField & HaapiStepperFormFieldDataHelpers;
+
+export interface HaapiStepperFormFieldDataHelpers {
+  id: string;
+}
+
 export interface HaapiStepperFormAPI {
-  fields: VisibleHaapiFormField[];
+  fields: HaapiStepperVisibleFormField[];
   formState: HaapiStepperFormState;
 }
 
@@ -151,21 +181,21 @@ export type HaapiStepperFormChildrenRenderInterceptor = (
 ) => ReactElement | HaapiStepperFormAPI | null | undefined;
 
 export type HaapiStepperFormFieldRenderInterceptor = (
-  field: VisibleHaapiFormField,
+  field: HaapiStepperVisibleFormField,
   formState: HaapiStepperFormState,
   index: number
-) => ReactElement | VisibleHaapiFormField | null | undefined;
+) => ReactElement | HaapiStepperVisibleFormField | null | undefined;
 
 export interface HaapiStepperFormState {
   readonly values: ReadonlyMap<string, string>;
 
-  get(field: HaapiCheckboxFormField): boolean;
+  get(field: HaapiStepperCheckboxFormField): boolean;
 
-  get(field: Exclude<HaapiFormField, HaapiCheckboxFormField>): string;
+  get(field: Exclude<HaapiStepperFormField, HaapiStepperCheckboxFormField>): string;
 
-  set(field: HaapiCheckboxFormField, value: boolean): void;
+  set(field: HaapiStepperCheckboxFormField, value: boolean): void;
 
-  set(field: Exclude<HaapiFormField, HaapiCheckboxFormField>, value: string): void;
+  set(field: Exclude<HaapiStepperFormField, HaapiStepperCheckboxFormField>, value: string): void;
 }
 
 /*

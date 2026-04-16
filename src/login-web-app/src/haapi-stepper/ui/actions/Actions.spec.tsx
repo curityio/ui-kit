@@ -8,7 +8,7 @@ import {
   HAAPI_ACTION_TYPES,
   HAAPI_FORM_ACTION_KINDS,
 } from '../../data-access/types/haapi-action.types';
-import { HaapiFormActionModel, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
+import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { HAAPI_STEPPER_ELEMENT_TYPES } from '../../data-access/types/haapi-step.types';
 import {
   HaapiStepperClientOperationAction,
@@ -37,7 +37,7 @@ describe('Actions', () => {
     it('should invoke onAction when the default elements trigger submission', async () => {
       const formAction = createMockFormAction({
         title: 'Login Form',
-        model: { actionTitle: 'Submit Login' } as HaapiFormActionModel,
+        model: { actionTitle: 'Submit Login' } as HaapiStepperFormAction['model'],
       });
       const clientAction = createMockClientOperationAction({ title: 'External Flow' });
 
@@ -59,7 +59,7 @@ describe('Actions', () => {
     describe('Container', () => {
       it('should render the default container when no custom container is provided', () => {
         const actions = [
-          createMockFormAction({ title: 'Login Heading', model: { actionTitle: 'Login' } as HaapiFormActionModel }),
+          createMockFormAction({ title: 'Login Heading', model: { actionTitle: 'Login' } as HaapiStepperFormAction['model'] }),
         ];
 
         render(<Actions actions={actions} onAction={onAction} />);
@@ -75,7 +75,7 @@ describe('Actions', () => {
       it('should render form, selector, and client operation actions using the default factory', () => {
         const formAction = createMockFormAction({
           title: 'Form Action',
-          model: { actionTitle: 'Submit Form' } as HaapiFormActionModel,
+          model: { actionTitle: 'Submit Form' } as HaapiStepperFormAction['model'],
         });
         const selectorAction = createMockSelectorAction({ title: 'Selector Action' });
         const clientAction = createMockClientOperationAction({ title: 'Client Action' });

@@ -11,26 +11,29 @@
 
 import { act, renderHook } from '@testing-library/react';
 import { useHaapiStepperFormState } from './HaapiStepperFormHook';
-import {
-  HaapiCheckboxFormField,
-  HAAPI_FORM_FIELDS,
-  HaapiHiddenFormField,
-  HaapiSelectFormField,
-  HaapiTextFormField,
-} from '../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_FIELDS } from '../../../data-access/types/haapi-form.types';
+import type {
+  HaapiStepperCheckboxFormField,
+  HaapiStepperHiddenFormField,
+  HaapiStepperSelectFormField,
+  HaapiStepperTextFormField,
+} from '../../stepper/haapi-stepper.types';
 import { expect, it } from 'vitest';
 
 it('can calculate initial values', () => {
-  const text1: HaapiTextFormField = {
+  const text1: HaapiStepperTextFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.TEXT,
     name: 'text-1',
     value: 't1',
   };
-  const text2: HaapiTextFormField = {
+  const text2: HaapiStepperTextFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.TEXT,
     name: 'text-2',
   };
-  const select1: HaapiSelectFormField = {
+  const select1: HaapiStepperSelectFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.SELECT,
     name: 'select-1',
     options: [
@@ -44,7 +47,8 @@ it('can calculate initial values', () => {
       },
     ],
   };
-  const select2: HaapiSelectFormField = {
+  const select2: HaapiStepperSelectFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.SELECT,
     name: 'select-2',
     options: [
@@ -59,18 +63,21 @@ it('can calculate initial values', () => {
       },
     ],
   };
-  const checkbox1: HaapiCheckboxFormField = {
+  const checkbox1: HaapiStepperCheckboxFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.CHECKBOX,
     name: 'checkbox-1',
     value: 'cb1',
     checked: true,
   };
-  const checkbox2: HaapiCheckboxFormField = {
+  const checkbox2: HaapiStepperCheckboxFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.CHECKBOX,
     name: 'checkbox-2',
     value: 'cb2',
   };
-  const hidden1: HaapiHiddenFormField = {
+  const hidden1: HaapiStepperHiddenFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.HIDDEN,
     name: 'hidden-1',
     value: 'h1',
@@ -98,12 +105,14 @@ it('can calculate initial values', () => {
 });
 
 it('can set and get field values', () => {
-  const text: HaapiTextFormField = {
+  const text: HaapiStepperTextFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.TEXT,
     name: 'text-1',
     value: 't1',
   };
-  const select: HaapiSelectFormField = {
+  const select: HaapiStepperSelectFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.SELECT,
     name: 'select-1',
     options: [
@@ -118,7 +127,8 @@ it('can set and get field values', () => {
       },
     ],
   };
-  const checkbox: HaapiCheckboxFormField = {
+  const checkbox: HaapiStepperCheckboxFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.CHECKBOX,
     name: 'checkbox-1',
   };
@@ -156,7 +166,8 @@ it('can set and get field values', () => {
 });
 
 it('setting select to invalid value does not change it', () => {
-  const select: HaapiSelectFormField = {
+  const select: HaapiStepperSelectFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.SELECT,
     name: 'select-1',
     options: [
@@ -179,7 +190,8 @@ it('setting select to invalid value does not change it', () => {
 });
 
 it('is not possible to modify readonly checkboxes', () => {
-  const checkbox: HaapiCheckboxFormField = {
+  const checkbox: HaapiStepperCheckboxFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.CHECKBOX,
     name: 'checkbox-1',
     value: 'cb-1',
@@ -198,7 +210,8 @@ it('is not possible to modify readonly checkboxes', () => {
 });
 
 it('is not possible to modify hidden fields', () => {
-  const hidden: HaapiHiddenFormField = {
+  const hidden: HaapiStepperHiddenFormField = {
+    id: crypto.randomUUID(),
     type: HAAPI_FORM_FIELDS.HIDDEN,
     name: 'hidden-1',
     value: 'secret',
