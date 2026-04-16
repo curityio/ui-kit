@@ -14,12 +14,10 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { required } from './shared/util/type-utils';
 
-import '@css/index.css';
 import '@css/styles.css';
-import '@styles/index.css';
 
 createRoot(required(document.getElementById('root'))).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+    <StrictMode>
+        <App />
+    </StrictMode>
 );
