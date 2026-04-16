@@ -22,8 +22,8 @@
 /* -------------------------------------------------------------------
 Base fields
 ------------------------------------------------------------------- */
-.field-light,
-.field {
+.field,
+.field-light {
   background-color: var(--form-field-background-color);
   border-color: var(--form-field-border-color);
   border-radius: var(--form-field-border-radius);
@@ -114,26 +114,29 @@ textarea {
   resize: vertical;
 }
 
-
-
 /* -------------------------------------------------------------------
 Nicer looking select boxes
 ------------------------------------------------------------------- */
 select {
-  appearance: none;
-  background-color: white;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0aec0'%3E%3Cpath d='M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z'/%3E%3C/svg%3E");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
+  appearance: base-select;
   border: 1px solid var(--form-field-border-color);
   border-radius: var(--form-field-border-radius);
   box-shadow: none;
   height: var(--form-field-height);
-  line-height: 1.2;
-  padding-left: var(--form-field-padding);
-  padding-right: calc(var(--form-field-padding) * 2);
+  min-height: var(--form-field-height);
+  padding-inline-start: var(--form-field-padding);
+  padding-inline-end: var(--form-field-padding);
+  display: flex;
+  align-items: center;
   width: 100%;
+}
+
+select:open::picker-icon {
+  rotate: 180deg;
+}
+
+::picker(select) {
+  border: none;
 }
 
 /* -------------------------------------------------------------------
@@ -215,7 +218,7 @@ input[data-autocompleted] {
 details {
   border: 1px solid var(--color-grey-light);
   border-radius: var(--form-field-border-radius);
-  margin-bottom:var(--space-2);
+  margin-bottom: var(--space-2);
   padding: var(--space-2) var(--space-2) 0;
 }
 
