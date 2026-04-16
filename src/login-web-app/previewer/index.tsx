@@ -9,17 +9,15 @@
  * For further information, please contact Curity AB.
  */
 
-import '@css/index.css';
-import '@css/styles.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '../src/shared/util/styles/index.css';
 import { required } from '../src/shared/util/type-utils';
 import { Previewer } from './Previewer';
+import '@css/styles.css';
 import './shared/styles/previewer.css';
 
 createRoot(required(document.getElementById('root'))).render(
-  <StrictMode>
-    <Previewer />
-  </StrictMode>
+    <StrictMode>
+        <Previewer />
+    </StrictMode>
 );
