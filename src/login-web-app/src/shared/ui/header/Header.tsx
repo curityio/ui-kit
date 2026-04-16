@@ -9,16 +9,16 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconVciCredentialHome } from '@icons';
+import { IconVciCredentialHome } from '@curity/ui-kit-icons';
 import classes from './header.module.css';
 
 export const Header = () => {
-  return (
-    <header className={`${classes.header} px2 flex flex-center flex-gap-1 w100`}>
-      <a href="/" className="button button-tiny button-link">
-        <IconVciCredentialHome width={32} height={32} />
-        Return to app
-      </a>
-    </header>
-  );
+    return (
+        <header className={`${classes.header} px2 flex flex-center flex-gap-1 w100`}>
+            <a href="/" className="button button-tiny button-link">
+                <IconVciCredentialHome width={32} height={32} />
+                Return to app
+            </a>
+        </header>
+    );
 };
