@@ -85,7 +85,6 @@ input[type='time'],
 input[type='url'],
 input[type='date'],
 input[type='week'],
-input[type]:not([type='submit']):not([type='reset']),
 textarea {
   background-color: var(--form-field-background-color);
   border-color: var(--form-field-border-color);

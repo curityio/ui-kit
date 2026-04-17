@@ -28,6 +28,10 @@
 	}
 }
 
+button[type="submit"] {
+	margin-block-start: var(--space-2);
+}
+
 /* Forgot password links */
 .login-actions {
 	padding-top: var(--space-1);

@@ -217,7 +217,7 @@ button svg {
   padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
-  margin-block-start: var(--space-2);
+
 
   &:where(:not([class*='-outline'])) {
     color: white;
