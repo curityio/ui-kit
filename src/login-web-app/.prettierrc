@@ -1,8 +1,11 @@
 {
   "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "semi": true,
   "printWidth": 120,
   "singleQuote": true,
+  "tabWidth": 2,
   "trailingComma": "es5",
-  "htmlWhitespaceSensitivity": "ignore",
-  "tabWidth": 2
+  "useTabs": false,
+  "htmlWhitespaceSensitivity": "ignore"
 }
