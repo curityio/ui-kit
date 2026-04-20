@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: Check Formatting
-        run: npx prettier --check "src/login-web-app/src/**/*.{ts,tsx}"
+        run: npx prettier --check --ignore-path src/login-web-app/.prettierignore "src/login-web-app/src/**/*.{ts,tsx}"
 
       - name: Lint Code
         run: npm run lint -w src/login-web-app
