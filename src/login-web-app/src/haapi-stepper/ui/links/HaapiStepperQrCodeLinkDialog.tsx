@@ -35,7 +35,7 @@ export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQr
 
   // BankID QR code hrefs change every second so we need to get the latest links and refresh it accordingly
   const currentQrCodeLink = displayedQrCodeKey
-    ? (links?.find((link) => getLinkKey(link) === displayedQrCodeKey) ?? null)
+    ? (links?.find(link => getLinkKey(link) === displayedQrCodeKey) ?? null)
     : null;
 
   const restoreFocusToOpenedQrCodeLink = (currentQrCodeLink: HaapiStepperLink | null) => {

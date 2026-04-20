@@ -59,7 +59,10 @@ describe('Actions', () => {
     describe('Container', () => {
       it('should render the default container when no custom container is provided', () => {
         const actions = [
-          createMockFormAction({ title: 'Login Heading', model: { actionTitle: 'Login' } as HaapiStepperFormAction['model'] }),
+          createMockFormAction({
+            title: 'Login Heading',
+            model: { actionTitle: 'Login' } as HaapiStepperFormAction['model'],
+          }),
         ];
 
         render(<Actions actions={actions} onAction={onAction} />);

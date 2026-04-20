@@ -1,41 +1,41 @@
 @import './index.css';
 
 .haapi-stepper-selector {
-    @extend .center, .py2;
+  @extend .center, .py2;
 }
 
 .haapi-stepper-messages {
-    @extend .center, .py2;
+  @extend .center, .py2;
 }
 
 .haapi-stepper-form-field-text-input {
-    @extend .field, .w100, mt2;
-    font-family: var(--type-regular);
+  @extend .field, .w100, .mt2;
+  font-family: var(--type-regular);
 }
 
 .haapi-stepper-form-field-password-wrapper {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  position: relative;
 }
 
 .haapi-stepper-form-field-password-input {
-    @extend .haapi-stepper-form-field-text-input;
-    flex: 1;
+  @extend .haapi-stepper-form-field-text-input;
+  flex: 1;
 }
 
 .haapi-stepper-form-field-password-visibility-toggle {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    height: calc(var(--form-field-height) / 2);
-    width: calc(var(--form-field-height) / 2);
-    padding: unset;
-    position: absolute;
-    right: var(--space-1);
-    vertical-align: middle;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  height: calc(var(--form-field-height) / 2);
+  width: calc(var(--form-field-height) / 2);
+  padding: unset;
+  position: absolute;
+  right: var(--space-1);
+  vertical-align: middle;
 }
 
 .haapi-stepper-form-field-password-visibility-toggle:focus-visible {
@@ -51,127 +51,127 @@
 .haapi-stepper-form-field-checkbox-label,
 .haapi-stepper-form-field-select-label,
 .haapi-stepper-form-field-password-label {
-    @extend .left-align, .label, .block, .mt2;
+  @extend .left-align, .label, .block, .mt2;
 }
 
 .haapi-stepper-form-field-checkbox-label {
-    display: flex;
-    gap: var(--space-1);
+  display: flex;
+  gap: var(--space-1);
 
-    input {
-        order: -1;
-    }
+  input {
+    order: -1;
+  }
 }
 
 .haapi-stepper-form-field-select-input {
 }
 
 .haapi-stepper-button {
-    @extend .button, .button-medium, .button-primary, .w100, .mt2;
+  @extend .button, .button-medium, .button-primary, .w100, .mt2;
 }
 
 .haapi-stepper-button-outline {
-    @extend .button, .button-medium, .button-primary-outline, .w100, .mt2;
+  @extend .button, .button-medium, .button-primary-outline, .w100, .mt2;
 }
 
 .haapi-stepper-well {
-    @extend .p3, .mx-auto, .bg-white, .br-8;
-    width: clamp(280px, 90%, 560px);
-    box-shadow: 0 4px 24px var(--color-grey-light);
-    margin: 0 auto;
+  @extend .p3, .mx-auto, .bg-white, .br-8;
+  width: clamp(280px, 90%, 560px);
+  box-shadow: 0 4px 24px var(--color-grey-light);
+  margin: 0 auto;
 }
 
 .haapi-stepper-links {
-    @extend .center, .py3, .flex, .flex-column;
+  @extend .center, .py3, .flex, .flex-column;
 }
 
 .haapi-stepper-link {
-    @extend .button, .button-small, .button-link;
+  @extend .button, .button-small, .button-link;
 }
 
 .haapi-stepper-actions {
-    @extend .center, .flex, .flex-column;
+  @extend .center, .flex, .flex-column;
 }
 
 .haapi-stepper-heading {
-    &:is(h1) {
-        font-size: calc(var(--type-base-size) * 1.75);
+  &:is(h1) {
+    font-size: calc(var(--type-base-size) * 1.75);
 
-        &:is(:first-of-type) {
-            margin-top: 0;
-        }
+    &:is(:first-of-type) {
+      margin-top: 0;
     }
+  }
 }
 
 .haapi-stepper-userName {
 }
 
 .haapi-stepper-userCode {
-    display: inline-block;
-    width: min(100%, 100px);
+  display: inline-block;
+  width: min(100%, 100px);
 }
 
 .haapi-stepper-polling-progress {
-    border-radius: var(--form-field-border-radius);
+  border-radius: var(--form-field-border-radius);
+  background-color: var(--color-grey-subtle);
+  outline: 1px solid var(--color-grey-light);
+  outline-offset: 2px;
+  border: none;
+
+  &::-webkit-progress-bar {
     background-color: var(--color-grey-subtle);
-    outline: 1px solid var(--color-grey-light);
-    outline-offset: 2px;
-    border: none;
+    border-radius: var(--form-field-border-radius);
+  }
 
-    &::-webkit-progress-bar {
-        background-color: var(--color-grey-subtle);
-        border-radius: var(--form-field-border-radius);
-    }
+  &::-webkit-progress-value {
+    background-color: var(--color-spot);
+    border-radius: var(--form-field-border-radius);
+  }
 
-    &::-webkit-progress-value {
-        background-color: var(--color-spot);
-        border-radius: var(--form-field-border-radius);
-    }
-
-    &::-moz-progress-bar {
-        background-color: var(--color-spot);
-        border-radius: var(--form-field-border-radius);
-    }
+  &::-moz-progress-bar {
+    background-color: var(--color-spot);
+    border-radius: var(--form-field-border-radius);
+  }
 }
 
 .haapi-stepper-link-qr-code-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .haapi-stepper-link-qr-code {
-    margin: 0;
+  margin: 0;
 }
 
 .haapi-stepper-link-qr-code img {
-    margin-inline: auto;
-    max-width: 250px;
+  margin-inline: auto;
+  max-width: 250px;
 }
 
 .haapi-stepper-link-qr-code-title {
-    text-align: center;
-    margin-top: var(--space-1);
+  text-align: center;
+  margin-top: var(--space-1);
 }
 
 .haapi-stepper-link-qr-code-dialog {
-    border: none;
-    background: transparent;
-    padding: var(--space-2);
+  border: none;
+  background: transparent;
+  padding: var(--space-2);
 }
 
 .haapi-stepper-link-qr-code-dialog::backdrop {
-    background: rgb(0 0 0 / 80%);
+  background: rgb(0 0 0 / 80%);
 }
 
 .haapi-stepper-link-qr-code-dialog-image {
-    width: min(90vw, 400px);
-    height: auto;
-    cursor: pointer;
+  width: min(90vw, 400px);
+  height: auto;
+  cursor: pointer;
 }
 
 .haapi-stepper-error-boundary-fallback {
-    min-height: 100dvh;
-    @extend .flex, .flex-column, .flex-center, .justify-center, .h100;
+  min-height: 100dvh;
+  @extend .flex, .flex-column, .flex-center, .justify-center, .h100;
 }

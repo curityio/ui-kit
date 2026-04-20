@@ -373,7 +373,9 @@ describe('HaapiStepper', () => {
     });
 
     describe('Completed With Success Step', () => {
-      const authorizationResponseUrl = completedWithSuccessStep.links?.find(link => link.rel === 'authorization-response')?.href;
+      const authorizationResponseUrl = completedWithSuccessStep.links?.find(
+        link => link.rel === 'authorization-response'
+      )?.href;
 
       describe('redirectOnAuthenticationCompletedWithSuccess enabled (default)', () => {
         it('should redirect to the authorization-response URL', async () => {
@@ -639,9 +641,7 @@ describe('HaapiStepper', () => {
       await goToNextStep(HAAPI_STEPS.REDIRECTION);
 
       // Redirection steps are mocked in test to return HAAPI_STEPS.REGISTRATION
-      await waitFor(() =>
-        expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION)
-      );
+      await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION));
 
       const history = screen.getByTestId('history');
       const historyData = getHistoryData(history);
