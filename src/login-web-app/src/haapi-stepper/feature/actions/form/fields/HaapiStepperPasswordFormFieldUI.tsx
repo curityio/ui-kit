@@ -13,7 +13,10 @@ import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { IconGeneralEye, IconGeneralEyeHide } from '@curity/ui-kit-icons';
 
-import { HAAPI_FORM_ACTION_KINDS, HAAPI_FORM_ACTION_KINDS_TYPE } from '../../../../data-access/types/haapi-action.types';
+import {
+  HAAPI_FORM_ACTION_KINDS,
+  HAAPI_FORM_ACTION_KINDS_TYPE,
+} from '../../../../data-access/types/haapi-action.types';
 import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
 import type { HaapiStepperPasswordFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
@@ -55,9 +58,7 @@ export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepper
   );
 }
 
-const getPasswordAutoComplete = (
-  actionKind: HAAPI_FORM_ACTION_KINDS_TYPE
-): 'current-password' | 'new-password' => {
+const getPasswordAutoComplete = (actionKind: HAAPI_FORM_ACTION_KINDS_TYPE): 'current-password' | 'new-password' => {
   const isRegistrationFlow = actionKind === HAAPI_FORM_ACTION_KINDS.USER_REGISTER;
 
   if (isRegistrationFlow) {

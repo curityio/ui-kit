@@ -51,19 +51,12 @@ describe('Links', () => {
         expect(screen.getByRole('button', { name: 'Register' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Help' })).toBeInTheDocument();
       });
-
     });
 
     describe('Custom rendering', () => {
       it('data customization: render interceptor modifies link data before default rendering', () => {
         const links = [createMockLink({ title: 'Original', subtype: 'text/html', rel: 'help' })];
-        render(
-          <Links
-            links={links}
-            onClick={onClick}
-            renderInterceptor={(link) => ({ ...link, title: 'Modified' })}
-          />
-        );
+        render(<Links links={links} onClick={onClick} renderInterceptor={link => ({ ...link, title: 'Modified' })} />);
 
         expect(screen.queryByRole('button', { name: 'Original' })).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Modified' })).toBeInTheDocument();
@@ -75,7 +68,11 @@ describe('Links', () => {
           <Links
             links={links}
             onClick={onClick}
-            renderInterceptor={(link) => <a href={link.href} data-testid="custom-link">{link.title}</a>}
+            renderInterceptor={link => (
+              <a href={link.href} data-testid="custom-link">
+                {link.title}
+              </a>
+            )}
           />
         );
 
@@ -99,7 +96,7 @@ describe('Links', () => {
           <Links
             links={links}
             onClick={onClick}
-            renderInterceptor={(link) =>
+            renderInterceptor={link =>
               link.rel === 'register' ? <span data-testid="custom-register">Custom</span> : link
             }
           />

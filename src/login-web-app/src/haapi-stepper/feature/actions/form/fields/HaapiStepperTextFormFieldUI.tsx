@@ -15,8 +15,11 @@ import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.type
 import type { HaapiStepperTextFormField, HaapiStepperUsernameFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
-
-export function HaapiStepperTextFormFieldUI({ field }: { field: HaapiStepperTextFormField | HaapiStepperUsernameFormField }): ReactElement {
+export function HaapiStepperTextFormFieldUI({
+  field,
+}: {
+  field: HaapiStepperTextFormField | HaapiStepperUsernameFormField;
+}): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const autoComplete = getTextAutoComplete(field);
   const inputId = `${action.id}-${field.name}-input`;

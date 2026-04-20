@@ -442,7 +442,6 @@ function cancelPendingOperation(pendingOperation: RefObject<AbortController | No
   }
 }
 
-
 function getInitialStepLink() {
   const initialStepLink: HaapiStepperLink = {
     href: configuration.initialUrl,

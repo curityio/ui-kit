@@ -156,8 +156,8 @@ export interface HaapiStepperHistoryEntry<T extends HaapiStepperStep = HaapiStep
  */
 export type HaapiStepperFormField = HaapiFormField & HaapiStepperFormFieldDataHelpers;
 export type HaapiStepperVisibleFormField = Exclude<
-    HaapiStepperFormField,
-    HaapiStepperHiddenFormField | HaapiStepperContextFormField
+  HaapiStepperFormField,
+  HaapiStepperHiddenFormField | HaapiStepperContextFormField
 >;
 export type HaapiStepperTextFormField = HaapiTextFormField & HaapiStepperFormFieldDataHelpers;
 export type HaapiStepperPasswordFormField = HaapiPasswordFormField & HaapiStepperFormFieldDataHelpers;

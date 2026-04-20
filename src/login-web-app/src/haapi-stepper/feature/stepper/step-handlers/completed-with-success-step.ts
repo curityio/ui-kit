@@ -18,9 +18,7 @@ export function handleCompletedWithSuccessStep(
   config: HaapiStepperConfig
 ) {
   if (config.redirectOnAuthenticationCompletedWithSuccess) {
-    const redirectHref = nextStepResponse.links?.find(
-      (link) => link.rel === 'authorization-response'
-    )?.href;
+    const redirectHref = nextStepResponse.links?.find(link => link.rel === 'authorization-response')?.href;
 
     if (!redirectHref) {
       throw new Error(
