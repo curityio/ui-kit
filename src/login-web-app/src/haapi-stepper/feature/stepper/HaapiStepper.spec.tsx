@@ -36,6 +36,7 @@ describe('HaapiStepper', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubGlobal('location', { href: '' });
     mockHaapiFetchStep(initialStepType);
   });
 
