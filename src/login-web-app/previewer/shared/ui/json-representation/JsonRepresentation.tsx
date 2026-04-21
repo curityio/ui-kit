@@ -9,8 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import JsonPrettify from '../../../../src/shared/ui/devbar/PrettyPrint';
-import { JsonValue } from '../../../../src/shared/ui/devbar/types';
+import JsonPrettify from './PrettyPrint';
+import { JsonValue } from './types';
 
 interface JsonRepresentationProps {
   data: unknown;
