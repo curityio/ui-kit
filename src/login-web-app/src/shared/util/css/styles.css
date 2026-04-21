@@ -196,6 +196,7 @@ svg {
   position: absolute;
   right: var(--space-1);
   vertical-align: middle;
+  top: calc(50%);
 }
 
 .haapi-stepper-form-field-password-visibility-toggle:focus-visible {
