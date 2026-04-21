@@ -10,7 +10,6 @@
  */
 
 import { Layout } from './shared/ui/Layout';
-import { DevBar } from './shared/ui/devbar/DevBar';
 import { ErrorBoundary } from './shared/feature/error-handling/ErrorBoundary';
 import { HaapiStepperStepUI } from './haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { HaapiStepper } from './haapi-stepper/feature/stepper/HaapiStepper';
@@ -20,7 +19,6 @@ export function App() {
     <ErrorBoundary>
       <HaapiStepper>
         <Layout>
-          <DevBar />
           <HaapiStepperStepUI />
         </Layout>
       </HaapiStepper>

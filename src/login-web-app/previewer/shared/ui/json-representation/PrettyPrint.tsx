@@ -1,5 +1,6 @@
 import { FC, ReactNode, useState } from 'react';
 import { JsonValue } from './types';
+import './pretty-print.css';
 
 interface JsonPrettifyProps {
   data: JsonValue;

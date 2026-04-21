@@ -1,0 +1,28 @@
+.json-pretty-print-root {
+  font-family: monospace;
+  font-size: 1em;
+}
+.json-pretty-print-string {
+  color: #690;
+}
+.json-pretty-print-number {
+  color: #905;
+}
+.json-pretty-print-boolean {
+  color: #07a;
+}
+.json-pretty-print-null {
+  color: #888;
+  font-style: italic;
+}
+.json-pretty-print-key {
+  color: #1c00cf;
+}
+.json-pretty-print-brace,
+.json-pretty-print-bracket {
+  color: #555;
+}
+.json-pretty-print-comma,
+.json-pretty-print-colon {
+  color: #aaa;
+}
