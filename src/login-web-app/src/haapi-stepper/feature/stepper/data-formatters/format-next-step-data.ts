@@ -26,7 +26,6 @@ import {
   HaapiStepperDataHelpers,
   HaapiStepperDataHelpersActionsMap,
   HaapiStepperLink,
-  HaapiStepperSelectorAction,
   HaapiStepperStep,
   HaapiStepperUserMessage,
 } from '../haapi-stepper.types';
@@ -68,17 +67,27 @@ function addActionDataHelpers(
 ): HaapiStepperAction {
   const actionWithDataHelpers = getElementWithDataHelpers(action);
 
-  if (action.template === HAAPI_ACTION_TYPES.SELECTOR) {
+  if (actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.FORM && actionWithDataHelpers.model.fields) {
     return {
       ...actionWithDataHelpers,
       model: {
-        ...action.model,
-        options: action.model.options.map(optionAction => addActionDataHelpers(optionAction, step)),
+        ...actionWithDataHelpers.model,
+        fields: actionWithDataHelpers.model.fields.map(field => ({ ...field, id: crypto.randomUUID() })),
       },
-    } as HaapiStepperSelectorAction;
+    };
   }
 
-  if (step.type === HAAPI_STEPS.POLLING && action.template === HAAPI_ACTION_TYPES.CLIENT_OPERATION) {
+  if (actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.SELECTOR) {
+    return {
+      ...actionWithDataHelpers,
+      model: {
+        ...actionWithDataHelpers.model,
+        options: actionWithDataHelpers.model.options.map(optionAction => addActionDataHelpers(optionAction, step)),
+      },
+    };
+  }
+
+  if (step.type === HAAPI_STEPS.POLLING && actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.CLIENT_OPERATION) {
     const clientOperationPollingAction = {
       ...actionWithDataHelpers,
       ...(step.properties.maxWaitTime != null && { maxWaitTime: step.properties.maxWaitTime }),
@@ -90,7 +99,7 @@ function addActionDataHelpers(
     return clientOperationPollingAction as HaapiStepperClientOperationAction;
   }
 
-  return { ...action, ...actionWithDataHelpers } as HaapiStepperAction;
+  return { ...action, ...actionWithDataHelpers };
 }
 
 function buildActionsMap(actions: HaapiStepperAction[]): HaapiStepperDataHelpersActionsMap {

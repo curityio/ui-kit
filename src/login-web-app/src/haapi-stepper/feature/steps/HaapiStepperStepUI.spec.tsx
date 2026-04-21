@@ -36,9 +36,9 @@ import type {
   HaapiStepperLink,
   HaapiStepperFormFieldRenderInterceptor,
   HaapiStepperFormState,
+  HaapiStepperVisibleFormField,
 } from '../stepper/haapi-stepper.types';
 import { HAAPI_FORM_FIELDS } from '../../data-access/types/haapi-form.types';
-import type { VisibleHaapiFormField } from '../../data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import { Actions } from '../../ui/actions/Actions';
 import {
@@ -47,7 +47,7 @@ import {
   HaapiBaseClientOperationModel,
 } from '../../data-access/types/haapi-action.types';
 import { HAAPI_STEPS, HAAPI_PROBLEM_STEPS } from '../../data-access/types/haapi-step.types';
-import { HaapiFormActionModel, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
+import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { HaapiStepperStepUI } from './HaapiStepperStepUI';
 import {
   createMockClientOperationAction,
@@ -63,7 +63,7 @@ import {
   MockMessageText,
   mockNextStep,
 } from '../../util/tests/mocks';
-import { HaapiStepperFormField } from '../actions/form/fields/HaapiStepperFormField';
+import { HaapiStepperFormFieldUI } from '../actions/form/fields/HaapiStepperFormFieldUI';
 
 const renderWithContext = (ui: React.ReactElement, contextValue: Partial<HaapiStepperAPI> = {}) => {
   const value: HaapiStepperAPI = {
@@ -1083,7 +1083,7 @@ describe('HaapiStepperStepUI', () => {
           if (field.name === 'country') {
             return (
               <div key={field.name} data-testid="country-wrapper">
-                <HaapiStepperFormField field={field} />
+                <HaapiStepperFormFieldUI field={field} />
                 <span data-testid={helperTestId}>Choose wisely</span>
               </div>
             );
@@ -1100,10 +1100,12 @@ describe('HaapiStepperStepUI', () => {
                 type: MEDIA_TYPES.FORM_URLENCODED,
                 fields: [
                   {
+                    id: crypto.randomUUID(),
                     type: HAAPI_FORM_FIELDS.USERNAME,
                     name: 'username',
                   },
                   {
+                    id: crypto.randomUUID(),
                     type: HAAPI_FORM_FIELDS.SELECT,
                     name: 'country',
                     options: [
@@ -1134,7 +1136,7 @@ describe('HaapiStepperStepUI', () => {
           field,
           formState,
         }: {
-          field: VisibleHaapiFormField;
+          field: HaapiStepperVisibleFormField;
           formState: HaapiStepperFormState;
         }) => {
           useEffect(() => {
@@ -1146,7 +1148,7 @@ describe('HaapiStepperStepUI', () => {
 
           return (
             <div>
-              <HaapiStepperFormField field={field} />
+              <HaapiStepperFormFieldUI field={field} />
             </div>
           );
         };
@@ -1676,12 +1678,12 @@ describe('HaapiStepperStepUI', () => {
               createMockFormAction({
                 title: 'Login',
                 kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
-                model: { actionTitle: 'Login' } as HaapiFormActionModel,
+                model: { actionTitle: 'Login' } as HaapiStepperFormAction['model'],
               }),
               createMockFormAction({
                 title: 'Cancel',
                 kind: HAAPI_FORM_ACTION_KINDS.CANCEL,
-                model: { actionTitle: 'Cancel' } as HaapiFormActionModel,
+                model: { actionTitle: 'Cancel' } as HaapiStepperFormAction['model'],
               }),
             ],
           });

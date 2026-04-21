@@ -46,7 +46,7 @@ interface LinksProps {
 export function Links({ links, onClick, renderInterceptor }: LinksProps) {
   return (
     <HaapiStepperQrCodeLinkDialog links={links}>
-      {(displayQrCodeInDialog) => {
+      {displayQrCodeInDialog => {
         const handleLinkClick = (link: HaapiStepperLink) => {
           if (link.subtype?.startsWith('image/')) {
             displayQrCodeInDialog(link);
@@ -55,7 +55,7 @@ export function Links({ links, onClick, renderInterceptor }: LinksProps) {
           }
         };
 
-        const linkElements = applyRenderInterceptor(links, renderInterceptor, (link) =>
+        const linkElements = applyRenderInterceptor(links, renderInterceptor, link =>
           defaultHaapiStepperLinkElementFactory(link, handleLinkClick)
         );
 
