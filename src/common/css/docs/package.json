@@ -15,12 +15,12 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.12",
+    "@astrojs/mdx": "^5.0.3",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "^4.4.2",
     "@curity/ui-kit-css": "*",
     "@curity/ui-kit-icons": "*",
-    "astro": "^5.16.1",
+    "astro": "^6.1.8",
     "mdast-util-to-string": "3.2.0",
     "react": "19.1.0",
     "react-compiler-runtime": "^19.0.0-beta-63e3235-20250105",
