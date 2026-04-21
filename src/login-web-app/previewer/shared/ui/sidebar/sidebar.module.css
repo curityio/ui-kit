@@ -64,9 +64,8 @@ li span {
   pointer-events: none;
 }
 
-input[type='search']:is(.search-input) {
-  width: 100%;
-  padding-inline-start: calc(var(--space-2) * 2.5);
+.search-input.search-input {
+  padding-left: calc(var(--space-2) * 2.5);
 }
 
 .sidebar [aria-current='page'] {

@@ -8,8 +8,8 @@
  *
  * For further information, please contact Curity AB.
  */
- .btn,
-.button {
+.button,
+.btn {
   --y-tiny: 0.75;
   --x-tiny: 1;
 
@@ -88,8 +88,8 @@ button svg {
   color: white;
 }
 
-.btn,
-.button-primary {
+.button-primary,
+.btn {
   background-color: var(--button-background-color);
   border: 1px solid var(--button-border-color);
   color: white;
@@ -209,15 +209,15 @@ button svg {
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
 }
 
-[type='submit']:where(:not(.button-tiny, .button-small, .button-large)),
-.button-medium {
+.button-medium,
+[type='submit']:where(:not(.button-tiny, .button-small, .button-large)) {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
   padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
   padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
-  margin-block-start: var(--space-2);
+
 
   &:where(:not([class*='-outline'])) {
     color: white;

@@ -1,4 +1,4 @@
-import { IconGeneralClose } from '@icons';
+import { IconGeneralClose } from '@curity/ui-kit-icons';
 import { ReactNode, useEffect, useState } from 'react';
 import styles from '../../feature/stepper/haapi-error-notifier.module.css';
 import { useHaapiStepper } from './HaapiStepperHook';

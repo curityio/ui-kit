@@ -1,4 +1,3 @@
-import { IconAuthenticatorHtml } from '@icons';
 import { useEffect, useState } from 'react';
 import { Spinner } from '../Spinner';
 import classes from './devbar.module.css';
@@ -33,7 +32,6 @@ export const DevBar = () => {
         >
           <div className="flex flex-gap-2 justify-between w100">
             <div className="flex flex-gap-1">
-              <IconAuthenticatorHtml width={24} height={24} />
               Click to {showDevNav ? 'hide' : 'view'} JSON representation{' '}
               {showDevNav ? (
                 <div className="inline-flex ml1">

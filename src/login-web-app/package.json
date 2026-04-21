@@ -27,6 +27,7 @@
     "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib"
   },
   "dependencies": {
+    "@curity/ui-kit-icons": "^1.0.0",
     "@curity/identityserver-haapi-web-driver": "^1.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

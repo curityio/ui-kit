@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { IconVciCredentialHome } from '@icons';
+import { IconVciCredentialHome } from '@curity/ui-kit-icons';
 import classes from './header.module.css';
 
 export const Header = () => {
