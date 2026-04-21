@@ -85,7 +85,6 @@
                 logger.debug("Not launching the app since the user previously cancelled in the app");
             #else
                 if (!browserStrategy.neverAutoLaunch) {
-                    logger.debug("Launching the app");
                     browserStrategy.launchApp();
                 } else {
                     logger.debug("Not launching the app per browser strategy configuration");
