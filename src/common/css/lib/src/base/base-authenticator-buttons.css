@@ -21,6 +21,8 @@ a.button-social,
   border-style: var(--form-field-border-style);
   border-width: var(--form-field-border-width);
   color: var(--button-color);
+  position: relative;
+  z-index: 2;
   margin: 0;
   text-align: left;
   transition:
@@ -52,7 +54,7 @@ button.button-social .icon,
 a.button-social .icon,
 .button-social .icon {
   align-items: center;
-  background-color: var(--color-primary);
+  background-color: var(--authenticator-color, var(--color-primary));
   border-bottom-left-radius: var(--button-border-radius);
   border-top-left-radius: var(--button-border-radius);
   box-sizing: border-box;
@@ -64,6 +66,7 @@ a.button-social .icon,
   justify-content: center;
   left: 0;
   position: absolute;
+  z-index: 1;
   top: 0;
   width: 60px;
 }
@@ -102,174 +105,42 @@ a.button-social-icon .icon,
   color: black;
 }
 
-button.button-social.button-google .icon,
-.button-social.button-google .icon {
-  background-color: var(--authenticator-google-color);
-}
-
-button.button-social.button-pingfederate .icon,
-.button-social.button-pingfederate .icon {
-  background-color: var(--authenticator-pingfederate-color);
-}
-
-button.button-social.button-email .icon,
-.button-social.button-email .icon {
-  background-color: var(--authenticator-email-color);
-}
-
-button.button-social.button-oidc .icon,
-.button-social.button-oidc .icon {
-  background-color: var(--authenticator-oidc-color);
-}
-
-button.button-social.button-group .icon,
-.button-social.button-group .icon {
-  background-color: var(--authenticator-group-color);
-}
-
-button.button-social.button-windows .icon,
-.button-social.button-windows .icon {
-  background-color: var(--authenticator-windows-color);
-}
-
-button.button-social.button-siths .icon,
-.button-social.button-siths .icon {
-  background-color: var(--authenticator-siths-color);
-}
-
-button.button-social.button-facebook .icon,
-.button-social.button-facebook .icon {
-  background-color: var(--authenticator-facebook-color);
-}
-
-button.button-social.button-github .icon,
-.button-social.button-github .icon {
-  background-color: var(--authenticator-github-color);
-}
-
-button.button-social.button-dropbox .icon,
-.button-social.button-dropbox .icon {
-  background-color: var(--authenticator-dropbox-color);
-}
-
-button.button-social.button-aws .icon,
-.button-social.button-aws .icon {
-  background-color: var(--authenticator-aws-color);
-}
-
-button.button-social.button-salesforce .icon,
-.button-social.button-salesforce .icon {
-  background-color: var(--authenticator-salesforce-color);
-}
-
-button.button-social.button-windows-live .icon,
-.button-social.button-windows-live .icon {
-  background-color: var(--authenticator-windows-live-color);
-}
-
-button.button-social.button-slack .icon,
-.button-social.button-slack .icon {
-  background-color: var(--authenticator-slack-color);
-}
-
-button.button-social.button-box .icon,
-.button-social.button-box .icon {
-  background-color: var(--authenticator-box-color);
-}
-
-button.button-social.button-bitbucket .icon,
-.button-social.button-bitbucket .icon {
-  background-color: var(--authenticator-bitbucket-color);
-}
-
-button.button-social.button-signicat .icon,
-.button-social.button-signicat .icon {
-  background-color: var(--authenticator-signicat-color);
-}
-
-button.button-social.button-criipto .icon,
-.button-social.button-criipto .icon {
-  background-color: var(--authenticator-criipto-color);
-}
-
-button.button-social.button-username .icon,
-.button-social.button-username .icon {
-  background-color: var(--authenticator-username-color);
-}
-
-button.button-social.button-stackexchange .icon,
-.button-social.button-stackexchange .icon {
-  background-color: var(--authenticator-stackexchange-color);
-}
-
-button.button-social.button-freja-eid .icon,
-.button-social.button-freja-eid .icon {
-  background-color: var(--authenticator-freja-eid-color);
-}
-
-button.button-social.button-cgi .icon,
-.button-social.button-cgi .icon {
-  background-color: var(--authenticator-cgi-color);
-}
-
-button.button-social.button-instagram .icon,
-.button-social.button-instagram .icon {
-  background-color: var(--authenticator-instagram-color);
-}
-
-button.button-social.button-twitter .icon,
-.button-social.button-twitter .icon {
-  background-color: var(--authenticator-x-color);
-}
-
-button.button-social.button-linkedin .icon,
-.button-social.button-linkedin .icon {
-  background-color: var(--authenticator-linkedin-color);
-}
-
-button.button-social.button-sms .icon,
-.button-social.button-sms .icon {
-  background-color: var(--authenticator-sms-color);
-}
-
-button.button-social.button-html-form .icon,
-.button-social.button-html-form .icon {
-  background-color: var(--authenticator-html-form-color);
-}
-
-button.button-social.button-totp .icon,
-.button-social.button-totp .icon {
-  background-color: var(--authenticator-totp-color);
-}
-
-button.button-social.button-saml .icon,
-.button-social.button-saml .icon {
-  background-color: var(--authenticator-saml-color);
-}
-
-button.button-social.button-bankid .icon,
-.button-social.button-bankid .icon {
-  background-color: var(--authenticator-bankid-color);
-}
-
-button.button-social.button-duo .icon,
-.button-social.button-duo .icon {
-  background-color: var(--authenticator-duo-color);
-}
-
-button.button-social.button-sign-in-with-apple .icon,
-.button-social.button-sign-in-with-apple .icon {
-  background-color: var(--authenticator-sign-in-with-apple-color);
-}
-
-button.button-social.button-netidaccess-os .icon,
-.button-social.button-netidaccess-os .icon {
-  background-color: var(--authenticator-netidaccess-os-color);
-}
-
-button.button-social.button-social-single-color .icon,
-.button-social.button-social-single-color .icon {
-  background-color: var(--authenticator-social-single-color);
+.button-social {
+  &.button-google { --authenticator-color: var(--authenticator-google-color); }
+  &.button-pingfederate { --authenticator-color: var(--authenticator-pingfederate-color); }
+  &.button-email { --authenticator-color: var(--authenticator-email-color); }
+  &.button-oidc { --authenticator-color: var(--authenticator-oidc-color); }
+  &.button-group { --authenticator-color: var(--authenticator-group-color); }
+  &.button-windows { --authenticator-color: var(--authenticator-windows-color); }
+  &.button-siths { --authenticator-color: var(--authenticator-siths-color); }
+  &.button-facebook { --authenticator-color: var(--authenticator-facebook-color); }
+  &.button-github { --authenticator-color: var(--authenticator-github-color); }
+  &.button-dropbox { --authenticator-color: var(--authenticator-dropbox-color); }
+  &.button-aws { --authenticator-color: var(--authenticator-aws-color); }
+  &.button-salesforce { --authenticator-color: var(--authenticator-salesforce-color); }
+  &.button-windows-live { --authenticator-color: var(--authenticator-windows-live-color); }
+  &.button-slack { --authenticator-color: var(--authenticator-slack-color); }
+  &.button-box { --authenticator-color: var(--authenticator-box-color); }
+  &.button-bitbucket { --authenticator-color: var(--authenticator-bitbucket-color); }
+  &.button-signicat { --authenticator-color: var(--authenticator-signicat-color); }
+  &.button-criipto { --authenticator-color: var(--authenticator-criipto-color); }
+  &.button-username { --authenticator-color: var(--authenticator-username-color); }
+  &.button-stackexchange { --authenticator-color: var(--authenticator-stackexchange-color); }
+  &.button-freja-eid { --authenticator-color: var(--authenticator-freja-eid-color); }
+  &.button-cgi { --authenticator-color: var(--authenticator-cgi-color); }
+  &.button-instagram { --authenticator-color: var(--authenticator-instagram-color); }
+  &.button-twitter { --authenticator-color: var(--authenticator-x-color); }
+  &.button-linkedin { --authenticator-color: var(--authenticator-linkedin-color); }
+  &.button-sms { --authenticator-color: var(--authenticator-sms-color); }
+  &.button-html-form { --authenticator-color: var(--authenticator-html-form-color); }
+  &.button-totp { --authenticator-color: var(--authenticator-totp-color); }
+  &.button-saml { --authenticator-color: var(--authenticator-saml-color); }
+  &.button-bankid { --authenticator-color: var(--authenticator-bankid-color); }
+  &.button-duo { --authenticator-color: var(--authenticator-duo-color); }
+  &.button-sign-in-with-apple { --authenticator-color: var(--authenticator-sign-in-with-apple-color); }
+  &.button-netidaccess-os { --authenticator-color: var(--authenticator-netidaccess-os-color); }
+  &.button-openid-wallet { --authenticator-color: var(--authenticator-openid-wallet-color); }
+  &.button-social-single-color { --authenticator-color: var(--authenticator-social-single-color); }
 }
 
 .form-field-social-icon {
