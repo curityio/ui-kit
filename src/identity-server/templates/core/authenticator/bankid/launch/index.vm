@@ -35,6 +35,11 @@
 #else
     #set($qr_time_left = $_maxWaitTime / 60)
 #end
+#if($_flowMode == 'cross-device' || $_flowMode == 'same-device')
+    #set($extendUrl="${_authUrl}?flowMode=$_flowMode")
+#else
+    #set($extendUrl=$_authUrl)
+#end
 #set($qr_time_elapsed = 0)
 <iframe id="autoStart" height="0" width="0" frameborder="0"></iframe>
     <h1 class="center">#message("${_templatePrefix}.page.title")</h1>
@@ -52,7 +57,7 @@
                     <span id="qr-time-label-seconds" #if($_maxWaitTime >= 60) class="hide"#end>#message("${_templatePrefix}.view.qr.seconds-left")</span>
                  </p>
                  <div class="mt2">
-                    <a class="button button-tiny button-primary-outline" id="qr-time-extend" href="$_authUrl">
+                    <a class="button button-tiny button-primary-outline" id="qr-time-extend" href="$extendUrl">
                     #message("${_templatePrefix}.view.button.qr-time-extend")
                     </a>
                  </div>
