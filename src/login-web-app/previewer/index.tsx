@@ -17,7 +17,7 @@ import '@css/styles.css';
 import './shared/styles/previewer.css';
 
 createRoot(required(document.getElementById('root'))).render(
-    <StrictMode>
-        <Previewer />
-    </StrictMode>
+  <StrictMode>
+    <Previewer />
+  </StrictMode>
 );
