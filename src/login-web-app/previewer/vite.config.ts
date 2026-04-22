@@ -6,16 +6,16 @@ import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [react()],
-    publicDir: path.resolve(__dirname, '../public'),
-    css: {
-        postcss: {
-            plugins: [postcssImport(), postcssExtendRule()],
-        },
+  plugins: [react()],
+  publicDir: path.resolve(__dirname, '../public'),
+  css: {
+    postcss: {
+      plugins: [postcssImport(), postcssExtendRule()],
     },
-    resolve: {
-        alias: {
-            '@css': path.resolve(__dirname, '../src/shared/util/css'),
-        },
+  },
+  resolve: {
+    alias: {
+      '@css': path.resolve(__dirname, '../src/shared/util/css'),
     },
+  },
 });

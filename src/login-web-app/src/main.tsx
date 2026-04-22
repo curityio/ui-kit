@@ -17,7 +17,7 @@ import { required } from './shared/util/type-utils';
 import '@css/styles.css';
 
 createRoot(required(document.getElementById('root'))).render(
-    <StrictMode>
-        <App />
-    </StrictMode>
+  <StrictMode>
+    <App />
+  </StrictMode>
 );
