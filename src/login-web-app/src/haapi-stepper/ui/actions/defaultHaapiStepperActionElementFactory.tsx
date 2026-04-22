@@ -18,9 +18,9 @@ import type {
   HaapiStepperNextStep,
   HaapiStepperFormFieldRenderInterceptor,
 } from '../../feature/stepper/haapi-stepper.types';
-import { HaapiStepperForm } from '../../feature/actions/form/HaapiStepperForm';
-import { ClientOperation } from '../../feature/actions/client-operation/ClientOperation';
-import { HaapiSelector } from '../../feature/actions/selector/HaapiSelector';
+import { HaapiStepperFormUI } from '../../feature/actions/form/HaapiStepperFormUI';
+import { HaapiStepperClientOperationUI } from '../../feature/actions/client-operation/HaapiStepperClientOperationUI';
+import { HaapiStepperSelectorUI } from '../../feature/actions/selector/HaapiStepperSelectorUI';
 
 export default function defaultHaapiStepperActionElementFactory(
   action: HaapiStepperAction,
@@ -30,7 +30,7 @@ export default function defaultHaapiStepperActionElementFactory(
   switch (action.subtype) {
     case HAAPI_ACTION_TYPES.FORM:
       return (
-        <HaapiStepperForm
+        <HaapiStepperFormUI
           key={`form-${action.model.href}`}
           action={action}
           onSubmit={onAction}
@@ -39,9 +39,11 @@ export default function defaultHaapiStepperActionElementFactory(
       );
 
     case HAAPI_ACTION_TYPES.CLIENT_OPERATION:
-      return <ClientOperation key={`clientop-${action.model.name}`} action={action} onAction={onAction} />;
+      return (
+        <HaapiStepperClientOperationUI key={`clientop-${action.model.name}`} action={action} onAction={onAction} />
+      );
 
     case HAAPI_ACTION_TYPES.SELECTOR:
-      return <HaapiSelector key={`selector-${action.title ?? ''}`} action={action} onSubmit={onAction} />;
+      return <HaapiStepperSelectorUI key={`selector-${action.title ?? ''}`} action={action} onSubmit={onAction} />;
   }
 }

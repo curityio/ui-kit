@@ -16,9 +16,9 @@ import {
   HaapiStepperNextStep,
   HaapiStepperSelectorAction,
 } from '../../feature/stepper/haapi-stepper.types';
-import { Actions } from './Actions';
+import { HaapiStepperActionsUI } from './HaapiStepperActionsUI';
 
-describe('Actions', () => {
+describe('HaapiStepperActionsUI', () => {
   let onAction: HaapiStepperNextStep<HaapiStepperFormAction | HaapiStepperClientOperationAction>;
   let user: ReturnType<typeof userEvent.setup>;
 
@@ -29,7 +29,7 @@ describe('Actions', () => {
 
   describe('Default Rendering', () => {
     it('should render null when actions are not provided', () => {
-      const { container } = render(<Actions actions={undefined} onAction={onAction} />);
+      const { container } = render(<HaapiStepperActionsUI actions={undefined} onAction={onAction} />);
 
       expect(container.firstChild).toBeNull();
     });
@@ -41,7 +41,7 @@ describe('Actions', () => {
       });
       const clientAction = createMockClientOperationAction({ title: 'External Flow' });
 
-      render(<Actions actions={[formAction, clientAction]} onAction={onAction} />);
+      render(<HaapiStepperActionsUI actions={[formAction, clientAction]} onAction={onAction} />);
 
       const formElement = screen.getByTestId('form-action');
       const submitButton = within(formElement).getByRole('button', { name: 'Submit Login' });
@@ -65,7 +65,7 @@ describe('Actions', () => {
           }),
         ];
 
-        render(<Actions actions={actions} onAction={onAction} />);
+        render(<HaapiStepperActionsUI actions={actions} onAction={onAction} />);
 
         const container = screen.getByTestId('actions');
         expect(container.tagName).toBe('DIV');
@@ -83,7 +83,7 @@ describe('Actions', () => {
         const selectorAction = createMockSelectorAction({ title: 'Selector Action' });
         const clientAction = createMockClientOperationAction({ title: 'Client Action' });
 
-        render(<Actions actions={[formAction, selectorAction, clientAction]} onAction={onAction} />);
+        render(<HaapiStepperActionsUI actions={[formAction, selectorAction, clientAction]} onAction={onAction} />);
 
         const formElement = screen.getAllByTestId('form-action')[0];
         expect(within(formElement).getByRole('button', { name: 'Submit Form' })).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('Actions', () => {
       it('should render inside a custom container element when provided', () => {
         const actions = [createMockFormAction({ title: 'Login' })];
 
-        render(<Actions actions={actions} onAction={onAction} container="section" />);
+        render(<HaapiStepperActionsUI actions={actions} onAction={onAction} container="section" />);
 
         expect(screen.getByTestId('actions').tagName).toBe('SECTION');
       });
@@ -111,7 +111,7 @@ describe('Actions', () => {
       it('should skip the container when container is null', () => {
         const actions = [createMockFormAction({ title: 'Login' })];
 
-        render(<Actions actions={actions} onAction={onAction} container={null} />);
+        render(<HaapiStepperActionsUI actions={actions} onAction={onAction} container={null} />);
 
         expect(screen.queryByTestId('actions')).not.toBeInTheDocument();
         expect(screen.getByTestId('form-action')).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe('Actions', () => {
           });
 
           render(
-            <Actions
+            <HaapiStepperActionsUI
               actions={[formAction, selectorAction, clientAction]}
               onAction={onAction}
               formActionRenderInterceptor={formInterceptor}
@@ -168,7 +168,7 @@ describe('Actions', () => {
           const clientAction = createMockClientOperationAction({ title: 'Client Action' });
 
           render(
-            <Actions
+            <HaapiStepperActionsUI
               actions={[formAction, selectorAction, clientAction]}
               onAction={onAction}
               formActionRenderInterceptor={() => <div data-testid="custom-form">Custom Form</div>}
@@ -191,7 +191,7 @@ describe('Actions', () => {
           const clientAction = createMockClientOperationAction({ title: 'Client Action' });
 
           const { container } = render(
-            <Actions
+            <HaapiStepperActionsUI
               actions={[formAction, selectorAction, clientAction]}
               onAction={onAction}
               formActionRenderInterceptor={() => null}

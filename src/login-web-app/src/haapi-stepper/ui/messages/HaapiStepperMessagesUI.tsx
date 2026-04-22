@@ -12,9 +12,9 @@
 import { ReactElement } from 'react';
 import { HaapiStepperUserMessage } from '../../feature/stepper/haapi-stepper.types';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
-import { defaultMessageElementFactory } from './defaultHaapiStepperMessageElementFactory';
+import { defaultHaapiStepperMessageElementFactory } from './defaultHaapiStepperMessageElementFactory';
 
-interface MessagesProps {
+interface HaapiStepperMessagesUIProps {
   messages?: HaapiStepperUserMessage[];
   renderInterceptor?: (message: HaapiStepperUserMessage) => ReactElement | HaapiStepperUserMessage | null | undefined;
 }
@@ -35,7 +35,7 @@ interface MessagesProps {
  *   const { currentStep } = useHaapiStepper();
  *   const messages = currentStep?.dataHelpers.messages;
  *
- *   return <Messages messages={messages} />;
+ *   return <HaapiStepperMessagesUI messages={messages} />;
  * }
  *
  * <HaapiStepper>
@@ -43,8 +43,8 @@ interface MessagesProps {
  * </HaapiStepper>
  * ```
  */
-export function Messages({ messages, renderInterceptor }: MessagesProps) {
-  const messageElements = applyRenderInterceptor(messages, renderInterceptor, defaultMessageElementFactory);
+export function HaapiStepperMessagesUI({ messages, renderInterceptor }: HaapiStepperMessagesUIProps) {
+  const messageElements = applyRenderInterceptor(messages, renderInterceptor, defaultHaapiStepperMessageElementFactory);
 
   return messageElements.length ? (
     <div className="haapi-stepper-messages" data-testid="messages">

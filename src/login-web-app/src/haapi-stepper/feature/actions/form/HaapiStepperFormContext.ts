@@ -26,7 +26,7 @@ export function useHaapiStepperForm(): HaapiStepperFormContextValue {
   // eslint-disable-next-line @eslint-react/no-use-context -- useContext is preferred here over use() to keep explicit null handling
   const context = useContext(HaapiStepperFormContext);
   if (!context) {
-    throw new Error('useHaapiStepperForm must be used within a <HaapiStepperForm>.');
+    throw new Error('useHaapiStepperForm must be used within a <HaapiStepperFormUI>.');
   }
   return context;
 }

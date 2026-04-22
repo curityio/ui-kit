@@ -21,9 +21,9 @@ export * from './stepper/data-formatters/problem-step';
 
 export * from './steps/HaapiStepperStepUI';
 
-export * from './actions/form/HaapiStepperForm';
+export * from './actions/form/HaapiStepperFormUI';
 export * from './actions/form/HaapiStepperFormValidationErrorInputWrapper';
 export * from './actions/form/HaapiStepperFormHook';
-export * from './actions/client-operation/ClientOperation';
+export * from './actions/client-operation/HaapiStepperClientOperationUI';
 export * from './actions/client-operation/client-operations';
-export * from './actions/selector/HaapiSelector';
+export * from './actions/selector/HaapiStepperSelectorUI';

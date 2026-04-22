@@ -1,7 +1,7 @@
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
-import { Link } from './Link';
+import { HaapiStepperLinkUI } from './HaapiStepperLinkUI';
 
 export const defaultHaapiStepperLinkElementFactory = (
   link: HaapiStepperLink,
   onClick: (link: HaapiStepperLink) => void
-) => <Link link={link} onClick={onClick} />;
+) => <HaapiStepperLinkUI link={link} onClick={onClick} />;

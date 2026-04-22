@@ -12,7 +12,7 @@
 import { ReactNode } from 'react';
 import { HaapiStepperClientOperationAction, HaapiStepperFormAction } from '../../stepper/haapi-stepper.types';
 
-interface ClientOperationProps {
+interface HaapiStepperClientOperationUIProps {
   action: HaapiStepperClientOperationAction;
   onAction: (action: HaapiStepperClientOperationAction | HaapiStepperFormAction) => void;
   showBankIdSessionTimeLeft?: boolean;
@@ -37,7 +37,7 @@ interface ClientOperationProps {
  *   const { currentStep, nextStep } = useHaapiStepper(); *
  *   const clientOperationAction = currentStep?.dataHelpers.clientOperationActions?.[0];
  *
- *   return { clientOperationAction && <ClientOperation action={clientOperationAction} onAction={nextStep} /> };
+ *   return { clientOperationAction && <HaapiStepperClientOperationUI action={clientOperationAction} onAction={nextStep} /> };
  * }
  *
  * <HaapiStepper>
@@ -45,12 +45,12 @@ interface ClientOperationProps {
  * </HaapiStepper>
  * ```
  */
-export function ClientOperation({
+export function HaapiStepperClientOperationUI({
   action,
   onAction,
   showBankIdSessionTimeLeft = true,
   render = defaultRenderClientOperation,
-}: ClientOperationProps) {
+}: HaapiStepperClientOperationUIProps) {
   return render(action, onAction, showBankIdSessionTimeLeft);
 }
 
