@@ -126,7 +126,7 @@ describe('HaapiStepperFormFieldUI', () => {
       expect(input).toHaveAttribute('type', 'checkbox');
     });
 
-    it('should render a select element for SELECT fields', () => {
+    it('should render a select element with options for SELECT fields', () => {
       const action = createFormActionWithField({
         id: 'country-id',
         type: HAAPI_FORM_FIELDS.SELECT,
@@ -153,6 +153,19 @@ describe('HaapiStepperFormFieldUI', () => {
       const select = screen.getByTestId('haapi-form-field-select-country');
       expect(select).toBeInTheDocument();
       expect(select.tagName).toBe('SELECT');
+      expect(select).toHaveAttribute('name', 'country');
+
+      const label = screen.getByText('Country');
+      expect(label).toBeInTheDocument();
+      expect(label.tagName).toBe('LABEL');
+      expect(label).toHaveAttribute('for', select.getAttribute('id'));
+
+      const options = screen.getAllByRole('option');
+      expect(options).toHaveLength(2);
+      expect(options[0]).toHaveTextContent('Sweden');
+      expect(options[0]).toHaveValue('SE');
+      expect(options[1]).toHaveTextContent('Canada');
+      expect(options[1]).toHaveValue('CA');
     });
   });
 
