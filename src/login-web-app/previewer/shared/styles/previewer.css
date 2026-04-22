@@ -11,5 +11,5 @@
 }
 
 .start-page-image {
-    max-width: var(--intro-image-max-width);
+  max-width: var(--intro-image-max-width);
 }
