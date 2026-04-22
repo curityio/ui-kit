@@ -129,7 +129,11 @@ svg {
 
 /* Stepper styles */
 .haapi-stepper-selector {
-  @extend .center, .py2;
+  @extend .flex, .flex-column, .flex-gap-1, .py2;
+}
+
+.haapi-stepper-selector-option {
+  @extend .button, .button-medium, .button-primary, .button-social, .w100, .relative;
 }
 
 .haapi-stepper-messages {
