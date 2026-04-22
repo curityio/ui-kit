@@ -68,7 +68,7 @@ a.button-social .icon,
   position: absolute;
   z-index: 1;
   top: 0;
-  width: 60px;
+  width: var(--icon-width);
 }
 
 button[type='submit'].button-social:hover,
