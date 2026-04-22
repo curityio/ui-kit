@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { HAAPI_ACTION_TYPES } from '../../../data-access/types/haapi-action.types';
+import { HAAPI_ACTION_TYPES, HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import type { HaapiStepperNextStep } from '../../stepper/haapi-stepper.types';
 import {
   HaapiStepperClientOperationAction,
@@ -17,6 +17,7 @@ import {
   HaapiStepperSelectorAction,
 } from '../../stepper/haapi-stepper.types';
 import { HaapiStepperForm } from '../form/HaapiStepperForm';
+import { HaapiSelectorOption } from './HaapiSelectorOption';
 
 interface HaapiSelectorProps {
   action: HaapiStepperSelectorAction;
@@ -50,9 +51,12 @@ export function HaapiSelector({ action, onSubmit }: HaapiSelectorProps) {
 
   return (
     <div className="haapi-stepper-selector" key={action.id} data-testid="selector-action">
-      {action.title && <h3 data-testid="form-selector-title">{action.title}</h3>}
+      {action.title && <h2 data-testid="form-selector-title">{action.title}</h2>}
       {options.map(option => {
         if (option.subtype === HAAPI_ACTION_TYPES.FORM) {
+          if (option.kind === HAAPI_FORM_ACTION_KINDS.AUTHENTICATOR_SELECTOR_OPTION) {
+            return <HaapiSelectorOption key={option.id} action={option} onSubmit={onSubmit} />;
+          }
           return <HaapiStepperForm key={option.id} action={option} onSubmit={onSubmit} />;
         }
       })}
