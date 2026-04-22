@@ -9,8 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-// eslint-disable-next-line @eslint-react/no-use-context
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 import { HaapiStepperFormAction, HaapiStepperFormState } from '../../stepper/haapi-stepper.types';
 
@@ -23,8 +22,7 @@ export interface HaapiStepperFormContextValue {
 export const HaapiStepperFormContext = createContext<HaapiStepperFormContextValue | null>(null);
 
 export function useHaapiStepperForm(): HaapiStepperFormContextValue {
-  // eslint-disable-next-line @eslint-react/no-use-context -- useContext is preferred here over use() to keep explicit null handling
-  const context = useContext(HaapiStepperFormContext);
+  const context = use(HaapiStepperFormContext);
   if (!context) {
     throw new Error('useHaapiStepperForm must be used within a <HaapiStepperForm>.');
   }
