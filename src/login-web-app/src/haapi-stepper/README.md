@@ -28,7 +28,7 @@ The HAAPI Frontend Library is a set of React components that provides:
       <HaapiStepperStepUI />
     </HaapiStepper>
   ```
- - A simple toolbox to fully customize HAAPI flows in the frontend, composed of the [HAAPI Stepper](#haapi-stepper), [HAAPI UI Step](#haapi-ui-step), and [HAAPI UI Components](#haapi-ui-components).
+ - A simple toolbox to fully customize HAAPI flows in the frontend, composed of the [HAAPI Stepper](#haapi-stepper), [HAAPI UI Step](#haapi-ui-step), and [HAAPI UI Components](#haapi-stepper-ui-components).
 
 ## HAAPI Stepper
 
@@ -92,7 +92,7 @@ function App() {
 
 Because `HaapiStepper` does not have a UI, it can be used to build custom flow user interfaces from scratch, or it can be used in combination with the [HaapiStepperStepUI](#haapi-ui-step) component, which provides a ready-to-use, highly customizable, HAAPI UI solution.
 
-Finally, the `HaapiStepper` can be used in combination with the built-in [HAAPI UI Components](#haapi-ui-components), which help create highly customized UIs while relying on some defaults.
+Finally, the `HaapiStepper` can be used in combination with the built-in [HAAPI UI Components](#haapi-stepper-ui-components), which help create highly customized UIs while relying on some defaults.
 
 Check out [the HaapiStepper documentation and usage examples](./feature/stepper/HaapiStepper.tsx)
 
@@ -132,7 +132,6 @@ Check out documentation and usage examples in the links below:
 * [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
 * [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
 * [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
-* [HaapiStepperMessageUI](./ui/messages/HaapiStepperMessageUI.tsx)
 * [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
 * [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
 

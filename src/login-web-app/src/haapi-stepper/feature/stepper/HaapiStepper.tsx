@@ -116,7 +116,7 @@ type SetCurrentStepAndUpdateHistoryFn = (
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
- * import { Form } from '../actions/form/Form';
+ * import { HaapiStepperFormUI } from '../actions/form/HaapiStepperFormUI';
  * import { HaapiStepperClientOperationUI } from '../actions/client-operation/HaapiStepperClientOperationUI';
  * import { HaapiStepperSelectorUI } from '../actions/selector/HaapiStepperSelectorUI';
  *
@@ -131,11 +131,11 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *     return <div>Error: {error.app.title}</div>;
  *   }
  *
- *   const { formActions, clientOperationActions, links } = currentStep.dataHelpers || {};
+ *   const { formActions, selectorActions, clientOperationActions, links } = currentStep.dataHelpers || {};
  *
  *   return (
  *     <>
- *       {formActions?.map((action) => (<Form key={action.kind} action={action} onSubmit={nextStep} />))}
+ *       {formActions?.map((action) => (<HaapiStepperFormUI key={action.kind} action={action} onSubmit={nextStep} />))}
  *       {selectorActions?.map(action => <HaapiStepperSelectorUI key={action.kind} action={action} onSubmit={nextStep} />)}
  *       {clientOperationActions?.map((action) => (<HaapiStepperClientOperationUI key={action.kind} action={action} onAction={nextStep} /> ))}
  *       {links?.map(link => (
