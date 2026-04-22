@@ -39,8 +39,7 @@ interface HaapiStepperFormProps {
  *
  * ## BUILT-IN HAAPI FORM ACTION SUPPORT
  *
- * Renders a HAAPI form action inside the stepper. Tests in
- * `haapi-stepper/feature/actions/form/HaapiStepperForm.spec.tsx` cover the supported usage patterns:
+ * Renders a HAAPI form action inside the stepper. [Tests](./HaapiStepperForm.spec.tsx) cover the supported usage patterns:
  *
  * @example
  * ```tsx
@@ -61,7 +60,7 @@ interface HaapiStepperFormProps {
  *
  * Use {@link HaapiStepperFormFieldRenderInterceptor} to adjust data, swap components, or omit fields while still
  * leveraging the built-in state management. The interceptor mirrors the “Data customization” and “UI
- * customization” tests.
+ * customization” [tests](./HaapiStepperForm.spec.tsx).
  *
  * The `formFieldRenderInterceptor` is better suited for customization of form fields. For form-level customization
  * (e.g. adding elements between fields, field group customizations), consider using the `children` render interceptor
@@ -110,7 +109,7 @@ interface HaapiStepperFormProps {
  *
  * Passing `children` to the `HaapiStepperForm` component disables the default renderer. Provide a render function
  * that receives the visible form `fields`, and the current `formState`. This pattern mirrors the scenarios covered
- * under “Via Composition (children render interceptor)” in the tests.
+ * under “Via Composition (children render interceptor)” in the [tests](./HaapiStepperForm.spec.tsx).
  *
  * This approach provides full control over the form content, while still leveraging the built-in state management
  * and submission handling. It is better suited for complex customizations, such as adding elements between fields,
@@ -161,7 +160,7 @@ interface HaapiStepperFormProps {
  * ### BEHAVIOUR OVERRIDES AROUND SUBMISSION
  *
  * Because `submit` is exposed through context, you can layer on additional behaviour (confirmation
- * prompts, analytics, pre-submit validation) before delegating to the incoming `onSubmit`. Tests under
+ * prompts, analytics, pre-submit validation) before delegating to the incoming `onSubmit`. [Tests](./HaapiStepperForm.spec.tsx) under
  * “Behavior customization” illustrate this pattern.
  *
  * @example

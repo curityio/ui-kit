@@ -17,12 +17,20 @@ import { HAAPI_FORM_ACTION_KINDS, HAAPI_FORM_ACTION_KINDS_TYPE } from '../../../
 import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
 import type { HaapiStepperPasswordFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
+import type { HaapiStepperGenericFormFieldInputProps } from './HaapiStepperFormFieldUI';
 
-export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepperPasswordFormField }): ReactElement {
+export function HaapiStepperPasswordFormFieldUI({
+  field,
+  inputProps,
+}: {
+  field: HaapiStepperPasswordFormField;
+  inputProps?: HaapiStepperGenericFormFieldInputProps;
+}): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const [isVisible, setIsVisible] = useState(false);
   const inputId = `${action.id}-${field.name}-input`;
   const autoComplete = getPasswordAutoComplete(action.kind);
+  const inputPropsClassName = inputProps?.className;
   const ariaLabel = `${isVisible ? 'Hide' : 'Show'} password`;
 
   return (
@@ -30,10 +38,11 @@ export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepper
       {field.label ?? field.name}
       <div className="haapi-stepper-form-field-password-wrapper">
         <input
+          {...inputProps}
           id={inputId}
           data-testid={`haapi-form-field-${HAAPI_FORM_FIELDS.PASSWORD}-${field.name}`}
           type={isVisible ? 'text' : 'password'}
-          className="haapi-stepper-form-field-password-input"
+          className={['haapi-stepper-form-field-password-input', inputPropsClassName].filter(Boolean).join(' ')}
           name={field.name}
           value={formState.get(field)}
           placeholder={field.placeholder}
