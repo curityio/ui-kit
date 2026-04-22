@@ -1,5 +1,3 @@
 .prettierrc
 tsconfig.*
 README.md
-src/shared/ui/icons/
-src/shared/util/css/index.css
