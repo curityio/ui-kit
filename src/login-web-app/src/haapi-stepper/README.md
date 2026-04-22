@@ -132,6 +132,7 @@ Check out documentation and usage examples in the links below:
 * [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
 * [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
 * [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
+* [HaapiStepperMessageUI](./ui/messages/HaapiStepperMessageUI.tsx)
 * [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
 * [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
 
