@@ -98,15 +98,15 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * Wrap your application or authentication flow with this provider to enable HAAPI authentication:
  *
- * Built-in HAAPI flow example using HaapiUIStep:
+ * Built-in HAAPI flow example using HaapiStepperStepUI:
  *
  * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
- * import { HaapiUIStep } from './HaapiUIStep';
+ * import { HaapiStepperStepUI } from '../steps/HaapiStepperStepUI';
  *
  * <HaapiStepper>
- *   <HaapiUIStep />
+ *   <HaapiStepperStepUI />
  * </HaapiStepper>
  * ```
  *
@@ -117,8 +117,8 @@ type SetCurrentStepAndUpdateHistoryFn = (
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
  * import { Form } from '../actions/form/Form';
- * import { ClientOperation } from '../actions/client-operation/ClientOperation';
- * import { HaapiSelector } from '../actions/selector/HaapiSelector';
+ * import { HaapiStepperClientOperationUI } from '../actions/client-operation/HaapiStepperClientOperationUI';
+ * import { HaapiStepperSelectorUI } from '../actions/selector/HaapiStepperSelectorUI';
  *
  * function HaapiComponentExample() {
  *   const { currentStep, history, loading, error, nextStep } = useHaapiStepper();
@@ -136,8 +136,8 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   return (
  *     <>
  *       {formActions?.map((action) => (<Form key={action.kind} action={action} onSubmit={nextStep} />))}
- *       {selectorActions?.map(action => <HaapiSelector key={action.kind} action={action} onSubmit={nextStep} />)}
- *       {clientOperationActions?.map((action) => (<ClientOperation key={action.kind} action={action} onAction={nextStep} /> ))}
+ *       {selectorActions?.map(action => <HaapiStepperSelectorUI key={action.kind} action={action} onSubmit={nextStep} />)}
+ *       {clientOperationActions?.map((action) => (<HaapiStepperClientOperationUI key={action.kind} action={action} onAction={nextStep} /> ))}
  *       {links?.map(link => (
  *         <button key={link.rel} onClick={() => nextStep(link)}>
  *           {link.title}
@@ -220,7 +220,7 @@ type SetCurrentStepAndUpdateHistoryFn = (
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
- * import { HaapiUIStep } from '../steps/HaapiUIStep';
+ * import { HaapiStepperStepUI } from '../steps/HaapiStepperStepUI';
  *
  * function ConditionalCustomizationExample() {
  *   const { currentStep, loading, error } = useHaapiStepper();
@@ -249,7 +249,7 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   }
  *
  *   // Fallback to the default UI for all other steps
- *   return <HaapiUIStep />;
+ *   return <HaapiStepperStepUI />;
  * }
  *
  * <HaapiStepper>

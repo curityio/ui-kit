@@ -66,7 +66,7 @@ import { ReactElement, isValidElement, Fragment } from 'react';
  * const linkElements = applyRenderInterceptor(
  *   links,
  *   (link) => ({ ...link, title: `Curity: ${link.title}` }),
- *   (link, index) => <Link link={link} onClick={handleClick} />
+ *   (link, index) => <HaapiStepperLinkUI link={link} onClick={handleClick} />
  * );
  *
  * @example

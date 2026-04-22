@@ -1,6 +1,6 @@
 import { HaapiStepperUserMessage } from '../../feature/stepper/haapi-stepper.types';
 
-export const defaultMessageElementFactory = (message: HaapiStepperUserMessage) => {
+export const defaultHaapiStepperMessageElementFactory = (message: HaapiStepperUserMessage) => {
   const className = message.classList?.join(' ');
   const isHeading = message.classList?.includes('heading');
   const isUserCode = message.classList?.includes('userCode');

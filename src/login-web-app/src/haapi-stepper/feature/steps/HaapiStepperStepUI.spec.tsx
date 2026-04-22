@@ -40,7 +40,7 @@ import type {
 } from '../stepper/haapi-stepper.types';
 import { HAAPI_FORM_FIELDS } from '../../data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
-import { Actions } from '../../ui/actions/Actions';
+import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
 import {
   HAAPI_FORM_ACTION_KINDS,
   HAAPI_ACTION_CLIENT_OPERATIONS,
@@ -580,7 +580,7 @@ describe('HaapiStepperStepUI', () => {
         it('should render custom elements when the actions render interceptor returns a custom element', () => {
           const actionsRenderInterceptor: HaapiStepperStepUIActionsRenderInterceptor = ({ currentStep, nextStep }) => (
             <div data-testid="custom-actions-wrapper">
-              <Actions actions={currentStep.dataHelpers.actions?.all} onAction={nextStep} />
+              <HaapiStepperActionsUI actions={currentStep.dataHelpers.actions?.all} onAction={nextStep} />
             </div>
           );
 

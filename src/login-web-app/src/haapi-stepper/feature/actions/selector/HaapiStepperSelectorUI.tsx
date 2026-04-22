@@ -16,9 +16,9 @@ import {
   HaapiStepperFormAction,
   HaapiStepperSelectorAction,
 } from '../../stepper/haapi-stepper.types';
-import { HaapiStepperForm } from '../form/HaapiStepperForm';
+import { HaapiStepperFormUI } from '../form/HaapiStepperFormUI';
 
-interface HaapiSelectorProps {
+interface HaapiStepperSelectorUIProps {
   action: HaapiStepperSelectorAction;
   onSubmit: HaapiStepperNextStep<HaapiStepperFormAction | HaapiStepperClientOperationAction>;
 }
@@ -37,7 +37,7 @@ interface HaapiSelectorProps {
  *   const { currentStep, nextStep } = useHaapiStepper();
  *   const selectorAction = currentStep?.dataHelpers.selectorActions?.[0];
  *
- *   return {selectorAction && <HaapiSelector action={selectorAction} onSubmit={nextStep} />}
+ *   return {selectorAction && <HaapiStepperSelectorUI action={selectorAction} onSubmit={nextStep} />}
  * }
  *
  * <HaapiStepper>
@@ -45,7 +45,7 @@ interface HaapiSelectorProps {
  * </HaapiStepper>
  * ```
  */
-export function HaapiSelector({ action, onSubmit }: HaapiSelectorProps) {
+export function HaapiStepperSelectorUI({ action, onSubmit }: HaapiStepperSelectorUIProps) {
   const options = action.model.options;
 
   return (
@@ -53,7 +53,7 @@ export function HaapiSelector({ action, onSubmit }: HaapiSelectorProps) {
       {action.title && <h3 data-testid="form-selector-title">{action.title}</h3>}
       {options.map(option => {
         if (option.subtype === HAAPI_ACTION_TYPES.FORM) {
-          return <HaapiStepperForm key={option.id} action={option} onSubmit={onSubmit} />;
+          return <HaapiStepperFormUI key={option.id} action={option} onSubmit={onSubmit} />;
         }
       })}
     </div>
