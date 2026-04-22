@@ -12,7 +12,6 @@ on:
 
 jobs:
   build-and-test:
-    if: ${{ github.event.pull_request.draft != true || github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -44,7 +43,7 @@ jobs:
     name: Notify Slack
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: ${{ always() && github.event_name == 'pull_request' }}
+    if: ${{ always() && github.event_name == 'pull_request' && github.event.pull_request.draft != true }}
     strategy:
       matrix:
         webhook_secret: [LWA_SLACK_WEBHOOK_URL]
