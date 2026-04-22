@@ -15,5 +15,6 @@ export * from './links/HaapiStepperLinkUI';
 export * from './links/HaapiStepperLinksUI';
 export * from './links/defaultHaapiStepperLinkElementFactory';
 export * from './links/HaapiStepperQrCodeLinkDialog';
+export * from './messages/HaapiStepperMessageUI';
 export * from './messages/HaapiStepperMessagesUI';
 export * from './messages/defaultHaapiStepperMessageElementFactory';
