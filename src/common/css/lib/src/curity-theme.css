@@ -149,7 +149,7 @@
   --authenticator-username-color: var(--color-primary);
   --authenticator-netidaccess-os-color: #000;
   --authenticator-passkeys-color: #626c87;
-  --authenticator-openid-wallet-color: #f2f2f2;
+  --authenticator-openid-wallet-color: #666;
 
   --alert-border-radius: 8px;
   --alert-border-style: solid;

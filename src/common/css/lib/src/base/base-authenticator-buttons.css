@@ -137,6 +137,7 @@ a.button-social-icon .icon,
   &.button-sign-in-with-apple { --authenticator-color: var(--authenticator-sign-in-with-apple-color); }
   &.button-netidaccess-os { --authenticator-color: var(--authenticator-netidaccess-os-color); }
   &.button-social-single-color { --authenticator-color: var(--authenticator-social-single-color); }
+  &.button-openid-wallet { --authenticator-color: var(--authenticator-openid-wallet-color); }
 }
 
 .form-field-social-icon {
