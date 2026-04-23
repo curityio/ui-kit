@@ -11,6 +11,7 @@ export { default as IconAuthenticatorDefault } from './IconAuthenticatorDefault'
 export { default as IconAuthenticatorDropbox } from './IconAuthenticatorDropbox';
 export { default as IconAuthenticatorDuo } from './IconAuthenticatorDuo';
 export { default as IconAuthenticatorDynamic } from './IconAuthenticatorDynamic';
+export { default as IconAuthenticatorEmail } from './IconAuthenticatorEmail';
 export { default as IconAuthenticatorEncap } from './IconAuthenticatorEncap';
 export { default as IconAuthenticatorEntrust } from './IconAuthenticatorEntrust';
 export { default as IconAuthenticatorFacebook } from './IconAuthenticatorFacebook';
