@@ -26,17 +26,18 @@
             #set($otpInputLength = 6)
             #parse("fragments/otp-input")
         </div>
-        <button type="submit" id="activate" class="button button-fullwidth button-primary">
-            #message("${_templatePrefix}.view.button")
+        <button type="submit" id="activate" class="button button-fullwidth button-primary button-loading">
+            <span>#message("${_templatePrefix}.view.button")</span>
         </button>
     </form>
     <form id="resend" name="resend" method="post" class="no-top-padding">
         <input type="hidden" name="resend" />
         <button type="submit" id="resend" class="button button-fullwidth
-                button-secondary button-info">
-            #message("${_templatePrefix}.otp.view.resend-otp-button")
+                button-secondary button-info button-loading">
+            <span>#message("${_templatePrefix}.otp.view.resend-otp-button")</span>
         </button>
     </form>
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

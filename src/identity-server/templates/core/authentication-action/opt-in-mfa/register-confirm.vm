@@ -31,18 +31,19 @@
     <div class="col-12 px1">
         <form method="POST" name="register-confirm" class="no-padding">
             <input type="hidden" name="acr" value="$_factor.acr"/>
-            <input type="submit" value='#message("${_templatePrefix}.register-confirm.view.confirm")' class="button button-fullwidth button-primary"/>
+            <button type="submit" class="button button-fullwidth button-primary button-loading"><span>#message("${_templatePrefix}.register-confirm.view.confirm")</span></button>
         </form>
     </div>
 
     <div class="col-12 px1">
         <form method="POST" name="setup-confirm" class="no-padding">
             <input type="hidden" name="cancel" value="true"/>
-            <input type="submit" value="#message("${_templatePrefix}.register-confirm.view.cancel")" class="button button-fullwidth button-primary-outline"/>
+            <button type="submit" class="button button-fullwidth button-primary-outline button-loading"><span>#message("${_templatePrefix}.register-confirm.view.cancel")</span></button>
         </form>
     </div>
 </div>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

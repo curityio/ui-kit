@@ -20,10 +20,11 @@
     <input type="hidden" name="confirmUsercode" value="on" />
     <h1>#message("views.oauth.confirm")</h1>
     <p>#message("views.oauth.confirm-description")</p>
-    <button type="submit" class="button button-fullwidth button-success button-medium mt2">#message("views.oauth.confirm-submit")</button>
+    <button type="submit" class="button button-fullwidth button-success button-medium mt2 button-loading"><span>#message("views.oauth.confirm-submit")</span></button>
 
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 

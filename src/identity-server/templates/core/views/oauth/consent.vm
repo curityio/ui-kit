@@ -142,10 +142,10 @@
 
 #* If all the required consent is given, enable the submit button *#
 
-    <input type="submit" class="button button-medium button-success button-fullwidth $!_errorClass $!successClass" value='#message("views.oauth.consent.submit")' name="submit_consent" id="cancel_button" />
+    <button type="submit" class="button button-medium button-success button-fullwidth button-loading $!_errorClass $!successClass" name="submit_consent" id="cancel_button"><span>#message("views.oauth.consent.submit")</span></button>
 
     <div class="login-actions center py2">
-        <input type="submit" name="cancel_consent" class="btn muted regular btn-link" value='#message("views.oauth.consent.cancel")' id="submit_button"/>
+        <button type="submit" name="cancel_consent" class="btn muted regular btn-link button-loading" id="submit_button"><span>#message("views.oauth.consent.cancel")</span></button>
 
         #if ($_client.get("policyUrl") || $_client.get("termsOfServiceUrl"))
             <br/>
@@ -169,6 +169,7 @@
 
 
 </form>
+#parse("fragments/button-loading")
 #end
 
 

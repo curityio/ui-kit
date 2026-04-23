@@ -20,7 +20,7 @@
 
     <div class="area center">
         <h1>#message("authentication-action.auto-link-account.view.info")</h1>
-        
+
         <ul class="account-linking-link">
             #foreach($permission in $_responseModel.linkPermissions)
                 <li>
@@ -44,26 +44,29 @@
                 </li>
             #end
         </ul>
-        
+
         <p>#message("authentication-action.auto-link-account.view.text")</p>
     </div>
 
     <div class="sm-grid-container" sm-columns="2" gap="1">
         <div>
             <button id="submit-button" name="response" type="submit"
-                    class="button button-fullwidth button-primary $!button_color mt2"
-                    value="true">#message("authentication-action.auto-link-account.view.allow")</button>
+                    class="button button-loading button-fullwidth button-primary $!button_color mt2"
+                    value="true"><span>#message("authentication-action.auto-link-account.view.allow")</span></button>
         </div>
 
         <div>
             <button id="cancel-button" name="response" type="submit"
-                    class="button button-fullwidth button-primary-outline $!button_color mt2"
-                    value="false">#message("authentication-action.auto-link-account.view.deny")</button>
+                    class="button button-loading button-fullwidth button-primary-outline $!button_color mt2"
+                    value="false"><span>#message("authentication-action.auto-link-account.view.deny")</span></button>
         </div>
 
     </div>
 
 </form>
+
+#parse("fragments/button-loading")
+
 #end
 
 #parse("layouts/default")

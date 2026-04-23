@@ -138,6 +138,7 @@
     #end
 </form>
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

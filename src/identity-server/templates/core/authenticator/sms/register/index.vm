@@ -57,8 +57,8 @@
             </div>
         </div>
 
-            <button type="submit" class="button button-fullwidth button-primary mt2">#message(
-                "authenticator.sms.register.view.change-phonenumber")
+            <button type="submit" class="button button-fullwidth button-primary mt2 button-loading"><span>#message(
+                "authenticator.sms.register.view.change-phonenumber")</span>
             </button>
 
             <div class="center py2 login-actions">
@@ -71,6 +71,7 @@
 
 
 
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")

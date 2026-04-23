@@ -64,8 +64,8 @@
                 <i class="form-field-icon icon ion-ios-person"></i>
             </div>
 
-            <button type="submit" class="button button-fullwidth button-primary">
-                #message("${_templatePrefix}.view.button.submit")
+            <button type="submit" class="button button-fullwidth button-primary button-loading">
+                <span>#message("${_templatePrefix}.view.button.submit")</span>
             </button>
         </form>
     #end ## ($_promptForUsername)
@@ -73,8 +73,8 @@
     <div id="additionalDialog" class="hidden">
         #set($showRegistration = $_registrationEndpoint && $_allowRegistrationDuringLogin)
         <div id="authenticateDiv" class="center">
-            <button id="authenticateButton" class="button button-fullwidth button-primary">
-                #message("${_templatePrefix}.view.signin.passkey")
+            <button id="authenticateButton" class="button button-fullwidth button-primary button-loading">
+                <span>#message("${_templatePrefix}.view.signin.passkey")</span>
             </button>
         </div>
         #if ($showRegistration)
@@ -85,8 +85,8 @@
     </div>
 
     <div id="authenticateDiv" class="hidden">
-        <button id="authenticateButton" class="button button-fullwidth button-primary">
-            #message("${_templatePrefix}.view.button.authenticate")
+        <button id="authenticateButton" class="button button-fullwidth button-primary button-loading">
+            <span>#message("${_templatePrefix}.view.button.authenticate")</span>
         </button>
     </div>
 
@@ -106,6 +106,7 @@
 
     #parse("authenticator/passkeys/js/authenticate-device")
 
+#parse("fragments/button-loading")
 #end ## /body
 
 #parse("layouts/default")

@@ -51,9 +51,10 @@
         <i class="form-field-icon icon ion-email"></i>
     </div>
 
-    <button type="submit" class="button button-fullwidth button-primary">#message("authenticator.html-form.account-activation.view.newToken.button")</button>
+    <button type="submit" class="button button-fullwidth button-primary button-loading"><span>#message("authenticator.html-form.account-activation.view.newToken.button")</span></button>
 
     </form>
+#parse("fragments/button-loading")
 #end
 
 #*

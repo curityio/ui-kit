@@ -27,14 +27,16 @@
         <form method="POST" name="${_factor.acr}" class="no-bottom-padding no-top-padding">
             <input type="hidden" name="acr" value="${_factor.acr}"/>
             <div class="form-field #if($icons_only_authenticator_chooser)form-field-social-icon#end mb1">
-                <button type="submit" value="${_factor.description}" class="button button-primary button-fullwidth button-social #if($icons_only_authenticator_chooser)button-social-icon#end #if($single_color_authenticator_chooser)button-social-single-color#end button-$_factor.type">
+                <button type="submit" value="${_factor.description}" class="button button-primary button-fullwidth button-social button-loading #if($icons_only_authenticator_chooser)button-social-icon#end #if($single_color_authenticator_chooser)button-social-single-color#end button-$_factor.type">
                     <i class="icon #iconClassName($_factor.type)"></i>
                     #if(!$icons_only_authenticator_chooser)
+                        <span>
                         #if($_factor.description)
                             $_factor.description
                         #else
                             $_factor.authenticatorId
                         #end
+                        </span>
                     #end
                 </button>
             </div>
@@ -45,13 +47,14 @@
         <form method="POST" name="optOut" class="no-bottom-padding no-top-padding">
             <input type="hidden" name="optOut" value="true"/>
             <div class="flex flex-column">
-                <button type="submit" value="Opt-out of second factor" class="button button-link">
-                    #message("${_templatePrefix}.setup.view.opt-out.action")
+                <button type="submit" value="Opt-out of second factor" class="button button-link button-loading">
+                    <span>#message("${_templatePrefix}.setup.view.opt-out.action")</span>
                 </button>
                 <p>#message("${_templatePrefix}.setup.view.opt-out.description")</p>
             </div>
         </form>
     #end
+#parse("fragments/button-loading")
 #end
 
 #parse("layouts/default")
