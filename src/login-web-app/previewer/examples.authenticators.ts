@@ -3,7 +3,11 @@ import {
   HAAPI_STEPS,
   HaapiActionStep,
 } from '../src/haapi-stepper/data-access/types/haapi-step.types';
-import { HAAPI_ACTION_TYPES, HAAPI_FORM_ACTION_KINDS } from '../src/haapi-stepper/data-access/types/haapi-action.types';
+import {
+  HAAPI_ACTION_CLIENT_OPERATIONS,
+  HAAPI_ACTION_TYPES,
+  HAAPI_FORM_ACTION_KINDS,
+} from '../src/haapi-stepper/data-access/types/haapi-action.types';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../src/haapi-stepper/data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../src/shared/util/types/media.types';
 import { PreviewItemData } from './examples';
@@ -153,6 +157,196 @@ const authenticatorHtmlFormOtpActivation: HaapiActionStep = {
             name: 'resend',
             type: HAAPI_FORM_FIELDS.HIDDEN,
             value: 'true',
+          },
+        ],
+      },
+    },
+  ],
+};
+
+const authenticatorWebauthnRegistrationAnyDevice: HaapiActionStep = {
+  links: [
+    {
+      href: '/authentication/authenticate/webauthn',
+      rel: 'restart',
+      title: 'Return to login',
+    },
+  ],
+  metadata: {
+    viewName: 'authenticator/webauthn/register/get',
+  },
+  type: HAAPI_STEPS.REGISTRATION,
+  actions: [
+    {
+      template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
+      kind: 'device-register',
+      title: 'Register new device',
+      model: {
+        name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+        arguments: {
+          crossPlatformCredentialCreationOptions: {
+            publicKey: {
+              rp: { name: 'se.curity', id: 'localhost' },
+              user: {
+                name: 'john',
+                displayName: 'john',
+                id: 'rl3rgi4NcZkpAEcacZnQ2VuOfJ0FxAqCRaKB_SwdZoQ',
+              },
+              challenge: 'Gwo3GzyJ25yPXd9bZc_h6HcjkamZ5Ye0eRyFjGrOOEg',
+              pubKeyCredParams: [
+                { alg: -7, type: 'public-key' },
+                { alg: -8, type: 'public-key' },
+                { alg: -35, type: 'public-key' },
+                { alg: -36, type: 'public-key' },
+                { alg: -257, type: 'public-key' },
+                { alg: -258, type: 'public-key' },
+                { alg: -259, type: 'public-key' },
+              ],
+              hints: [],
+              excludeCredentials: [],
+              authenticatorSelection: {
+                authenticatorAttachment: 'cross-platform',
+                requireResidentKey: false,
+                residentKey: 'preferred',
+                userVerification: 'preferred',
+              },
+              attestation: 'none',
+              extensions: {},
+            },
+          },
+          platformCredentialCreationOptions: {
+            publicKey: {
+              rp: { name: 'se.curity', id: 'localhost' },
+              user: {
+                name: 'john',
+                displayName: 'john',
+                id: 'rl3rgi4NcZkpAEcacZnQ2VuOfJ0FxAqCRaKB_SwdZoQ',
+              },
+              challenge: 'dKRGJIGkHwuSuPlpMe867RVLywin8-LtMjX7yqX2nTo',
+              pubKeyCredParams: [
+                { alg: -7, type: 'public-key' },
+                { alg: -8, type: 'public-key' },
+                { alg: -35, type: 'public-key' },
+                { alg: -36, type: 'public-key' },
+                { alg: -257, type: 'public-key' },
+                { alg: -258, type: 'public-key' },
+                { alg: -259, type: 'public-key' },
+              ],
+              hints: [],
+              excludeCredentials: [],
+              authenticatorSelection: {
+                authenticatorAttachment: 'platform',
+                requireResidentKey: false,
+                residentKey: 'preferred',
+                userVerification: 'preferred',
+              },
+              attestation: 'none',
+              extensions: {},
+            },
+          },
+        },
+        continueActions: [
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: HAAPI_FORM_ACTION_KINDS.CONTINUE,
+            title: 'Register new device',
+            model: {
+              href: 'https://localhost:8443/authentication/register/create/webauthn',
+              method: HTTP_METHODS.POST,
+              type: MEDIA_TYPES.JSON,
+              fields: [
+                { name: 'platformCredential', type: HAAPI_FORM_FIELDS.CONTEXT },
+                { name: 'crossPlatformCredential', type: HAAPI_FORM_FIELDS.CONTEXT },
+              ],
+            },
+          },
+        ],
+        errorActions: [
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: HAAPI_FORM_ACTION_KINDS.REDIRECT,
+            model: {
+              href: '/authentication/authenticate/webauthn?_force_external_browser_flow=true',
+              method: HTTP_METHODS.GET,
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+
+const authenticatorWebauthnRegistrationPasskeys: HaapiActionStep = {
+  links: [
+    {
+      href: '/authentication/authenticate/webauthn',
+      rel: 'restart',
+      title: 'Return to login',
+    },
+  ],
+  metadata: {
+    viewName: 'authenticator/webauthn/register/get',
+  },
+  type: HAAPI_STEPS.REGISTRATION,
+  actions: [
+    {
+      template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
+      kind: 'device-register',
+      title: 'Register new device',
+      model: {
+        name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+        arguments: {
+          credentialCreationOptions: {
+            publicKey: {
+              rp: { name: 'se.curity', id: 'localhost' },
+              user: {
+                name: 'john',
+                displayName: 'john',
+                id: 'rl6rgi9NcZkpAEcacZnQ2VuOfJ0FxAqCRaKB_SwdZoQ',
+              },
+              challenge: 'EvdQtJxjTOEHT3fhLNZDVbfA5p2aThQDeAIq6BY3aHw',
+              pubKeyCredParams: [
+                { alg: -7, type: 'public-key' },
+                { alg: -8, type: 'public-key' },
+                { alg: -35, type: 'public-key' },
+                { alg: -36, type: 'public-key' },
+                { alg: -257, type: 'public-key' },
+                { alg: -258, type: 'public-key' },
+                { alg: -259, type: 'public-key' },
+              ],
+              hints: [],
+              excludeCredentials: [],
+              authenticatorSelection: {
+                requireResidentKey: false,
+                residentKey: 'preferred',
+                userVerification: 'required',
+              },
+              attestation: 'none',
+              extensions: {},
+            },
+          },
+        },
+        continueActions: [
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: HAAPI_FORM_ACTION_KINDS.CONTINUE,
+            title: 'Register new device',
+            model: {
+              href: 'https://localhost:8443/authentication/register/create/webauthn',
+              method: HTTP_METHODS.POST,
+              type: MEDIA_TYPES.JSON,
+              fields: [{ name: 'credential', type: HAAPI_FORM_FIELDS.CONTEXT }],
+            },
+          },
+        ],
+        errorActions: [
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: HAAPI_FORM_ACTION_KINDS.REDIRECT,
+            model: {
+              href: '/authentication/authenticate/webauthn?_force_external_browser_flow=true',
+              method: HTTP_METHODS.GET,
+            },
           },
         ],
       },
@@ -462,8 +656,21 @@ export const authenticatorExamples: PreviewItemData[] = [
     ],
   },
   {
-    title: 'WebAuthn - Registration Completed',
-    step: authenticatorWebauthnRegistrationCompleted,
+    title: 'WebAuthn',
+    items: [
+      {
+        title: 'Registration (select device)',
+        step: authenticatorWebauthnRegistrationAnyDevice,
+      },
+      {
+        title: 'Registration (Passkey)',
+        step: authenticatorWebauthnRegistrationPasskeys,
+      },
+      {
+        title: 'Registration Completed',
+        step: authenticatorWebauthnRegistrationCompleted,
+      },
+    ],
   },
   {
     title: 'Duo - Select Device',
