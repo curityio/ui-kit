@@ -1,0 +1,27 @@
+#*
+ * Copyright (C) 2025 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *###
+
+## redirect to the same URL
+#set ($_callbackUrl = "")
+## using a GET
+#set ($_callbackMethod = "get")
+#define($_formContent)
+    ## providing 'navigator.maxTouchPoints' in the 'nmtp' query-string variable
+    <input type="hidden" name="nmtp" id="nmtp"/>
+    <script type="text/javascript" $!nonceAttr>
+        const nmtp = navigator.maxTouchPoints
+        document.getElementById("nmtp").setAttribute("value", "" + nmtp)
+    </script>
+
+    ## just to ensure the query-string is not empty and we do not endup on an infinit loop
+    <input type="hidden" name="ctx" value="1" />
+#end
+#parse("layouts/redirect")
