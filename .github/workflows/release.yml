@@ -1,0 +1,73 @@
+name: Release UI Kit
+
+on:
+  push:
+    tags:
+      - 'ui-kit-*'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Extract version from tag
+        id: extract_version
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG_NAME#ui-kit-}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Find previous tag
+        id: prev_tag
+        run: |
+          TAGS=$(git tag --list 'ui-kit-*' --sort=-creatordate)
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+          PREV_TAG=$(echo "$TAGS" | grep -v "^$CURRENT_TAG$" | head -n 1)
+          echo "prev_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog from merged PRs
+        id: changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+          PREV_TAG="${{ steps.prev_tag.outputs.prev_tag }}"
+          if [ -z "$PREV_TAG" ]; then
+            # First release: get all merged PRs
+            RANGE=""
+          else
+            RANGE="$PREV_TAG..$CURRENT_TAG"
+          fi
+          PRS=$(git log $RANGE --merges --pretty=format:'%s %b' | grep -oE '#[0-9]+' | sort -u | tr -d '#')
+          if [ -z "$PRS" ]; then
+            echo 'changelog=No merged pull requests found.' >> $GITHUB_OUTPUT
+          else
+            BODY=""
+            for PR in $PRS; do
+              TITLE=$(gh pr view $PR --json title --jq '.title')
+              BODY+="- PR #$PR: $TITLE"$'\n'
+            done
+            {
+              echo 'changelog<<EOF'
+              printf '%s' "$BODY"
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ steps.extract_version.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
