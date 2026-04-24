@@ -696,7 +696,7 @@ const createLoginFormAction = () =>
   });
 
 const formFieldTestId = (type: string, name: string) => `haapi-form-field-${type}-${name}`;
-const submitButtonTestId = 'haapi-form-submit-button';
+const submitButtonTestId = 'form-submit-button';
 const validationErrorTestId = 'haapi-validation-error';
 const interceptorExtraElementTestId = 'interceptor-extra-element';
 const composedExtraElementTestId = 'composed-extra-element';

@@ -1165,7 +1165,7 @@ describe('HaapiStepperStepUI', () => {
           expect(usernameInput.value).toBe(prefilledUsernameValue);
         });
 
-        fireEvent.click(screen.getByTestId('haapi-form-submit-button'));
+        fireEvent.click(screen.getByTestId('form-submit-button'));
 
         expect(mockNextStep).toHaveBeenCalledTimes(1);
         const payload = mockNextStep.mock.calls[0]?.[1] as Map<string, string>;

@@ -140,7 +140,7 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 | Class | Used by | Purpose |
 |-------|---------|---------|
 | `.haapi-stepper-selector` | `HaapiSelector` | Selector action container |
-| `.haapi-stepper-selector-option` | `HaapiSelectorOption` | Authenticator-selector option button; combine with `.button-<authenticatorType>` (e.g. `.button-google`) to get the per-authenticator icon color |
+| `.haapi-stepper-authenticator-button` | `HaapiStepperFormSubmitButton` | Authenticator-selector option button (applied automatically when the action carries `authenticatorType`); combine with `.button-<authenticatorType>` (e.g. `.button-google`) to get the per-authenticator icon color |
 | `.haapi-stepper-messages` | `Messages` | Messages container |
 | `.haapi-stepper-form-field-text-input` | `HaapiStepperTextFormField` | Text input fields |
 | `.haapi-stepper-form-field-text-label` | `HaapiStepperTextFormField` | Form field labels |

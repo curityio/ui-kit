@@ -50,22 +50,9 @@ import {
   IconAuthenticatorX,
 } from '@curity/ui-kit-icons';
 
-import { HaapiStepperForm } from '../form/HaapiStepperForm';
-import { useHaapiStepperForm } from '../form/HaapiStepperFormContext';
-import type {
-  HaapiStepperClientOperationAction,
-  HaapiStepperFormAction,
-  HaapiStepperNextStep,
-} from '../../stepper/haapi-stepper.types';
+export type AuthenticatorIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
-interface HaapiSelectorOptionProps {
-  action: HaapiStepperFormAction;
-  onSubmit: HaapiStepperNextStep<HaapiStepperFormAction | HaapiStepperClientOperationAction>;
-}
-
-type AuthenticatorIcon = ComponentType<SVGProps<SVGSVGElement>>;
-
-const AUTHENTICATOR_ICONS: Record<string, AuthenticatorIcon> = {
+export const AUTHENTICATOR_ICONS: Record<string, AuthenticatorIcon> = {
   aws: IconAuthenticatorAws,
   bankid: IconAuthenticatorBankid,
   bitbucket: IconAuthenticatorBitbucket,
@@ -106,41 +93,6 @@ const AUTHENTICATOR_ICONS: Record<string, AuthenticatorIcon> = {
   x: IconAuthenticatorX,
 };
 
-/**
- * Renders a single selector option (an authenticator choice) as a social-style button
- * with an authenticator-specific color and icon. Delegates submission to the wrapped
- * `HaapiStepperForm` so existing form behaviour (validation, payload building) is preserved.
- */
-export function HaapiSelectorOption({ action, onSubmit }: HaapiSelectorOptionProps) {
-  const authenticatorType = action.properties?.authenticatorType;
-
-  return (
-    <HaapiStepperForm action={action} onSubmit={onSubmit}>
-      {() => <HaapiSelectorOptionButton authenticatorType={authenticatorType} />}
-    </HaapiStepperForm>
-  );
-}
-
-interface HaapiSelectorOptionButtonProps {
-  authenticatorType: string | undefined;
-}
-
-function HaapiSelectorOptionButton({ authenticatorType }: HaapiSelectorOptionButtonProps) {
-  const { action } = useHaapiStepperForm();
-  const label = action.model.actionTitle ?? action.title ?? authenticatorType ?? '';
-  const Icon = AUTHENTICATOR_ICONS[authenticatorType ?? ''] ?? IconAuthenticatorDefault;
-  const authenticatorClass = authenticatorType ? `button-${authenticatorType}` : 'button-social-single-color';
-
-  return (
-    <button
-      data-testid="haapi-form-submit-button"
-      className={`haapi-stepper-selector-option ${authenticatorClass}`}
-      type="submit"
-    >
-      <span className="icon" aria-hidden="true">
-        <Icon />
-      </span>
-      {label}
-    </button>
-  );
+export function resolveAuthenticatorIcon(authenticatorType: string | undefined): AuthenticatorIcon {
+  return AUTHENTICATOR_ICONS[authenticatorType ?? ''] ?? IconAuthenticatorDefault;
 }
