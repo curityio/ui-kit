@@ -17,6 +17,7 @@ import { HaapiStepperMessagesUI } from '../../ui/messages/HaapiStepperMessagesUI
 import { Well } from '../../ui/well/Well';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { formatNextStepData } from '../stepper/data-formatters/format-next-step-data';
+import { HaapiStepperViewNameBuiltInUI, getViewNameBuiltInUI } from '../viewnames';
 import type {
   HaapiStepperAPI,
   HaapiStepperAPIWithRequiredCurrentStep,
@@ -52,6 +53,7 @@ interface HaapiStepperStepUIProps {
   clientOperationActionRenderInterceptor?: HaapiStepperStepUIClientOperationActionRenderInterceptor;
   linkRenderInterceptor?: HaapiStepperStepUILinkRenderInterceptor;
   messageRenderInterceptor?: HaapiStepperStepUIMessageRenderInterceptor;
+  enableViewNameBuiltInUIs?: HaapiStepperViewNameBuiltInUI[] | boolean;
 }
 
 /**
@@ -78,6 +80,56 @@ interface HaapiStepperStepUIProps {
  *
  * Note: Redirection, and Continue Same steps are handled automatically by the HaapiStepper and never
  * reach this component
+ *
+ * ### VIEW NAME BUILT-IN UIs
+ *
+ * The HaapiStepperStepUI component also provides built-in UIs for specific HAAPI `viewName`s that require a more
+ * tailored UI than the generic step shell can provide (e.g. the BankID QR code step, which requires lifting
+ * the QR code up and showing a spinner while polling).
+ *
+ * The viewName built-in UIs are opt-in: `enableViewNameBuiltInUIs` defaults to `undefined` (no built-ins active).
+ * Pass:
+ *
+ * - `true` (or the JSX shorthand `enableViewNameBuiltInUIs`) to enable all known built-ins. This
+ *   stays in sync with the library — if a new built-in is added in a future release, it is
+ *   activated automatically.
+ * - An array of `HaapiStepperViewNameBuiltInUI` values to enable only specific built-ins.
+ *   This pins the active set, so adding a new built-in to the library is a purely additive
+ *   change that doesn't affect existing rendering.
+ * - `false` or `undefined` to keep all built-ins disabled (every view renders through the
+ *   generic shell).
+ *
+ * Composition: the matching viewName built-in UI is rendered after the `stepRenderInterceptor` has processed the
+ * step, and before any of the per-element render interceptors (actions, messages, links…). It is only rendered
+ * when `stepRenderInterceptor` was not provided or if it returns the stepper API data (pass-through) — the same
+ * rule that governs every other render interceptor.
+ *
+ * #### ViewName Built-in UIs Example
+ *
+ * @example
+ * ```tsx
+ * import { HaapiStepperViewNameBuiltInUI } from '...';
+ *
+ * // No prop = no built-ins active. The component renders every view through the generic shell.
+ * <HaapiStepperStepUI />
+ *
+ * // Boolean shorthand: opt in to all known built-ins (current and future).
+ * <HaapiStepperStepUI enableViewNameBuiltInUIs />
+ *
+ * // Pin to a specific subset.
+ * <HaapiStepperStepUI enableViewNameBuiltInUIs={[HaapiStepperViewNameBuiltInUI.BANKID]} />
+ *
+ * // Override a viewName built-in UI with a `stepRenderInterceptor`
+ * const customBankIdUI: HaapiStepperStepUIStepRenderInterceptor = ({ currentStep, ...rest }) => {
+ *   if (currentStep.metadata?.viewName === 'authenticator/bankid/wait/index') {
+ *     return <MyBankId step={currentStep} />;
+ *   }
+ *   return { currentStep, ...rest };
+ * };
+ *
+ * // MyBankId will be rendered instead of the built-in UI for the BankID
+ * <HaapiStepperStepUI stepRenderInterceptor={customBankIdUI} enableViewNameBuiltInUIs />
+ * ```
  *
  * ## CUSTOMIZATION
  *
@@ -241,6 +293,7 @@ export const HaapiStepperStepUI = ({
   clientOperationActionRenderInterceptor,
   linkRenderInterceptor,
   messageRenderInterceptor,
+  enableViewNameBuiltInUIs,
 }: HaapiStepperStepUIProps) => {
   const haapiStepperAPI = useHaapiStepper();
   const loadingElement: ReactElement | null = getLoadingElement(haapiStepperAPI, loadingRenderInterceptor);
@@ -249,38 +302,46 @@ export const HaapiStepperStepUI = ({
     return loadingElement;
   }
 
-  let haapiUIStepperAPI = haapiStepperAPI as HaapiStepperAPIWithRequiredCurrentStep;
+  let haapiStepperUiAPI = haapiStepperAPI as HaapiStepperAPIWithRequiredCurrentStep;
 
   if (stepRenderInterceptor) {
-    const customStepRenderInterceptorResult = stepRenderInterceptor(haapiUIStepperAPI);
+    const stepRenderInterceptorResult = stepRenderInterceptor(haapiStepperUiAPI);
 
-    if (isValidElement(customStepRenderInterceptorResult)) {
-      return customStepRenderInterceptorResult;
-    } else if (customStepRenderInterceptorResult === null || customStepRenderInterceptorResult === undefined) {
-      return null;
-    } else {
-      haapiUIStepperAPI = {
-        ...customStepRenderInterceptorResult,
-        currentStep: formatNextStepData(customStepRenderInterceptorResult.currentStep),
-      };
+    if (isValidElement(stepRenderInterceptorResult)) {
+      return stepRenderInterceptorResult;
     }
+
+    if (stepRenderInterceptorResult === null || stepRenderInterceptorResult === undefined) {
+      return null;
+    }
+
+    haapiStepperUiAPI = {
+      ...stepRenderInterceptorResult,
+      currentStep: formatNextStepData(stepRenderInterceptorResult.currentStep),
+    };
   }
 
-  const { error, currentStep } = haapiUIStepperAPI;
-  const errorElement: ReactElement | null = getErrorElement(haapiUIStepperAPI, errorRenderInterceptor);
+  const ViewNameBuiltInUI = getViewNameBuiltInUI(haapiStepperUiAPI, enableViewNameBuiltInUIs);
+
+  if (ViewNameBuiltInUI) {
+    return <ViewNameBuiltInUI {...haapiStepperUiAPI} />;
+  }
+
+  const { error, currentStep } = haapiStepperUiAPI;
+  const errorElement: ReactElement | null = getErrorElement(haapiStepperUiAPI, errorRenderInterceptor);
   const linksToDisplay = getLinksToDisplay(error, currentStep);
   const messagesToDisplay = error?.input ? error.input.dataHelpers.messages : currentStep.dataHelpers.messages;
 
-  const messagesElement = getMessagesElement(haapiUIStepperAPI, messagesToDisplay, messageRenderInterceptor);
+  const messagesElement = getMessagesElement(haapiStepperUiAPI, messagesToDisplay, messageRenderInterceptor);
   const actionsElement = getActionsElement(
-    haapiUIStepperAPI,
+    haapiStepperUiAPI,
     actionsRenderInterceptor,
     formActionRenderInterceptor,
     formFieldRenderInterceptor,
     selectorActionRenderInterceptor,
     clientOperationActionRenderInterceptor
   );
-  const linksElement = getLinksElement(haapiUIStepperAPI, linksToDisplay, linkRenderInterceptor);
+  const linksElement = getLinksElement(haapiStepperUiAPI, linksToDisplay, linkRenderInterceptor);
 
   return (
     <Well>
