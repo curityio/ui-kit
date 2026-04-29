@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
@@ -180,23 +181,25 @@ describe('HaapiStepperFormSubmitButton', () => {
 
     describe('ref prop', () => {
       it('forwards the ref to the underlying button element', () => {
-        let buttonRef: HTMLButtonElement | null = null;
         const action = createNonAuthenticatorFormAction();
+
+        function FocusSubmitOnMount() {
+          const submitButtonRef = useRef<HTMLButtonElement>(null);
+
+          useEffect(() => {
+            submitButtonRef.current?.focus();
+          }, []);
+
+          return <HaapiStepperFormSubmitButton ref={submitButtonRef} />;
+        }
 
         render(
           <HaapiStepperForm action={action} onSubmit={vi.fn()}>
-            {() => (
-              <HaapiStepperFormSubmitButton
-                ref={el => {
-                  buttonRef = el;
-                }}
-              />
-            )}
+            {() => <FocusSubmitOnMount />}
           </HaapiStepperForm>
         );
 
-        expect(buttonRef).toBeInstanceOf(HTMLButtonElement);
-        expect(buttonRef).toHaveAttribute('type', 'submit');
+        expect(screen.getByTestId(submitButtonTestId)).toHaveFocus();
       });
     });
 
