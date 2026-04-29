@@ -35,6 +35,11 @@
 #else
     #set($qr_time_left = $_maxWaitTime / 60)
 #end
+#if($_flowMode == 'cross-device' || $_flowMode == 'same-device')
+    #set($extendUrl="${_authUrl}?flowMode=$_flowMode")
+#else
+    #set($extendUrl=$_authUrl)
+#end
 #set($qr_time_elapsed = 0)
 <iframe id="autoStart" height="0" width="0" frameborder="0"></iframe>
     <h1 class="center">#message("${_templatePrefix}.page.title")</h1>
@@ -52,7 +57,7 @@
                     <span id="qr-time-label-seconds" #if($_maxWaitTime >= 60) class="hide"#end>#message("${_templatePrefix}.view.qr.seconds-left")</span>
                  </p>
                  <div class="mt2">
-                    <a class="button button-tiny button-primary-outline" id="qr-time-extend" href="$_authUrl">
+                    <a class="button button-tiny button-primary-outline" id="qr-time-extend" href="$extendUrl">
                     #message("${_templatePrefix}.view.button.qr-time-extend")
                     </a>
                  </div>
@@ -92,30 +97,32 @@
             <p class="left-align">#message("${_templatePrefix}.view.qr.screen-reader.outro")</p>
         </details>
     </div>
+    #end
+    #if($_autostartTokenDataUri && $_autostartToken)
     <p class="login-symbol">#message("${_templatePrefix}.view.or")</p>
+    #end
+    #if($_autostartToken)
     <form class="manuallink pb0">
         <a class="button button-fullwidth button-primary center" id="manualStart">
             #message("${_templatePrefix}.view.button.this-device")</a>
     </form>
+    #end
+    #if($_flowMode == 'cross-device')
+    <form class="manuallink pb0">
+        <a class="button button-fullwidth button-primary center" href="$_switchModeUrl">
+            #message("${_templatePrefix}.view.button.open-on-this-device")</a>
+    </form>
+    #end
+    #if($_flowMode == 'same-device')
+    <form class="manuallink pb0">
+        <a class="button button-fullwidth button-primary center" href="$_switchModeUrl">
+            #message("${_templatePrefix}.view.button.show-qr-code")</a>
+    </form>
+    #end
     <form name="cancel" action="cancel" class="manuallink" method="get">
         <button type="submit" class="button button-fullwidth button-primary-outline">#message($_messages,
             "${_templatePrefix}.view.button.cancel")</button>
     </form>
-    #else
-    <div class="area center">
-        <p class="h4 mb4 semibold" id="poll_message">#message("${_templatePrefix}.view.title")</p>
-        #parse("fragments/spinner")
-    </div>
-    <form class="manuallink pb0 display-none">
-        <p class="h4 center">#message("${_templatePrefix}.view.manualstart")</p>
-        <a class="button button-fullwidth button-primary center" id="manualStart">
-            #message("${_templatePrefix}.view.button.manualstart")</a>
-    </form>
-    <form name="cancel" action="cancel" class="manuallink display-none" method="get">
-        <button type="submit" class="button button-fullwidth button-primary-outline">#message($_messages,
-            "${_templatePrefix}.view.button.cancel")</button>
-    </form>
-    #end
 <form action="$_action" method="post" id="pollingDone" class="display-none">
     <input type="hidden" name="_pollingDone" value="true"/>
 </form>
