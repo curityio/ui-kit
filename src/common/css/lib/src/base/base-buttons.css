@@ -209,19 +209,13 @@ button svg {
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
 }
 
-.button-medium,
-[type='submit']:where(:not(.button-tiny, .button-small, .button-large)) {
+.button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
   padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
   padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
-
-
-  &:where(:not([class*='-outline'])) {
-    color: white;
-  }
 }
 
 a:is(.button) {

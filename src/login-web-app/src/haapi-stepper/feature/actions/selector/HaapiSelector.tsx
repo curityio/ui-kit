@@ -50,7 +50,7 @@ export function HaapiSelector({ action, onSubmit }: HaapiSelectorProps) {
 
   return (
     <div className="haapi-stepper-selector" key={action.id} data-testid="selector-action">
-      {action.title && <h3 data-testid="form-selector-title">{action.title}</h3>}
+      {action.title && <h2 data-testid="form-selector-title">{action.title}</h2>}
       {options.map(option => {
         if (option.subtype === HAAPI_ACTION_TYPES.FORM) {
           return <HaapiStepperForm key={option.id} action={option} onSubmit={onSubmit} />;

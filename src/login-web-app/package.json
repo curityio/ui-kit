@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "prestart": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
+    "predev": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
     "start": "npm run previewer",
     "dev": "vite --open /start.html",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
