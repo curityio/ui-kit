@@ -21,6 +21,8 @@ a.button-social {
   border-style: var(--form-field-border-style);
   border-width: var(--form-field-border-width);
   color: var(--button-color);
+  position: relative;
+  z-index: 2;
   margin: 0;
   text-align: left;
   transition:
@@ -64,8 +66,9 @@ a.button-social .icon {
   justify-content: center;
   left: 0;
   position: absolute;
+  z-index: 1;
   top: 0;
-  width: 60px;
+  width: var(--icon-width);
 }
 
 .button-social:hover,
