@@ -4,10 +4,10 @@ import { render, screen } from '@testing-library/react';
 
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '../../../data-access/types/haapi-form.types';
-import { HaapiStepperForm } from './HaapiStepperForm';
 import { HaapiStepperFormSubmitButton } from './HaapiStepperFormSubmitButton';
 import { useHaapiStepper } from '../../stepper/HaapiStepperHook';
 import { createHaapiStepperApiMock, createMockFormAction } from '../../../util/tests/mocks';
+import { HaapiStepperFormUI } from './HaapiStepperFormUI';
 
 describe('HaapiStepperFormSubmitButton', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('HaapiStepperFormSubmitButton', () => {
     it('uses action.model.actionTitle as the default label', () => {
       const action = createNonAuthenticatorFormAction();
 
-      render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
       expect(screen.getByTestId(submitButtonTestId)).toHaveTextContent(nonAuthenticatorActionTitle);
     });
@@ -31,7 +31,7 @@ describe('HaapiStepperFormSubmitButton', () => {
         model: { href: '/login', method: HTTP_METHODS.POST, fields: [] },
       });
 
-      render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
       expect(screen.getByTestId(submitButtonTestId)).toHaveTextContent(fallbackActionTitle);
     });
@@ -39,7 +39,7 @@ describe('HaapiStepperFormSubmitButton', () => {
     it('renders no icon for a non-authenticator form action', () => {
       const action = createNonAuthenticatorFormAction();
 
-      render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
       expect(screen.getByTestId(submitButtonTestId).querySelector('.icon')).toBeNull();
     });
@@ -47,7 +47,7 @@ describe('HaapiStepperFormSubmitButton', () => {
     it('applies the default haapi-stepper-button class for a non-authenticator form action', () => {
       const action = createNonAuthenticatorFormAction();
 
-      render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
       const button = screen.getByTestId(submitButtonTestId);
       expect(button).toHaveClass('haapi-stepper-button');
@@ -58,7 +58,7 @@ describe('HaapiStepperFormSubmitButton', () => {
     it('applies the outline class and no icon for a cancel form action', () => {
       const action = createCancelFormAction();
 
-      render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
       const button = screen.getByTestId(submitButtonTestId);
       expect(button).toHaveClass('haapi-stepper-button-outline');
@@ -71,7 +71,7 @@ describe('HaapiStepperFormSubmitButton', () => {
       it('renders the authenticator icon and classes', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'google' });
 
-        render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
         const button = screen.getByTestId(submitButtonTestId);
         expect(button).toHaveClass('haapi-stepper-authenticator-button');
@@ -83,7 +83,7 @@ describe('HaapiStepperFormSubmitButton', () => {
       it('falls back to the default icon for an unknown authenticator type', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'some-unknown-type' });
 
-        render(<HaapiStepperForm action={action} onSubmit={vi.fn()} />);
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
 
         const button = screen.getByTestId(submitButtonTestId);
         expect(button).toHaveClass('button-some-unknown-type');
@@ -98,9 +98,9 @@ describe('HaapiStepperFormSubmitButton', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'google' });
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => <HaapiStepperFormSubmitButton label={customLabel} />}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         const button = screen.getByTestId(submitButtonTestId);
@@ -114,9 +114,9 @@ describe('HaapiStepperFormSubmitButton', () => {
         const action = createNonAuthenticatorFormAction();
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => <HaapiStepperFormSubmitButton icon={<span data-testid={customIconTestId} />} />}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         const button = screen.getByTestId(submitButtonTestId);
@@ -128,9 +128,9 @@ describe('HaapiStepperFormSubmitButton', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'google' });
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => <HaapiStepperFormSubmitButton icon={<span data-testid={customIconTestId} />} />}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         const button = screen.getByTestId(submitButtonTestId);
@@ -145,13 +145,13 @@ describe('HaapiStepperFormSubmitButton', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'google' });
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => (
               <HaapiStepperFormSubmitButton>
                 <span data-testid={customChildrenTestId}>Custom content</span>
               </HaapiStepperFormSubmitButton>
             )}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         const button = screen.getByTestId(submitButtonTestId);
@@ -167,9 +167,9 @@ describe('HaapiStepperFormSubmitButton', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'google' });
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => <HaapiStepperFormSubmitButton className="my-extra-class" />}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         const button = screen.getByTestId(submitButtonTestId);
@@ -194,9 +194,9 @@ describe('HaapiStepperFormSubmitButton', () => {
         }
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => <FocusSubmitOnMount />}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         expect(screen.getByTestId(submitButtonTestId)).toHaveFocus();
@@ -208,7 +208,7 @@ describe('HaapiStepperFormSubmitButton', () => {
         const action = createAuthenticatorSelectorOption({ authenticatorType: 'google' });
 
         render(
-          <HaapiStepperForm action={action} onSubmit={vi.fn()}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()}>
             {() => (
               <HaapiStepperFormSubmitButton
                 aria-label="Sign in with Google"
@@ -217,7 +217,7 @@ describe('HaapiStepperFormSubmitButton', () => {
                 name="submit"
               />
             )}
-          </HaapiStepperForm>
+          </HaapiStepperFormUI>
         );
 
         const button = screen.getByTestId(submitButtonTestId);
