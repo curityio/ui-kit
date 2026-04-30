@@ -26,7 +26,7 @@ import { useHaapiStepperFormState } from './HaapiStepperFormHook';
 import { HaapiStepperFormSubmitButton } from './HaapiStepperFormSubmitButton';
 import { defaultHaapiStepperFormFieldElementFactory } from './fields/defaultHaapiStepperFormFieldElementFactory';
 
-interface HaapiStepperFormProps {
+interface HaapiStepperFormUIProps {
   action: HaapiStepperFormAction;
   onSubmit: HaapiStepperNextStep<HaapiStepperFormAction>;
   formFieldRenderInterceptor?: HaapiStepperFormFieldRenderInterceptor;
@@ -40,16 +40,16 @@ interface HaapiStepperFormProps {
  * ## BUILT-IN HAAPI FORM ACTION SUPPORT
  *
  * Renders a HAAPI form action inside the stepper. Tests in
- * `haapi-stepper/feature/actions/form/HaapiStepperForm.spec.tsx` cover the supported usage patterns:
+ * `haapi-stepper/feature/actions/form/HaapiStepperFormUI.spec.tsx` cover the supported usage patterns:
  *
  * @example
  * ```tsx
  * const onSubmit: HaapiStepperNextStep<HaapiStepperFormAction> = (action, payload) => nextStep(action, payload);
  *
- * <HaapiStepperForm action={loginAction} onSubmit={onSubmit} />
+ * <HaapiStepperFormUI action={loginAction} onSubmit={onSubmit} />
  * ```
  *
- * By default, the HaapiStepperForm:
+ * By default, the HaapiStepperFormUI:
  *
  * - Automatically renders all non-hidden fields with built-in HAAPI field components.
  * - Keeps hidden fields in the submission payload without rendering them.
@@ -99,7 +99,7 @@ interface HaapiStepperFormProps {
  *   return field;
  * };
  *
- * <HaapiStepperForm
+ * <HaapiStepperFormUI
  *   action={formAction}
  *   onSubmit={nextStep}
  *   formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -108,7 +108,7 @@ interface HaapiStepperFormProps {
  *
  * ### CUSTOMIZATION VIA COMPOSITION (CHILDREN RENDER INTERCEPTOR)
  *
- * Passing `children` to the `HaapiStepperForm` component disables the default renderer. Provide a render function
+ * Passing `children` to the `HaapiStepperFormUI` component disables the default renderer. Provide a render function
  * that receives the visible form `fields`, and the current `formState`. This pattern mirrors the scenarios covered
  * under “Via Composition (children render interceptor)” in the tests.
  *
@@ -122,7 +122,7 @@ interface HaapiStepperFormProps {
  *
  * @example
  * ```tsx
- * <HaapiStepperForm action={action} onSubmit={nextStep}>
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
  *   {({ fields, formState }) => {
  *      const delegateToDefaultRendering = currentStep.metadata?.viewName !== 'authenticator/html-form/authenticate/get';
  *
@@ -137,7 +137,7 @@ interface HaapiStepperFormProps {
  *       <>
  *         <fieldset>
  *           <legend>Login</legend>
- *           <HaapiStepperFormField field={usernameField} />
+ *           <HaapiStepperFormFieldUI field={usernameField} />
  *           <label>
  *             Password:
  *             <input
@@ -155,7 +155,7 @@ interface HaapiStepperFormProps {
  *       </>
  *     );
  *   }}
- * </HaapiStepperForm>
+ * </HaapiStepperFormUI>
  * ```
  *
  * ### BEHAVIOUR OVERRIDES AROUND SUBMISSION
@@ -173,10 +173,15 @@ interface HaapiStepperFormProps {
  *   nextStep(action, payload);
  * };
  *
- * <HaapiStepperForm action={loginAction} onSubmit={handleSubmit} />
+ * <HaapiStepperFormUI action={loginAction} onSubmit={handleSubmit} />
  * ```
  */
-export function HaapiStepperForm({ action, onSubmit, formFieldRenderInterceptor, children }: HaapiStepperFormProps) {
+export function HaapiStepperFormUI({
+  action,
+  onSubmit,
+  formFieldRenderInterceptor,
+  children,
+}: HaapiStepperFormUIProps) {
   const fields = action.model.fields ?? [];
   const formState = useHaapiStepperFormState(fields);
   const visibleFields = fields.filter(

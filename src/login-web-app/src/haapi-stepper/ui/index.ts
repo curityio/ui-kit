@@ -9,11 +9,12 @@
  * For further information, please contact Curity AB.
  */
 
-export * from './actions/Actions';
+export * from './actions/HaapiStepperActionsUI';
 export * from './actions/defaultHaapiStepperActionElementFactory';
-export * from './links/Link';
-export * from './links/Links';
+export * from './links/HaapiStepperLinkUI';
+export * from './links/HaapiStepperLinksUI';
 export * from './links/defaultHaapiStepperLinkElementFactory';
 export * from './links/HaapiStepperQrCodeLinkDialog';
-export * from './messages/Messages';
+export * from './messages/HaapiStepperMessageUI';
+export * from './messages/HaapiStepperMessagesUI';
 export * from './messages/defaultHaapiStepperMessageElementFactory';

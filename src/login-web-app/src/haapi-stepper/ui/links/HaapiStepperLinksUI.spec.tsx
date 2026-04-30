@@ -15,9 +15,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 import { createMockLink } from '../../util/tests/mocks';
-import { Links } from './Links';
+import { HaapiStepperLinksUI } from './HaapiStepperLinksUI';
 
-describe('Links', () => {
+describe('HaapiStepperLinksUI', () => {
   let onClick: ReturnType<typeof vi.fn<(action: HaapiStepperLink) => void>>;
   let user: ReturnType<typeof userEvent.setup>;
 
@@ -29,13 +29,13 @@ describe('Links', () => {
   describe('UI', () => {
     describe('Default rendering', () => {
       it('renders nothing when links is undefined', () => {
-        render(<Links links={undefined} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={undefined} onClick={onClick} />);
 
         expect(screen.queryByTestId('links')).not.toBeInTheDocument();
       });
 
       it('renders nothing when links is empty', () => {
-        render(<Links links={[]} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={[]} onClick={onClick} />);
 
         expect(screen.queryByTestId('links')).not.toBeInTheDocument();
       });
@@ -45,7 +45,7 @@ describe('Links', () => {
           createMockLink({ title: 'Register', subtype: 'text/html', rel: 'register' }),
           createMockLink({ title: 'Help', subtype: 'text/html', rel: 'help' }),
         ];
-        render(<Links links={links} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         expect(screen.getByTestId('links')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Register' })).toBeInTheDocument();
@@ -56,7 +56,13 @@ describe('Links', () => {
     describe('Custom rendering', () => {
       it('data customization: render interceptor modifies link data before default rendering', () => {
         const links = [createMockLink({ title: 'Original', subtype: 'text/html', rel: 'help' })];
-        render(<Links links={links} onClick={onClick} renderInterceptor={link => ({ ...link, title: 'Modified' })} />);
+        render(
+          <HaapiStepperLinksUI
+            links={links}
+            onClick={onClick}
+            renderInterceptor={link => ({ ...link, title: 'Modified' })}
+          />
+        );
 
         expect(screen.queryByRole('button', { name: 'Original' })).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Modified' })).toBeInTheDocument();
@@ -65,7 +71,7 @@ describe('Links', () => {
       it('UI customization: render interceptor replaces default rendering with custom element', () => {
         const links = [createMockLink({ title: 'Default', subtype: 'text/html', rel: 'help' })];
         render(
-          <Links
+          <HaapiStepperLinksUI
             links={links}
             onClick={onClick}
             renderInterceptor={link => (
@@ -82,7 +88,7 @@ describe('Links', () => {
 
       it('render interceptor hides links by returning null', () => {
         const links = [createMockLink({ title: 'Hidden', subtype: 'text/html', rel: 'help' })];
-        render(<Links links={links} onClick={onClick} renderInterceptor={() => null} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} renderInterceptor={() => null} />);
 
         expect(screen.queryByTestId('links')).not.toBeInTheDocument();
       });
@@ -93,7 +99,7 @@ describe('Links', () => {
           createMockLink({ title: 'Help', subtype: 'text/html', rel: 'help' }),
         ];
         render(
-          <Links
+          <HaapiStepperLinksUI
             links={links}
             onClick={onClick}
             renderInterceptor={link =>
@@ -112,7 +118,7 @@ describe('Links', () => {
     describe('Link navigation', () => {
       it('calls onClick when a link button is clicked', async () => {
         const link = createMockLink({ title: 'Register', subtype: 'text/html', rel: 'register' });
-        render(<Links links={[link]} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={[link]} onClick={onClick} />);
 
         await user.click(screen.getByRole('button', { name: 'Register' }));
 
@@ -136,7 +142,7 @@ describe('Links', () => {
       });
 
       it('opens dialog when QR button is clicked', async () => {
-        render(<Links links={links} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
@@ -144,7 +150,7 @@ describe('Links', () => {
       });
 
       it('does not call onClick when QR button is clicked', async () => {
-        render(<Links links={links} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
@@ -152,7 +158,7 @@ describe('Links', () => {
       });
 
       it('renders a close button with accessible label inside the dialog', async () => {
-        render(<Links links={links} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
@@ -160,7 +166,7 @@ describe('Links', () => {
       });
 
       it('focuses the close button when dialog opens', async () => {
-        render(<Links links={links} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
@@ -168,7 +174,7 @@ describe('Links', () => {
       });
 
       it('closes dialog when QR image is clicked', async () => {
-        render(<Links links={links} onClick={onClick} />);
+        render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
         expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
@@ -178,7 +184,7 @@ describe('Links', () => {
       });
 
       it('dialog uses the current image href from links prop', async () => {
-        const { rerender } = render(<Links links={links} onClick={onClick} />);
+        const { rerender } = render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
 
@@ -191,14 +197,14 @@ describe('Links', () => {
           }),
           links[1],
         ];
-        rerender(<Links links={updatedLinks} onClick={onClick} />);
+        rerender(<HaapiStepperLinksUI links={updatedLinks} onClick={onClick} />);
 
         const dialogImg = screen.getByTestId('qr-code-dialog').querySelector('img')!;
         expect(dialogImg).toHaveAttribute('src', 'data:image/svg+xml;base64,UPDATED');
       });
 
       it('dialog stays open across re-renders with new links', async () => {
-        const { rerender } = render(<Links links={links} onClick={onClick} />);
+        const { rerender } = render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
         await user.click(screen.getByTestId('qr-code-button'));
         expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
@@ -212,7 +218,7 @@ describe('Links', () => {
           }),
           links[1],
         ];
-        rerender(<Links links={updatedLinks} onClick={onClick} />);
+        rerender(<HaapiStepperLinksUI links={updatedLinks} onClick={onClick} />);
 
         expect(screen.getByTestId('qr-code-dialog')).toHaveAttribute('open');
       });

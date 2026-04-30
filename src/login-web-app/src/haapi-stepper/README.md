@@ -25,10 +25,10 @@ The HAAPI Frontend Library is a set of React components that provides:
  - A built-in, full management of HAAPI flows in the frontend with minimal setup:
   ```tsx
     <HaapiStepper>
-      <HaapiUIStep />
+      <HaapiStepperStepUI />
     </HaapiStepper>
   ```
- - A simple toolbox to fully customize HAAPI flows in the frontend, composed of the [HAAPI Stepper](#haapi-stepper), [HAAPI UI Step](#haapi-ui-step), and [HAAPI UI Components](#haapi-ui-components).
+ - A simple toolbox to fully customize HAAPI flows in the frontend, composed of the [HAAPI Stepper](#haapi-stepper), [HAAPI UI Step](#haapi-ui-step), and [HAAPI UI Components](#haapi-stepper-ui-components).
 
 ## HAAPI Stepper
 
@@ -90,46 +90,50 @@ function App() {
 
 ### Usage
 
-Because `HaapiStepper` does not have a UI, it can be used to build custom flow user interfaces from scratch, or it can be used in combination with the [HaapiUIStep](#haapi-ui-step) component, which provides a ready-to-use, highly customizable, HAAPI UI solution.
+Because `HaapiStepper` does not have a UI, it can be used to build custom flow user interfaces from scratch, or it can be used in combination with the [HaapiStepperStepUI](#haapi-ui-step) component, which provides a ready-to-use, highly customizable, HAAPI UI solution.
 
-Finally, the `HaapiStepper` can be used in combination with the built-in [HAAPI UI Components](#haapi-ui-components), which help create highly customized UIs while relying on some defaults.
+Finally, the `HaapiStepper` can be used in combination with the built-in [HAAPI UI Components](#haapi-stepper-ui-components), which help create highly customized UIs while relying on some defaults.
 
 Check out [the HaapiStepper documentation and usage examples](./feature/stepper/HaapiStepper.tsx)
 
 ## HAAPI UI Step
 
-The `HaapiUIStep` component provides a seamless way to implement complete HAAPI authentication flow UIs in your application, allowing extensive customization with minimal setup.
+The `HaapiStepperStepUI` component provides a seamless way to implement complete HAAPI authentication flow UIs in your application, allowing extensive customization with minimal setup.
 
 ### Basic Setup
 
  ```tsx
   <HaapiStepper>
-   <HaapiUIStep />
+   <HaapiStepperStepUI />
   </HaapiStepper>
 ```
 
 ### Usage
 
-Because the `HaapiUIStep` handles all possible HAAPI authentication flows with proper user interfaces (UI), it is the fastest and easiest way to get HAAPI up and running in your application. It is also highly customizable and granular, allowing you to customize some aspects while keeping the defaults for the rest.
+Because the `HaapiStepperStepUI` handles all possible HAAPI authentication flows with proper user interfaces (UI), it is the fastest and easiest way to get HAAPI up and running in your application. It is also highly customizable and granular, allowing you to customize some aspects while keeping the defaults for the rest.
 
-Check out [the HaapiUIStep documentation and usage examples](./feature/steps/HaapiUIStep.tsx).
+Check out [the HaapiStepperStepUI documentation and usage examples](./feature/steps/HaapiStepperStepUI.tsx).
 
 
 
-## HAAPI UI Components
+## HAAPI Stepper UI Components
 
-The HAAPI Frontend Library provides some common HAAPI UI elements that help create highly customized UIs while relying on some defaults.
+The HAAPI Frontend Library provides some common HAAPI Stepper UI elements that help create highly customized UIs while relying on some defaults.
+
+### Naming convention
+
+The HAAPI Stepper UI components are the UI representation of the main HAAPI entities, named with a `UI` suffix: `HaapiStepperStepUI` displays/interacts with `HaapiStepperStep`, `HaapiStepperLinkUI` with `HaapiStepperLink`, and so on. Collection components use the plural form (`HaapiStepperActionsUI`, `HaapiStepperLinksUI`, `HaapiStepperMessagesUI`).
 
 ### Usage
 
 Check out documentation and usage examples in the links below:
 
-- [Form](./feature/actions/form/Form.tsx)
-* [Selector](./feature/actions/selector/HaapiSelector.tsx)
-* [ClientOperation](./feature/actions/client-operation/ClientOperation.tsx)
-* [Messages](./ui/messages/Messages.tsx)
-* [Links](./ui/links/Links.tsx)
-* [Link](./ui/links/Link.tsx)
+* [HaapiStepperFormUI](./feature/actions/form/HaapiStepperFormUI.tsx)
+* [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
+* [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
+* [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
+* [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
+* [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
 
 ### CSS Customization
 
@@ -139,34 +143,34 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 
 | Class | Used by | Purpose |
 |-------|---------|---------|
-| `.haapi-stepper-selector` | `HaapiSelector` | Selector action container |
+| `.haapi-stepper-selector` | `HaapiStepperSelectorUI` | Selector action container |
 | `.haapi-stepper-authenticator-button` | `HaapiStepperFormSubmitButton` | Authenticator-selector option button (applied automatically when the action carries `authenticatorType`); combine with `.button-<authenticatorType>` (e.g. `.button-google`) to get the per-authenticator icon color |
-| `.haapi-stepper-messages` | `Messages` | Messages container |
-| `.haapi-stepper-form-field-text-input` | `HaapiStepperTextFormField` | Text input fields |
-| `.haapi-stepper-form-field-text-label` | `HaapiStepperTextFormField` | Form field labels |
-| `.haapi-stepper-form-field-checkbox-input` | `HaapiStepperCheckboxFormField` | Checkbox inputs |
-| `.haapi-stepper-form-field-checkbox-label` | `HaapiStepperCheckboxFormField` | Checkbox-specific labels |
-| `.haapi-stepper-form-field-select-input` | `HaapiStepperSelectFormField` | Select inputs |
-| `.haapi-stepper-form-field-select-label` | `HaapiStepperSelectFormField` | Select-specific labels |
-| `.haapi-stepper-form-field-password-wrapper` | `HaapiStepperPasswordFormField` | Password input container |
-| `.haapi-stepper-form-field-password-label` | `HaapiStepperPasswordFormField` | Password label |
-| `.haapi-stepper-form-field-password-input` | `HaapiStepperPasswordFormField` | Password input |
-| `.haapi-stepper-form-field-password-visibility-toggle` | `HaapiStepperPasswordFormField` | Password visibility toggle button |
-| `.haapi-stepper-button` | `HaapiStepperForm` | Primary submit buttons |
-| `.haapi-stepper-button-outline` | `HaapiStepperForm` | Outline/cancel buttons |
+| `.haapi-stepper-messages` | `HaapiStepperMessagesUI` | Messages container |
+| `.haapi-stepper-form-field-text-input` | `HaapiStepperTextFormFieldUI` | Text input fields |
+| `.haapi-stepper-form-field-text-label` | `HaapiStepperTextFormFieldUI` | Form field labels |
+| `.haapi-stepper-form-field-checkbox-input` | `HaapiStepperCheckboxFormFieldUI` | Checkbox inputs |
+| `.haapi-stepper-form-field-checkbox-label` | `HaapiStepperCheckboxFormFieldUI` | Checkbox-specific labels |
+| `.haapi-stepper-form-field-select-input` | `HaapiStepperSelectFormFieldUI` | Select inputs |
+| `.haapi-stepper-form-field-select-label` | `HaapiStepperSelectFormFieldUI` | Select-specific labels |
+| `.haapi-stepper-form-field-password-wrapper` | `HaapiStepperPasswordFormFieldUI` | Password input container |
+| `.haapi-stepper-form-field-password-label` | `HaapiStepperPasswordFormFieldUI` | Password label |
+| `.haapi-stepper-form-field-password-input` | `HaapiStepperPasswordFormFieldUI` | Password input |
+| `.haapi-stepper-form-field-password-visibility-toggle` | `HaapiStepperPasswordFormFieldUI` | Password visibility toggle button |
+| `.haapi-stepper-button` | `HaapiStepperFormUI` | Primary submit buttons |
+| `.haapi-stepper-button-outline` | `HaapiStepperFormUI` | Outline/cancel buttons |
 | `.haapi-stepper-well` | `Well` | Styled content container |
-| `.haapi-stepper-links` | `Links` | Links container |
-| `.haapi-stepper-link` | `Link` | Link element |
-| `.haapi-stepper-link-qr-code` | `Link` | QR code link figure wrapper |
-| `.haapi-stepper-link-qr-code-title` | `Link` | QR code link figcaption |
-| `.haapi-stepper-link-qr-code-button` | `Link` | QR code link expand button |
+| `.haapi-stepper-links` | `HaapiStepperLinksUI` | Links container |
+| `.haapi-stepper-link` | `HaapiStepperLinkUI` | Link element |
+| `.haapi-stepper-link-qr-code` | `HaapiStepperLinkUI` | QR code link figure wrapper |
+| `.haapi-stepper-link-qr-code-title` | `HaapiStepperLinkUI` | QR code link figcaption |
+| `.haapi-stepper-link-qr-code-button` | `HaapiStepperLinkUI` | QR code link expand button |
 | `.haapi-stepper-link-qr-code-dialog` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog |
 | `.haapi-stepper-link-qr-code-dialog-image` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog image |
-| `.haapi-stepper-actions` | `Actions` | Actions container |
-| `.haapi-stepper-heading` | `Messages` | Heading messages |
-| `.haapi-stepper-userName` | `Messages` | User name display |
-| `.haapi-stepper-userCode` | `Messages` | User code display (e.g. recovery codes) |
-| `.haapi-stepper-polling-progress` | `ClientOperation` | Remaining polling time indicator (e.g. recovery codes) |
+| `.haapi-stepper-actions` | `HaapiStepperActionsUI` | Actions container |
+| `.haapi-stepper-heading` | `HaapiStepperMessagesUI` | Heading messages |
+| `.haapi-stepper-userName` | `HaapiStepperMessagesUI` | User name display |
+| `.haapi-stepper-userCode` | `HaapiStepperMessagesUI` | User code display (e.g. recovery codes) |
+| `.haapi-stepper-polling-progress` | `HaapiStepperClientOperationUI` | Remaining polling time indicator (e.g. recovery codes) |
 | `.haapi-stepper-error-boundary-fallback` | `DefaultErrorFallback` | Error boundary fallback container |
 
 

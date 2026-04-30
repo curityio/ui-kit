@@ -15,9 +15,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 import { createMockLink } from '../../util/tests/mocks';
-import { Link } from './Link';
+import { HaapiStepperLinkUI } from './HaapiStepperLinkUI';
 
-describe('Link', () => {
+describe('HaapiStepperLinkUI', () => {
   let onClick: ReturnType<typeof vi.fn<(action: HaapiStepperLink) => void>>;
   let user: ReturnType<typeof userEvent.setup>;
 
@@ -30,7 +30,7 @@ describe('Link', () => {
     describe('Non-image links', () => {
       it('renders a button with title', () => {
         const link = createMockLink({ title: 'Help', subtype: 'text/html' });
-        render(<Link link={link} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={link} onClick={onClick} />);
 
         const button = screen.getByRole('button', { name: 'Help' });
         expect(button).toHaveClass('haapi-stepper-link');
@@ -38,7 +38,7 @@ describe('Link', () => {
 
       it('falls back to rel when title is missing', () => {
         const link = createMockLink({ title: undefined, rel: 'help', subtype: 'text/html' });
-        render(<Link link={link} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={link} onClick={onClick} />);
 
         expect(screen.getByRole('button', { name: 'help' })).toBeInTheDocument();
       });
@@ -57,7 +57,7 @@ describe('Link', () => {
       });
 
       it('renders a button wrapping the QR image', () => {
-        render(<Link link={imageLink} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={imageLink} onClick={onClick} />);
 
         const button = screen.getByRole('button', { name: 'QR code, click to expand' });
         expect(button).toHaveClass('haapi-stepper-link-qr-code-button');
@@ -65,13 +65,13 @@ describe('Link', () => {
       });
 
       it('shows alt text from link title', () => {
-        render(<Link link={imageLink} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={imageLink} onClick={onClick} />);
 
         expect(screen.getByAltText('QR Code')).toBeInTheDocument();
       });
 
       it('shows visible title text from link title', () => {
-        render(<Link link={imageLink} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={imageLink} onClick={onClick} />);
 
         expect(screen.getByText('QR Code')).toBeInTheDocument();
       });
@@ -83,7 +83,7 @@ describe('Link', () => {
           title: undefined,
           rel: 'qr-code',
         });
-        render(<Link link={imageLink} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={imageLink} onClick={onClick} />);
 
         expect(screen.getByAltText('QR code, click to expand')).toBeInTheDocument();
       });
@@ -95,7 +95,7 @@ describe('Link', () => {
           title: undefined,
           rel: 'qr-code',
         });
-        render(<Link link={imageLink} onClick={onClick} />);
+        render(<HaapiStepperLinkUI link={imageLink} onClick={onClick} />);
 
         expect(screen.queryByText('qr-code')).not.toBeInTheDocument();
       });
@@ -105,7 +105,7 @@ describe('Link', () => {
   describe('Features', () => {
     it('calls onClick when a non-image link is clicked', async () => {
       const link = createMockLink({ title: 'Help', subtype: 'text/html' });
-      render(<Link link={link} onClick={onClick} />);
+      render(<HaapiStepperLinkUI link={link} onClick={onClick} />);
 
       await user.click(screen.getByRole('button', { name: 'Help' }));
       expect(onClick).toHaveBeenCalledWith(link);
@@ -118,7 +118,7 @@ describe('Link', () => {
         title: 'QR Code',
         rel: 'qr-code',
       });
-      render(<Link link={imageLink} onClick={onClick} />);
+      render(<HaapiStepperLinkUI link={imageLink} onClick={onClick} />);
 
       await user.click(screen.getByRole('button', { name: 'QR code, click to expand' }));
       expect(onClick).toHaveBeenCalledWith(imageLink);

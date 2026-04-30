@@ -15,7 +15,7 @@ import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { defaultHaapiStepperLinkElementFactory } from './defaultHaapiStepperLinkElementFactory';
 import { HaapiStepperQrCodeLinkDialog } from './HaapiStepperQrCodeLinkDialog';
 
-interface LinksProps {
+interface HaapiStepperLinksUIProps {
   links?: HaapiStepperLink[];
   onClick: HaapiStepperNextStep<HaapiStepperLink>;
   renderInterceptor?: (link: HaapiStepperLink) => ReactElement | HaapiStepperLink | null | undefined;
@@ -35,7 +35,7 @@ interface LinksProps {
  *   const { currentStep, nextStep } = useHaapiStepper();
  *   const links = currentStep?.dataHelpers.links;
  *
- *   return { <Links links={links} onClick={nextStep} /> };
+ *   return { <HaapiStepperLinksUI links={links} onClick={nextStep} /> };
  * }
  *
  * <HaapiStepper>
@@ -43,7 +43,7 @@ interface LinksProps {
  * </HaapiStepper>
  * ```
  */
-export function Links({ links, onClick, renderInterceptor }: LinksProps) {
+export function HaapiStepperLinksUI({ links, onClick, renderInterceptor }: HaapiStepperLinksUIProps) {
   return (
     <HaapiStepperQrCodeLinkDialog links={links}>
       {displayQrCodeInDialog => {

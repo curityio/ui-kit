@@ -23,7 +23,7 @@ import type {
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import defaultHaapiStepperActionElementFactory from './defaultHaapiStepperActionElementFactory';
 
-interface ActionsProps {
+interface HaapiStepperActionsUIProps {
   actions?: HaapiStepperAction[];
   onAction: HaapiStepperNextStep<HaapiStepperFormAction | HaapiStepperClientOperationAction>;
   formActionRenderInterceptor?: HaapiStepperActionsActionRenderInterceptor<HaapiStepperFormAction>;
@@ -33,7 +33,7 @@ interface ActionsProps {
   container?: ElementType | null;
 }
 
-export function Actions({
+export function HaapiStepperActionsUI({
   actions,
   onAction,
   formActionRenderInterceptor,
@@ -41,7 +41,7 @@ export function Actions({
   selectorActionRenderInterceptor,
   clientOperationActionRenderInterceptor,
   container,
-}: ActionsProps) {
+}: HaapiStepperActionsUIProps) {
   if (!actions?.length) {
     return null;
   }

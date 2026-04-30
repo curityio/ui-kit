@@ -11,7 +11,13 @@
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 
-export const Link = ({ link, onClick }: { link: HaapiStepperLink; onClick: (action: HaapiStepperLink) => void }) => {
+export const HaapiStepperLinkUI = ({
+  link,
+  onClick,
+}: {
+  link: HaapiStepperLink;
+  onClick: (action: HaapiStepperLink) => void;
+}) => {
   const isQRCodeLink = link.subtype?.startsWith('image/');
 
   if (isQRCodeLink) {

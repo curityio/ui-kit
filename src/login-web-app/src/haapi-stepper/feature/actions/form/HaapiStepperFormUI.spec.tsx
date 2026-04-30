@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { HaapiStepperForm } from './HaapiStepperForm';
+import { HaapiStepperFormUI } from './HaapiStepperFormUI';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../../data-access/types/haapi-form.types';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { HAAPI_PROBLEM_STEPS } from '../../../data-access/types/haapi-step.types';
@@ -23,7 +23,7 @@ import userEvent from '@testing-library/user-event';
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
-describe('HaapiStepperForm', () => {
+describe('HaapiStepperFormUI', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('HaapiStepperForm', () => {
       const action = createLoginFormAction();
       const onSubmit = vi.fn();
 
-      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toBeInTheDocument();
       expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('HaapiStepperForm', () => {
       const action = createLoginFormAction();
       const onSubmit = vi.fn();
 
-      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       const usernameInput = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName));
       const passwordInput = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName));
@@ -91,7 +91,7 @@ describe('HaapiStepperForm', () => {
         },
       };
 
-      const { rerender } = render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      const { rerender } = render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       expect(screen.queryByTestId(validationErrorTestId)).not.toBeInTheDocument();
 
@@ -99,7 +99,7 @@ describe('HaapiStepperForm', () => {
 
       await user.click(screen.getByTestId(submitButtonTestId));
 
-      rerender(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      rerender(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       await waitFor(() => {
         expect(screen.getAllByTestId(validationErrorTestId)).toHaveLength(2);
@@ -112,7 +112,7 @@ describe('HaapiStepperForm', () => {
       const action = createLoginFormAction();
       const onSubmit = vi.fn();
 
-      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const passwordInput = screen.getByTestId(
@@ -148,7 +148,7 @@ describe('HaapiStepperForm', () => {
       });
       const onSubmit = vi.fn();
 
-      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
         'autocomplete',
@@ -164,7 +164,7 @@ describe('HaapiStepperForm', () => {
       const action = createLoginFormAction();
       const onSubmit = vi.fn();
 
-      render(<HaapiStepperForm action={action} onSubmit={onSubmit} />);
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
       expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
         'autocomplete',
@@ -192,7 +192,7 @@ describe('HaapiStepperForm', () => {
           };
 
           render(
-            <HaapiStepperForm
+            <HaapiStepperFormUI
               action={action}
               onSubmit={onSubmit}
               formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -230,7 +230,7 @@ describe('HaapiStepperForm', () => {
           };
 
           render(
-            <HaapiStepperForm
+            <HaapiStepperFormUI
               action={action}
               onSubmit={onSubmit}
               formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -261,7 +261,7 @@ describe('HaapiStepperForm', () => {
           };
 
           render(
-            <HaapiStepperForm
+            <HaapiStepperFormUI
               action={action}
               onSubmit={onSubmit}
               formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -302,7 +302,7 @@ describe('HaapiStepperForm', () => {
           };
 
           render(
-            <HaapiStepperForm
+            <HaapiStepperFormUI
               action={action}
               onSubmit={onSubmit}
               formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -350,7 +350,7 @@ describe('HaapiStepperForm', () => {
           );
 
           render(
-            <HaapiStepperForm
+            <HaapiStepperFormUI
               action={action}
               onSubmit={onSubmit}
               formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -384,7 +384,7 @@ describe('HaapiStepperForm', () => {
           const onSubmit = vi.fn();
 
           render(
-            <HaapiStepperForm action={action} onSubmit={onSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
               {({ fields }) => (
                 <>
                   {fields.map(field => {
@@ -402,7 +402,7 @@ describe('HaapiStepperForm', () => {
                   })}
                 </>
               )}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           expect(screen.getByLabelText(customizedUsernameLabel)).toBeInTheDocument();
@@ -416,7 +416,7 @@ describe('HaapiStepperForm', () => {
           const onSubmit = vi.fn();
 
           render(
-            <HaapiStepperForm action={action} onSubmit={onSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
               {({ fields }) => (
                 <>
                   {fields.map(field => (
@@ -427,7 +427,7 @@ describe('HaapiStepperForm', () => {
                   <HaapiStepperFormSubmitButton />
                 </>
               )}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           const usernameInput = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName));
@@ -448,7 +448,7 @@ describe('HaapiStepperForm', () => {
           const onSubmit = vi.fn();
 
           render(
-            <HaapiStepperForm action={action} onSubmit={onSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
               {({ fields }) => (
                 <>
                   {fields.map(field => (
@@ -459,7 +459,7 @@ describe('HaapiStepperForm', () => {
                   <button type="submit">{submitButtonLabel}</button>
                 </>
               )}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           const usernameInput = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName));
@@ -480,7 +480,7 @@ describe('HaapiStepperForm', () => {
           const onSubmit = vi.fn();
 
           render(
-            <HaapiStepperForm action={action} onSubmit={onSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
               {({ fields, formState }) => {
                 const usernameField = fields.find(field => field.type === HAAPI_FORM_FIELDS.USERNAME)!;
                 const otherVisibleFields = fields.filter(field => field !== usernameField);
@@ -508,7 +508,7 @@ describe('HaapiStepperForm', () => {
                   </>
                 );
               }}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           const customInput = screen.getByLabelText(customUsernameLabelWithSuffix);
@@ -540,7 +540,7 @@ describe('HaapiStepperForm', () => {
           const onSubmit = vi.fn();
 
           render(
-            <HaapiStepperForm action={action} onSubmit={onSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
               {({ fields }) => (
                 <>
                   {fields
@@ -553,7 +553,7 @@ describe('HaapiStepperForm', () => {
                   <HaapiStepperFormSubmitButton />
                 </>
               )}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           expect(
@@ -577,7 +577,7 @@ describe('HaapiStepperForm', () => {
           const onSubmit = vi.fn();
 
           render(
-            <HaapiStepperForm action={action} onSubmit={onSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
               {({ fields }) => (
                 <>
                   {fields.map(field => (
@@ -594,7 +594,7 @@ describe('HaapiStepperForm', () => {
                   <HaapiStepperFormSubmitButton />
                 </>
               )}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           expect(screen.getByTestId(composedExtraElementTestId)).toHaveTextContent(helperTextBetweenFields);
@@ -618,7 +618,7 @@ describe('HaapiStepperForm', () => {
           };
 
           render(
-            <HaapiStepperForm action={action} onSubmit={handleSubmit}>
+            <HaapiStepperFormUI action={action} onSubmit={handleSubmit}>
               {({ fields }) => (
                 <>
                   {fields.map(field => (
@@ -629,7 +629,7 @@ describe('HaapiStepperForm', () => {
                   <button type="submit">{submitButtonLabel}</button>
                 </>
               )}
-            </HaapiStepperForm>
+            </HaapiStepperFormUI>
           );
 
           const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);

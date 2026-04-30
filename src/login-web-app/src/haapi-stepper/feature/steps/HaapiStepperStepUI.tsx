@@ -11,9 +11,9 @@
 
 import { ReactElement, isValidElement } from 'react';
 import { Spinner } from '../../../shared/ui/Spinner';
-import { Actions } from '../../ui/actions/Actions';
-import { Links } from '../../ui/links/Links';
-import { Messages } from '../../ui/messages/Messages';
+import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
+import { HaapiStepperLinksUI } from '../../ui/links/HaapiStepperLinksUI';
+import { HaapiStepperMessagesUI } from '../../ui/messages/HaapiStepperMessagesUI';
 import { Well } from '../../ui/well/Well';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import { formatNextStepData } from '../stepper/data-formatters/format-next-step-data';
@@ -322,7 +322,7 @@ const getMessagesElement = (
     ? (message: HaapiStepperUserMessage) => messageRenderInterceptor({ message, ...haapiStepperAPI })
     : undefined;
 
-  return <Messages messages={messages} renderInterceptor={renderInterceptor} />;
+  return <HaapiStepperMessagesUI messages={messages} renderInterceptor={renderInterceptor} />;
 };
 
 const getActionsElement = (
@@ -354,7 +354,7 @@ const getActionsElement = (
       : undefined;
 
     return (
-      <Actions
+      <HaapiStepperActionsUI
         actions={actions}
         onAction={haapiStepperAPI.nextStep}
         formActionRenderInterceptor={formActionInterceptor}
@@ -383,7 +383,7 @@ const getLinksElement = (
     ? (link: HaapiStepperLink) => linkRenderInterceptor({ link, ...haapiStepperAPI })
     : undefined;
 
-  return <Links links={links} onClick={haapiStepperAPI.nextStep} renderInterceptor={renderInterceptor} />;
+  return <HaapiStepperLinksUI links={links} onClick={haapiStepperAPI.nextStep} renderInterceptor={renderInterceptor} />;
 };
 
 const getLinksToDisplay = (
