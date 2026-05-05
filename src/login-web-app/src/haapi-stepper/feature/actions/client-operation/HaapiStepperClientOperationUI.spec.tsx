@@ -101,14 +101,14 @@ describe('HaapiStepperClientOperationUI', () => {
   });
 
   describe('WebAuthn any-device split (integration)', () => {
-    it('renders one button per credential option when both are offered', () => {
+    it('renders one button per credential option when both are offered, suffixing the original title', () => {
       const action = createWebAuthnAnyDeviceBothOptionsAction();
       const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, { actions: [action] });
 
       render(<HaapiStepperActionsUI actions={step.dataHelpers.actions?.all} onAction={vi.fn()} />);
 
-      expect(screen.getByRole('button', { name: 'This device' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Another device' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Register device (This device)' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Register device (Another device)' })).toBeInTheDocument();
     });
   });
 });

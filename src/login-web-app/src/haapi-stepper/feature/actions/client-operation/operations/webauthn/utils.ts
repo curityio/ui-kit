@@ -27,8 +27,9 @@ const WEBAUTHN_CROSS_PLATFORM_LABEL = 'Another device';
  * When the server returned both `platformCredentialCreationOptions` and
  * `crossPlatformCredentialCreationOptions` (any-device mode of the `webauthn` authenticator),
  * splits the action into two sibling actions — one per credential type, each with
- * `model.arguments` narrowed to its single creation-options key and `title` set to the
- * matching English label. Default action rendering produces one button per emitted action.
+ * `model.arguments` narrowed to its single creation-options key and `title` suffixed with the
+ * matching English label (e.g. `"Register new device (This device)"`). Default action
+ * rendering produces one button per emitted action.
  *
  * Single-option (any-device platform-only / cross-platform-only) and passkeys-mode actions
  * pass through unchanged.
@@ -45,7 +46,7 @@ export function splitWebAuthnRegistrationAction(
       ? [
           {
             ...action,
-            title: WEBAUTHN_PLATFORM_LABEL,
+            title: composeTitle(action.title, WEBAUTHN_PLATFORM_LABEL),
             model: {
               ...action.model,
               arguments: { platformCredentialCreationOptions: args.platformCredentialCreationOptions },
@@ -58,7 +59,7 @@ export function splitWebAuthnRegistrationAction(
       ? [
           {
             ...action,
-            title: WEBAUTHN_CROSS_PLATFORM_LABEL,
+            title: composeTitle(action.title, WEBAUTHN_CROSS_PLATFORM_LABEL),
             model: {
               ...action.model,
               arguments: { crossPlatformCredentialCreationOptions: args.crossPlatformCredentialCreationOptions },
@@ -78,6 +79,9 @@ export function splitWebAuthnRegistrationAction(
 
   return [action];
 }
+
+const composeTitle = (originalTitle: string | undefined, label: string): string =>
+  originalTitle ? `${originalTitle} (${label})` : label;
 
 export const isWebAuthnRegistrationClientOperation = (
   action: HaapiAction
