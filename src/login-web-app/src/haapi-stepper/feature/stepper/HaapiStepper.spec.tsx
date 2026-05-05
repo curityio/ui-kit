@@ -732,11 +732,9 @@ vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({
 }));
 
 const mockOpenBankIdApp = vi.hoisted(() => vi.fn());
-vi.mock('../actions/client-operation/openBankIdApp', () => {
-  return {
-    openBankIdApp: mockOpenBankIdApp,
-  };
-});
+vi.mock('../actions/client-operation/operations/bankid/open-bankid-app', () => ({
+  openBankIdApp: mockOpenBankIdApp,
+}));
 
 const mockHaapiFetchStep = (step: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config: Record<string, unknown> = {}) => {
   const stepMock = getStepMock(step, config);

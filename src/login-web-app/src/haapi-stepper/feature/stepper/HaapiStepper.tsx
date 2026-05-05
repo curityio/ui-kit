@@ -20,7 +20,7 @@ import {
 } from '../../data-access/types/haapi-step.types';
 
 import { HaapiStepperContext } from './HaapiStepperContext';
-import { isClientOperation, performClientOperation } from '../actions/client-operation/client-operations';
+import { isClientOperation, performClientOperation } from '../actions/client-operation/operations/client-operations';
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
