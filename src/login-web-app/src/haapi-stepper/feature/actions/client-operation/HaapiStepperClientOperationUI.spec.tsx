@@ -24,6 +24,15 @@ import { HaapiStepperClientOperationAction } from '../../stepper/haapi-stepper.t
 import { createMockClientOperationAction, createMockFormAction, createMockStep } from '../../../util/tests/mocks';
 import { HaapiStepperActionsUI } from '../../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperClientOperationUI } from './HaapiStepperClientOperationUI';
+import { useIsWebAuthnPlatformAuthenticatorAvailable } from './operations/webauthn';
+
+vi.mock('./operations/webauthn', async () => {
+  const actual = await vi.importActual('./operations/webauthn');
+  return {
+    ...(actual as object),
+    useIsWebAuthnPlatformAuthenticatorAvailable: vi.fn(() => undefined),
+  };
+});
 
 describe('HaapiStepperClientOperationUI', () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -83,20 +92,40 @@ describe('HaapiStepperClientOperationUI', () => {
   });
 
   describe('WebAuthn registration', () => {
-    beforeEach(() => {
-      vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
+    describe('when the WebAuthn API is available', () => {
+      beforeEach(() => {
+        vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
+      });
+
+      afterEach(() => {
+        vi.unstubAllGlobals();
+      });
+
+      it('enables the button', () => {
+        const action = createWebAuthnRegistrationAction();
+
+        render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
+
+        expect(screen.getByRole('button', { name: webAuthnActionTitle })).toBeEnabled();
+      });
+
+      it('disables the button for platform-only any-device registration when platform authenticator is unavailable', () => {
+        vi.mocked(useIsWebAuthnPlatformAuthenticatorAvailable).mockReturnValue(false);
+        const action = createWebAuthnPlatformOnlyAnyDeviceAction();
+
+        render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
+
+        expect(screen.getByRole('button', { name: webAuthnActionTitle })).toBeDisabled();
+      });
     });
 
-    afterEach(() => {
-      vi.unstubAllGlobals();
-    });
-
-    it('enables the button when the WebAuthn API is available', () => {
+    it('disables the button when the WebAuthn API is not available', () => {
+      // PublicKeyCredential is not stubbed — WebAuthn API unavailable
       const action = createWebAuthnRegistrationAction();
 
       render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
 
-      expect(screen.getByRole('button', { name: webAuthnActionTitle })).toBeEnabled();
+      expect(screen.getByRole('button', { name: webAuthnActionTitle })).toBeDisabled();
     });
   });
 
@@ -198,3 +227,20 @@ const createWebAuthnAnyDeviceBothOptionsAction = (): HaapiClientOperationAction 
     continueActions: [continueAction],
   },
 });
+
+const createWebAuthnPlatformOnlyAnyDeviceAction = (
+  overrides: Partial<HaapiStepperClientOperationAction> = {}
+): HaapiStepperClientOperationAction =>
+  createMockClientOperationAction({
+    title: webAuthnActionTitle,
+    kind: 'device-register',
+    template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
+    model: {
+      name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+      arguments: {
+        platformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY },
+      },
+      continueActions: [continueAction],
+    },
+    ...overrides,
+  });

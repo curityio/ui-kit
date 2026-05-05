@@ -31,7 +31,7 @@ interface HaapiStepperClientOperationUIProps {
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();
- *   const clientOperationAction = currentStep?.dataHelpers.clientOperationActions?.[0];
+ *   const clientOperationAction = currentStep?.dataHelpers.actions?.clientOperation?.[0];
  *
  *   return clientOperationAction && (
  *     <HaapiStepperClientOperationUI action={clientOperationAction} onAction={nextStep} />
@@ -59,12 +59,7 @@ export function HaapiStepperClientOperationUI({
           max={action.maxWaitTime}
         />
       )}
-      <button
-        type="button"
-        className="haapi-stepper-button"
-        disabled={!isAvailable}
-        onClick={() => onAction(action)}
-      >
+      <button type="button" className="haapi-stepper-button" disabled={!isAvailable} onClick={() => onAction(action)}>
         {action.title}
       </button>
     </div>
