@@ -35,9 +35,9 @@ interface HaapiStepperSelectorUIProps {
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();
- *   const selectorAction = currentStep?.dataHelpers.selectorActions?.[0];
+ *   const selectorAction = currentStep?.dataHelpers.actions?.selector?.[0];
  *
- *   return {selectorAction && <HaapiStepperSelectorUI action={selectorAction} onSubmit={nextStep} />}
+ *   return selectorAction && <HaapiStepperSelectorUI action={selectorAction} onSubmit={nextStep} />;
  * }
  *
  * <HaapiStepper>

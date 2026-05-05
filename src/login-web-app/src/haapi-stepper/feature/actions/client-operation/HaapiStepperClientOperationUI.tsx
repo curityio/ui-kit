@@ -9,35 +9,33 @@
  * For further information, please contact Curity AB.
  */
 
-import { ReactNode } from 'react';
 import { HaapiStepperClientOperationAction, HaapiStepperFormAction } from '../../stepper/haapi-stepper.types';
+import { useIsClientOperationAvailable } from './useIsClientOperationAvailable';
 
 interface HaapiStepperClientOperationUIProps {
   action: HaapiStepperClientOperationAction;
   onAction: (action: HaapiStepperClientOperationAction | HaapiStepperFormAction) => void;
   showBankIdSessionTimeLeft?: boolean;
-  render?: (
-    action: HaapiStepperClientOperationAction,
-    onAction: (action: HaapiStepperClientOperationAction | HaapiStepperFormAction) => void,
-    showBankIdSessionTimeLeft: boolean
-  ) => ReactNode;
 }
 
 /**
  * @description
  * # CLIENT OPERATION ACTION COMPONENT
  *
- * Provides the default UI wrapper for HAAPI client-operation actions and exposes a render
- * prop to fully customise the look and feel while keeping the underlying behaviour intact.
- * It also forwards the client operation option clicked to the provided `onAction` handler.
+ * Renders the default UI for a HAAPI client-operation action and forwards the click to
+ * `onAction`. The button is disabled when the action's runtime capability requirements are
+ * not met (e.g. WebAuthn API missing, or platform authenticator unavailable for platform-only
+ * WebAuthn registration).
  *
  * @example
  * ```tsx
  * function HaapiComponentExample() {
- *   const { currentStep, nextStep } = useHaapiStepper(); *
- *   const clientOperationAction = currentStep?.dataHelpers.clientOperationActions?.[0];
+ *   const { currentStep, nextStep } = useHaapiStepper();
+ *   const clientOperationAction = currentStep?.dataHelpers.actions?.clientOperation?.[0];
  *
- *   return { clientOperationAction && <HaapiStepperClientOperationUI action={clientOperationAction} onAction={nextStep} /> };
+ *   return clientOperationAction && (
+ *     <HaapiStepperClientOperationUI action={clientOperationAction} onAction={nextStep} />
+ *   );
  * }
  *
  * <HaapiStepper>
@@ -49,26 +47,21 @@ export function HaapiStepperClientOperationUI({
   action,
   onAction,
   showBankIdSessionTimeLeft = true,
-  render = defaultRenderClientOperation,
 }: HaapiStepperClientOperationUIProps) {
-  return render(action, onAction, showBankIdSessionTimeLeft);
-}
+  const isAvailable = useIsClientOperationAvailable(action);
 
-const defaultRenderClientOperation = (
-  action: HaapiStepperClientOperationAction,
-  onAction: (action: HaapiStepperClientOperationAction | HaapiStepperFormAction) => void,
-  showBankIdSessionTimeLeft: boolean
-) => (
-  <div data-testid="client-operation-action">
-    {showBankIdSessionTimeLeft && action.maxWaitRemainingTime !== undefined && (
-      <progress
-        className="haapi-stepper-polling-progress"
-        value={action.maxWaitRemainingTime}
-        max={action.maxWaitTime}
-      />
-    )}
-    <button type="button" className="haapi-stepper-button" onClick={() => onAction(action)}>
-      {action.title}
-    </button>
-  </div>
-);
+  return (
+    <div data-testid="client-operation-action">
+      {showBankIdSessionTimeLeft && action.maxWaitRemainingTime !== undefined && (
+        <progress
+          className="haapi-stepper-polling-progress"
+          value={action.maxWaitRemainingTime}
+          max={action.maxWaitTime}
+        />
+      )}
+      <button type="button" className="haapi-stepper-button" disabled={!isAvailable} onClick={() => onAction(action)}>
+        {action.title}
+      </button>
+    </div>
+  );
+}
