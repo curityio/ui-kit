@@ -95,46 +95,42 @@ describe('HaapiStepperClientOperationUI', () => {
     });
   });
 
-  describe('WebAuthn registration', () => {
-    describe('when the WebAuthn API is available', () => {
-      beforeEach(() => {
-        vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
-      });
-
-      afterEach(() => {
-        vi.unstubAllGlobals();
-      });
-
-      it('enables the button', () => {
-        const action = createMockWebAuthnRegistrationAction();
-
-        render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
-
-        expect(screen.getByRole('button', { name: webAuthnRegistrationActionTitle })).toBeEnabled();
-      });
-
-      it('disables the button for platform-only any-device registration when platform authenticator is unavailable', () => {
-        vi.mocked(useIsWebAuthnPlatformAuthenticatorAvailable).mockReturnValue(false);
-        const action = createMockWebAuthnPlatformOnlyAnyDeviceAction();
-
-        render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
-
-        expect(screen.getByRole('button', { name: webAuthnPlatformOnlyAnyDeviceActionTitle })).toBeDisabled();
-      });
+  describe('WebAuthn', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      vi.mocked(useIsWebAuthnPlatformAuthenticatorAvailable).mockReset();
     });
 
-    it('disables the button when the WebAuthn API is not available', () => {
-      // PublicKeyCredential is not stubbed — WebAuthn API unavailable
+    it('enables the button when the WebAuthn API is available', () => {
+      vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
+      const action = createMockWebAuthnRegistrationAction();
+
+      render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
+
+      expect(screen.getByRole('button', { name: webAuthnRegistrationActionTitle })).toBeEnabled();
+    });
+
+    it('disables the button when the WebAuthn API is unavailable', () => {
+      // jsdom does not expose `PublicKeyCredential`, so `isWebAuthnApiSupported()` returns false
+      // and the gate disables WebAuthn buttons.
       const action = createMockWebAuthnRegistrationAction();
 
       render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
 
       expect(screen.getByRole('button', { name: webAuthnRegistrationActionTitle })).toBeDisabled();
     });
-  });
 
-  describe('WebAuthn any-device split (integration)', () => {
-    it('renders one button per credential option when both are offered, suffixing the original title', () => {
+    it('disables a platform-only any-device registration when no platform authenticator is available', () => {
+      vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
+      vi.mocked(useIsWebAuthnPlatformAuthenticatorAvailable).mockReturnValue(false);
+      const action = createMockWebAuthnPlatformOnlyAnyDeviceAction();
+
+      render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
+
+      expect(screen.getByRole('button', { name: webAuthnPlatformOnlyAnyDeviceActionTitle })).toBeDisabled();
+    });
+
+    it('renders one button per credential option for any-device-mode with both options, suffixing the original title', () => {
       const action = createMockWebAuthnAnyDeviceBothOptionsAction();
       const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, { actions: [action] });
 
