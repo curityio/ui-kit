@@ -1,0 +1,15 @@
+#
+# Copyright (C) 2024 Curity AB. All rights reserved.
+#
+# The contents of this file are the property of Curity AB.
+# You may not copy or use this file, in either source code
+# or executable form, except in compliance with terms
+# set by Curity AB.
+#
+# For further information, please contact Curity AB.
+#
+
+view.description=Din nyckel är inte längre giltig eftersom din kontoinformation har ändrats. Du måste registrera en ny nyckel för att fortsätta.
+view.button.register=Registrera fler enheter
+view.error.registration=Något gick fel. Kan inte registrera den här enheten.
+view.error.cancel-or-timeout=Registreringen avbröts, eller tog för lång tid.
