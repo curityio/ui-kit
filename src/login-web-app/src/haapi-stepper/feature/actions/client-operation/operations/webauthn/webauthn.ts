@@ -15,17 +15,13 @@ import {
   HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../../../../data-access/types/haapi-action.types';
 import { HaapiFetchFormAction } from '../../../../../data-access/types/haapi-fetch.types';
-import { isAnyDeviceWebAuthnRegistrationAction, isPasskeysWebAuthnRegistrationAction } from './utils';
+import {
+  isAnyDeviceWebAuthnRegistrationAction,
+  isPasskeysWebAuthnRegistrationAction,
+  isWebAuthnApiSupported,
+} from './utils';
 
 const WEBAUTHN_API_NOT_SUPPORTED_ERROR_MESSAGE = 'WebAuthn API is not supported in this browser';
-
-export function isWebAuthnApiSupported(): boolean {
-  return (
-    typeof PublicKeyCredential === 'function' &&
-    typeof PublicKeyCredential.parseCreationOptionsFromJSON === 'function' &&
-    typeof PublicKeyCredential.parseRequestOptionsFromJSON === 'function'
-  );
-}
 
 /**
  * Executes the `webauthn-registration` ceremony: prompts the browser for a new public-key
