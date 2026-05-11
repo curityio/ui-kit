@@ -1,6 +1,11 @@
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import { HAAPI_STEPPER_ELEMENT_TYPES, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
-import { HAAPI_ACTION_TYPES, HAAPI_ACTION_CLIENT_OPERATIONS } from '../../data-access/types/haapi-action.types';
+import {
+  HAAPI_ACTION_CLIENT_OPERATIONS,
+  HAAPI_ACTION_TYPES,
+  HAAPI_FORM_ACTION_KINDS,
+  HaapiClientOperationAction,
+} from '../../data-access/types/haapi-action.types';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
@@ -139,3 +144,93 @@ export const defaultStepperAPI: HaapiStepperAPI = {
   history: [],
   nextStep: mockNextStep,
 };
+
+// ============================================================================
+// Client-operation action factories
+// ============================================================================
+
+export const externalBrowserFlowActionTitle = 'Continue in browser';
+export const bankIdActionTitle = 'Open BankID';
+export const webAuthnRegistrationActionTitle = 'Register a passkey';
+export const webAuthnAnyDeviceActionTitle = 'Register device';
+export const webAuthnPlatformOnlyAnyDeviceActionTitle = 'Register device (This device)';
+
+const continueAction = createMockFormAction({
+  kind: HAAPI_FORM_ACTION_KINDS.CONTINUE,
+  title: 'Continue',
+});
+
+const WEBAUTHN_PUBLIC_KEY = {
+  challenge: 'c',
+  rp: { name: 'r' },
+  user: { id: 'u', name: 'n', displayName: 'd' },
+  pubKeyCredParams: [],
+} as never;
+
+export const createMockExternalBrowserFlowAction = (
+  overrides: Partial<HaapiStepperClientOperationAction> = {}
+): HaapiStepperClientOperationAction =>
+  createMockClientOperationAction({
+    title: externalBrowserFlowActionTitle,
+    model: {
+      name: HAAPI_ACTION_CLIENT_OPERATIONS.EXTERNAL_BROWSER_FLOW,
+      arguments: { href: '/external-browser' },
+      continueActions: [continueAction],
+    },
+    ...overrides,
+  });
+
+export const createMockBankIdAction = (
+  overrides: Partial<HaapiStepperClientOperationAction> = {}
+): HaapiStepperClientOperationAction =>
+  createMockClientOperationAction({
+    title: bankIdActionTitle,
+    kind: 'bankid',
+    model: {
+      name: HAAPI_ACTION_CLIENT_OPERATIONS.BANKID,
+      arguments: { href: '/bankid', autoStartToken: 'token' },
+      continueActions: [continueAction],
+    },
+    ...overrides,
+  });
+
+export const createMockWebAuthnRegistrationAction = (
+  overrides: Partial<HaapiStepperClientOperationAction> = {}
+): HaapiStepperClientOperationAction =>
+  createMockClientOperationAction({
+    title: webAuthnRegistrationActionTitle,
+    kind: 'device-register',
+    template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
+    model: {
+      name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+      arguments: { credentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY } },
+      continueActions: [continueAction],
+    },
+    ...overrides,
+  });
+
+export const createMockWebAuthnAnyDeviceBothOptionsAction = (): HaapiClientOperationAction => ({
+  template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
+  kind: 'device-register',
+  title: webAuthnAnyDeviceActionTitle,
+  model: {
+    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+    arguments: {
+      platformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY },
+      crossPlatformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY },
+    },
+    continueActions: [continueAction],
+  },
+});
+
+export const createMockWebAuthnPlatformOnlyAnyDeviceAction = (): HaapiStepperClientOperationAction =>
+  createMockClientOperationAction({
+    title: webAuthnPlatformOnlyAnyDeviceActionTitle,
+    kind: 'device-register',
+    template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
+    model: {
+      name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+      arguments: { platformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY } },
+      continueActions: [continueAction],
+    },
+  });

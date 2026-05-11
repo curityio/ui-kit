@@ -39,9 +39,7 @@ export default function defaultHaapiStepperActionElementFactory(
       );
 
     case HAAPI_ACTION_TYPES.CLIENT_OPERATION:
-      return (
-        <HaapiStepperClientOperationUI key={`clientop-${action.model.name}`} action={action} onAction={onAction} />
-      );
+      return <HaapiStepperClientOperationUI key={`clientop-${action.id}`} action={action} onAction={onAction} />;
 
     case HAAPI_ACTION_TYPES.SELECTOR:
       return <HaapiStepperSelectorUI key={`selector-${action.title ?? ''}`} action={action} onSubmit={onAction} />;

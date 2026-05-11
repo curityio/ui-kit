@@ -198,13 +198,53 @@ export interface HaapiWebAuthnRegistrationClientOperationAction extends HaapiCli
 
 export interface HaapiWebAuthnRegistrationClientOperationModel extends HaapiBaseClientOperationModel {
   name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION;
-  arguments:
-    | { credentialCreationOptions: HaapiPublicKeyCredentialCreationOptions }
-    | {
-        platformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
-        crossPlatformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
-      };
+  arguments: HaapiWebAuthnRegistrationArgs;
   continueActions: [HaapiFormAction];
+}
+
+export type HaapiWebAuthnPasskeysRegistrationAction = Omit<HaapiWebAuthnRegistrationClientOperationAction, 'model'> & {
+  model: Omit<HaapiWebAuthnRegistrationClientOperationModel, 'arguments'> & {
+    arguments: HaapiWebAuthnPasskeysArgs;
+  };
+};
+
+export type HaapiWebAuthnAnyDeviceRegistrationAction = Omit<HaapiWebAuthnRegistrationClientOperationAction, 'model'> & {
+  model: Omit<HaapiWebAuthnRegistrationClientOperationModel, 'arguments'> & {
+    arguments: HaapiWebAuthnAnyDeviceArgs;
+  };
+};
+
+/**
+ * Discriminated union of `webauthn-registration` action arguments.
+ *
+ * - Passkeys-mode (`passkey` authenticator or `webauthn` in passkeys-mode): only
+ *   `credentialCreationOptions` is present.
+ * - Any-device-mode (`webauthn` authenticator): one or both of
+ *   `platformCredentialCreationOptions` / `crossPlatformCredentialCreationOptions`.
+ */
+export type HaapiWebAuthnRegistrationArgs = HaapiWebAuthnPasskeysArgs | HaapiWebAuthnAnyDeviceArgs;
+
+export interface HaapiWebAuthnPasskeysArgs {
+  credentialCreationOptions: HaapiPublicKeyCredentialCreationOptions;
+}
+
+export interface HaapiWebAuthnAnyDeviceArgs {
+  platformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
+  crossPlatformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
+}
+
+/**
+ * Continue-action payload key for the `webauthn-registration` operation. The value matches the
+ * `*CreationOptions` key the client picked from `model.arguments`.
+ *
+ * - `CREDENTIAL` — passkeys-mode (when `HaapiWebAuthnPasskeysArgs.credentialCreationOptions` is present).
+ * - `PLATFORM_CREDENTIAL` — any-device-mode (when `HaapiWebAuthnAnyDeviceArgs.platformCredentialCreationOptions` is present).
+ * - `CROSS_PLATFORM_CREDENTIAL` — any-device-mode (when `HaapiWebAuthnAnyDeviceArgs.crossPlatformCredentialCreationOptions` is present).
+ */
+export enum HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION {
+  CREDENTIAL = 'credential',
+  PLATFORM_CREDENTIAL = 'platformCredential',
+  CROSS_PLATFORM_CREDENTIAL = 'crossPlatformCredential',
 }
 
 export interface HaapiPublicKeyCredentialCreationOptions {
