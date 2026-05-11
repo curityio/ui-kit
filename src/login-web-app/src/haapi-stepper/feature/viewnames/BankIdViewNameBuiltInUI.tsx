@@ -20,22 +20,22 @@ import { HaapiStepperAPIWithRequiredCurrentStep, HaapiStepperLink } from '../ste
 /**
  * Built-in UI for the BankID viewName (`HaapiStepperViewNameBuiltInUI.BANKID`).
  *
- *  - Renders a spinner while the polling status is `pending` (independent of the `loading` flag,
- *    which only covers the time the LWA is fetching the next step). Once the polling resolves
- *    to `done` or `failed`, the spinner is dropped.
+ *  - Renders a spinner while the polling status is `pending` *or* while the stepper is loading. Together
+ *    these cover the full BankID-in-progress window so the user always sees a progress indicator.
  *  - Lifts the QR code link above the actions so it's the primary element on the screen.
  */
-export const BankIdViewNameBuiltInUI = ({ currentStep, nextStep }: HaapiStepperAPIWithRequiredCurrentStep) => {
+export const BankIdViewNameBuiltInUI = ({ currentStep, nextStep, loading }: HaapiStepperAPIWithRequiredCurrentStep) => {
   const { messages, actions, links } = currentStep.dataHelpers;
   const isQrLink = (link: HaapiStepperLink) => link.subtype?.startsWith('image/') ?? false;
   const qrLink = links.find(isQrLink);
   const nonQrLinks = links.filter(link => !isQrLink(link));
   const isPollingPending =
     currentStep.type === HAAPI_STEPS.POLLING && currentStep.properties.status === HAAPI_POLLING_STATUS.PENDING;
+  const showSpinner = loading || isPollingPending;
 
   return (
     <Well>
-      {isPollingPending && <Spinner width={48} height={48} mode="fullscreen" data-testid="bankid-spinner" />}
+      {showSpinner && <Spinner width={48} height={48} mode="fullscreen" data-testid="bankid-spinner" />}
       <HaapiStepperMessagesUI messages={messages} />
       {qrLink && <HaapiStepperLinksUI links={[qrLink]} onClick={nextStep} />}
       <HaapiStepperActionsUI actions={actions?.all} onAction={nextStep} />

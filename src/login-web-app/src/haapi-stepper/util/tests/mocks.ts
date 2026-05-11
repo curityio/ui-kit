@@ -164,7 +164,6 @@ export const createMockQrLink = (overrides: Partial<HaapiStepperLink> = {}) => {
     title: 'QR Code',
     href: 'data:image/svg+xml;base64,abc',
     type: 'image/svg+xml',
-    subtype: 'image/svg+xml',
     ...overrides,
   });
 };

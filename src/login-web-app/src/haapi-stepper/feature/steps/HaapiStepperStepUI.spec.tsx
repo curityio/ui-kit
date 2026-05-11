@@ -1906,6 +1906,17 @@ describe('HaapiStepperStepUI', () => {
           expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
         });
 
+        it('should render the spinner during the step transition (loading=true after polling has resolved)', () => {
+          const step = createBankIdPollingStep({ status: HAAPI_POLLING_STATUS.DONE });
+
+          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, {
+            currentStep: step,
+            loading: true,
+          });
+
+          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
+        });
+
         it('should render the QR link above the actions', () => {
           const qrLink = createMockQrLink();
           const otherLink = createMockLink({ rel: 'help', title: 'Help' });
