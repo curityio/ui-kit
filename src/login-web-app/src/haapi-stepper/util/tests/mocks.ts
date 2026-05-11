@@ -1,5 +1,4 @@
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
-
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
@@ -9,6 +8,9 @@ import type {
   HaapiStepperUserMessage,
   HaapiStepperLink,
   HaapiStepperAPI,
+  HaapiStepperWebAuthnAnyDeviceRegistrationAction,
+  HaapiStepperWebAuthnAuthenticationClientOperationAction,
+  HaapiStepperWebAuthnPasskeysRegistrationAction,
 } from '../../feature/stepper/haapi-stepper.types';
 import { formatNextStepData } from '../../feature/stepper/data-formatters/format-next-step-data';
 import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
@@ -19,7 +21,6 @@ import {
   HAAPI_POLLING_STATUS,
   HAAPI_STEPPER_ELEMENT_TYPES,
   HAAPI_STEPS,
-  HaapiClientOperationAction,
 } from '../../data-access';
 
 export const mockNextStep = vi.fn();
@@ -158,6 +159,8 @@ export const bankIdActionTitle = 'Open BankID';
 export const webAuthnRegistrationActionTitle = 'Register a passkey';
 export const webAuthnAnyDeviceActionTitle = 'Register device';
 export const webAuthnPlatformOnlyAnyDeviceActionTitle = 'Register device (This device)';
+export const webAuthnCrossPlatformOnlyAnyDeviceActionTitle = 'Register device (Another device)';
+export const webAuthnAuthenticationActionTitle = 'Use passkey';
 
 const continueAction = createMockFormAction({
   kind: HAAPI_FORM_ACTION_KINDS.CONTINUE,
@@ -198,45 +201,58 @@ export const createMockBankIdAction = (
     ...overrides,
   });
 
-export const createMockWebAuthnRegistrationAction = (
-  overrides: Partial<HaapiStepperClientOperationAction> = {}
-): HaapiStepperClientOperationAction =>
-  createMockClientOperationAction({
-    title: webAuthnRegistrationActionTitle,
-    kind: 'device-register',
-    template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
-    model: {
-      name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
-      arguments: { credentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY } },
-      continueActions: [continueAction],
-    },
-    ...overrides,
-  });
+const PUBLIC_KEY = { publicKey: WEBAUTHN_PUBLIC_KEY };
 
-export const createMockWebAuthnAnyDeviceBothOptionsAction = (): HaapiClientOperationAction => ({
+const webAuthnActionMetadata = {
+  type: HAAPI_STEPPER_ELEMENT_TYPES.ACTION,
+  subtype: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
   template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
-  kind: 'device-register',
-  title: webAuthnAnyDeviceActionTitle,
-  model: {
-    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
-    arguments: {
-      platformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY },
-      crossPlatformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY },
-    },
-    continueActions: [continueAction],
-  },
+} as const;
+
+const createMockWebAuthnAction = <K extends string, M>(title: string, kind: K, model: M) => ({
+  ...webAuthnActionMetadata,
+  id: crypto.randomUUID(),
+  title,
+  kind,
+  model,
 });
 
-export const createMockWebAuthnPlatformOnlyAnyDeviceAction = (): HaapiStepperClientOperationAction =>
-  createMockClientOperationAction({
-    title: webAuthnPlatformOnlyAnyDeviceActionTitle,
-    kind: 'device-register',
-    template: HAAPI_ACTION_TYPES.CLIENT_OPERATION,
-    model: {
-      name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
-      arguments: { platformCredentialCreationOptions: { publicKey: WEBAUTHN_PUBLIC_KEY } },
-      continueActions: [continueAction],
+export const createMockWebAuthnRegistrationAction = (): HaapiStepperWebAuthnPasskeysRegistrationAction =>
+  createMockWebAuthnAction(webAuthnRegistrationActionTitle, 'device-register', {
+    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+    arguments: { credentialCreationOptions: PUBLIC_KEY },
+    continueActions: [continueAction],
+  });
+
+export const createMockWebAuthnAnyDeviceBothOptionsAction = (): HaapiStepperWebAuthnAnyDeviceRegistrationAction =>
+  createMockWebAuthnAction(webAuthnAnyDeviceActionTitle, 'device-register', {
+    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+    arguments: {
+      platformCredentialCreationOptions: PUBLIC_KEY,
+      crossPlatformCredentialCreationOptions: PUBLIC_KEY,
     },
+    continueActions: [continueAction],
+  });
+
+export const createMockWebAuthnPlatformOnlyAnyDeviceAction = (): HaapiStepperWebAuthnAnyDeviceRegistrationAction =>
+  createMockWebAuthnAction(webAuthnPlatformOnlyAnyDeviceActionTitle, 'device-register', {
+    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+    arguments: { platformCredentialCreationOptions: PUBLIC_KEY },
+    continueActions: [continueAction],
+  });
+
+export const createMockWebAuthnCrossPlatformOnlyAnyDeviceAction = (): HaapiStepperWebAuthnAnyDeviceRegistrationAction =>
+  createMockWebAuthnAction(webAuthnCrossPlatformOnlyAnyDeviceActionTitle, 'device-register', {
+    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION,
+    arguments: { crossPlatformCredentialCreationOptions: PUBLIC_KEY },
+    continueActions: [continueAction],
+  });
+
+export const createMockWebAuthnAuthenticationAction = (): HaapiStepperWebAuthnAuthenticationClientOperationAction =>
+  createMockWebAuthnAction(webAuthnAuthenticationActionTitle, 'device-authn', {
+    name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_AUTHENTICATION,
+    arguments: { credentialRequestOptions: PUBLIC_KEY },
+    continueActions: [continueAction],
   });
 export const createBankIdPollingStep = (
   overrides: { status?: HAAPI_POLLING_STATUS; links?: HaapiStepperLink[]; viewName?: string } = {}

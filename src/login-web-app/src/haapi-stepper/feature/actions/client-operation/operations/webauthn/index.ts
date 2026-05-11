@@ -12,3 +12,4 @@
 export * from './webauthn';
 export * from './utils';
 export * from './useIsWebAuthnPlatformAuthenticatorAvailable';
+export * from './auto-start';
