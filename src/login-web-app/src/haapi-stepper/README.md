@@ -116,7 +116,7 @@ Check out [the HaapiStepperStepUI documentation and usage examples](./feature/st
 
 ### ViewName built-in UIs
 
-Some HAAPI viewNames (`step.metadata.viewName`) need a UI that the generic step rendering can't deliver well. For example, the **BankID** screen needs to render a spinner while the polling status is `pending`, not only while `loading` is true, and lifts the QR code above the actions.
+Some HAAPI viewNames (`step.metadata.viewName`) need a UI that the generic step rendering can't deliver well. For example, the **BankID** screen needs to render a spinner while the polling status is `pending`, and lifts the QR code above the actions.
 
 To handle this kind of view, the library ships **viewName built-in UIs** that automatically take over when the matching `step.metadata.viewName` arrives from the server.
 
@@ -124,12 +124,6 @@ To handle this kind of view, the library ships **viewName built-in UIs** that au
 
 `<HaapiStepperStepUI>` accepts a
 `enableViewNameBuiltInUIs?: HaapiStepperViewNameBuiltInUI[] | boolean` prop that opts in to which viewName built-in UIs are active. It is **opt-in**: when the prop is omitted (or `false`), no viewName built-in UIs are applied and every step renders through the generic render pipeline. Pass `true` to enable all known built-ins, or an array of built-in view names (`HaapiStepperViewNameBuiltInUI[]`) to pin a specific subset.
-
-#### Current set
-
-| `metadata.viewName`               | Enum member                                | What it delivers                                                                     |
-| --------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `authenticator/bankid/wait/index` | `HaapiStepperViewNameBuiltInUI.BANKID` | Spinner while polling `status === pending`; QR code link rendered above the actions. |
 
 Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/steps/HaapiStepperStepUI.tsx), and the test use cases in [`HaapiStepperStepUI.spec.tsx`](./feature/steps/HaapiStepperStepUI.spec.tsx) (`describe('ViewName built-in UIs Rendering')`) for more details.
 
