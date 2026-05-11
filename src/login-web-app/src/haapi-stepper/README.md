@@ -114,6 +114,19 @@ Because the `HaapiStepperStepUI` handles all possible HAAPI authentication flows
 
 Check out [the HaapiStepperStepUI documentation and usage examples](./feature/steps/HaapiStepperStepUI.tsx).
 
+### ViewName built-in UIs
+
+Some HAAPI viewNames (`step.metadata.viewName`) need a UI that the generic step rendering can't deliver well. For example, the **BankID** screen needs to render a spinner while the polling status is `pending`, and lifts the QR code above the actions.
+
+To handle this kind of view, the library ships **viewName built-in UIs** that automatically take over when the matching `step.metadata.viewName` arrives from the server.
+
+#### The `enableViewNameBuiltInUIs` prop
+
+`<HaapiStepperStepUI>` accepts a
+`enableViewNameBuiltInUIs?: HaapiStepperViewNameBuiltInUI[] | boolean` prop that opts in to which viewName built-in UIs are active. It is **opt-in**: when the prop is omitted (or `false`), no viewName built-in UIs are applied and every step renders through the generic render pipeline. Pass `true` to enable all known built-ins, or an array of built-in view names (`HaapiStepperViewNameBuiltInUI[]`) to pin a specific subset.
+
+Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/steps/HaapiStepperStepUI.tsx), and the test use cases in [`HaapiStepperStepUI.spec.tsx`](./feature/steps/HaapiStepperStepUI.spec.tsx) (`describe('ViewName built-in UIs Rendering')`) for more details.
+
 
 
 ## HAAPI Stepper UI Components
@@ -132,6 +145,7 @@ Check out documentation and usage examples in the links below:
 * [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
 * [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
 * [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
+* [HaapiStepperMessageUI](./ui/messages/HaapiStepperMessageUI.tsx)
 * [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
 * [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
 

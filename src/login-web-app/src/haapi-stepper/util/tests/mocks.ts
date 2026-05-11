@@ -1,11 +1,5 @@
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
-import { HAAPI_STEPPER_ELEMENT_TYPES, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
-import {
-  HAAPI_ACTION_CLIENT_OPERATIONS,
-  HAAPI_ACTION_TYPES,
-  HAAPI_FORM_ACTION_KINDS,
-  HaapiClientOperationAction,
-} from '../../data-access/types/haapi-action.types';
+
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
@@ -17,6 +11,16 @@ import type {
   HaapiStepperAPI,
 } from '../../feature/stepper/haapi-stepper.types';
 import { formatNextStepData } from '../../feature/stepper/data-formatters/format-next-step-data';
+import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
+import {
+  HAAPI_ACTION_CLIENT_OPERATIONS,
+  HAAPI_ACTION_TYPES,
+  HAAPI_FORM_ACTION_KINDS,
+  HAAPI_POLLING_STATUS,
+  HAAPI_STEPPER_ELEMENT_TYPES,
+  HAAPI_STEPS,
+  HaapiClientOperationAction,
+} from '../../data-access';
 
 export const mockNextStep = vi.fn();
 export const MockMessageText = 'Step Message';
@@ -234,3 +238,25 @@ export const createMockWebAuthnPlatformOnlyAnyDeviceAction = (): HaapiStepperCli
       continueActions: [continueAction],
     },
   });
+export const createBankIdPollingStep = (
+  overrides: { status?: HAAPI_POLLING_STATUS; links?: HaapiStepperLink[]; viewName?: string } = {}
+) => {
+  return createMockStep(HAAPI_STEPS.POLLING, {
+    metadata: {
+      templateArea: 'lwa',
+      viewName: overrides.viewName ?? HaapiStepperViewNameBuiltInUI.BANKID,
+    },
+    properties: { status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING },
+    ...(overrides.links !== undefined && { links: overrides.links }),
+  });
+};
+
+export const createMockQrLink = (overrides: Partial<HaapiStepperLink> = {}) => {
+  return createMockLink({
+    rel: 'activation',
+    title: 'QR Code',
+    href: 'data:image/svg+xml;base64,abc',
+    type: 'image/svg+xml',
+    ...overrides,
+  });
+};
