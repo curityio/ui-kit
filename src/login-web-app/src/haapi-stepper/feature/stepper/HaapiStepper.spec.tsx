@@ -29,7 +29,7 @@ import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
 import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
-import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
+import { configuration } from '../../data-access/bootstrap-configuration';
 
 describe('HaapiStepper', () => {
   const initialStepType = HAAPI_STEPS.AUTHENTICATION;
@@ -53,7 +53,7 @@ describe('HaapiStepper', () => {
         </HaapiStepper>
       );
 
-      expect(mockHaapiFetch).toHaveBeenCalledWith(mockConfiguration.initialUrl, { method: 'GET' });
+      expect(mockHaapiFetch).toHaveBeenCalledWith(configuration.initialUrl, { method: 'GET' });
 
       const stepRendered = await screen.findByTestId('step-type');
 
@@ -711,17 +711,6 @@ const mockHaapiFetch = vi.hoisted(() => vi.fn());
 vi.mock('../../data-access/haapi-fetch-initializer', () => {
   return {
     default: mockHaapiFetch,
-  };
-});
-
-const mockConfiguration: Partial<BootstrapConfiguration> = vi.hoisted(() => {
-  return {
-    initialUrl: 'https://example.com/auth',
-  };
-});
-vi.mock('../../data-access/bootstrap-configuration', () => {
-  return {
-    configuration: mockConfiguration,
   };
 });
 
