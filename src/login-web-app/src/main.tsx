@@ -9,15 +9,10 @@
  * For further information, please contact Curity AB.
  */
 
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { required } from './shared/util/type-utils';
 
 import '@css/styles.css';
 
-createRoot(required(document.getElementById('root'))).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+createRoot(required(document.getElementById('root'))).render(<App />);
