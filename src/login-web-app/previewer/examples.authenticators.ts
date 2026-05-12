@@ -94,11 +94,11 @@ const authenticatorHtmlFormAccountCreatedHyperlink: HaapiActionStep = {
     {
       template: HAAPI_ACTION_TYPES.FORM,
       kind: 'user-register',
-      title: 'Send a new activation email',
       model: {
         href: '/authentication/register/create/user-pwd/resend-activation-email',
         method: HTTP_METHODS.POST,
         type: MEDIA_TYPES.FORM_URLENCODED,
+        actionTitle: 'Send a new activation email',
       },
     },
   ],
