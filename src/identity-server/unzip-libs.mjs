@@ -48,9 +48,10 @@ async function main() {
         process.exit(1);
     }
 
-    if (expectedSha256) {
-        await verifySha256(source, expectedSha256);
+    if (!expectedSha256) {
+        throw new Error(`No checksum found for platform suffix '${assetSuffix}' in previewer-checksums.json`);
     }
+    await verifySha256(source, expectedSha256);
 
     await extract(source, { dir: target });
     console.log(`Unzipped ${source} to ${target}`);
