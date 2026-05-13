@@ -23,18 +23,22 @@ async function main() {
     const checksums = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'previewer-checksums.json'), 'utf-8'));
     const version = checksums.version;
     const expectedSha256BySuffix = checksums.sha256;
+
+    if (!version || typeof expectedSha256BySuffix !== 'object') {
+        throw new Error('previewer-checksums.json must contain "version" and "sha256" properties');
+    }
+
     const assetSuffix = resolveAssetSuffix(Object.keys(expectedSha256BySuffix));
     const expectedSha256 = expectedSha256BySuffix[assetSuffix];
     const assetName = `curity-ui-kit-previewer-${version}-${assetSuffix}.zip`;
 
     const libFolder = '../../lib/';
     const zipFile = assetName;
-    const presenceFile = 'run-ui-kit-server.sh';
     const source = path.resolve(__dirname, libFolder + zipFile);
     const target = path.resolve(__dirname, libFolder);
-    const presence = path.join(target, presenceFile);
+    const versionMarker = path.join(target, '.previewer-version');
 
-    if (fs.existsSync(presence)) {
+    if (fs.existsSync(versionMarker) && fs.readFileSync(versionMarker, 'utf-8').trim() === version) {
         console.log('UI Kit runtime already unzipped. Skipping...');
         return;
     }
@@ -57,6 +61,8 @@ async function main() {
     console.log(`Unzipped ${source} to ${target}`);
 
     await extractNestedZip(target, `ui-kit-runtime-${version}.zip`);
+
+    fs.writeFileSync(versionMarker, version + '\n');
 }
 
 function resolveAssetSuffix(supportedSuffixes) {
