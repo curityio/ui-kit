@@ -23,7 +23,7 @@ async function main() {
     const checksums = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'previewer-checksums.json'), 'utf-8'));
     const version = checksums.version;
     const expectedSha256BySuffix = checksums.sha256;
-    const assetSuffix = resolveAssetSuffix();
+    const assetSuffix = resolveAssetSuffix(Object.keys(expectedSha256BySuffix));
     const expectedSha256 = expectedSha256BySuffix[assetSuffix];
     const assetName = `curity-ui-kit-previewer-${version}-${assetSuffix}.zip`;
 
@@ -44,7 +44,7 @@ async function main() {
     }
 
     if (!fs.existsSync(source)) {
-        console.error('ui-kit-runtime.zip file does not exist:', source);
+        console.error(`Previewer zip does not exist: ${source}`);
         process.exit(1);
     }
 
@@ -59,8 +59,7 @@ async function main() {
     await extractNestedZip(target, `ui-kit-runtime-${version}.zip`);
 }
 
-function resolveAssetSuffix() {
-    const supportedSuffixes = new Set(['linux-arm64', 'linux-x64', 'macos-arm64', 'windows-x64']);
+function resolveAssetSuffix(supportedSuffixes) {
     const platformMap = {
         linux: 'linux',
         darwin: 'macos',
@@ -75,7 +74,7 @@ function resolveAssetSuffix() {
     const arch = archMap[process.arch];
     const suffix = `${platform}-${arch}`;
 
-    if (!platform || !arch || !supportedSuffixes.has(suffix)) {
+    if (!platform || !arch || !supportedSuffixes.includes(suffix)) {
         throw new Error(`Unsupported platform/arch: ${process.platform}/${process.arch}`);
     }
 
