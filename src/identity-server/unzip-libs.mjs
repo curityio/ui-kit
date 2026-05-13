@@ -59,6 +59,7 @@ async function main() {
 }
 
 function resolveAssetSuffix() {
+    const supportedSuffixes = new Set(['linux-arm64', 'linux-x64', 'macos-arm64', 'windows-x64']);
     const platformMap = {
         linux: 'linux',
         darwin: 'macos',
@@ -71,12 +72,13 @@ function resolveAssetSuffix() {
 
     const platform = platformMap[process.platform];
     const arch = archMap[process.arch];
+    const suffix = `${platform}-${arch}`;
 
-    if (!platform || !arch) {
+    if (!platform || !arch || !supportedSuffixes.has(suffix)) {
         throw new Error(`Unsupported platform/arch: ${process.platform}/${process.arch}`);
     }
 
-    return `${platform}-${arch}`;
+    return suffix;
 }
 
 function downloadPreviewerZip(version, assetSuffix, assetName, destinationPath) {
