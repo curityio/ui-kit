@@ -12,6 +12,7 @@
 import type { FC } from 'react';
 import type { HaapiStepperAPIWithRequiredCurrentStep } from '../stepper/haapi-stepper.types';
 import { BankIdViewNameBuiltInUI } from './BankIdViewNameBuiltInUI';
+import type { ViewNameBuiltInUIProps } from './typings';
 import { HaapiStepperViewNameBuiltInUI } from './viewname.types';
 
 /**
@@ -20,34 +21,16 @@ import { HaapiStepperViewNameBuiltInUI } from './viewname.types';
  * Every enum member must have a matching entry here — this is the invariant that keeps the
  * set of "view names with built-in UX" in sync with the set of available components.
  */
-export const VIEW_NAME_BUILT_IN_UIS_MAP: Record<
-  HaapiStepperViewNameBuiltInUI,
-  FC<HaapiStepperAPIWithRequiredCurrentStep>
-> = {
+export const VIEW_NAME_BUILT_IN_UI_MAP: Record<HaapiStepperViewNameBuiltInUI, FC<ViewNameBuiltInUIProps>> = {
   [HaapiStepperViewNameBuiltInUI.BANKID]: BankIdViewNameBuiltInUI,
 };
 
-export const VIEW_NAMES_BUILT_IN_UIS: HaapiStepperViewNameBuiltInUI[] = Object.values(HaapiStepperViewNameBuiltInUI);
+const isBuiltInViewName = (viewName?: string): viewName is HaapiStepperViewNameBuiltInUI =>
+  !!viewName && viewName in VIEW_NAME_BUILT_IN_UI_MAP;
 
 export const getViewNameBuiltInUI = (
-  haapiStepperAPI: HaapiStepperAPIWithRequiredCurrentStep,
-  enableViewNameBuiltInUIs?: HaapiStepperViewNameBuiltInUI[] | boolean
-): FC<HaapiStepperAPIWithRequiredCurrentStep> | undefined => {
-  const currentViewName = haapiStepperAPI.currentStep.metadata?.viewName;
-  const enabledViewNames: HaapiStepperViewNameBuiltInUI[] =
-    enableViewNameBuiltInUIs === true
-      ? VIEW_NAMES_BUILT_IN_UIS
-      : Array.isArray(enableViewNameBuiltInUIs)
-        ? enableViewNameBuiltInUIs
-        : [];
-
-  const isOptedInViewNameBuiltIn = (viewName: string): viewName is HaapiStepperViewNameBuiltInUI => {
-    return enabledViewNames.includes(viewName as HaapiStepperViewNameBuiltInUI);
-  };
-
-  if (!currentViewName || !isOptedInViewNameBuiltIn(currentViewName)) {
-    return undefined;
-  }
-
-  return VIEW_NAME_BUILT_IN_UIS_MAP[currentViewName];
+  haapiStepperAPI: HaapiStepperAPIWithRequiredCurrentStep
+): FC<ViewNameBuiltInUIProps> | undefined => {
+  const viewName = haapiStepperAPI.currentStep.metadata?.viewName;
+  return isBuiltInViewName(viewName) ? VIEW_NAME_BUILT_IN_UI_MAP[viewName] : undefined;
 };

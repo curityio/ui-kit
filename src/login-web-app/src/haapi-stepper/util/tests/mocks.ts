@@ -8,6 +8,7 @@ import { HAAPI_ACTION_TYPES, HAAPI_ACTION_CLIENT_OPERATIONS } from '../../data-a
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
+  HaapiStepperAction,
   HaapiStepperFormAction,
   HaapiStepperSelectorAction,
   HaapiStepperClientOperationAction,
@@ -145,8 +146,18 @@ export const defaultStepperAPI: HaapiStepperAPI = {
   nextStep: mockNextStep,
 };
 
-export const createBankIdPollingStep = (
-  overrides: { status?: HAAPI_POLLING_STATUS; links?: HaapiStepperLink[]; viewName?: string } = {}
+/**
+ * Builds a polling step mock. Defaults to the BankID viewName + `PENDING` status, since that's the
+ * combination most tests care about, but callers can override `viewName` (e.g. pass a non-BankID
+ * value for generic loading-factory tests) and any of the other fields independently.
+ */
+export const createPollingStep = (
+  overrides: {
+    status?: HAAPI_POLLING_STATUS;
+    links?: HaapiStepperLink[];
+    actions?: HaapiStepperAction[];
+    viewName?: string;
+  } = {}
 ) => {
   return createMockStep(HAAPI_STEPS.POLLING, {
     metadata: {
@@ -155,6 +166,7 @@ export const createBankIdPollingStep = (
     },
     properties: { status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING },
     ...(overrides.links !== undefined && { links: overrides.links }),
+    ...(overrides.actions !== undefined && { actions: overrides.actions }),
   });
 };
 

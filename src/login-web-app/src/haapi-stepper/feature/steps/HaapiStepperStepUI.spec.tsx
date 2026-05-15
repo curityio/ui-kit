@@ -47,11 +47,10 @@ import {
   HaapiBaseClientOperationModel,
 } from '../../data-access/types/haapi-action.types';
 import { HAAPI_STEPS, HAAPI_PROBLEM_STEPS, HAAPI_POLLING_STATUS } from '../../data-access/types/haapi-step.types';
-import { HaapiStepperViewNameBuiltInUI } from '../viewnames';
 import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { HaapiStepperStepUI } from './HaapiStepperStepUI';
 import {
-  createBankIdPollingStep,
+  createPollingStep,
   createMockClientOperationAction,
   createMockFormAction,
   createMockLink,
@@ -127,6 +126,31 @@ describe('HaapiStepperStepUI', () => {
 
           expect(screen.queryByTestId('messages')).toBeInTheDocument();
           expect(screen.queryByTestId('links')).toBeInTheDocument();
+        });
+
+        it('should render loading spinner when currentStep is a polling step in pending status', () => {
+          const step = createMockStep(HAAPI_STEPS.POLLING, {
+            properties: { status: HAAPI_POLLING_STATUS.PENDING },
+          });
+
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
+
+          expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
+        });
+
+        it('should not render loading spinner when currentStep is a polling step in done/failed status', () => {
+          const { unmount } = renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: createMockStep(HAAPI_STEPS.POLLING, { properties: { status: HAAPI_POLLING_STATUS.DONE } }),
+          });
+
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+          unmount();
+
+          renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: createMockStep(HAAPI_STEPS.POLLING, { properties: { status: HAAPI_POLLING_STATUS.FAILED } }),
+          });
+
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
       });
     });
@@ -1771,158 +1795,212 @@ describe('HaapiStepperStepUI', () => {
 
   describe('ViewName built-in UIs Rendering', () => {
     describe('Default Rendering', () => {
-      it('should render the generic step shell when enableViewNameBuiltInUIs is not provided', () => {
-        const step = createBankIdPollingStep();
+      it('should render the matching built-in UI by default for a registered viewName', () => {
+        const step = createPollingStep();
 
         renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
 
-        expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('messages')).toBeInTheDocument();
+        expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
       });
 
-      it('should render the generic step shell when enableViewNameBuiltInUIs is an empty array', () => {
-        const step = createBankIdPollingStep();
+      it('should render the generic step shell when the viewName has no registered built-in', () => {
+        const step = createMockStep(HAAPI_STEPS.AUTHENTICATION);
 
-        renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs={[]} />, { currentStep: step });
+        renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
 
-        expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         expect(screen.queryByTestId('messages')).toBeInTheDocument();
+        expect(screen.queryByTestId('form-action')).toBeInTheDocument();
       });
     });
 
     describe('Custom Rendering', () => {
-      describe('Opt-in via boolean shorthand', () => {
-        it('should apply the matching built-in when enableViewNameBuiltInUIs is true', () => {
-          const step = createBankIdPollingStep();
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs={true} />, { currentStep: step });
-
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
-        });
-
-        it('should apply the matching built-in when the JSX boolean shorthand is used', () => {
-          const step = createBankIdPollingStep();
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
-
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
-        });
-
-        it('should render the generic step shell when the viewName has no registered built-in', () => {
-          const step = createMockStep(HAAPI_STEPS.AUTHENTICATION);
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
-
-          expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
-          expect(screen.queryByTestId('messages')).toBeInTheDocument();
-          expect(screen.queryByTestId('form-action')).toBeInTheDocument();
-        });
-      });
-
-      describe('Opt-in via subset array', () => {
-        it('should apply the built-in when its viewName is in the array', () => {
-          const step = createBankIdPollingStep();
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs={[HaapiStepperViewNameBuiltInUI.BANKID]} />, {
-            currentStep: step,
-          });
-
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
-        });
-      });
-
       describe('Composition with stepRenderInterceptor', () => {
         it('should apply the built-in when stepRenderInterceptor returns pass-through data', () => {
-          const step = createBankIdPollingStep();
+          const step = createPollingStep();
           const passThroughInterceptor: HaapiStepperStepUIStepRenderInterceptor = (
             haapiStepperAPI: HaapiStepperAPIWithRequiredCurrentStep
           ) => {
             return haapiStepperAPI;
           };
 
-          renderWithContext(
-            <HaapiStepperStepUI enableViewNameBuiltInUIs stepRenderInterceptor={passThroughInterceptor} />,
-            { currentStep: step }
-          );
+          renderWithContext(<HaapiStepperStepUI stepRenderInterceptor={passThroughInterceptor} />, {
+            currentStep: step,
+          });
 
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
+          expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
         });
 
         it('should be skipped when stepRenderInterceptor returns a React element', () => {
-          const step = createBankIdPollingStep();
+          const step = createPollingStep();
           const elementInterceptor: HaapiStepperStepUIStepRenderInterceptor = () => {
             return <div data-testid="custom-step-element">Custom UI</div>;
           };
 
-          renderWithContext(
-            <HaapiStepperStepUI enableViewNameBuiltInUIs stepRenderInterceptor={elementInterceptor} />,
-            {
-              currentStep: step,
-            }
-          );
+          renderWithContext(<HaapiStepperStepUI stepRenderInterceptor={elementInterceptor} />, {
+            currentStep: step,
+          });
 
           expect(screen.queryByTestId('custom-step-element')).toBeInTheDocument();
-          expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
 
         it('should be skipped (and render nothing) when stepRenderInterceptor returns null', () => {
-          const step = createBankIdPollingStep();
+          const step = createPollingStep();
           const nullInterceptor: HaapiStepperStepUIStepRenderInterceptor = () => {
             return null;
           };
 
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs stepRenderInterceptor={nullInterceptor} />, {
+          renderWithContext(<HaapiStepperStepUI stepRenderInterceptor={nullInterceptor} />, {
             currentStep: step,
           });
 
-          expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
           expect(screen.queryByTestId('messages')).not.toBeInTheDocument();
           expect(screen.queryByTestId('form-action')).not.toBeInTheDocument();
         });
       });
 
-      describe('BankID viewName built-in UI', () => {
-        it('should render the spinner while polling status is pending', () => {
-          const step = createBankIdPollingStep({ status: HAAPI_POLLING_STATUS.PENDING });
+      describe('Composition with element-level render interceptors', () => {
+        it('should apply loadingRenderInterceptor to the loadingElement reused by the built-in', () => {
+          const step = createPollingStep();
+          const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = () => (
+            <div data-testid="custom-loading">Custom Loading</div>
+          );
 
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
-
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
-        });
-
-        it('should not render the spinner when polling status is done', () => {
-          const step = createBankIdPollingStep({ status: HAAPI_POLLING_STATUS.DONE });
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
-
-          expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
-        });
-
-        it('should not render the spinner when polling status is failed', () => {
-          const step = createBankIdPollingStep({ status: HAAPI_POLLING_STATUS.FAILED });
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
-
-          expect(screen.queryByTestId('bankid-spinner')).not.toBeInTheDocument();
-        });
-
-        it('should render the spinner during the step transition (loading=true after polling has resolved)', () => {
-          const step = createBankIdPollingStep({ status: HAAPI_POLLING_STATUS.DONE });
-
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, {
+          renderWithContext(<HaapiStepperStepUI loadingRenderInterceptor={loadingRenderInterceptor} />, {
             currentStep: step,
-            loading: true,
           });
 
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
+          expect(screen.getByTestId('custom-loading')).toBeInTheDocument();
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
 
+        it('should apply errorRenderInterceptor to the errorElement reused by the built-in', () => {
+          const step = createPollingStep();
+          const errorRenderInterceptor: HaapiStepperStepUIErrorRenderInterceptor = ({ error }) => (
+            <div data-testid="custom-error">Custom Error: {error?.app?.title ?? ''}</div>
+          );
+          const errorStep: HaapiStepperUnexpectedProblemStep = {
+            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+            title: 'Unexpected Error',
+            dataHelpers: { messages: [], links: [] },
+          };
+
+          renderWithContext(<HaapiStepperStepUI errorRenderInterceptor={errorRenderInterceptor} />, {
+            currentStep: step,
+            error: { app: errorStep, input: null },
+          });
+
+          expect(screen.getByTestId('custom-error')).toHaveTextContent('Custom Error: Unexpected Error');
+        });
+
+        it('should apply messageRenderInterceptor to the messagesElement reused by the built-in', () => {
+          const step = createPollingStep();
+          const messageRenderInterceptor: HaapiStepperStepUIMessageRenderInterceptor = ({ message }) => {
+            return { ...message, text: `Modified ${message.text}` };
+          };
+
+          renderWithContext(<HaapiStepperStepUI messageRenderInterceptor={messageRenderInterceptor} />, {
+            currentStep: step,
+          });
+
+          const messagesContainer = screen.getByTestId('messages');
+          expect(within(messagesContainer).getByText(`Modified ${MockMessageText}`)).toBeInTheDocument();
+        });
+
+        it('should apply actionsRenderInterceptor to the actionsElement reused by the built-in', () => {
+          const step = createPollingStep();
+          const actionsRenderInterceptor: HaapiStepperStepUIActionsRenderInterceptor = () => (
+            <div data-testid="custom-actions">Custom Actions</div>
+          );
+
+          renderWithContext(<HaapiStepperStepUI actionsRenderInterceptor={actionsRenderInterceptor} />, {
+            currentStep: step,
+          });
+
+          expect(screen.getByTestId('custom-actions')).toBeInTheDocument();
+        });
+
+        it('should apply formActionRenderInterceptor to the actionsElement reused by the built-in', () => {
+          const step = createPollingStep();
+          const formActionRenderInterceptor: HaapiStepperStepUIFormActionRenderInterceptor = ({ action }) => (
+            <div data-testid="custom-form-action">{action.title}</div>
+          );
+
+          renderWithContext(<HaapiStepperStepUI formActionRenderInterceptor={formActionRenderInterceptor} />, {
+            currentStep: step,
+          });
+
+          expect(screen.getByTestId('custom-form-action')).toHaveTextContent(MockActionTitle);
+        });
+
+        it('should apply formFieldRenderInterceptor to the actionsElement reused by the built-in', () => {
+          const step = createPollingStep();
+          const formFieldRenderInterceptor: HaapiStepperFormFieldRenderInterceptor = field => (
+            <div data-testid={`custom-form-field-${field.name}`}>{field.label}</div>
+          );
+
+          renderWithContext(<HaapiStepperStepUI formFieldRenderInterceptor={formFieldRenderInterceptor} />, {
+            currentStep: step,
+          });
+
+          expect(screen.getByTestId('custom-form-field-username')).toHaveTextContent('Username');
+          expect(screen.getByTestId('custom-form-field-password')).toHaveTextContent('Password');
+        });
+
+        it('should apply selectorActionRenderInterceptor to the actionsElement reused by the built-in', () => {
+          const step = createPollingStep({ actions: [createMockSelectorAction({ title: 'Pick One' })] });
+          const selectorActionRenderInterceptor: HaapiStepperStepUISelectorActionRenderInterceptor = ({ action }) => (
+            <div data-testid="custom-selector-action">{action.title}</div>
+          );
+
+          renderWithContext(<HaapiStepperStepUI selectorActionRenderInterceptor={selectorActionRenderInterceptor} />, {
+            currentStep: step,
+          });
+
+          expect(screen.getByTestId('custom-selector-action')).toHaveTextContent('Pick One');
+        });
+
+        it('should apply clientOperationActionRenderInterceptor to the actionsElement reused by the built-in', () => {
+          const step = createPollingStep({
+            actions: [createMockClientOperationAction({ title: 'Launch BankID App' })],
+          });
+          const clientOperationActionRenderInterceptor: HaapiStepperStepUIClientOperationActionRenderInterceptor = ({
+            action,
+          }) => <div data-testid="custom-client-op-action">{action.title}</div>;
+
+          renderWithContext(
+            <HaapiStepperStepUI clientOperationActionRenderInterceptor={clientOperationActionRenderInterceptor} />,
+            { currentStep: step }
+          );
+
+          expect(screen.getByTestId('custom-client-op-action')).toHaveTextContent('Launch BankID App');
+        });
+
+        it('should apply linkRenderInterceptor to the QR link rendered by the built-in', () => {
+          const qrLink = createMockQrLink({ title: 'Original QR' });
+          const step = createPollingStep({ links: [qrLink] });
+          const linkRenderInterceptor: HaapiStepperStepUILinkRenderInterceptor = ({ link }) => {
+            return { ...link, title: `Modified ${link.title ?? ''}` };
+          };
+
+          renderWithContext(<HaapiStepperStepUI linkRenderInterceptor={linkRenderInterceptor} />, {
+            currentStep: step,
+          });
+
+          const qrButton = screen.getByTestId('qr-code-button');
+          expect(within(qrButton).getByText('Modified Original QR')).toBeInTheDocument();
+        });
+      });
+
+      describe('BankID viewName built-in UI', () => {
         it('should render the QR link above the actions', () => {
           const qrLink = createMockQrLink();
           const otherLink = createMockLink({ rel: 'help', title: 'Help' });
-          const step = createBankIdPollingStep({ links: [qrLink, otherLink] });
+          const step = createPollingStep({ links: [qrLink, otherLink] });
 
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
 
           const renderedTestIds = screen.getAllByTestId(/^(qr-code-button|form-action)$/).map(element => {
             return element.getAttribute('data-testid');
@@ -1933,12 +2011,11 @@ describe('HaapiStepperStepUI', () => {
 
         it('should render gracefully when no QR link is present', () => {
           const otherLink = createMockLink({ rel: 'help', title: 'Help' });
-          const step = createBankIdPollingStep({ links: [otherLink] });
+          const step = createPollingStep({ links: [otherLink] });
 
-          renderWithContext(<HaapiStepperStepUI enableViewNameBuiltInUIs />, { currentStep: step });
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
 
           expect(screen.queryByTestId('qr-code-button')).not.toBeInTheDocument();
-          expect(screen.queryByTestId('bankid-spinner')).toBeInTheDocument();
           expect(screen.queryByTestId('messages')).toBeInTheDocument();
           expect(screen.queryByTestId('links')).toBeInTheDocument();
         });

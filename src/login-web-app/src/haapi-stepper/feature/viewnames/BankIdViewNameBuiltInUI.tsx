@@ -9,37 +9,30 @@
  * For further information, please contact Curity AB.
  */
 
-import { Spinner } from '../../../shared/ui/Spinner';
 import { Well } from '../../ui/well/Well';
-import { HaapiStepperMessagesUI } from '../../ui/messages/HaapiStepperMessagesUI';
-import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
-import { HaapiStepperLinksUI } from '../../ui/links/HaapiStepperLinksUI';
-import { HAAPI_POLLING_STATUS, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
-import { HaapiStepperAPIWithRequiredCurrentStep, HaapiStepperLink } from '../stepper/haapi-stepper.types';
+import { isQrCodeLink } from '../../util/isQrCodeLink';
+import { getLinksElement } from '../steps/step-element-factories';
+import type { ViewNameBuiltInUIProps } from './typings';
 
 /**
  * Built-in UI for the BankID viewName (`HaapiStepperViewNameBuiltInUI.BANKID`).
  *
- *  - Renders a spinner while the polling status is `pending` *or* while the stepper is loading. Together
- *    these cover the full BankID-in-progress window so the user always sees a progress indicator.
  *  - Lifts the QR code link above the actions so it's the primary element on the screen.
  */
-export const BankIdViewNameBuiltInUI = ({ currentStep, nextStep, loading }: HaapiStepperAPIWithRequiredCurrentStep) => {
-  const { messages, actions, links } = currentStep.dataHelpers;
-  const isQrLink = (link: HaapiStepperLink) => link.subtype?.startsWith('image/') ?? false;
-  const qrLink = links.find(isQrLink);
-  const nonQrLinks = links.filter(link => !isQrLink(link));
-  const isPollingPending =
-    currentStep.type === HAAPI_STEPS.POLLING && currentStep.properties.status === HAAPI_POLLING_STATUS.PENDING;
-  const showSpinner = loading || isPollingPending;
+export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
+  const { currentStep, linkRenderInterceptor, loadingElement, errorElement, messagesElement, actionsElement } = props;
+  const { links } = currentStep.dataHelpers;
+  const qrLink = links.find(isQrCodeLink);
+  const nonQrLinks = links.filter(link => !isQrCodeLink(link));
 
   return (
     <Well>
-      {showSpinner && <Spinner width={48} height={48} mode="fullscreen" data-testid="bankid-spinner" />}
-      <HaapiStepperMessagesUI messages={messages} />
-      {qrLink && <HaapiStepperLinksUI links={[qrLink]} onClick={nextStep} />}
-      <HaapiStepperActionsUI actions={actions?.all} onAction={nextStep} />
-      {nonQrLinks.length > 0 && <HaapiStepperLinksUI links={nonQrLinks} onClick={nextStep} />}
+      {loadingElement}
+      {errorElement}
+      {messagesElement}
+      {qrLink && getLinksElement(props, [qrLink], linkRenderInterceptor)}
+      {actionsElement}
+      {nonQrLinks.length > 0 && getLinksElement(props, nonQrLinks, linkRenderInterceptor)}
     </Well>
   );
 };
