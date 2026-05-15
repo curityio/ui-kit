@@ -209,11 +209,7 @@ button svg {
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
 }
 
-[type='submit'] {
-  margin-block-start: var(--space-2);
-}
-
-[type='submit']:not(.button-medium):not(.button-small):not(.button-tiny):not(.button-small):not(.button-large):not(.button-social):not(.button-link):not(.button-primary-outline),
+[type='submit']:where(:not(.button-tiny, .button-small, .button-large)),
 .button-medium {
   font-size: calc(var(--button-font-size) * var(--y-medium));
   min-height: 44px;
@@ -221,8 +217,9 @@ button svg {
   padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
   padding-inline-start: calc(var(--button-padding-x) * var(--x-medium));
   padding-inline-end: calc(var(--button-padding-x) * var(--x-medium));
+  margin-block-start: var(--space-2);
 
-  &:is([type='submit']) {
+  &:where(:not([class*='-outline'])) {
     color: white;
   }
 }

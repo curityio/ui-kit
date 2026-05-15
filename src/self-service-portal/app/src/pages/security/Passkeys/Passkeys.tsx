@@ -22,6 +22,7 @@ import { Device, DEVICE_TYPES } from '@/shared/data-access/API';
 import { PageHeader, Spinner, toUiKitTranslation } from '@curity/ui-kit-component-library';
 import { NewPasskeyDialog } from './NewPasskeyDialog';
 import { getFormattedDate } from '@shared/utils/date.ts';
+import { MFA_REGISTRABLE_FACTORS } from '@/pages/security/MFA/MFA';
 
 export const Passkeys = () => {
   const { t } = useTranslation();
@@ -93,6 +94,24 @@ export const Passkeys = () => {
           .includes(search?.toLocaleLowerCase());
       }) || [];
 
+  const shouldDisallowDeletingPasskeys =
+    passKeys.length === 1 &&
+    accountResponse?.accountByUserName?.mfaOptIn?.registeredFactors?.factors.some(
+      factor => factor.type === MFA_REGISTRABLE_FACTORS.PASSKEYS
+    );
+
+  if (shouldDisallowDeletingPasskeys) {
+    columns.push({
+      key: 'meta',
+      label: t('actions'),
+      customRender: () => (
+        <small>
+          <em>{t('security.passkeys.disallow.deletion.description')}</em>
+        </small>
+      ),
+    });
+  }
+
   const deletePasskeyFromAccount = ({ deviceId }: Device) => {
     return deleteDeviceFromAccountByAccountId({
       variables: {
@@ -119,6 +138,7 @@ export const Passkeys = () => {
         columns={columns}
         data={passKeys}
         createButtonLabel={t('security.passkeys.passkey')}
+        showDelete={!shouldDisallowDeletingPasskeys}
         onRowDelete={deletePasskeyFromAccount}
         onSearch={setSearch}
         onCreateNew={() => setShowNewPasskeyDialog(true)}

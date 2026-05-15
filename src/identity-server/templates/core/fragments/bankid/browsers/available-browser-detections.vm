@@ -1,5 +1,5 @@
 #*
- * Copyright (C) 2023 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -21,9 +21,9 @@
 ##
 ## Detection will run top to bottom, and end on first instance where the `detectCurrentBrowser` function returns `true`.
 ## Order in this list matters
-#parse("authenticator/bankid/launch/browsers/chrome-ios.js")
-#parse("authenticator/bankid/launch/browsers/edge-ios.js")
-#parse("authenticator/bankid/launch/browsers/firefox-ios.js")
-#parse("authenticator/bankid/launch/browsers/safari-ipad.js")
-#parse("authenticator/bankid/launch/browsers/safari-iphone.js")
-#parse("authenticator/bankid/launch/browsers/default-android.js")
+#parse("fragments/bankid/browsers/chrome-ios.js")
+#parse("fragments/bankid/browsers/edge-ios.js")
+#parse("fragments/bankid/browsers/firefox-ios.js")
+#parse("fragments/bankid/browsers/safari-ipad.js")
+#parse("fragments/bankid/browsers/safari-iphone.js")
+#parse("fragments/bankid/browsers/default-android.js")

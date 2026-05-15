@@ -69,8 +69,8 @@ Build output directory containing compiled assets:
 
 ### Prerequisites
 
-- Node.js >= 20.16.0
-- npm >= 10.8.1
+- Node.js >= 22.22.0
+- npm >= 10.9.4
 
 ### Installation
 

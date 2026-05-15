@@ -91,8 +91,8 @@ function App() {
 
 ### Prerequisites
 
-- Node.js >= 22.12.0
-- npm >= 10.9.0
+- Node.js >= 22.22.0
+- npm >= 10.9.4
 
 ### Scripts
 
@@ -155,7 +155,7 @@ src/
 - `@curity/ui-kit-icons` - Icon library
 - `react`
 - `react-router` - Routing support
-- `@reach/dialog` - Dialog support
+- `@radix-ui/react-dialog` - Dialog support
 
 ## Browser Support
 

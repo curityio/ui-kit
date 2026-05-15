@@ -54,6 +54,17 @@ export default defineConfig(({ mode }) => {
   if (mode === "styles") {
     return {
       ...shared,
+      plugins: [
+        ...shared.plugins,
+        {
+          name: "watch-css-lib-source",
+          buildStart() {
+            if (this.meta.watchMode) {
+              this.addWatchFile(path.resolve(__dirname, "../common/css/lib/src"));
+            }
+          },
+        },
+      ],
       build: {
         ...shared.build,
         emptyOutDir: false,
