@@ -24,7 +24,7 @@ async function main() {
     const version = checksums.version;
     const expectedSha256BySuffix = checksums.sha256;
 
-    if (!version || typeof expectedSha256BySuffix !== 'object') {
+    if (!version || !expectedSha256BySuffix || typeof expectedSha256BySuffix !== 'object') {
         throw new Error('previewer-checksums.json must contain "version" and "sha256" properties');
     }
 
