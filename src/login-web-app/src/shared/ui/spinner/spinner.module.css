@@ -1,0 +1,21 @@
+.circle {
+  animation: spinner-animation 0.8s linear infinite;
+}
+
+.delay2 {
+  animation-delay: -0.65s;
+}
+
+.delay3 {
+  animation-delay: -0.5s;
+}
+
+@keyframes spinner-animation {
+  93.75%,
+  to {
+    r: 6px;
+  }
+  46.875% {
+    r: 0.6px;
+  }
+}
