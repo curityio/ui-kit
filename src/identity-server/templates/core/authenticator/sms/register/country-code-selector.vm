@@ -39,7 +39,7 @@
                 selected="selected"
             #end
         >
-            #message("authenticator.sms.register.view.country-codes.${code.countryCode}")
+            #message("country-codes.${code.countryCode}")
             #if ($code.countryRegion)
                 ($code.countryRegion)
             #end
