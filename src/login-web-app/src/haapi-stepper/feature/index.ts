@@ -16,7 +16,7 @@ export * from './stepper/HaapiStepperHook';
 export * from './stepper/haapi-stepper.types';
 export * from './stepper/data-formatters/format-next-step-data';
 export * from './stepper/data-formatters/continue-same-step';
-export * from './stepper/data-formatters/polling-step';
+export * from './stepper/step-handlers/polling-step';
 export * from './stepper/data-formatters/problem-step';
 
 export * from './steps/HaapiStepperStepUI';

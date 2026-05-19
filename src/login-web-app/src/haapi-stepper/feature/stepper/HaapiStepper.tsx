@@ -22,7 +22,7 @@ import {
 import { HaapiStepperContext } from './HaapiStepperContext';
 import { isClientOperation, performClientOperation } from '../actions/client-operation/client-operations';
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
-import { handlePollingStep } from './data-formatters/polling-step';
+import { handlePollingStep } from './step-handlers/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
 import { handleCompletedWithSuccessStep } from './step-handlers/completed-with-success-step';
