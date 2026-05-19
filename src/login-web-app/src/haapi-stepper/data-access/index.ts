@@ -10,5 +10,5 @@
  */
 
 export * from './haapi-fetch-utils';
-export * from './happi-fetch-request';
+export * from './haapi-fetch-request';
 export * from './types';

@@ -26,7 +26,7 @@ import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
 import { handleCompletedWithSuccessStep } from './step-handlers/completed-with-success-step';
-import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
+import { sendHaapiFetchRequest } from '../../data-access/haapi-fetch-request';
 import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
   HaapiStepperClientOperationAction,
