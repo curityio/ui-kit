@@ -335,7 +335,7 @@ svg {
 }
 
 .haapi-validation-error-description {
-    color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 .is-error {
