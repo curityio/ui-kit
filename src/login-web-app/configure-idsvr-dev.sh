@@ -53,7 +53,7 @@ EOF
 # Copy the loader template
 
 OVERRIDES_DIR=$IDSVR_HOME/usr/share/templates/overrides
-API_DRIVEN_UI_DIR=$OVERRIDES_DIR/api-driven-ui
+API_DRIVEN_UI_DIR=$OVERRIDES_DIR/views/api-driven-ui
 
 mkdir -p $API_DRIVEN_UI_DIR
 
