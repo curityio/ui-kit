@@ -15,14 +15,18 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    ## TODO Looks like the app creates <style> element(s)) dynamically.
-    ##  Investigate and check if this can be more strict by default.
-    #set ($_cspStyleSrc = "style-src 'self' 'unsafe-inline' ${nonceScriptSrc}; style-src-elem 'self' 'unsafe-inline';")
+    #set($_cspImgsrc = "img-src 'self' data:;")
     #parse("fragments/csp")
 
     <title></title>
-    <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js"></script>
-    <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css">
+    <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js?v=${_cacheBustingHash}"></script>
+    <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css?v=${_cacheBustingHash}">
+    #if ($_configured_ui_theme_css_path)
+        <link rel="stylesheet" type="text/css" href="${_configured_ui_theme_css_path}?v=${_cacheBustingHash}"/>
+    #end
+    #if ($_configured_ui_custom_theme_css_path)
+        <link rel="stylesheet" type="text/css" href="${_configured_ui_custom_theme_css_path}?v=${_cacheBustingHash}">
+    #end
 </head>
 <body>
 <script $nonceAttr>
