@@ -141,7 +141,7 @@ svg {
 }
 
 .haapi-stepper-form-field-text-input {
-  @extend .field, .w100, .mt2;
+  @extend .field, .w100;
   font-family: var(--type-regular);
 }
 
@@ -161,14 +161,16 @@ svg {
   background: transparent;
   border: none;
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: calc(var(--form-field-height) / 2);
   width: calc(var(--form-field-height) / 2);
   padding: unset;
   position: absolute;
   right: var(--space-1);
-  vertical-align: middle;
-  top: calc(50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .haapi-stepper-form-field-password-visibility-toggle:focus-visible {
@@ -208,10 +210,14 @@ svg {
 }
 
 .haapi-stepper-well {
-  @extend .p3, .mx-auto, .bg-white, .br-8;
+  @extend .p3, .mx-auto;
   width: clamp(280px, 90%, 560px);
-  box-shadow: 0 4px 24px var(--color-grey-light);
-  margin: 0 auto;
+  background-color: var(--well-background-color);
+  border-width: var(--well-border-width);
+  border-style: var(--well-border-style);
+  border-color: var(--well-border-color);
+  border-radius: var(--well-border-radius);
+  box-shadow: var(--well-box-shadow);
 }
 
 .haapi-stepper-links {
@@ -329,4 +335,9 @@ svg {
 }
 
 .haapi-validation-error-description {
+    color: var(--color-danger);
+}
+
+.is-error {
+  @extend .alert, .alert-danger, .w100, .mx-auto;
 }
