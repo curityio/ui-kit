@@ -62,8 +62,10 @@ describe('webauthn', () => {
           );
           expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
           expect(result).toEqual({
-            action: action.model.continueActions[0],
-            payload: { credential: credentialJSON },
+            clientOperationData: {
+              action: action.model.continueActions[0],
+              payload: { credential: credentialJSON },
+            },
           });
         });
       });
@@ -84,8 +86,10 @@ describe('webauthn', () => {
           );
           expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
           expect(result).toEqual({
-            action: action.model.continueActions[0],
-            payload: { platformCredential: credentialJSON },
+            clientOperationData: {
+              action: action.model.continueActions[0],
+              payload: { platformCredential: credentialJSON },
+            },
           });
         });
 
@@ -104,8 +108,10 @@ describe('webauthn', () => {
           );
           expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
           expect(result).toEqual({
-            action: action.model.continueActions[0],
-            payload: { crossPlatformCredential: credentialJSON },
+            clientOperationData: {
+              action: action.model.continueActions[0],
+              payload: { crossPlatformCredential: credentialJSON },
+            },
           });
         });
       });
@@ -124,10 +130,12 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
-        ).rejects.toMatchObject({
-          app: {
-            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
+        ).resolves.toMatchObject({
+          clientOperationError: {
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
+            },
           },
         });
       });
@@ -137,10 +145,12 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, cancelStep)
-        ).rejects.toMatchObject({
-          app: {
-            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+        ).resolves.toMatchObject({
+          clientOperationError: {
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+            },
           },
         });
       });
@@ -155,10 +165,12 @@ describe('webauthn', () => {
 
             await expect(
               runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
-            ).rejects.toMatchObject({
-              app: {
-                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
+            ).resolves.toMatchObject({
+              clientOperationError: {
+                app: {
+                  type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                  messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
+                },
               },
             });
           }
@@ -174,10 +186,12 @@ describe('webauthn', () => {
 
           await expect(
             runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, cancelStep)
-          ).rejects.toMatchObject({
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+          ).resolves.toMatchObject({
+            clientOperationError: {
+              app: {
+                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+              },
             },
           });
         });
@@ -190,10 +204,12 @@ describe('webauthn', () => {
 
           await expect(
             runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
-          ).rejects.toMatchObject({
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
+          ).resolves.toMatchObject({
+            clientOperationError: {
+              app: {
+                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
+              },
             },
           });
         });
@@ -205,8 +221,8 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
-        ).rejects.toMatchObject({
-          app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] },
+        ).resolves.toMatchObject({
+          clientOperationError: { app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] } },
         });
       });
 
@@ -215,8 +231,8 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, null)
-        ).rejects.toMatchObject({
-          app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] },
+        ).resolves.toMatchObject({
+          clientOperationError: { app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] } },
         });
       });
     });
@@ -238,12 +254,14 @@ describe('webauthn', () => {
       );
       expect(mockCredentialsGet).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
       expect(result).toEqual({
-        action: action.model.continueActions[0],
-        payload: { credential: credentialJSON },
+        clientOperationData: {
+          action: action.model.continueActions[0],
+          payload: { credential: credentialJSON },
+        },
       });
     });
 
-    describe('error catalog — throws HaapiStepperError', () => {
+    describe('error', () => {
       const cancelStep = makeStepWithMetadata({
         viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
       });
@@ -256,10 +274,12 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
-        ).rejects.toMatchObject({
-          app: {
-            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
+        ).resolves.toMatchObject({
+          clientOperationError: {
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
+            },
           },
         });
       });
@@ -269,10 +289,12 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, cancelStep)
-        ).rejects.toMatchObject({
-          app: {
-            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+        ).resolves.toMatchObject({
+          clientOperationError: {
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+            },
           },
         });
       });
@@ -284,10 +306,12 @@ describe('webauthn', () => {
 
         await expect(
           runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
-        ).rejects.toMatchObject({
-          app: {
-            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
+        ).resolves.toMatchObject({
+          clientOperationError: {
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
+            },
           },
         });
       });
@@ -298,10 +322,12 @@ describe('webauthn', () => {
 
           await expect(
             runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, cancelStep)
-          ).rejects.toMatchObject({
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+          ).resolves.toMatchObject({
+            clientOperationError: {
+              app: {
+                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+              },
             },
           });
         });
@@ -313,10 +339,12 @@ describe('webauthn', () => {
 
             await expect(
               runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
-            ).rejects.toMatchObject({
-              app: {
-                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
+            ).resolves.toMatchObject({
+              clientOperationError: {
+                app: {
+                  type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                  messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
+                },
               },
             });
           }

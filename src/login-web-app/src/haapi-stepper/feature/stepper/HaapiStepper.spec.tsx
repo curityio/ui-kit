@@ -642,8 +642,10 @@ describe('HaapiStepper', () => {
             const action = createMockWebAuthnRegistrationAction();
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, action);
             mockRunWebAuthnRegistration.mockResolvedValueOnce({
-              action: action.model.continueActions[0],
-              payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              clientOperationData: {
+                action: action.model.continueActions[0],
+                payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              },
             });
             mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
 
@@ -664,7 +666,7 @@ describe('HaapiStepper', () => {
           describe('error', () => {
             beforeEach(() => {
               mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
-              mockRunWebAuthnRegistration.mockRejectedValue(failedWebAuthnCeremonyError());
+              mockRunWebAuthnRegistration.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
             });
 
             it('provides the error via error.app', async () => {
@@ -721,8 +723,10 @@ describe('HaapiStepper', () => {
             const action = createMockWebAuthnAuthenticationAction();
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, action);
             mockRunWebAuthnAuthentication.mockResolvedValueOnce({
-              action: action.model.continueActions[0],
-              payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              clientOperationData: {
+                action: action.model.continueActions[0],
+                payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              },
             });
             mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
 
@@ -743,7 +747,7 @@ describe('HaapiStepper', () => {
           describe('error', () => {
             beforeEach(() => {
               mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
-              mockRunWebAuthnAuthentication.mockRejectedValue(failedWebAuthnCeremonyError());
+              mockRunWebAuthnAuthentication.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
             });
 
             it('provides the error via error.app', async () => {
