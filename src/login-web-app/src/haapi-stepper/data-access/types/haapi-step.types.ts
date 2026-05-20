@@ -351,11 +351,7 @@ export interface HaapiMetadata {
   templateArea?: string;
   /** The name for the view that produced the response */
   viewName?: string;
-  /**
-   * Categorised view-specific data emitted by the Identity Server alongside step responses.
-   * Currently scopes error-tone copy for client-operation failures (WebAuthn today; BankID /
-   * EBF on the same pattern when their per-operation error handling lands).
-   */
+  /** Categorised view-specific data */
   viewData?: HaapiMetadataViewData;
 }
 
