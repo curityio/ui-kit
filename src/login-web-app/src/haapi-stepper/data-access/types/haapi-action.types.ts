@@ -189,12 +189,9 @@ export interface HaapiExternalBrowserArguments {
   href: string;
 }
 
-/**
- * Client operation WebAuthn registration action
- */
-export interface HaapiWebAuthnRegistrationClientOperationAction extends HaapiClientOperationAction {
-  model: HaapiWebAuthnRegistrationClientOperationModel;
-}
+export type HaapiWebAuthnRegistrationClientOperationAction =
+  | HaapiWebAuthnPasskeysRegistrationAction
+  | HaapiWebAuthnAnyDeviceRegistrationAction;
 
 export interface HaapiWebAuthnRegistrationClientOperationModel extends HaapiBaseClientOperationModel {
   name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION;
@@ -202,17 +199,17 @@ export interface HaapiWebAuthnRegistrationClientOperationModel extends HaapiBase
   continueActions: [HaapiFormAction];
 }
 
-export type HaapiWebAuthnPasskeysRegistrationAction = Omit<HaapiWebAuthnRegistrationClientOperationAction, 'model'> & {
+export interface HaapiWebAuthnPasskeysRegistrationAction extends HaapiClientOperationAction {
   model: Omit<HaapiWebAuthnRegistrationClientOperationModel, 'arguments'> & {
     arguments: HaapiWebAuthnPasskeysArgs;
   };
-};
+}
 
-export type HaapiWebAuthnAnyDeviceRegistrationAction = Omit<HaapiWebAuthnRegistrationClientOperationAction, 'model'> & {
+export interface HaapiWebAuthnAnyDeviceRegistrationAction extends HaapiClientOperationAction {
   model: Omit<HaapiWebAuthnRegistrationClientOperationModel, 'arguments'> & {
     arguments: HaapiWebAuthnAnyDeviceArgs;
   };
-};
+}
 
 /**
  * Discriminated union of `webauthn-registration` action arguments.
@@ -228,10 +225,15 @@ export interface HaapiWebAuthnPasskeysArgs {
   credentialCreationOptions: HaapiPublicKeyCredentialCreationOptions;
 }
 
-export interface HaapiWebAuthnAnyDeviceArgs {
-  platformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
-  crossPlatformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
-}
+export type HaapiWebAuthnAnyDeviceArgs =
+  | {
+      platformCredentialCreationOptions: HaapiPublicKeyCredentialCreationOptions;
+      crossPlatformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
+    }
+  | {
+      platformCredentialCreationOptions?: undefined;
+      crossPlatformCredentialCreationOptions: HaapiPublicKeyCredentialCreationOptions;
+    };
 
 /**
  * Continue-action payload key for the `webauthn-registration` operation. The value matches the
