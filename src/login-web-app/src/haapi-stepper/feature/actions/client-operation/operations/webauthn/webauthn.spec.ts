@@ -12,6 +12,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { runWebAuthnAuthentication, runWebAuthnRegistration } from './webauthn';
 import {
+  HAAPI_PROBLEM_STEPS,
+  HAAPI_STEPS,
+  HaapiAuthenticationStep,
+  HaapiMetadata,
+  HaapiStep,
+} from '../../../../../data-access/types/haapi-step.types';
+import {
   createMockWebAuthnAuthenticationAction,
   createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
   createMockWebAuthnPlatformOnlyAnyDeviceAction,
@@ -20,9 +27,14 @@ import {
 
 describe('webauthn', () => {
   const abortSignal = new AbortController().signal;
+  const stepWithoutMetadata: HaapiStep | null = null;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockParseCreationOptionsFromJSON.mockReset();
+    mockParseRequestOptionsFromJSON.mockReset();
+    mockCredentialsCreate.mockReset();
+    mockCredentialsGet.mockReset();
     vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
     installNavigatorCredentials();
   });
@@ -33,108 +45,184 @@ describe('webauthn', () => {
   });
 
   describe('runWebAuthnRegistration', () => {
-    it('throws when WebAuthn API is not supported', async () => {
-      vi.unstubAllGlobals();
-      const action = createMockWebAuthnRegistrationAction();
+    describe('success', () => {
+      describe('passkey', () => {
+        it('parses credentialCreationOptions, creates a credential, and returns a continuation under "credential"', async () => {
+          const parsedOptions = { challenge: 'parsed' };
+          const credentialJSON = { id: 'passkey-cred', type: 'public-key' };
 
-      await expect(runWebAuthnRegistration(action, abortSignal)).rejects.toMatchObject({
-        message: 'WebAuthn API is not supported in this browser',
+          mockParseCreationOptionsFromJSON.mockReturnValue(parsedOptions);
+          mockCredentialsCreate.mockResolvedValue(mockCredential(credentialJSON));
+
+          const action = createMockWebAuthnRegistrationAction();
+          const result = await runWebAuthnRegistration(action, abortSignal, stepWithoutMetadata);
+
+          expect(mockParseCreationOptionsFromJSON).toHaveBeenCalledWith(
+            action.model.arguments.credentialCreationOptions.publicKey
+          );
+          expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
+          expect(result).toEqual({
+            action: action.model.continueActions[0],
+            payload: { credential: credentialJSON },
+          });
+        });
       });
-    });
 
-    it('throws when navigator.credentials.create returns null', async () => {
-      mockCredentialsCreate.mockResolvedValue(null);
-      const action = createMockWebAuthnRegistrationAction();
+      describe('any-device', () => {
+        it('platform-only: parses platformCredentialCreationOptions, creates a credential, and returns a continuation under "platformCredential"', async () => {
+          const parsedOptions = { challenge: 'platform' };
+          const credentialJSON = { id: 'platform-cred', type: 'public-key' };
 
-      await expect(runWebAuthnRegistration(action, abortSignal)).rejects.toMatchObject({
-        message: 'Could not create credential',
-      });
-    });
+          mockParseCreationOptionsFromJSON.mockReturnValue(parsedOptions);
+          mockCredentialsCreate.mockResolvedValue(mockCredential(credentialJSON));
 
-    describe('passkey', () => {
-      it('parses credentialCreationOptions, creates a credential, and returns a continuation under "credential"', async () => {
-        const parsedOptions = { challenge: 'parsed' };
-        const credentialJSON = { id: 'passkey-cred', type: 'public-key' };
+          const action = createMockWebAuthnPlatformOnlyAnyDeviceAction();
+          const result = await runWebAuthnRegistration(action, abortSignal, stepWithoutMetadata);
 
-        mockParseCreationOptionsFromJSON.mockReturnValue(parsedOptions);
-        mockCredentialsCreate.mockResolvedValue(mockCredential(credentialJSON));
+          expect(mockParseCreationOptionsFromJSON).toHaveBeenCalledWith(
+            action.model.arguments.platformCredentialCreationOptions?.publicKey
+          );
+          expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
+          expect(result).toEqual({
+            action: action.model.continueActions[0],
+            payload: { platformCredential: credentialJSON },
+          });
+        });
 
-        const action = createMockWebAuthnRegistrationAction();
-        const result = await runWebAuthnRegistration(action, abortSignal);
+        it('cross-platform-only: parses crossPlatformCredentialCreationOptions, creates a credential, and returns a continuation under "crossPlatformCredential"', async () => {
+          const parsedOptions = { challenge: 'cross-platform' };
+          const credentialJSON = { id: 'cross-platform-cred', type: 'public-key' };
 
-        expect(mockParseCreationOptionsFromJSON).toHaveBeenCalledWith(
-          action.model.arguments.credentialCreationOptions.publicKey
-        );
-        expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
-        expect(result).toEqual({
-          action: action.model.continueActions[0],
-          payload: { credential: credentialJSON },
+          mockParseCreationOptionsFromJSON.mockReturnValue(parsedOptions);
+          mockCredentialsCreate.mockResolvedValue(mockCredential(credentialJSON));
+
+          const action = createMockWebAuthnCrossPlatformOnlyAnyDeviceAction();
+          const result = await runWebAuthnRegistration(action, abortSignal, stepWithoutMetadata);
+
+          expect(mockParseCreationOptionsFromJSON).toHaveBeenCalledWith(
+            action.model.arguments.crossPlatformCredentialCreationOptions?.publicKey
+          );
+          expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
+          expect(result).toEqual({
+            action: action.model.continueActions[0],
+            payload: { crossPlatformCredential: credentialJSON },
+          });
         });
       });
     });
 
-    describe('any-device', () => {
-      it('platform-only: parses platformCredentialCreationOptions, creates a credential, and returns a continuation under "platformCredential"', async () => {
-        const parsedOptions = { challenge: 'platform' };
-        const credentialJSON = { id: 'platform-cred', type: 'public-key' };
+    describe('error', () => {
+      const cancelStep = makeStepWithMetadata({
+        messages: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the registration.' } } } },
+      });
+      const failedStep = makeStepWithMetadata({
+        messages: { error: { clientOperation: { webauthn: { registration: 'Registration failed.' } } } },
+      });
 
-        mockParseCreationOptionsFromJSON.mockReturnValue(parsedOptions);
-        mockCredentialsCreate.mockResolvedValue(mockCredential(credentialJSON));
+      it('WebAuthn API not supported → registrationError copy', async () => {
+        vi.unstubAllGlobals();
 
-        const action = createMockWebAuthnPlatformOnlyAnyDeviceAction();
-        const result = await runWebAuthnRegistration(action, abortSignal);
-
-        expect(mockParseCreationOptionsFromJSON).toHaveBeenCalledWith(
-          action.model.arguments.platformCredentialCreationOptions?.publicKey
-        );
-        expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
-        expect(result).toEqual({
-          action: action.model.continueActions[0],
-          payload: { platformCredential: credentialJSON },
+        await expect(
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
+        ).rejects.toMatchObject({
+          app: {
+            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+            messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.registration }],
+          },
         });
       });
 
-      it('cross-platform-only: parses crossPlatformCredentialCreationOptions, creates a credential, and returns a continuation under "crossPlatformCredential"', async () => {
-        const parsedOptions = { challenge: 'cross-platform' };
-        const credentialJSON = { id: 'cross-platform-cred', type: 'public-key' };
+      it('navigator.credentials.create returns null → cancelOrTimeoutError copy', async () => {
+        mockCredentialsCreate.mockResolvedValue(null);
 
-        mockParseCreationOptionsFromJSON.mockReturnValue(parsedOptions);
-        mockCredentialsCreate.mockResolvedValue(mockCredential(credentialJSON));
+        await expect(
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, cancelStep)
+        ).rejects.toMatchObject({
+          app: {
+            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+            messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+          },
+        });
+      });
 
-        const action = createMockWebAuthnCrossPlatformOnlyAnyDeviceAction();
-        const result = await runWebAuthnRegistration(action, abortSignal);
+      describe('parseCreationOptionsFromJSON throws', () => {
+        it.each(['EncodingError', 'SecurityError'] as const)(
+          '%s → registrationError copy (failed bucket)',
+          async errorName => {
+            mockParseCreationOptionsFromJSON.mockImplementation(() => {
+              throw new DOMException(`${errorName} message`, errorName);
+            });
 
-        expect(mockParseCreationOptionsFromJSON).toHaveBeenCalledWith(
-          action.model.arguments.crossPlatformCredentialCreationOptions?.publicKey
+            await expect(
+              runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
+            ).rejects.toMatchObject({
+              app: {
+                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.registration }],
+              },
+            });
+          }
         );
-        expect(mockCredentialsCreate).toHaveBeenCalledWith({ publicKey: parsedOptions, signal: abortSignal });
-        expect(result).toEqual({
-          action: action.model.continueActions[0],
-          payload: { crossPlatformCredential: credentialJSON },
+      });
+
+      describe('navigator.credentials.create throws', () => {
+        it.each([
+          ['NotAllowedError', new DOMException('user cancelled', 'NotAllowedError')],
+          ['AbortError (non-caller-triggered, signal not aborted)', new DOMException('internal timeout', 'AbortError')],
+        ] as const)('%s → cancelOrTimeoutError copy', async (_label, error) => {
+          mockCredentialsCreate.mockRejectedValue(error);
+
+          await expect(
+            runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, cancelStep)
+          ).rejects.toMatchObject({
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+            },
+          });
+        });
+
+        it.each([
+          ['TypeError', new TypeError('bad options')],
+          ['arbitrary non-DOMException', new Error('something else')],
+        ] as const)('%s → registrationError copy (failed bucket)', async (_label, error) => {
+          mockCredentialsCreate.mockRejectedValue(error);
+
+          await expect(
+            runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
+          ).rejects.toMatchObject({
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.registration }],
+            },
+          });
+        });
+      });
+
+      it('falls back to no message when the matching metadata key is absent (BE has not emitted it yet)', async () => {
+        mockCredentialsCreate.mockResolvedValue(null);
+        const step = makeStepWithMetadata({ templateArea: 'lwa', viewName: 'unrelated' });
+
+        await expect(
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
+        ).rejects.toMatchObject({
+          app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] },
+        });
+      });
+
+      it('falls back to no message when currentStep is null', async () => {
+        mockCredentialsCreate.mockResolvedValue(null);
+
+        await expect(
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, null)
+        ).rejects.toMatchObject({
+          app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] },
         });
       });
     });
   });
 
   describe('runWebAuthnAuthentication', () => {
-    it('throws when WebAuthn API is not supported', async () => {
-      vi.unstubAllGlobals();
-      const action = createMockWebAuthnAuthenticationAction();
-
-      await expect(runWebAuthnAuthentication(action, abortSignal)).rejects.toMatchObject({
-        message: 'WebAuthn API is not supported in this browser',
-      });
-    });
-
-    it('throws when navigator.credentials.get returns null', async () => {
-      mockCredentialsGet.mockResolvedValue(null);
-      const action = createMockWebAuthnAuthenticationAction();
-
-      await expect(runWebAuthnAuthentication(action, abortSignal)).rejects.toMatchObject({
-        message: 'Could not get credential',
-      });
-    });
-
     it('parses credentialRequestOptions, gets a credential, and returns a continuation under "credential"', async () => {
       const parsedOptions = { challenge: 'auth' };
       const credentialJSON = { id: 'auth-cred', type: 'public-key' };
@@ -143,7 +231,7 @@ describe('webauthn', () => {
       mockCredentialsGet.mockResolvedValue(mockCredential(credentialJSON));
 
       const action = createMockWebAuthnAuthenticationAction();
-      const result = await runWebAuthnAuthentication(action, abortSignal);
+      const result = await runWebAuthnAuthentication(action, abortSignal, stepWithoutMetadata);
 
       expect(mockParseRequestOptionsFromJSON).toHaveBeenCalledWith(
         action.model.arguments.credentialRequestOptions.publicKey
@@ -152,6 +240,87 @@ describe('webauthn', () => {
       expect(result).toEqual({
         action: action.model.continueActions[0],
         payload: { credential: credentialJSON },
+      });
+    });
+
+    describe('error catalog — throws HaapiStepperError', () => {
+      const cancelStep = makeStepWithMetadata({
+        messages: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
+      });
+      const failedStep = makeStepWithMetadata({
+        messages: { error: { clientOperation: { webauthn: { authentication: 'Authentication failed.' } } } },
+      });
+
+      it('WebAuthn API not supported → authenticationError copy (failed bucket)', async () => {
+        vi.unstubAllGlobals();
+
+        await expect(
+          runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
+        ).rejects.toMatchObject({
+          app: {
+            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+            messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.authentication }],
+          },
+        });
+      });
+
+      it('navigator.credentials.get returns null → cancelOrTimeoutError copy', async () => {
+        mockCredentialsGet.mockResolvedValue(null);
+
+        await expect(
+          runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, cancelStep)
+        ).rejects.toMatchObject({
+          app: {
+            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+            messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+          },
+        });
+      });
+
+      it('parseRequestOptionsFromJSON throws SecurityError → authenticationError copy', async () => {
+        mockParseRequestOptionsFromJSON.mockImplementation(() => {
+          throw new DOMException('rp id mismatch', 'SecurityError');
+        });
+
+        await expect(
+          runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
+        ).rejects.toMatchObject({
+          app: {
+            type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+            messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.authentication }],
+          },
+        });
+      });
+
+      describe('navigator.credentials.get throws', () => {
+        it.each(['NotAllowedError', 'AbortError'])('%s → cancelOrTimeoutError copy', async errorName => {
+          mockCredentialsGet.mockRejectedValue(new DOMException(`${errorName} message`, errorName));
+
+          await expect(
+            runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, cancelStep)
+          ).rejects.toMatchObject({
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+            },
+          });
+        });
+
+        it.each(['TimeoutError', 'NetworkError', 'IdentityCredentialError', 'SecurityError'])(
+          '%s → authenticationError copy (failed bucket)',
+          async errorName => {
+            mockCredentialsGet.mockRejectedValue(new DOMException(`${errorName} message`, errorName));
+
+            await expect(
+              runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
+            ).rejects.toMatchObject({
+              app: {
+                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+                messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.authentication }],
+              },
+            });
+          }
+        );
       });
     });
   });
@@ -182,3 +351,12 @@ const restoreNavigatorCredentials = () => {
 const mockCredential = (toJSONResult: unknown = { id: 'cred-id', type: 'public-key' }) => ({
   toJSON: vi.fn(() => toJSONResult),
 });
+
+function makeStepWithMetadata(metadata: HaapiMetadata = {}): HaapiStep {
+  const step: HaapiAuthenticationStep = {
+    type: HAAPI_STEPS.AUTHENTICATION,
+    actions: [],
+    metadata,
+  };
+  return step;
+}
