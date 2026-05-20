@@ -49,15 +49,11 @@ export async function performClientOperation(
   const signal = abortController.signal;
 
   if (isWebAuthnRegistrationClientOperation(action)) {
-    return runWebAuthnRegistration(action, signal, currentStep)
-      .then(clientOperationData => ({ clientOperationData }))
-      .catch(wrapStepperErrorOrRethrow);
+    return runWebAuthnRegistration(action, signal, currentStep);
   }
 
   if (isWebAuthnAuthenticationClientOperation(action)) {
-    return runWebAuthnAuthentication(action, signal, currentStep)
-      .then(clientOperationData => ({ clientOperationData }))
-      .catch(wrapStepperErrorOrRethrow);
+    return runWebAuthnAuthentication(action, signal, currentStep);
   }
 
   if (isExternalBrowserFlowClientOperation(action)) {
@@ -69,27 +65,6 @@ export async function performClientOperation(
   }
 
   throw new Error(`Unsupported client operation: ${action.model.name}`);
-}
-
-/**
- * Catch-handler shared by the WebAuthn dispatcher branches. WebAuthn runners throw a
- * synthesised {@link HaapiStepperError} on ceremony failure (IS-11327); anything else is a
- * programming bug or an unexpected runtime error and should escape to the React error boundary
- * rather than being misrouted into `error.app`. The type guard discriminates between the two.
- */
-function isHaapiStepperError(value: unknown): value is HaapiStepperError {
-  return typeof value === 'object' && value !== null && ('app' in value || 'input' in value);
-}
-
-function wrapStepperErrorOrRethrow(rejection: unknown): ClientOperationResult {
-  if (isHaapiStepperError(rejection)) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- `rejection` is narrowed to HaapiStepperError by the guard above; the rule still flags it as error-typed because the parent type was `unknown`.
-    return { clientOperationError: rejection };
-  }
-  // Rethrow non-conforming rejections (programming bugs / unexpected runtime errors) so the
-  // React error boundary handles them — they're not routed into `error.app`.
-  // eslint-disable-next-line @typescript-eslint/only-throw-error
-  throw rejection;
 }
 
 /**
