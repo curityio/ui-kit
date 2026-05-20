@@ -22,10 +22,10 @@
     <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js?v=${_cacheBustingHash}"></script>
     <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css?v=${_cacheBustingHash}">
     #if ($_configured_ui_theme_css_path)
-        <link rel="stylesheet" type="text/css" href="${_configured_ui_theme_css_path}?v=${_cacheBustingHash}"/>
+        <link rel="stylesheet" type="text/css" href="${_configured_ui_theme_css_path}"/>
     #end
     #if ($_configured_ui_custom_theme_css_path)
-        <link rel="stylesheet" type="text/css" href="${_configured_ui_custom_theme_css_path}?v=${_cacheBustingHash}">
+        <link rel="stylesheet" type="text/css" href="${_configured_ui_custom_theme_css_path}">
     #end
 </head>
 <body>
