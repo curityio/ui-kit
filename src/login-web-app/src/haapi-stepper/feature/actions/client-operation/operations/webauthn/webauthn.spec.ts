@@ -113,10 +113,10 @@ describe('webauthn', () => {
 
     describe('error', () => {
       const cancelStep = makeStepWithMetadata({
-        messages: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the registration.' } } } },
+        viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the registration.' } } } },
       });
       const failedStep = makeStepWithMetadata({
-        messages: { error: { clientOperation: { webauthn: { registration: 'Registration failed.' } } } },
+        viewData: { error: { clientOperation: { webauthn: { registration: 'Registration failed.' } } } },
       });
 
       it('WebAuthn API not supported → registrationError copy', async () => {
@@ -127,7 +127,7 @@ describe('webauthn', () => {
         ).rejects.toMatchObject({
           app: {
             type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.registration }],
+            messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
           },
         });
       });
@@ -140,7 +140,7 @@ describe('webauthn', () => {
         ).rejects.toMatchObject({
           app: {
             type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+            messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
           },
         });
       });
@@ -158,7 +158,7 @@ describe('webauthn', () => {
             ).rejects.toMatchObject({
               app: {
                 type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-                messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.registration }],
+                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
               },
             });
           }
@@ -177,7 +177,7 @@ describe('webauthn', () => {
           ).rejects.toMatchObject({
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
             },
           });
         });
@@ -193,7 +193,7 @@ describe('webauthn', () => {
           ).rejects.toMatchObject({
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.registration }],
+              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
             },
           });
         });
@@ -245,10 +245,10 @@ describe('webauthn', () => {
 
     describe('error catalog — throws HaapiStepperError', () => {
       const cancelStep = makeStepWithMetadata({
-        messages: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
+        viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
       });
       const failedStep = makeStepWithMetadata({
-        messages: { error: { clientOperation: { webauthn: { authentication: 'Authentication failed.' } } } },
+        viewData: { error: { clientOperation: { webauthn: { authentication: 'Authentication failed.' } } } },
       });
 
       it('WebAuthn API not supported → authenticationError copy (failed bucket)', async () => {
@@ -259,7 +259,7 @@ describe('webauthn', () => {
         ).rejects.toMatchObject({
           app: {
             type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.authentication }],
+            messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
           },
         });
       });
@@ -272,7 +272,7 @@ describe('webauthn', () => {
         ).rejects.toMatchObject({
           app: {
             type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+            messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
           },
         });
       });
@@ -287,7 +287,7 @@ describe('webauthn', () => {
         ).rejects.toMatchObject({
           app: {
             type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-            messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.authentication }],
+            messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
           },
         });
       });
@@ -301,7 +301,7 @@ describe('webauthn', () => {
           ).rejects.toMatchObject({
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: cancelStep.metadata?.messages?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
             },
           });
         });
@@ -316,7 +316,7 @@ describe('webauthn', () => {
             ).rejects.toMatchObject({
               app: {
                 type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-                messages: [{ text: failedStep.metadata?.messages?.error?.clientOperation?.webauthn?.authentication }],
+                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
               },
             });
           }
