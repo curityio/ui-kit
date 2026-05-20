@@ -352,16 +352,18 @@ export interface HaapiMetadata {
   /** The name for the view that produced the response */
   viewName?: string;
   /**
-   * Categorised user-facing messages
+   * Categorised view-specific data emitted by the Identity Server alongside step responses.
+   * Currently scopes error-tone copy for client-operation failures (WebAuthn today; BankID /
+   * EBF on the same pattern when their per-operation error handling lands).
    */
-  messages?: HaapiMetadataMessages;
+  viewData?: HaapiMetadataViewData;
 }
 
-export interface HaapiMetadataMessages {
-  error?: HaapiMetadataErrorMessages;
+export interface HaapiMetadataViewData {
+  error?: HaapiMetadataViewDataError;
 }
 
-export interface HaapiMetadataErrorMessages {
+export interface HaapiMetadataViewDataError {
   clientOperation?: HaapiClientOperationErrorMessages;
 }
 export interface HaapiClientOperationErrorMessages {

@@ -15,11 +15,10 @@ import {
   HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../../../../data-access/types/haapi-action.types';
 import { HaapiFetchFormAction } from '../../../../../data-access/types/haapi-fetch.types';
-import { HAAPI_PROBLEM_STEPS, HaapiStep, HaapiUserMessage } from '../../../../../data-access/types/haapi-step.types';
-import type { HaapiStepperError } from '../../../../stepper/haapi-stepper.types';
-import { formatErrorStepData } from '../../../../stepper/data-formatters/problem-step';
+import { HaapiStep } from '../../../../../data-access/types/haapi-step.types';
 import { isPasskeysWebAuthnRegistrationAction, isWebAuthnApiSupported } from './utils';
 import { WEBAUTHN_ERROR_TYPE, WEBAUTHN_OPERATION } from './typings';
+import { getHaapiStepperError } from '../client-operations';
 
 /**
  * Executes the `webauthn-registration` ceremony and returns the HAAPI continuation form
@@ -69,7 +68,9 @@ async function createWebAuthnRegistrationCredential(
 ): Promise<PublicKeyCredential> {
   if (!isWebAuthnApiSupported()) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- synthesised HaapiStepperError (data, not Error instance); caught + wrapped by `performClientOperation` (IS-11327)
-    throw getHaapiStepperError(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.REGISTRATION, currentStep);
+    throw getHaapiStepperError(
+      getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+    );
   }
 
   let credential: PublicKeyCredential | null;
@@ -81,12 +82,16 @@ async function createWebAuthnRegistrationCredential(
     })) as PublicKeyCredential | null;
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- synthesised HaapiStepperError (data, not Error instance); caught + wrapped by `performClientOperation` (IS-11327)
-    throw getHaapiStepperError(getWebAuthnErrorType(error), WEBAUTHN_OPERATION.REGISTRATION, currentStep);
+    throw getHaapiStepperError(
+      getWebAuthnErrorMessage(getWebAuthnErrorType(error), WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+    );
   }
 
   if (credential === null) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- synthesised HaapiStepperError (data, not Error instance); caught + wrapped by `performClientOperation` (IS-11327)
-    throw getHaapiStepperError(WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT, WEBAUTHN_OPERATION.REGISTRATION, currentStep);
+    throw getHaapiStepperError(
+      getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+    );
   }
 
   return credential;
@@ -99,7 +104,9 @@ async function getWebAuthnAuthenticationCredential(
 ): Promise<PublicKeyCredential> {
   if (!isWebAuthnApiSupported()) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- synthesised HaapiStepperError (data, not Error instance); caught + wrapped by `performClientOperation` (IS-11327)
-    throw getHaapiStepperError(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep);
+    throw getHaapiStepperError(
+      getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+    );
   }
 
   let credential: PublicKeyCredential | null;
@@ -113,47 +120,38 @@ async function getWebAuthnAuthenticationCredential(
     })) as PublicKeyCredential | null;
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- synthesised HaapiStepperError (data, not Error instance); caught + wrapped by `performClientOperation` (IS-11327)
-    throw getHaapiStepperError(getWebAuthnErrorType(error), WEBAUTHN_OPERATION.AUTHENTICATION, currentStep);
+    throw getHaapiStepperError(
+      getWebAuthnErrorMessage(getWebAuthnErrorType(error), WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+    );
   }
 
   if (credential === null) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- synthesised HaapiStepperError (data, not Error instance); caught + wrapped by `performClientOperation` (IS-11327)
-    throw getHaapiStepperError(WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep);
+    throw getHaapiStepperError(
+      getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+    );
   }
 
   return credential;
 }
 
 /**
- * Synthesises a {@link HaapiStepperError} for a WebAuthn ceremony failure.
- *
- * Client-operation failures happen on the client and aren't part of the HAAPI response, so
- * the stepper has no native category for them. We treat them as `AppError`-class problems of
- * the current step — building a `HaapiUnexpectedProblemStep` via {@link formatErrorStepData} —
- * so they surface via `useHaapiStepper().error.app` like any server-driven problem and
- * consumers handle them through the same channel (e.g. `HaapiStepperErrorNotifier`).
- *
- * Message copy comes from `step.metadata.messages.error` per
- * `type` and `operation`.
+ * Resolve the user-facing copy for a WebAuthn ceremony failure from the current step's
+ * `metadata.viewData.error.clientOperation.webauthn.<key>`, picking the key per the two-tone
+ * discriminator (`cancelOrTimeout` / per-ceremony failure). Returns `undefined` when the key
+ * is absent so the synthesised error has no message and consumers fall back to their own copy.
  */
-function getHaapiStepperError(
+function getWebAuthnErrorMessage(
   type: WEBAUTHN_ERROR_TYPE,
   operation: WEBAUTHN_OPERATION,
   currentStep: HaapiStep | null
-): HaapiStepperError {
-  const webauthnErrors = currentStep?.metadata?.messages?.error?.clientOperation?.webauthn;
-  const messageText =
-    type === WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT
-      ? (webauthnErrors?.cancelOrTimeout ?? '')
-      : operation === WEBAUTHN_OPERATION.REGISTRATION
-        ? (webauthnErrors?.registration ?? '')
-        : (webauthnErrors?.authentication ?? '');
-  const messages: HaapiUserMessage[] = messageText ? [{ text: messageText }] : [];
-
-  return formatErrorStepData({
-    type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-    messages,
-  });
+): string | undefined {
+  const webauthnErrors = currentStep?.metadata?.viewData?.error?.clientOperation?.webauthn;
+  return type === WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT
+    ? webauthnErrors?.cancelOrTimeout
+    : operation === WEBAUTHN_OPERATION.REGISTRATION
+      ? webauthnErrors?.registration
+      : webauthnErrors?.authentication;
 }
 
 function getWebAuthnErrorType(error: unknown): WEBAUTHN_ERROR_TYPE {
