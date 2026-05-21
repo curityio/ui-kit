@@ -31,7 +31,7 @@ import {
   runWebAuthnAuthentication,
   runWebAuthnRegistration,
 } from './webauthn';
-import { ClientOperationResult } from './webauthn/typings';
+import { ClientOperationResult } from './typings';
 
 export function isClientOperation(
   action: HaapiAction | HaapiStepperAction | HaapiLink | HaapiStepperLink

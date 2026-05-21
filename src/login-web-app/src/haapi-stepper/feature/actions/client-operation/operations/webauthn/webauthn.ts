@@ -17,7 +17,8 @@ import {
 import { HaapiStep } from '../../../../../data-access/types/haapi-step.types';
 import type { HaapiStepperError } from '../../../../stepper/haapi-stepper.types';
 import { isPasskeysWebAuthnRegistrationAction, isWebAuthnApiSupported } from './utils';
-import { ClientOperationResult, WEBAUTHN_ERROR_TYPE, WEBAUTHN_OPERATION } from './typings';
+import { WEBAUTHN_ERROR_TYPE, WEBAUTHN_OPERATION } from './typings';
+import { ClientOperationResult } from '../typings';
 import { getHaapiStepperError } from '../client-operations';
 
 type WebAuthnCredentialResult =
