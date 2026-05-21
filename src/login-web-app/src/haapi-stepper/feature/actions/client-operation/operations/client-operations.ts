@@ -51,11 +51,11 @@ export async function performClientOperation(
   }
 
   if (isExternalBrowserFlowClientOperation(action)) {
-    return runExternalBrowserFlow(action, 2500, signal).then(clientOperationData => ({ clientOperationData }));
+    return runExternalBrowserFlow(action, 2500, signal, currentStep);
   }
 
   if (isBankIdClientOperation(action)) {
-    return runBankIdAuthentication(action).then(clientOperationData => ({ clientOperationData }));
+    return runBankIdAuthentication(action);
   }
 
   throw new Error(`Unsupported client operation: ${action.model.name}`);

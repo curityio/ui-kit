@@ -14,6 +14,7 @@ import {
   HAAPI_ACTION_TYPES,
   HAAPI_FORM_ACTION_KINDS,
   HaapiClientOperationAction,
+  HaapiExternalBrowserFlowClientOperationAction,
   HaapiFormAction,
   HaapiSelectorAction,
   HaapiWebAuthnAnyDeviceRegistrationAction,
@@ -128,6 +129,8 @@ export type HaapiStepperWebAuthnAnyDeviceRegistrationAction = HaapiStepperClient
   HaapiWebAuthnAnyDeviceRegistrationAction;
 export type HaapiStepperWebAuthnAuthenticationClientOperationAction = HaapiStepperClientOperationAction &
   HaapiWebAuthnAuthenticationClientOperationAction;
+export type HaapiStepperExternalBrowserFlowClientOperationAction = HaapiStepperClientOperationAction &
+  HaapiExternalBrowserFlowClientOperationAction;
 
 /*
  * STEP MESSAGE TYPINGS
