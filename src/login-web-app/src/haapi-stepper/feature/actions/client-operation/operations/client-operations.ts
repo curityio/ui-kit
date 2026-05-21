@@ -57,11 +57,11 @@ export async function performClientOperation(
   }
 
   if (isExternalBrowserFlowClientOperation(action)) {
-    return runExternalBrowserFlow(action, 2500, signal).then(clientOperationData => ({ clientOperationData }));
+    return runExternalBrowserFlow(action, 2500, signal, currentStep);
   }
 
   if (isBankIdClientOperation(action)) {
-    return runBankIdAuthentication(action).then(clientOperationData => ({ clientOperationData }));
+    return runBankIdAuthentication(action);
   }
 
   throw new Error(`Unsupported client operation: ${action.model.name}`);
@@ -71,9 +71,9 @@ export async function performClientOperation(
  * Synthesises a {@link HaapiStepperError} for a client-operation failure (IS-11327).
  *
  * Client-operation failures (WebAuthn ceremony cancel / timeout / parse error / unsupported
- * API today; BankID / EBF on the same pattern when their per-operation error handling lands)
- * happen on the client and aren't part of the HAAPI response, so the stepper has no native
- * category for them. We treat them as `AppError`-class problems of the current step — building
+ * API; EBF popup-blocked / unexpected-resume) happen on the client and aren't part of the
+ * HAAPI response, so the stepper has no native category for them. We treat them as
+ * `AppError`-class problems of the current step — building
  * a `HaapiUnexpectedProblemStep` via {@link formatErrorStepData} — so they surface via
  * `useHaapiStepper().error.app` like any server-driven problem and consumers handle them
  * through the same channel (e.g. `HaapiStepperErrorNotifier`).

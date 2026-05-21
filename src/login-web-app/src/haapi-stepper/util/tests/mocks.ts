@@ -11,6 +11,7 @@ import type {
   HaapiStepperFormAction,
   HaapiStepperSelectorAction,
   HaapiStepperClientOperationAction,
+  HaapiStepperExternalBrowserFlowClientOperationAction,
   HaapiStepperUserMessage,
   HaapiStepperLink,
   HaapiStepperAPI,
@@ -171,18 +172,21 @@ const WEBAUTHN_PUBLIC_KEY = {
   pubKeyCredParams: [],
 } as never;
 
+/** Absolute URL used as the EBF launch href so `new URL(...)` parses without a base. */
+const EXTERNAL_BROWSER_FLOW_LAUNCH_URL = 'http://external-browser-flow.example/launch';
+
 export const createMockExternalBrowserFlowAction = (
   overrides: Partial<HaapiStepperClientOperationAction> = {}
-): HaapiStepperClientOperationAction =>
+): HaapiStepperExternalBrowserFlowClientOperationAction =>
   createMockClientOperationAction({
     title: externalBrowserFlowActionTitle,
     model: {
       name: HAAPI_ACTION_CLIENT_OPERATIONS.EXTERNAL_BROWSER_FLOW,
-      arguments: { href: '/external-browser' },
+      arguments: { href: EXTERNAL_BROWSER_FLOW_LAUNCH_URL },
       continueActions: [continueAction],
     },
     ...overrides,
-  });
+  }) as HaapiStepperExternalBrowserFlowClientOperationAction;
 
 export const createMockBankIdAction = (
   overrides: Partial<HaapiStepperClientOperationAction> = {}

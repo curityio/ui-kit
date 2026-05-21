@@ -14,36 +14,33 @@ import {
   HAAPI_ACTION_CLIENT_OPERATIONS,
   HAAPI_ACTION_TYPES,
   HaapiExternalBrowserFlowClientOperationAction,
-} from '../../../../data-access/types/haapi-action.types';
-import { HaapiFetchFormAction } from '../../../../data-access/types/haapi-fetch.types';
+} from '../../../../../data-access/types/haapi-action.types';
+import { HaapiStep } from '../../../../../data-access/types/haapi-step.types';
+import { ClientOperationResult } from '../typings';
+import { getHaapiStepperError } from '../client-operations';
+import { EXTERNAL_BROWSER_FLOW_ERROR_TYPE } from './typings';
 
 /**
- * Executes an external browser flow by opening a new window in the launch URL defined by the action and waiting for
- * the completion message from that window.
- *
- * When the flow completes, the returned promise resolves with the form action and values that should be used to resume
- * the flow via HAAPI.
- *
- * The flow can be cancelled by aborting the provided AbortSignal, in which case the external window is closed and the
- * returned promise is rejected.
- *
- * @param action the external browser flow action to execute
- * @param closeDelay the delay in milliseconds before closing the external window after successful completion
- * @param abortSignal an AbortSignal to listen to for cancellation of the flow
- * @returns a promise that represents the execution of the external browser flow
+ * Executes an external browser flow by opening a new window at the launch URL and waiting for the
+ * completion message from that window.
  */
 export function runExternalBrowserFlow(
   action: HaapiExternalBrowserFlowClientOperationAction,
   closeDelay: number,
-  abortSignal: AbortSignal
-): Promise<HaapiFetchFormAction> {
-  return new Promise((resolve, reject) => {
+  abortSignal: AbortSignal,
+  currentStep: HaapiStep | null
+): Promise<ClientOperationResult> {
+  return new Promise(resolve => {
     const launchUrl = new URL(action.model.arguments.href);
     launchUrl.searchParams.set('for_origin', window.location.origin);
 
     const externalWindow = window.open(launchUrl);
     if (!externalWindow) {
-      reject(new Error('Failed to open external browser window'));
+      resolve({
+        clientOperationError: getHaapiStepperError(
+          getExternalBrowserFlowErrorMessage(EXTERNAL_BROWSER_FLOW_ERROR_TYPE.LAUNCH, currentStep)
+        ),
+      });
       return;
     }
 
@@ -52,17 +49,31 @@ export function runExternalBrowserFlow(
         return;
       }
       if (event.origin !== launchUrl.origin || typeof event.data !== 'string') {
-        reject(new Error('External browser flow: unexpected origin or type in resume message'));
+        cleanup(true);
+        resolve({
+          clientOperationError: getHaapiStepperError(
+            getExternalBrowserFlowErrorMessage(EXTERNAL_BROWSER_FLOW_ERROR_TYPE.RESUME, currentStep)
+          ),
+        });
         return;
       }
 
       cleanup(false);
-      resolve({ action: action.model.continueActions[0], payload: new Map([['_resume_nonce', event.data]]) });
+      resolve({
+        clientOperationData: {
+          action: action.model.continueActions[0],
+          payload: new Map([['_resume_nonce', event.data]]),
+        },
+      });
     };
 
     const onAbort = () => {
       cleanup(true);
-      reject(abortSignal.reason as Error);
+      resolve({
+        clientOperationError: getHaapiStepperError(
+          getExternalBrowserFlowErrorMessage(EXTERNAL_BROWSER_FLOW_ERROR_TYPE.RESUME, currentStep)
+        ),
+      });
     };
 
     window.addEventListener('message', onMessage);
@@ -78,6 +89,16 @@ export function runExternalBrowserFlow(
       }
     };
   });
+}
+
+function getExternalBrowserFlowErrorMessage(
+  type: EXTERNAL_BROWSER_FLOW_ERROR_TYPE,
+  currentStep: HaapiStep | null
+): string | undefined {
+  const externalBrowserFlowErrors = currentStep?.metadata?.viewData?.error?.clientOperation?.externalBrowserFlow;
+  return type === EXTERNAL_BROWSER_FLOW_ERROR_TYPE.LAUNCH
+    ? externalBrowserFlowErrors?.launch
+    : externalBrowserFlowErrors?.resume;
 }
 
 export const isExternalBrowserFlowClientOperation = (
