@@ -15,7 +15,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    #set($_cspImgsrc = "img-src 'self' data:;")
+    #if (!$_cspImgsrc)
+        #set($_cspImgsrc = "img-src 'self' data:;")
+    #end
     #parse("fragments/csp")
 
     <title></title>
@@ -27,6 +29,9 @@
     #if ($_configured_ui_custom_theme_css_path)
         <link rel="stylesheet" type="text/css" href="${_configured_ui_custom_theme_css_path}">
     #end
+
+    <link rel="icon" type="image/png" href="$favicon_path">
+    <link rel="apple-touch-icon" href="$favicon_path">
 </head>
 <body>
 <script $nonceAttr>
@@ -35,6 +40,38 @@
         haapi: {
             clientId: '$_apiDrivenClientInfo.clientId',
             tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        },
+        theme: {
+            logo: {
+                path: '$!logo_path',
+                isInsideWell: #if ($logo_inside) true #else false #end,
+            },
+        #if ($show_symbol)
+            pageSymbols: {
+                ## Free form mapping of page symbols names to full paths.
+                #macro(pageSymbolPath $jsonKey $variable)
+                    #if($variable)$jsonKey: '$!variable',#end
+                #end
+                paths: {
+                    #pageSymbolPath("authenticate_desktop" $page_symbol_authenticate_desktop)
+                    #pageSymbolPath("authenticate_mobile" $page_symbol_authenticate_mobile)
+                    #pageSymbolPath("authenticate_email" $page_symbol_authenticate_email)
+                    #pageSymbolPath("authenticate_card" $page_symbol_authenticate_card)
+                    #pageSymbolPath("authenticate_sms" $page_symbol_authenticate_sms)
+                    #pageSymbolPath("authenticate_pair_device" $page_symbol_authenticate_pair_device)
+                    #pageSymbolPath("authenticate_htmlform" $page_symbol_authenticate_htmlform)
+                    #pageSymbolPath("authenticate_totp" $page_symbol_authenticate_totp)
+                    #pageSymbolPath("authenticate_bankid" $page_symbol_authenticate_bankid)
+                    #pageSymbolPath("authenticate_webauthn" $page_symbol_authenticate_webauthn)
+                    #pageSymbolPath("authenticate_opt_in_mfa" $page_symbol_authenticate_opt_in_mfa)
+                    #pageSymbolPath("authenticate_passkeys" $page_symbol_authenticate_passkeys)
+                    #pageSymbolPath("authenticate_openid_wallet" $page_symbol_openid_wallet)
+                    #pageSymbolPath("error_generic" $page_symbol_error_generic)
+                },
+                ## Added in case the UI needs to build paths for other page symbols.
+                basePath: '$!page_symbol_path',
+            },
+        #end
         },
     };
 </script>
