@@ -13,10 +13,12 @@ import { HaapiBankIdClientOperationAction } from '../../../../../data-access/typ
 import { HaapiFetchFormAction } from '../../../../../data-access/types/haapi-fetch.types';
 import { openBankIdApp } from './open-bankid-app';
 
-export async function runBankIdAuthentication(action: HaapiBankIdClientOperationAction): Promise<HaapiFetchFormAction> {
+export function runBankIdAuthentication(
+  action: HaapiBankIdClientOperationAction
+): Promise<{ clientOperationData: HaapiFetchFormAction }> {
   openBankIdApp(action);
 
   const nextAction = action.model.continueActions[0];
 
-  return Promise.resolve({ action: nextAction });
+  return Promise.resolve({ clientOperationData: { action: nextAction } });
 }

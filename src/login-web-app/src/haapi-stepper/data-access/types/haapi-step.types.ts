@@ -364,6 +364,7 @@ export interface HaapiMetadataViewDataError {
 }
 export interface HaapiClientOperationErrorMessages {
   webauthn?: HaapiWebAuthnErrorMessages;
+  externalBrowserFlow?: HaapiExternalBrowserFlowErrorMessages;
 }
 
 export interface HaapiWebAuthnErrorMessages {
@@ -373,4 +374,11 @@ export interface HaapiWebAuthnErrorMessages {
   registration?: string;
   /** Authentication ceremony failed for any reason other than cancel/timeout. */
   authentication?: string;
+}
+
+export interface HaapiExternalBrowserFlowErrorMessages {
+  /** Launch failed (popup blocked, browser policy, etc.) */
+  launch?: string;
+  /** Resume failed — the parent could not consume the postMessage from the external flow (unexpected origin/type, or operation aborted). */
+  resume?: string;
 }

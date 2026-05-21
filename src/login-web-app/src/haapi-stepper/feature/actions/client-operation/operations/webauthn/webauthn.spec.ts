@@ -11,14 +11,9 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { runWebAuthnAuthentication, runWebAuthnRegistration } from './webauthn';
+import { HAAPI_PROBLEM_STEPS, HAAPI_STEPS, HaapiStep } from '../../../../../data-access/types/haapi-step.types';
 import {
-  HAAPI_PROBLEM_STEPS,
-  HAAPI_STEPS,
-  HaapiAuthenticationStep,
-  HaapiMetadata,
-  HaapiStep,
-} from '../../../../../data-access/types/haapi-step.types';
-import {
+  createMockStep,
   createMockWebAuthnAuthenticationAction,
   createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
   createMockWebAuthnPlatformOnlyAnyDeviceAction,
@@ -118,11 +113,17 @@ describe('webauthn', () => {
     });
 
     describe('error', () => {
-      const cancelStep = makeStepWithMetadata({
-        viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the registration.' } } } },
+      const cancelStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+        metadata: {
+          viewData: {
+            error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the registration.' } } },
+          },
+        },
       });
-      const failedStep = makeStepWithMetadata({
-        viewData: { error: { clientOperation: { webauthn: { registration: 'Registration failed.' } } } },
+      const failedStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+        metadata: {
+          viewData: { error: { clientOperation: { webauthn: { registration: 'Registration failed.' } } } },
+        },
       });
 
       it('WebAuthn API not supported → registrationError copy', async () => {
@@ -217,7 +218,9 @@ describe('webauthn', () => {
 
       it('falls back to no message when the matching metadata key is absent (BE has not emitted it yet)', async () => {
         mockCredentialsCreate.mockResolvedValue(null);
-        const step = makeStepWithMetadata({ templateArea: 'lwa', viewName: 'unrelated' });
+        const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+          metadata: { templateArea: 'lwa', viewName: 'unrelated' },
+        });
 
         await expect(
           runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
@@ -262,11 +265,15 @@ describe('webauthn', () => {
     });
 
     describe('error', () => {
-      const cancelStep = makeStepWithMetadata({
-        viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
+      const cancelStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+        metadata: {
+          viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
+        },
       });
-      const failedStep = makeStepWithMetadata({
-        viewData: { error: { clientOperation: { webauthn: { authentication: 'Authentication failed.' } } } },
+      const failedStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+        metadata: {
+          viewData: { error: { clientOperation: { webauthn: { authentication: 'Authentication failed.' } } } },
+        },
       });
 
       it('WebAuthn API not supported → authenticationError copy (failed bucket)', async () => {
@@ -379,12 +386,3 @@ const restoreNavigatorCredentials = () => {
 const mockCredential = (toJSONResult: unknown = { id: 'cred-id', type: 'public-key' }) => ({
   toJSON: vi.fn(() => toJSONResult),
 });
-
-function makeStepWithMetadata(metadata: HaapiMetadata = {}): HaapiStep {
-  const step: HaapiAuthenticationStep = {
-    type: HAAPI_STEPS.AUTHENTICATION,
-    actions: [],
-    metadata,
-  };
-  return step;
-}
