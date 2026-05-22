@@ -114,6 +114,12 @@ Because the `HaapiStepperStepUI` handles all possible HAAPI authentication flows
 
 Check out [the HaapiStepperStepUI documentation and usage examples](./feature/steps/HaapiStepperStepUI.tsx).
 
+### ViewName built-in UIs
+
+The HaapiStepperStepUI ships built-in UIs for specific HAAPI `viewName`s (`step.metadata.viewName`) that need a more tailored UI than the generic step shell can provide (e.g. the BankID requires the QR link to be lifted above the actions). They are displayed by default and can be customized like any other step by using render interceptors.
+
+Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/steps/HaapiStepperStepUI.tsx), and the test use cases in [`HaapiStepperStepUI.spec.tsx`](./feature/steps/HaapiStepperStepUI.spec.tsx) (`describe('ViewName built-in UIs Rendering')`) for more details.
+
 
 
 ## HAAPI Stepper UI Components
@@ -132,6 +138,7 @@ Check out documentation and usage examples in the links below:
 * [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
 * [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
 * [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
+* [HaapiStepperMessageUI](./ui/messages/HaapiStepperMessageUI.tsx)
 * [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
 * [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
 

@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { HaapiBankIdClientOperationAction } from '../../../../../data-access';
+import { HaapiBankIdClientOperationAction } from '../../../../../data-access/types/haapi-action.types';
 import { isMobileDevice } from '../../../../../util/isMobileDevice';
 
 export function openBankIdApp(action: HaapiBankIdClientOperationAction) {

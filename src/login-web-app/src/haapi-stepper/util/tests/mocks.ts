@@ -1,14 +1,7 @@
-import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
-import { HAAPI_STEPPER_ELEMENT_TYPES, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
-import {
-  HAAPI_ACTION_CLIENT_OPERATIONS,
-  HAAPI_ACTION_TYPES,
-  HAAPI_FORM_ACTION_KINDS,
-  HaapiClientOperationAction,
-} from '../../data-access/types/haapi-action.types';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
+  HaapiStepperAction,
   HaapiStepperFormAction,
   HaapiStepperSelectorAction,
   HaapiStepperClientOperationAction,
@@ -17,6 +10,15 @@ import type {
   HaapiStepperAPI,
 } from '../../feature/stepper/haapi-stepper.types';
 import { formatNextStepData } from '../../feature/stepper/data-formatters/format-next-step-data';
+import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
+import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
+import {
+  HAAPI_ACTION_CLIENT_OPERATIONS,
+  HAAPI_ACTION_TYPES,
+  HAAPI_FORM_ACTION_KINDS,
+  HaapiClientOperationAction,
+} from '../../data-access/types/haapi-action.types';
+import { HAAPI_POLLING_STATUS, HAAPI_STEPPER_ELEMENT_TYPES, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
 
 export const mockNextStep = vi.fn();
 export const MockMessageText = 'Step Message';
@@ -234,3 +236,36 @@ export const createMockWebAuthnPlatformOnlyAnyDeviceAction = (): HaapiStepperCli
       continueActions: [continueAction],
     },
   });
+/**
+ * Builds a polling step mock. Defaults to the BankID viewName + `PENDING` status, since that's the
+ * combination most tests care about, but callers can override `viewName` (e.g. pass a non-BankID
+ * value for generic loading-factory tests) and any of the other fields independently.
+ */
+export const createPollingStep = (
+  overrides: {
+    status?: HAAPI_POLLING_STATUS;
+    links?: HaapiStepperLink[];
+    actions?: HaapiStepperAction[];
+    viewName?: string;
+  } = {}
+) => {
+  return createMockStep(HAAPI_STEPS.POLLING, {
+    metadata: {
+      templateArea: 'lwa',
+      viewName: overrides.viewName ?? HaapiStepperViewNameBuiltInUI.BANKID,
+    },
+    properties: { status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING },
+    ...(overrides.links !== undefined && { links: overrides.links }),
+    ...(overrides.actions !== undefined && { actions: overrides.actions }),
+  });
+};
+
+export const createMockQrLink = (overrides: Partial<HaapiStepperLink> = {}) => {
+  return createMockLink({
+    rel: 'activation',
+    title: 'QR Code',
+    href: 'data:image/svg+xml;base64,abc',
+    type: 'image/svg+xml',
+    ...overrides,
+  });
+};
