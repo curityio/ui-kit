@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 import { OtpInput } from '../../../shared/ui/OtpInput';
 import { USER_MANAGEMENT_API } from '@/shared/data-access/API/user-management';
 import { GRAPHQL_API_ERROR_MESSAGES } from '@/shared/data-access/API/GRAPHQL_API_ERROR_MESSAGES';
+import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
+import { countryFlag } from '@/shared/utils/country-flag';
 
 type Props = {
   accountId: string;
@@ -33,8 +35,10 @@ export const PhoneNumberVerificationDialog = ({
 }: Props) => {
   const { t } = useTranslation();
   const uiKitT = toUiKitTranslation(t);
+  const { countries } = useUiConfig();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [phoneNumber, setPhoneNumber] = useState(phoneNumberForOtpVerification ?? '');
+  const [dialCode, setDialCode] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneNumberVerificationState, setPhoneNumberVerificationState] = useState('');
   const [forcePhoneNumberStep, setForcePhoneNumberStep] = useState(false);
   const [otpDigits, setOtpDigits] = useState('');
@@ -153,13 +157,15 @@ export const PhoneNumberVerificationDialog = ({
     onClose();
   };
 
+  const fullPhoneNumber = `${dialCode}${phoneNumber.trim()}`;
+
   const submitPhoneNumber = async () => {
     setForcePhoneNumberStep(false);
     await startVerifyPhoneNumberByAccountId({
       variables: {
         input: {
           accountId,
-          phoneNumber: phoneNumber,
+          phoneNumber: fullPhoneNumber,
         },
       },
     }).then(response => {
@@ -188,7 +194,7 @@ export const PhoneNumberVerificationDialog = ({
         variables: {
           input: {
             accountId,
-            newPrimaryPhoneNumber: phoneNumberForOtpVerification || phoneNumber,
+            newPrimaryPhoneNumber: phoneNumberForOtpVerification || fullPhoneNumber,
           },
         },
       }).catch(() => {
@@ -203,6 +209,7 @@ export const PhoneNumberVerificationDialog = ({
 
   const resetDialog = () => {
     setPhoneNumber('');
+    setDialCode('');
     setForcePhoneNumberStep(true);
     resetVerificationStart();
     resetVerificationComplete();
@@ -246,6 +253,23 @@ export const PhoneNumberVerificationDialog = ({
       {isDialogPhoneNumberStep && (
         <>
           <p>{t('account.phone.send-code')}</p>
+          <div>
+            {countries.length > 0 && (
+                <select
+                    id="newphoneNumberDialCode"
+                    className="field"
+                    value={dialCode}
+                    onChange={event => setDialCode(event.target.value)}
+                    data-testid="phone-number-country-code-select"
+                >
+                  {countries.sort().map(country => (
+                      <option key={country.dialCode} value={country.dialCode}>
+                        {countryFlag(country.code)} {country.name} ({country.dialCode})
+                      </option>
+                  ))}
+                </select>
+            )}
+          </div>
           <div className="left-align">
             <label htmlFor="newphoneNumber" className="label inline-flex flex-center flex-gap-1">
               {t('account.phone.title')}
