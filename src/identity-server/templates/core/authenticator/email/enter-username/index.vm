@@ -52,7 +52,7 @@
         <div class="form-field">
             <label for="userName" class="$!_errorClass">#message("authenticator.email.enter-username.view.username")</label>
             <input type="text" name="userName" class="block full-width mb1 field-light $!_errorClass" autocapitalize="none"
-            value="$!userNameValue" autofocus>
+            value="$!userNameValue" required autofocus>
             <i class="form-field-icon icon ion-ios-person"></i>
         </div>
 

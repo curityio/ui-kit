@@ -17,27 +17,28 @@ import https from 'node:https';
 import crypto from 'node:crypto';
 
 async function main() {
-    const version = '1.0.0';
-    const expectedSha256BySuffix = {
-        "linux-arm64": '69be61326f5d305ed5b0d27659bb5a6ecf2fc9fc517a1f7a1ed4a560011591dd',
-        "linux-x64": '6050d404473c3fbba707513d8f99d3f10fc953e6fe6cc8a118b2a22c99ea1729',
-        "macos-arm64": 'b9c227f429adbb7089b6b88ad1676e546bb57faf5c9abe5f22cdbafe90c61e1e',
-        "windows-x64": 'e572cc627d7aee9fd7f3928ba9bd9004da367ce83cb58e54616d2a17872b2c5e',
-    };
-    const assetSuffix = resolveAssetSuffix();
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    const checksums = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'previewer-checksums.json'), 'utf-8'));
+    const version = checksums.version;
+    const expectedSha256BySuffix = checksums.sha256;
+
+    if (!version || !expectedSha256BySuffix || typeof expectedSha256BySuffix !== 'object') {
+        throw new Error('previewer-checksums.json must contain "version" and "sha256" properties');
+    }
+
+    const assetSuffix = resolveAssetSuffix(Object.keys(expectedSha256BySuffix));
     const expectedSha256 = expectedSha256BySuffix[assetSuffix];
     const assetName = `curity-ui-kit-previewer-${version}-${assetSuffix}.zip`;
 
     const libFolder = '../../lib/';
     const zipFile = assetName;
-    const presenceFile = 'run-ui-kit-server.sh';
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
     const source = path.resolve(__dirname, libFolder + zipFile);
     const target = path.resolve(__dirname, libFolder);
-    const presence = path.join(target, presenceFile);
+    const versionMarker = path.join(target, '.previewer-version');
 
-    if (fs.existsSync(presence)) {
+    if (fs.existsSync(versionMarker) && fs.readFileSync(versionMarker, 'utf-8').trim() === version) {
         console.log('UI Kit runtime already unzipped. Skipping...');
         return;
     }
@@ -47,21 +48,24 @@ async function main() {
     }
 
     if (!fs.existsSync(source)) {
-        console.error('ui-kit-runtime.zip file does not exist:', source);
+        console.error(`Previewer zip does not exist: ${source}`);
         process.exit(1);
     }
 
-    if (expectedSha256) {
-        await verifySha256(source, expectedSha256);
+    if (!expectedSha256) {
+        throw new Error(`No checksum found for platform suffix '${assetSuffix}' in previewer-checksums.json`);
     }
+    await verifySha256(source, expectedSha256);
 
     await extract(source, { dir: target });
     console.log(`Unzipped ${source} to ${target}`);
 
     await extractNestedZip(target, `ui-kit-runtime-${version}.zip`);
+
+    fs.writeFileSync(versionMarker, version + '\n');
 }
 
-function resolveAssetSuffix() {
+function resolveAssetSuffix(supportedSuffixes) {
     const platformMap = {
         linux: 'linux',
         darwin: 'macos',
@@ -74,12 +78,13 @@ function resolveAssetSuffix() {
 
     const platform = platformMap[process.platform];
     const arch = archMap[process.arch];
+    const suffix = `${platform}-${arch}`;
 
-    if (!platform || !arch) {
+    if (!platform || !arch || !supportedSuffixes.includes(suffix)) {
         throw new Error(`Unsupported platform/arch: ${process.platform}/${process.arch}`);
     }
 
-    return `${platform}-${arch}`;
+    return suffix;
 }
 
 function downloadPreviewerZip(version, assetSuffix, assetName, destinationPath) {
