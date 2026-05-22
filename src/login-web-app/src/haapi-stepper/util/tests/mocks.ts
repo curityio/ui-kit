@@ -153,7 +153,7 @@ export const externalBrowserFlowActionTitle = 'Continue in browser';
 export const bankIdActionTitle = 'Open BankID';
 export const webAuthnRegistrationActionTitle = 'Register a passkey';
 export const webAuthnAnyDeviceActionTitle = 'Register device';
-export const webAuthnPlatformOnlyAnyDeviceActionTitle = 'Register device (This device)';
+export const webAuthnPlatformOnlyAnyDeviceActionTitle = 'Register device (Built-in)';
 
 const continueAction = createMockFormAction({
   kind: HAAPI_FORM_ACTION_KINDS.CONTINUE,
