@@ -29,6 +29,10 @@ import {
   HaapiStepperStep,
   HaapiStepperUserMessage,
 } from '../haapi-stepper.types';
+import {
+  isWebAuthnRegistrationClientOperation,
+  splitWebAuthnRegistrationAction,
+} from '../../actions/client-operation/operations/webauthn';
 
 export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
@@ -49,7 +53,8 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
     };
   }
 
-  const actionsWithDataHelpers = step.actions.map(action => addActionDataHelpers(action, step));
+  const actions = getNextStepActions(step.actions);
+  const actionsWithDataHelpers = actions.map(action => addActionDataHelpers(action, step));
   const actionsWithDataHelpersMap = buildActionsMap(actionsWithDataHelpers);
 
   return {
@@ -59,6 +64,12 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
       actions: actionsWithDataHelpersMap,
     },
   };
+}
+
+function getNextStepActions(actions: HaapiAction[]): HaapiAction[] {
+  return actions.flatMap(action =>
+    isWebAuthnRegistrationClientOperation(action) ? splitWebAuthnRegistrationAction(action) : [action]
+  );
 }
 
 function addActionDataHelpers(

@@ -20,7 +20,7 @@ import {
 } from '../../data-access/types/haapi-step.types';
 
 import { HaapiStepperContext } from './HaapiStepperContext';
-import { isClientOperation, performClientOperation } from '../actions/client-operation/client-operations';
+import { isClientOperation, performClientOperation } from '../actions/client-operation/operations/client-operations';
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
@@ -131,15 +131,15 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *     return <div>Error: {error.app.title}</div>;
  *   }
  *
- *   const { formActions, selectorActions, clientOperationActions, links } = currentStep.dataHelpers || {};
+ *   const { actions, links } = currentStep.dataHelpers;
  *
  *   return (
  *     <>
- *       {formActions?.map((action) => (<HaapiStepperFormUI key={action.kind} action={action} onSubmit={nextStep} />))}
- *       {selectorActions?.map(action => <HaapiStepperSelectorUI key={action.kind} action={action} onSubmit={nextStep} />)}
- *       {clientOperationActions?.map((action) => (<HaapiStepperClientOperationUI key={action.kind} action={action} onAction={nextStep} /> ))}
- *       {links?.map(link => (
- *         <button key={link.rel} onClick={() => nextStep(link)}>
+ *       {actions?.form.map(action => <HaapiStepperFormUI key={action.id} action={action} onSubmit={nextStep} />)}
+ *       {actions?.selector.map(action => <HaapiStepperSelectorUI key={action.id} action={action} onSubmit={nextStep} />)}
+ *       {actions?.clientOperation.map(action => <HaapiStepperClientOperationUI key={action.id} action={action} onAction={nextStep} />)}
+ *       {links.map(link => (
+ *         <button key={link.id} onClick={() => nextStep(link)}>
  *           {link.title}
  *         </button>
  *       ))}
@@ -170,26 +170,26 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *     return <div>Error: {error.app.title}</div>;
  *   }
  *
- *  const { formActions, clientOperationActions, links } = currentStep.dataHelpers || {};
+ *   const { actions, links } = currentStep.dataHelpers;
  *
  *   return (
  *     <div>
  *       <h2>Step: {currentStep.type}</h2>
- *       {formActions?.map((action) => (
- *         <div className="mb2" key={action.kind}>
+ *       {actions?.form.map(action => (
+ *         <div className="mb2" key={action.id}>
  *           <h5>{action.title}</h5>
  *           <button onClick={() => nextStep(action)}>
  *             Select
  *           </button>
  *         </div>
  *       ))}
- *       {clientOperationActions?.map((action) => (
- *         <button key={action.kind} onClick={() => nextStep(action)}>
+ *       {actions?.clientOperation.map(action => (
+ *         <button key={action.id} onClick={() => nextStep(action)}>
  *           {action.title}
  *         </button>
  *       ))}
- *       {links?.map((link) => (
- *         <button key={link.rel} onClick={() => nextStep(link)}>
+ *       {links.map(link => (
+ *         <button key={link.id} onClick={() => nextStep(link)}>
  *           {link.title}
  *         </button>
  *       ))}
