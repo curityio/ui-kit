@@ -25,22 +25,16 @@ Follow these steps to get started:
     - The server should have a minimum setup to allow running OAuth authorization flows with user interaction.
 2. In this directory, run `IDSVR_HOME=<idsvr_home> ./configure-idsvr-dev.sh`.
    - `IDSVR_HOME` should contain the path to the home directory of the running Identity Server instance.
-3. Run `npm start`.
+3. Run `npm run dev`.
 
 ## Deploying to Identity Server
 
-> This is a minimal setup for testing purposes.
+Identity Server includes a Velocity template to serve the application (`views/api-driven-ui/index.vm`), as well as the corresponding assets (`usr/share/webroot/assets/css/api-driven-ui.css` and `usr/share/webroot/assets/js/api-driven-ui.js`).
 
-[loader.vm.html](./loader.vm.html) is processed by Vite so that bundle references are injected, but it's actually a Velocity template.
-The asset references in the output need to be adjusted before deploying.
+Customizations to the application can be deployed to the Identity Server by building the current project (`npm run build`) and copying/replacing the mentioned assets and/or overriding the loader template.
+As with other templates, the loader template can also be overridden in specific template areas.
 
-Follow these steps to deploy the application and configure the server:
-1. Start Identity Server locally.
-2. Run `IDSVR_HOME=<idsvr_home> ./configure-idsvr-served.sh`.
-   - `IDSVR_HOME` should contain the path to the home directory of the running Identity Server instance.
-   - This will copy the loader template and assets to the proper directories in Identity Server.
-   - It will also ensure that API-driven UI is enabled.
-3. Run OAuth flows for any OAuth client that is available in the system and capable of user-interactive flows.
+To test the updates, enable the API-driven UI in the Identity Server instance and run an OAuth flow for any OAuth client that is available in the system and capable of user-interactive flows.
 
 ## Error Handling
 

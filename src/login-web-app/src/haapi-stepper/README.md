@@ -144,7 +144,26 @@ Check out documentation and usage examples in the links below:
 
 ### CSS Customization
 
-The HAAPI UI components reference the CSS classes listed below but do not ship any styles themselves — they are intentionally unstyled at the library level. It is the consuming application's responsibility to customize styles and define these classes.
+The HAAPI UI components are styled via plain CSS class names — no CSS-in-JS, no inline styles. The components only emit class names; the actual rules live in a stylesheet shipped alongside the components at [`src/shared/util/css/styles.css`](../shared/util/css/styles.css).
+
+#### Importing CSS styles
+
+Import the stylesheet once from the consuming application's entry point (e.g. `main.tsx`):
+
+```ts
+import './shared/util/css/styles.css';
+```
+
+By default, the rules in `styles.css` compose utility classes from [Curity CSS Library](https://github.com/curityio/ui-kit/tree/main/src/common/css) (imported at the top of the file) using PostCSS `@extend` — e.g. `.haapi-stepper-button { @extend .button, .button-medium, .button-primary, .w100, .mt2; }`. The components themselves only know about the `.haapi-stepper-*` class names, so consumers are free to back those classes with anything they like.
+
+#### Overriding or extending the defaults
+
+Because the components emit static class names, consumers can:
+
+- **Override / Extend**: define rules for the same class names — or append additional CSS — in a separate stylesheet imported after `styles.css`.
+- **Replace**: skip the default import entirely and provide your own definitions for the classes listed below — written in plain CSS, or composed from any third-party library, for example Tailwind CSS.
+
+The Curity utility composition shown above is just how *this* project chose to implement the defaults; it is not a contract. Nothing in the components requires `@curity/ui-kit-css`, PostCSS, or `@extend`.
 
 **Available CSS classes:**
 
@@ -172,6 +191,7 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 | `.haapi-stepper-link-qr-code-title` | `HaapiStepperLinkUI` | QR code link figcaption |
 | `.haapi-stepper-link-qr-code-button` | `HaapiStepperLinkUI` | QR code link expand button |
 | `.haapi-stepper-link-qr-code-dialog` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog |
+| `.haapi-stepper-link-qr-code-dialog-close-button` | `HaapiStepperQrCodeLinkDialog` | Button wrapping the expanded QR code image; closes the dialog when clicked |
 | `.haapi-stepper-link-qr-code-dialog-image` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog image |
 | `.haapi-stepper-actions` | `HaapiStepperActionsUI` | Actions container |
 | `.haapi-stepper-heading` | `HaapiStepperMessagesUI` | Heading messages |
@@ -179,6 +199,10 @@ The HAAPI UI components reference the CSS classes listed below but do not ship a
 | `.haapi-stepper-userCode` | `HaapiStepperMessagesUI` | User code display (e.g. recovery codes) |
 | `.haapi-stepper-polling-progress` | `HaapiStepperClientOperationUI` | Remaining polling time indicator (e.g. recovery codes) |
 | `.haapi-stepper-error-boundary-fallback` | `DefaultErrorFallback` | Error boundary fallback container |
+| `.haapi-validation-errors-container` | `HaapiStepperFormValidationErrorInputWrapper` | Wrapper around a form field that has validation errors. Receives the `.has-errors` modifier class while errors are visible |
+| `.haapi-validation-errors` | `HaapiStepperFormValidationErrorInputWrapper` | Inner container that holds the list of validation error messages |
+| `.haapi-validation-error` | `HaapiStepperFormValidationErrorInputWrapper` | A single validation error entry (also gets the utility classes `.red .py1`) |
+| `.haapi-validation-error-description` | `HaapiStepperFormValidationErrorInputWrapper` | Validation error message text |
 
 
 

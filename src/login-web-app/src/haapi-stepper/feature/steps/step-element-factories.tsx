@@ -10,7 +10,6 @@
  */
 
 import { ReactElement } from 'react';
-import { Spinner } from '../../../shared/ui/Spinner';
 import { HAAPI_POLLING_STATUS, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
 import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperLinksUI } from '../../ui/links/HaapiStepperLinksUI';
@@ -35,6 +34,7 @@ import type {
   HaapiStepperStepUISelectorActionRenderInterceptor,
   HaapiStepperUserMessage,
 } from '../stepper/haapi-stepper.types';
+import { Spinner } from '../../../shared/ui/spinner/Spinner';
 
 export const getLoadingElement = (
   haapiStepperAPI: HaapiStepperAPI,
