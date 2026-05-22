@@ -18,7 +18,11 @@ import {
   HAAPI_FORM_ACTION_KINDS,
   HaapiClientOperationAction,
 } from '../../data-access/types/haapi-action.types';
-import { HAAPI_POLLING_STATUS, HAAPI_STEPPER_ELEMENT_TYPES, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
+import {
+  HAAPI_POLLING_STATUS,
+  HAAPI_STEPPER_ELEMENT_TYPES,
+  HAAPI_STEPS,
+} from '../../data-access/types/haapi-step.types';
 
 export const mockNextStep = vi.fn();
 export const MockMessageText = 'Step Message';
