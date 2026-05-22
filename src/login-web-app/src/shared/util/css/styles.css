@@ -298,6 +298,13 @@ svg {
   background: rgb(0 0 0 / 80%);
 }
 
+.haapi-stepper-link-qr-code-dialog-close-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 .haapi-stepper-link-qr-code-dialog-image {
   width: min(90vw, 400px);
   height: auto;
@@ -307,4 +314,19 @@ svg {
 .haapi-stepper-error-boundary-fallback {
   min-height: 100dvh;
   @extend .flex, .flex-column, .flex-center, .justify-center, .h100;
+}
+
+.haapi-validation-errors-container {
+}
+
+.haapi-validation-errors-container.has-errors {
+}
+
+.haapi-validation-errors {
+}
+
+.haapi-validation-error {
+}
+
+.haapi-validation-error-description {
 }

@@ -18,9 +18,6 @@ jobs:
           - runner: ubuntu-22.04-arm
             architecture: arm64
             asset_suffix: linux-arm64
-          - runner: macos-13
-            architecture: x64
-            asset_suffix: macos-x64
           - runner: macos-14
             architecture: arm64
             asset_suffix: macos-arm64

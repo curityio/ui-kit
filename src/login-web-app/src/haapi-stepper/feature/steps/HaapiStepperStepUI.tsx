@@ -10,7 +10,7 @@
  */
 
 import { ReactElement, isValidElement } from 'react';
-import { Spinner } from '../../../shared/ui/Spinner';
+import { Spinner } from '../../../shared/ui/spinner/Spinner';
 import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperLinksUI } from '../../ui/links/HaapiStepperLinksUI';
 import { HaapiStepperMessagesUI } from '../../ui/messages/HaapiStepperMessagesUI';
@@ -298,7 +298,7 @@ const getLoadingElement = (
   loadingRenderInterceptor?: HaapiStepperStepUILoadingRenderInterceptor
 ): ReactElement | null => {
   const loadingElements = applyRenderInterceptor([haapiStepperAPI], loadingRenderInterceptor, ({ loading }) =>
-    loading ? <Spinner width={48} height={48} mode="fullscreen" data-testid="loading-spinner" /> : null
+    loading ? <Spinner data-testid="loading-spinner" /> : null
   );
 
   return loadingElements.length > 0 ? loadingElements[0] : null;
