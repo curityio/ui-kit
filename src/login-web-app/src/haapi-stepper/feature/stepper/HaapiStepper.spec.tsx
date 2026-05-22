@@ -16,6 +16,8 @@ import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import {
   authenticationStep,
+  completedWithErrorStep,
+  completedWithErrorStepWithoutLinks,
   completedWithSuccessStep,
   completedWithSuccessStepWithoutLinks,
   continueSameStep,
@@ -30,6 +32,7 @@ import { useHaapiStepper } from './HaapiStepperHook';
 import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
 import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
+import { AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE } from './typings';
 
 describe('HaapiStepper', () => {
   const initialStepType = HAAPI_STEPS.AUTHENTICATION;
@@ -372,13 +375,30 @@ describe('HaapiStepper', () => {
       });
     });
 
-    describe('Completed With Success Step', () => {
-      const authorizationResponseUrl = completedWithSuccessStep.links?.find(
-        link => link.rel === 'authorization-response'
-      )?.href;
+    describe.each([
+      {
+        label: 'success',
+        stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+        stepFixture: completedWithSuccessStep,
+      },
+      {
+        label: 'error',
+        stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+        stepFixture: completedWithErrorStep,
+      },
+    ] as const)('Completed With $label Step', ({ label, stepType, stepFixture }) => {
+      const authorizationResponseUrl = stepFixture.links?.find(link => link.rel === 'authorization-response')?.href;
+      const redirectSetting =
+        label === 'success'
+          ? AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE.ONLY_ON_SUCCESS
+          : AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE.ONLY_ON_ERROR;
+      const skipRedirectSetting =
+        label === 'success'
+          ? AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE.ONLY_ON_ERROR
+          : AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE.ONLY_ON_SUCCESS;
 
-      describe('redirectOnAuthenticationCompletedWithSuccess enabled (default)', () => {
-        it('should redirect to the authorization-response URL', async () => {
+      describe('autoRedirectOnAuthenticationComplete', () => {
+        it('redirects to the authorization-response URL when set to true (default)', async () => {
           render(
             <HaapiStepper>
               <TestComponent />
@@ -386,14 +406,63 @@ describe('HaapiStepper', () => {
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          await goToNextStep(stepType);
 
           await waitFor(() => {
             expect(window.location.href).toBe(authorizationResponseUrl);
           });
         });
 
-        it('should throw error to the error boundary when no authorization-response link exists', async () => {
+        it(`redirects when set to '${redirectSetting}'`, async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: redirectSetting }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(window.location.href).toBe(authorizationResponseUrl);
+          });
+        });
+
+        it('renders the completed step instead of redirecting when set to false', async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+          });
+
+          expect(window.location.href).not.toBe(authorizationResponseUrl);
+        });
+
+        it(`renders the completed step instead of redirecting when set to '${skipRedirectSetting}'`, async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: skipRedirectSetting }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+          });
+
+          expect(window.location.href).not.toBe(authorizationResponseUrl);
+        });
+
+        it('throws to the error boundary when redirect is enabled but no authorization-response link exists', async () => {
           render(
             <HaapiStepper>
               <TestComponent />
@@ -401,16 +470,16 @@ describe('HaapiStepper', () => {
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS, { noLinks: true });
+          await goToNextStep(stepType, { noLinks: true });
 
           await waitFor(() => {
             expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
-              'redirectOnAuthenticationCompletedWithSuccess is enabled, but the completed-with-success step did not include an authorization-response link.'
+              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
             );
           });
         });
 
-        it('should not update the current step when redirecting', async () => {
+        it('does not update the current step when redirecting', async () => {
           render(
             <HaapiStepper>
               <TestComponent />
@@ -418,32 +487,13 @@ describe('HaapiStepper', () => {
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          await goToNextStep(stepType);
 
           await waitFor(() => {
             expect(window.location.href).toBe(authorizationResponseUrl);
           });
 
           expect(screen.getByTestId('step-type')).toHaveTextContent(initialStepType);
-        });
-      });
-
-      describe('redirectOnAuthenticationCompletedWithSuccess disabled', () => {
-        it('should render the completed step instead of redirecting', async () => {
-          render(
-            <HaapiStepper config={{ redirectOnAuthenticationCompletedWithSuccess: false }}>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
-
-          await waitFor(() => {
-            expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
-          });
-
-          expect(window.location.href).not.toBe(authorizationResponseUrl);
         });
       });
     });
@@ -809,6 +859,9 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       break;
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
       stepMock = config?.noLinks ? completedWithSuccessStepWithoutLinks : completedWithSuccessStep;
+      break;
+    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
+      stepMock = config?.noLinks ? completedWithErrorStepWithoutLinks : completedWithErrorStep;
       break;
     case HAAPI_STEPS.REGISTRATION:
       stepMock = createRegistrationStep();

@@ -328,6 +328,25 @@ export const completedWithErrorStep = {
       classList: ['error'],
     },
   ],
+  links: [
+    {
+      href: 'http://client-callback?error=server_error',
+      rel: 'authorization-response',
+    },
+  ],
+  error: 'server_error',
+  error_description: 'An error occurred during authorization',
+} as HaapiCompletedWithErrorStep;
+
+export const completedWithErrorStepWithoutLinks = {
+  type: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+  title: 'Authorization Error',
+  messages: [
+    {
+      text: 'The authorization process completed with an error.',
+      classList: ['error'],
+    },
+  ],
   error: 'server_error',
   error_description: 'An error occurred during authorization',
 } as HaapiCompletedWithErrorStep;
