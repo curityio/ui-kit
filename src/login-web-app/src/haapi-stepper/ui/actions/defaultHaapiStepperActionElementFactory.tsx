@@ -31,7 +31,7 @@ export default function defaultHaapiStepperActionElementFactory(
     case HAAPI_ACTION_TYPES.FORM:
       return (
         <HaapiStepperFormUI
-          key={`form-${action.model.href}`}
+          key={`form-${action.id}`}
           action={action}
           onSubmit={onAction}
           formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -42,6 +42,6 @@ export default function defaultHaapiStepperActionElementFactory(
       return <HaapiStepperClientOperationUI key={`clientop-${action.id}`} action={action} onAction={onAction} />;
 
     case HAAPI_ACTION_TYPES.SELECTOR:
-      return <HaapiStepperSelectorUI key={`selector-${action.title ?? ''}`} action={action} onSubmit={onAction} />;
+      return <HaapiStepperSelectorUI key={`selector-${action.id}`} action={action} onSubmit={onAction} />;
   }
 }
