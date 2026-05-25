@@ -253,51 +253,60 @@ export const PhoneNumberVerificationDialog = ({
       {isDialogPhoneNumberStep && (
         <>
           <p>{t('account.phone.send-code')}</p>
-          <div>
-            {countries.length > 0 && (
-                <select
+          <div className="flex flex-gap-2 justify-between">
+            <div className="flex flex-column">
+              {countries.length > 0 && (
+                <>
+                  <label htmlFor="newphoneNumberDialCode" className="label inline-flex flex-gap-1">
+                    {t('account.phone.country-code')}
+                  </label>
+                  <select
                     id="newphoneNumberDialCode"
                     className="field"
                     value={dialCode}
                     onChange={event => setDialCode(event.target.value)}
                     data-testid="phone-number-country-code-select"
-                >
-                  {countries.sort().map(country => (
+                  >
+                    {countries.sort().map(country => (
                       <option key={country.dialCode} value={country.dialCode}>
                         {countryFlag(country.code)} {country.name} ({country.dialCode})
                       </option>
-                  ))}
-                </select>
-            )}
-          </div>
-          <div className="left-align">
-            <label htmlFor="newphoneNumber" className="label inline-flex flex-center flex-gap-1">
-              {t('account.phone.title')}
-            </label>
-            <Input
-              ref={inputRef}
-              id="newphoneNumber"
-              type="tel"
-              inputClassName="w100"
-              autoFocus
-              value={phoneNumber}
-              onChange={event => setPhoneNumber(event.target.value)}
-              data-testid="phone-number-input"
-            />
-            {(verificationStartError || updatePrimaryPhoneNumberError) && (
-              <Alert
-                kind="danger"
-                errorMessage={
-                  verificationStartError
-                    ? t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumberByAccountId)
-                    : updatePrimaryPhoneNumberErrorMessage
-                }
-                classes="mt2"
-                data-testid={
-                  verificationStartError ? 'phone-number-start-verification-error' : 'phone-number-update-primary-error'
-                }
+                    ))}
+                  </select>
+                </>
+              )}
+            </div>
+            <div className="flex flex-auto flex-column">
+              <label htmlFor="newphoneNumber" className="label inline-flex flex-gap-1">
+                {t('account.phone.title')}
+              </label>
+              <Input
+                ref={inputRef}
+                id="newphoneNumber"
+                type="tel"
+                inputClassName="w100"
+                autoFocus
+                value={phoneNumber}
+                onChange={event => setPhoneNumber(event.target.value)}
+                data-testid="phone-number-input"
               />
-            )}
+              {(verificationStartError || updatePrimaryPhoneNumberError) && (
+                <Alert
+                  kind="danger"
+                  errorMessage={
+                    verificationStartError
+                      ? t(GRAPHQL_API_ERROR_MESSAGES.startVerifyPhoneNumberByAccountId)
+                      : updatePrimaryPhoneNumberErrorMessage
+                  }
+                  classes="mt2"
+                  data-testid={
+                    verificationStartError
+                      ? 'phone-number-start-verification-error'
+                      : 'phone-number-update-primary-error'
+                  }
+                />
+              )}
+            </div>
           </div>
         </>
       )}
