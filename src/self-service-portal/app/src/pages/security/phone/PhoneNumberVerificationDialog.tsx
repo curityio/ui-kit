@@ -267,8 +267,11 @@ export const PhoneNumberVerificationDialog = ({
                     onChange={event => setDialCode(event.target.value)}
                     data-testid="phone-number-country-code-select"
                   >
-                    {countries.sort().map(country => (
-                      <option key={country.dialCode} value={country.dialCode}>
+                    <option value="" disabled>
+                      {t('account.phone.country-code')}
+                    </option>
+                    {countries.map(country => (
+                      <option key={country.code + country.dialCode} value={country.dialCode}>
                         {countryFlag(country.code)} {country.name} ({country.dialCode})
                       </option>
                     ))}
