@@ -136,9 +136,9 @@ describe('HaapiStepperClientOperationUI', () => {
 
       render(<HaapiStepperActionsUI actions={step.dataHelpers.actions?.all} onAction={vi.fn()} />);
 
-      expect(screen.getByRole('button', { name: `${webAuthnAnyDeviceActionTitle} (This device)` })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: `${webAuthnAnyDeviceActionTitle} (Built-in)` })).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: `${webAuthnAnyDeviceActionTitle} (Another device)` })
+        screen.getByRole('button', { name: `${webAuthnAnyDeviceActionTitle} (Security key)` })
       ).toBeInTheDocument();
     });
   });

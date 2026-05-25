@@ -21,15 +21,15 @@ import {
 } from '../../../../../data-access/types/haapi-action.types';
 import type { HaapiStepperStep } from '../../../../stepper/haapi-stepper.types';
 
-const WEBAUTHN_PLATFORM_LABEL = 'This device';
-const WEBAUTHN_CROSS_PLATFORM_LABEL = 'Another device';
+const WEBAUTHN_PLATFORM_LABEL = 'Built-in';
+const WEBAUTHN_CROSS_PLATFORM_LABEL = 'Security key';
 
 /**
  * When the server returned both `platformCredentialCreationOptions` and
  * `crossPlatformCredentialCreationOptions` (any-device mode of the `webauthn` authenticator),
  * splits the action into two sibling actions — one per credential type, each with
  * `model.arguments` narrowed to its single creation-options key and `title` suffixed with the
- * matching English label (e.g. `"Register new device (This device)"`). Default action
+ * matching English label (e.g. `"Register new device (Built-in)"`). Default action
  * rendering produces one button per emitted action.
  *
  * Single-option (any-device platform-only / cross-platform-only) and passkeys-mode actions

@@ -38,7 +38,7 @@ export function runExternalBrowserFlow(
   abortSignal: AbortSignal
 ): Promise<HaapiFetchFormAction> {
   return new Promise((resolve, reject) => {
-    const launchUrl = new URL(action.model.arguments.href);
+    const launchUrl = new URL(action.model.arguments.href, window.location.origin);
     launchUrl.searchParams.set('for_origin', window.location.origin);
 
     const externalWindow = window.open(launchUrl);

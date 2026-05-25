@@ -28,7 +28,7 @@
     "start": "cross-env SKIP_PRESTART=1 concurrently \"npm run start:identity-server\" \"npm run start:ssp\" \"npm run start:css\" \"npm run start:component-library\" \"open index.html\"",
     "start:ssp": "npm run -w src/self-service-portal/app start",
     "start:css": "npm run -w src/common/css start",
-    "start:component-library": "npm run -w src/common/component-library start",
+    "start:component-library": "npm run -w src/common/component-library watch",
     "start:identity-server": "npm run -w src/identity-server start",
     "build:identity-server": "npm run -w src/identity-server build",
     "start:login-web-app": "npm run -w src/login-web-app start",

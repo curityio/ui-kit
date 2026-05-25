@@ -33,6 +33,7 @@ import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
 import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
+import { isQrCodeLink } from '../../util/isQrCodeLink';
 import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 import {
   createMockWebAuthnAnyDeviceBothOptionsAction,
@@ -1201,7 +1202,7 @@ function TestComponent() {
             </button>
           ))}
           {currentStep.dataHelpers.links.map(link =>
-            link.subtype?.startsWith('image/') ? (
+            isQrCodeLink(link) ? (
               <img key={link.id} src={link.href} alt={link.title ?? link.rel} data-testid="link-image" />
             ) : (
               <button key={link.id} type="button" data-testid="link-button" onClick={() => nextStep(link)}>

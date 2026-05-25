@@ -167,6 +167,24 @@ const authenticationActionOptInMfaSetup: HaapiActionStep = {
         ],
       },
     },
+    {
+      template: HAAPI_ACTION_TYPES.FORM,
+      kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+      title: 'Skip setting up 2-step verification. This will make your account less secure.',
+      model: {
+        href: '/dev/authn/authenticate/_action/opt-in-1/setup',
+        method: HTTP_METHODS.POST,
+        type: MEDIA_TYPES.FORM_URLENCODED,
+        actionTitle: 'Skip',
+        fields: [
+          {
+            name: 'optOut',
+            type: HAAPI_FORM_FIELDS.HIDDEN,
+            value: 'true',
+          },
+        ],
+      },
+    },
   ],
 };
 
@@ -199,7 +217,6 @@ const authenticationActionOptInMfaSetupConfirm: HaapiActionStep = {
     {
       template: HAAPI_ACTION_TYPES.FORM,
       kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
-      title: 'Confirm',
       model: {
         href: '/authentication/_action/opt-in/setup-confirm',
         method: HTTP_METHODS.POST,
@@ -222,7 +239,6 @@ const authenticationActionOptInMfaSetupConfirm: HaapiActionStep = {
     {
       template: HAAPI_ACTION_TYPES.FORM,
       kind: HAAPI_FORM_ACTION_KINDS.CANCEL,
-      title: 'Cancel',
       model: {
         href: '/authentication/_action/opt-in/setup-confirm',
         method: HTTP_METHODS.POST,
