@@ -9,5 +9,5 @@
 # For further information, please contact Curity AB.
 #
 
-view.description=Your new passkey has been registered successfully. Your old passkey is still stored in your browser or keychain but will no longer work on this site. To avoid being prompted to use it, remove it from your browser or device's passkey manager.
-view.button.continue=Continue
+view.description=Din nyckel har registrerats. Din förra nyckel är fortfarande kvar i din webbläsare eller nyckel-hanterare men kommer inte att kunna användas för inloggning längre. För att undvika förvirring, ta bort den gamla nyckeln från din nyckel-hanterare.
+view.button.continue=Fortsätt
