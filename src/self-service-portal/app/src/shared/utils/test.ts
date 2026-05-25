@@ -43,6 +43,7 @@ export const mockMetadataEndpointResponse = () => {
     },
     messages: {},
     accessControlPolicy: UI_CONFIG.accessControlPolicy,
+    countries: UI_CONFIG.countries,
   };
   vi.stubGlobal('fetch', vi.fn());
   vi.mocked(fetch).mockResolvedValue({

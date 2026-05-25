@@ -63,4 +63,5 @@ export const UI_CONFIG: UiConfig = {
     logoImage: '',
     loginImage: '',
   },
+  countries: [],
 };

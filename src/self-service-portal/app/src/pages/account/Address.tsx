@@ -229,7 +229,6 @@ export const Address = () => {
                   onChange={handleAddressFormInputChange}
                   className="field flex-auto"
                   data-testid={`address-country-select`}
-                  style={{ color: formData.country ? 'inherit' : 'var(--form-field-placeholder-color)' }}
                 >
                   <option value="" disabled>
                     {t('account.address.country')}
