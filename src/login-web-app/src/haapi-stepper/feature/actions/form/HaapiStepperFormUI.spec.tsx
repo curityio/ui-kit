@@ -175,6 +175,117 @@ describe('HaapiStepperFormUI', () => {
         'current-password'
       );
     });
+
+    describe('HTML required attribute', () => {
+      it('should set the required attribute on text, password, select and checkbox inputs when field.required is true', () => {
+        const action = createMockFormAction({
+          kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+          model: {
+            href: loginFormActionHref,
+            method: HTTP_METHODS.POST,
+            fields: [
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.USERNAME,
+                name: usernameFieldName,
+                label: 'Username',
+                required: true,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.PASSWORD,
+                name: passwordFieldName,
+                label: 'Password',
+                required: true,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.CHECKBOX,
+                name: rememberMeFieldName,
+                label: 'Remember me',
+                value: rememberValue,
+                required: true,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.SELECT,
+                name: countryFieldName,
+                label: 'Country',
+                required: true,
+                options: [{ label: 'Sweden', value: countrySwedenValue }],
+              },
+            ],
+          },
+        });
+
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
+
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).toBeRequired();
+      });
+
+      it('should not set the required attribute when field.required is false', () => {
+        const action = createMockFormAction({
+          kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+          model: {
+            href: loginFormActionHref,
+            method: HTTP_METHODS.POST,
+            fields: [
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.USERNAME,
+                name: usernameFieldName,
+                label: 'Username',
+                required: false,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.PASSWORD,
+                name: passwordFieldName,
+                label: 'Password',
+                required: false,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.CHECKBOX,
+                name: rememberMeFieldName,
+                label: 'Remember me',
+                value: rememberValue,
+                required: false,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.SELECT,
+                name: countryFieldName,
+                label: 'Country',
+                required: false,
+                options: [{ label: 'Sweden', value: countrySwedenValue }],
+              },
+            ],
+          },
+        });
+
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
+
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).not.toBeRequired();
+      });
+
+      it('should not set the required attribute when field.required is omitted', () => {
+        const action = createLoginFormAction();
+
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
+
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).not.toBeRequired();
+      });
+    });
   });
 
   describe('Custom rendering', () => {
