@@ -99,10 +99,6 @@ export enum HAAPI_ACTION_CLIENT_OPERATIONS {
   BANKID = 'bankid',
   WEBAUTHN_AUTHENTICATION = 'webauthn-authentication',
   WEBAUTHN_REGISTRATION = 'webauthn-registration',
-  /*
-   * @deprecated
-   */
-  ENCAP_AUTO_ACTIVATION = 'encap-auto-activation',
 }
 
 /**
@@ -131,7 +127,6 @@ export interface HaapiBaseClientOperationModel {
  * Other operations that the Curity Identity Server ships with (and may be supported by fully compliant clients) are:
  *
  * * bankid
- * * encap-auto-activation (deprecated)
  * * webauthn-registration
  * * webauthn-authentication
  */
