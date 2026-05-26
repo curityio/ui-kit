@@ -69,6 +69,12 @@ export interface GrantedAuthorizationsResources {
   grantedAuthorizations?: ResourceOperations<(UI_CONFIG_OPERATIONS.READ | UI_CONFIG_OPERATIONS.DELETE)[]>;
 }
 
+export interface UiConfigCountry {
+  code: string;
+  name: string;
+  dialCode: string;
+}
+
 export interface UiConfig extends BootstrapUiConfig {
   PATHS: BootstrapUiConfig['PATHS'] & {
     OAUTH_AGENT: string;
@@ -79,6 +85,7 @@ export interface UiConfig extends BootstrapUiConfig {
   messages: {
     [key: string]: string;
   };
+  countries: UiConfigCountry[];
 }
 
 export interface UiConfigAccessControlPolicy {
@@ -115,4 +122,5 @@ export interface UiConfigMetadataResponse {
   messages: {
     [key: string]: string;
   };
+  countries: UiConfigCountry[];
 }

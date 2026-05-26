@@ -24,6 +24,13 @@ export const api = [
                     "grantedAuthorization": "/granted-authorization/graphql"
                 },
                 messages: messages,
+                "countries": [
+                    { "code": "SE", "name": "Sweden", "dialCode": "+46" },
+                    { "code": "US", "name": "United States", "dialCode": "+1" },
+                    { "code": "GB", "name": "United Kingdom", "dialCode": "+44" },
+                    { "code": "DE", "name": "Germany", "dialCode": "+49" },
+                    { "code": "PT", "name": "Portugal", "dialCode": "+351" },
+                ],
                 "accessControlPolicy": {
                     "resourceGroups": {
                         "userManagement": {
