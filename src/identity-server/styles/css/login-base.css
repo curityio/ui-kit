@@ -28,7 +28,7 @@
 	}
 }
 
-button[type="submit"] {
+.login-well [type="submit"] {
 	margin-block-start: var(--space-2);
 }
 
