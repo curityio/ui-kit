@@ -41,7 +41,7 @@ export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepper
           value={formState.get(field)}
           placeholder={field.placeholder}
           autoComplete={autoComplete}
-          required={!!field.required}
+          required={field.required ?? true}
           onChange={event => formState.set(field, event.target.value)}
         />
         <button

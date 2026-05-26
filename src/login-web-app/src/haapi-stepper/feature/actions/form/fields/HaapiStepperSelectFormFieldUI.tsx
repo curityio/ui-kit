@@ -26,7 +26,7 @@ export function HaapiStepperSelectFormFieldUI({ field }: { field: HaapiStepperSe
         data-testid={`haapi-form-field-select-${field.name}`}
         name={field.name}
         value={formState.get(field)}
-        required={!!field.required}
+        required={field.required ?? true}
         onChange={e => formState.set(field, e.target.value)}
         className="haapi-stepper-form-field-select-input"
       >
