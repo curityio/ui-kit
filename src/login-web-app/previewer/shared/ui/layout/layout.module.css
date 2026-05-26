@@ -13,7 +13,7 @@
   --sidebarWidth: 360px;
   display: grid;
   grid-template-columns: var(--sidebarWidth) 1fr;
-  min-height: calc(100vh - 80px);
+  min-height: 100dvh;
   gap: 0;
 }
 
