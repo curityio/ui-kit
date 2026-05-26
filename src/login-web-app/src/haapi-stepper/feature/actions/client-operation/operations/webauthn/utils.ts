@@ -19,6 +19,7 @@ import {
   HaapiWebAuthnPasskeysRegistrationAction,
   HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../../../../data-access/types/haapi-action.types';
+import type { HaapiStepperStep } from '../../../../stepper/haapi-stepper.types';
 
 const WEBAUTHN_PLATFORM_LABEL = 'Built-in';
 const WEBAUTHN_CROSS_PLATFORM_LABEL = 'Security key';
@@ -136,3 +137,32 @@ export function isAnyDeviceWebAuthnRegistrationAction(
 ): action is HaapiWebAuthnAnyDeviceRegistrationAction {
   return !isPasskeysWebAuthnRegistrationAction(action);
 }
+
+export const isWebAuthnStep = (step: HaapiStepperStep): boolean => {
+  const clientOperationActions = step.dataHelpers.actions?.clientOperation ?? [];
+  return clientOperationActions.some(isWebAuthnClientOperationAction);
+};
+
+export const isWebAuthnApiSupported = (): boolean =>
+  typeof PublicKeyCredential === 'function' &&
+  typeof PublicKeyCredential.parseCreationOptionsFromJSON === 'function' &&
+  typeof PublicKeyCredential.parseRequestOptionsFromJSON === 'function';
+
+export const isWebAuthnPlatformAuthenticatorApiAvailable = (): boolean =>
+  typeof PublicKeyCredential === 'function' && 'isUserVerifyingPlatformAuthenticatorAvailable' in PublicKeyCredential;
+
+export const isWebAuthnPlatformAuthenticatorAvailable = (): Promise<boolean> => {
+  if (!isWebAuthnPlatformAuthenticatorApiAvailable()) {
+    return Promise.resolve(false);
+  }
+  return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+};
+
+/**
+ * Safari browser (non-Chromium) blocks auto-initiated `navigator.credentials.{create,get}` calls
+ * when the document isn't focused.
+ */
+export const requiresWebAuthnUserInteraction = (): boolean => {
+  const userAgent = navigator.userAgent;
+  return userAgent.includes('Safari') && !userAgent.includes('Chrom');
+};

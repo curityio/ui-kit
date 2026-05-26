@@ -99,10 +99,6 @@ export enum HAAPI_ACTION_CLIENT_OPERATIONS {
   BANKID = 'bankid',
   WEBAUTHN_AUTHENTICATION = 'webauthn-authentication',
   WEBAUTHN_REGISTRATION = 'webauthn-registration',
-  /*
-   * @deprecated
-   */
-  ENCAP_AUTO_ACTIVATION = 'encap-auto-activation',
 }
 
 /**
@@ -131,7 +127,6 @@ export interface HaapiBaseClientOperationModel {
  * Other operations that the Curity Identity Server ships with (and may be supported by fully compliant clients) are:
  *
  * * bankid
- * * encap-auto-activation
  * * webauthn-registration
  * * webauthn-authentication
  */
@@ -260,12 +255,26 @@ export interface HaapiWebAuthnAuthenticationClientOperationAction extends HaapiC
 
 export interface HaapiWebAuthnAuthenticationClientOperationModel extends HaapiBaseClientOperationModel {
   name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_AUTHENTICATION;
-  arguments: {
-    credentialRequestOptions: {
-      publicKey: PublicKeyCredentialRequestOptionsJSON;
-    };
-  };
+  arguments: HaapiWebAuthnAuthenticationArgs;
   continueActions: [HaapiFormAction];
+}
+
+/**
+ * Unlike registration, the authentication step emits a SINGLE action that carries the ceremony
+ * spec together with optional descriptor lists used to scope which credentials the assertion will
+ * accept. The browser's WebAuthn API handles credential selection inside the single ceremony, so
+ * there is no client-side action selection for authentication.
+ *
+ * See https://curity.io/docs/haapi-data-model/latest/webauthn-authentication-step.html
+ */
+export interface HaapiWebAuthnAuthenticationArgs {
+  credentialRequestOptions: HaapiPublicKeyCredentialRequestOptions;
+  platformCredentials?: PublicKeyCredentialDescriptorJSON[];
+  crossPlatformCredentials?: PublicKeyCredentialDescriptorJSON[];
+}
+
+export interface HaapiPublicKeyCredentialRequestOptions {
+  publicKey: PublicKeyCredentialRequestOptionsJSON;
 }
 
 /**
