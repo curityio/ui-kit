@@ -14,6 +14,7 @@ import { AppConfig } from './shared/feature/app-config/AppConfig';
 import { ErrorBoundary } from './shared/feature/error-handling/ErrorBoundary';
 import { HaapiStepperStepUI } from './haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { HaapiStepper } from './haapi-stepper/feature/stepper/HaapiStepper';
+import { HaapiStepperErrorNotifier } from './haapi-stepper/feature/stepper/HaapiStepperErrorNotifier';
 
 export function App() {
   return (
@@ -21,7 +22,9 @@ export function App() {
       <ErrorBoundary>
         <HaapiStepper>
           <Layout>
-            <HaapiStepperStepUI />
+            <HaapiStepperErrorNotifier>
+              <HaapiStepperStepUI />
+            </HaapiStepperErrorNotifier>
           </Layout>
         </HaapiStepper>
       </ErrorBoundary>
