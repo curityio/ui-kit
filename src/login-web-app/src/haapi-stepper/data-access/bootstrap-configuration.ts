@@ -14,6 +14,12 @@ import { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 export interface BootstrapConfiguration {
   initialUrl: string;
   haapi: HaapiConfiguration;
+  theme: {
+    logo: {
+      path: string;
+      isInsideWell: boolean;
+    };
+  };
 }
 
 // @ts-expect-error window.__CONFIG__ is not declared on the Window type

@@ -231,6 +231,27 @@ svg {
   box-shadow: var(--well-box-shadow);
 }
 
+.haapi-stepper-logo {
+  display: var(--login-logo-display);
+  max-width: var(--login-logo-max-width);
+  max-height: var(--login-logo-max-height);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin-inline: auto;
+  margin-block: 1.5rem 0;
+}
+
+@media (min-width: 576px) {
+  .haapi-stepper-logo {
+    margin-top: 5rem;
+  }
+}
+
+.haapi-stepper-well > .haapi-stepper-logo {
+  margin-block: 0 var(--space-2);
+}
+
 .haapi-stepper-links {
   @extend .center, .py3, .flex, .flex-column;
 }

@@ -11,12 +11,23 @@
 
 import { ReactNode } from 'react';
 import { Header } from './header/Header';
+import { configuration } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import { Well } from '../../haapi-stepper/ui/well/Well';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
+  const logo = configuration.theme.logo;
+  const logoElement = <img className="haapi-stepper-logo" src={logo.path} alt="" role="presentation" />;
+
   return (
-    <div className="h100">
-      <Header />
-      <main className="app-layout">{children}</main>
-    </div>
+    <>
+      {!logo.isInsideWell && logoElement}
+      <Well>
+        {logo.isInsideWell && logoElement}
+        <div className="h100">
+          <Header />
+          <main className="app-layout">{children}</main>
+        </div>
+      </Well>
+    </>
   );
 };
