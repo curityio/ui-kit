@@ -11,6 +11,8 @@
 
 import { ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { HaapiClientOperationAction, HaapiFormAction } from '../../data-access/types/haapi-action.types';
+import type { HaapiFetchAction } from '../../data-access/types/haapi-fetch.types';
+import { useHaapiFetch } from '../../data-access/useHaapiFetch';
 import {
   HAAPI_PROBLEM_STEPS,
   HAAPI_STEPPER_ELEMENT_TYPES,
@@ -30,6 +32,7 @@ import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
 import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
   HaapiStepperClientOperationAction,
+  HaapiStepperConfig,
   HaapiStepperError,
   HaapiStepperFormAction,
   HaapiStepperHistoryEntry,
@@ -45,18 +48,12 @@ import { useRefCallback } from '../../util/useRefCallBack';
 import { handleAuthenticationOrRegistrationStep } from './step-handlers/authentication-or-registration-step';
 
 const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
+  bootstrap: configuration,
   pollingInterval: 3000,
   bankIdAutostart: true,
   autoRedirectOnAuthenticationComplete: true,
   webAuthnAutostart: true,
 };
-
-export interface HaapiStepperConfig {
-  pollingInterval: number;
-  bankIdAutostart: boolean;
-  autoRedirectOnAuthenticationComplete: boolean;
-  webAuthnAutostart: boolean;
-}
 
 interface HaapiStepperProps {
   children: ReactNode;
@@ -277,6 +274,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   const throwErrorToAppErrorBoundary = useThrowErrorToAppErrorBoundary();
   const pendingOperation = useRef<AbortController | NodeJS.Timeout | null>(null);
   const configResult = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
+  const { sendHaapiFetchRequest } = useHaapiFetch(configResult.bootstrap.haapi);
 
   const setCurrentStepAndUpdateHistory = useCallback<SetCurrentStepAndUpdateHistoryFn>(
     (newStep, triggeredByAction, triggeredByPayload) => {
@@ -300,15 +298,16 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
       setError(null);
       cancelPendingOperation(pendingOperation);
 
-      const { nextStepData, nextStepError } = await processHaapiNextStep(
+      const { nextStepData, nextStepError } = await processHaapiNextStep({
         currentStep,
+        nextStep,
+        history,
         action,
         payload,
         pendingOperation,
-        nextStep,
-        configResult,
-        history
-      );
+        config: configResult,
+        sendHaapiFetchRequest,
+      });
 
       if (nextStepError) {
         setError(nextStepError);
@@ -322,7 +321,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
       setCurrentStepAndUpdateHistory(nextStepData, action, payload);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nextStep is a stable ref via useRefCallback, defined below
-    [configResult, currentStep, history, setCurrentStepAndUpdateHistory]
+    [configResult, sendHaapiFetchRequest, currentStep, history, setCurrentStepAndUpdateHistory]
   );
 
   const nextStepImplementation: HaapiStepperNextStep = useCallback<HaapiStepperNextStep>(
@@ -340,9 +339,9 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   const nextStep = useRefCallback(nextStepImplementation);
 
   useEffect(() => {
-    nextStep(getInitialStepLink());
+    nextStep(getInitialStepLink(configResult.bootstrap.initialUrl));
     return () => cancelPendingOperation(pendingOperation);
-  }, [nextStep]);
+  }, [nextStep, configResult.bootstrap.initialUrl]);
 
   const contextValue = useMemo(
     () => ({ currentStep, loading, error, nextStep, history }),
@@ -352,24 +351,29 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   return <HaapiStepperContext value={contextValue}>{children}</HaapiStepperContext>;
 }
 
-async function processHaapiNextStep(
-  currentStep: HaapiStep | null,
+interface ProcessHaapiNextStepParams {
+  currentStep: HaapiStep | null;
+  nextStep: HaapiStepperNextStep;
+  history: HaapiStepperHistoryEntry[];
   action:
     | HaapiFormAction
     | HaapiClientOperationAction
     | HaapiLink
     | HaapiStepperFormAction
     | HaapiStepperClientOperationAction
-    | HaapiStepperLink,
-  payload: HaapiStepperNextStepPayload | undefined,
-  pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>,
-  nextStep: HaapiStepperNextStep,
-  config: HaapiStepperConfig,
-  history: HaapiStepperHistoryEntry[]
-): Promise<{
+    | HaapiStepperLink;
+  payload: HaapiStepperNextStepPayload | undefined;
+  pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>;
+  config: HaapiStepperConfig;
+  sendHaapiFetchRequest: (action: HaapiFetchAction) => Promise<HaapiStep>;
+}
+
+async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise<{
   nextStepData?: HaapiStepperStep;
   nextStepError?: HaapiStepperError;
 }> {
+  const { currentStep, nextStep, history, action, payload, pendingOperation, config, sendHaapiFetchRequest } = params;
+
   if (isClientOperation(action)) {
     const { clientOperationData, clientOperationError } = await performClientOperation(
       action,
@@ -381,15 +385,11 @@ async function processHaapiNextStep(
       return { nextStepError: clientOperationError };
     }
 
-    return processHaapiNextStep(
-      currentStep,
-      clientOperationData.action,
-      clientOperationData.payload,
-      pendingOperation,
-      nextStep,
-      config,
-      history
-    );
+    return processHaapiNextStep({
+      ...params,
+      action: clientOperationData.action,
+      payload: clientOperationData.payload,
+    });
   }
 
   const isLinkAction = 'href' in action;
@@ -398,15 +398,12 @@ async function processHaapiNextStep(
 
   switch (nextStepResponse.type) {
     case HAAPI_STEPS.REDIRECTION:
-      return processHaapiNextStep(
-        nextStepResponse,
-        nextStepResponse.actions[0],
-        undefined,
-        pendingOperation,
-        nextStep,
-        config,
-        history
-      );
+      return processHaapiNextStep({
+        ...params,
+        currentStep: nextStepResponse,
+        action: nextStepResponse.actions[0],
+        payload: undefined,
+      });
 
     case HAAPI_STEPS.POLLING:
       return handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
@@ -451,9 +448,9 @@ function cancelPendingOperation(pendingOperation: RefObject<AbortController | No
   }
 }
 
-function getInitialStepLink() {
+function getInitialStepLink(initialUrl: string) {
   const initialStepLink: HaapiStepperLink = {
-    href: configuration.initialUrl,
+    href: initialUrl,
     rel: 'self',
     type: HAAPI_STEPPER_ELEMENT_TYPES.LINK,
     subtype: 'initial-link',

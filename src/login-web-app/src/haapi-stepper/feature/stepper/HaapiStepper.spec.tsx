@@ -82,6 +82,23 @@ describe('HaapiStepper', () => {
       expect(screen.queryByTestId('error')).not.toBeInTheDocument();
     });
 
+    it('should use the bootstrap config provided via the stepper config prop instead of the default', async () => {
+      const overrideUrl = 'https://override.example/start';
+
+      render(
+        <HaapiStepper
+          config={{ bootstrap: { initialUrl: overrideUrl, haapi: {}, theme: {} } as BootstrapConfiguration }}
+        >
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledWith(overrideUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
+    });
+
     it('should go to the next step and provide the updated current step', async () => {
       render(
         <HaapiStepper>
@@ -1208,16 +1225,17 @@ describe('HaapiStepper', () => {
   });
 });
 
-const mockHaapiFetch = vi.hoisted(() => vi.fn());
-vi.mock('../../data-access/haapi-fetch-initializer', () => {
+const mockHaapiFetch = vi.fn();
+vi.mock('@curity/identityserver-haapi-web-driver', () => {
   return {
-    default: mockHaapiFetch,
+    createHaapiFetch: () => mockHaapiFetch,
   };
 });
 
 const mockConfiguration: Partial<BootstrapConfiguration> = vi.hoisted(() => {
   return {
     initialUrl: 'https://example.com/auth',
+    haapi: {} as BootstrapConfiguration['haapi'],
   };
 });
 vi.mock('../../data-access/bootstrap-configuration', () => {

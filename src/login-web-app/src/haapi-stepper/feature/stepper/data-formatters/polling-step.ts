@@ -12,12 +12,12 @@
 import { RefObject } from 'react';
 import { HaapiPollingStep, HAAPI_POLLING_STATUS, HAAPI_STEPS } from '../../../data-access/types/haapi-step.types';
 import type {
+  HaapiStepperConfig,
   HaapiStepperNextStep,
   HaapiStepperError,
   HaapiStepperStep,
   HaapiStepperHistoryEntry,
 } from '../haapi-stepper.types';
-import { HaapiStepperConfig } from '../HaapiStepper';
 import { formatNextStepData } from './format-next-step-data';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { isBankIdClientOperation, openBankIdApp } from '../../actions/client-operation/operations/bankid';

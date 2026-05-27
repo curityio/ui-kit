@@ -53,6 +53,7 @@ import {
   HaapiTextFormField,
   HaapiUsernameFormField,
 } from '../../data-access';
+import { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 
 /**
  * Public API provided by the `HaapiStepper`, accessed via the `useHaapiStepper` hook.
@@ -68,6 +69,17 @@ export interface HaapiStepperAPI {
   nextStep: HaapiStepperNextStep;
   // Complete history of all steps and actions taken
   history: HaapiStepperHistoryEntry[];
+}
+
+/*
+ * CONFIG TYPINGS
+ */
+export interface HaapiStepperConfig {
+  bootstrap: BootstrapConfiguration;
+  pollingInterval: number;
+  bankIdAutostart: boolean;
+  webAuthnAutostart: boolean;
+  autoRedirectOnAuthenticationComplete: boolean;
 }
 
 /*

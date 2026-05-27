@@ -11,8 +11,7 @@
 
 import type { HaapiAuthenticationStep, HaapiRegistrationStep } from '../../../data-access/types/haapi-step.types';
 import { formatNextStepData } from '../data-formatters/format-next-step-data';
-import type { HaapiStepperConfig } from '../HaapiStepper';
-import type { HaapiStepperNextStep, HaapiStepperStep } from '../haapi-stepper.types';
+import type { HaapiStepperConfig, HaapiStepperNextStep, HaapiStepperStep } from '../haapi-stepper.types';
 import { isWebAuthnStep, manageWebAuthnAutoStart } from '../../actions/client-operation/operations/webauthn';
 
 export function handleAuthenticationOrRegistrationStep(
