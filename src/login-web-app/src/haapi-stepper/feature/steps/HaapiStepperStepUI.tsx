@@ -282,12 +282,12 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
   }
 
   return (
-    <Well>
+    <>
       {stepElements.loadingElement}
       {stepElements.errorElement}
       {stepElements.messagesElement}
       {stepElements.actionsElement}
       {stepElements.linksElement}
-    </Well>
+    </>
   );
 };

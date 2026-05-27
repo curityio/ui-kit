@@ -26,13 +26,13 @@ export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
   const nonQrLinks = links.filter(link => !isQrCodeLink(link));
 
   return (
-    <Well>
+    <>
       {loadingElement}
       {errorElement}
       {messagesElement}
       {qrLink && getLinksElement(props, [qrLink], linkRenderInterceptor)}
       {actionsElement}
       {nonQrLinks.length > 0 && getLinksElement(props, nonQrLinks, linkRenderInterceptor)}
-    </Well>
+    </>
   );
 };
