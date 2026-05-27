@@ -365,7 +365,7 @@ svg {
   z-index: 50;
 
   h4 {
-      font-size: var(--type-base-size);
-      color: var(--color-danger);
+    font-size: var(--type-base-size);
+    color: var(--color-danger);
   }
 }
