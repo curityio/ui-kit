@@ -1,3 +1,14 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
 import { RefObject } from 'react';
 import { HaapiPollingStep, HAAPI_POLLING_STATUS, HAAPI_STEPS } from '../../../data-access/types/haapi-step.types';
 import type {
@@ -9,8 +20,7 @@ import type {
 import { HaapiStepperConfig } from '../HaapiStepper';
 import { formatNextStepData } from './format-next-step-data';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
-import { isBankIdClientOperation } from '../../actions/client-operation/client-operations';
-import { openBankIdApp } from '../../actions/client-operation/openBankIdApp';
+import { isBankIdClientOperation, openBankIdApp } from '../../actions/client-operation/operations/bankid';
 import { HaapiStepperPollingStep } from '../haapi-stepper.types';
 
 export function handlePollingStep(

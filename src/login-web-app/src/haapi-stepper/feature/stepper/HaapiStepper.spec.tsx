@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -31,6 +31,7 @@ import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
 import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
+import { isQrCodeLink } from '../../util/isQrCodeLink';
 import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 import { AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE } from './typings';
 
@@ -177,6 +178,7 @@ describe('HaapiStepper', () => {
         });
       });
     });
+
     describe('Polling Step', () => {
       beforeEach(() => {
         vi.useFakeTimers();
@@ -782,9 +784,22 @@ vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({
 }));
 
 const mockOpenBankIdApp = vi.hoisted(() => vi.fn());
-vi.mock('../actions/client-operation/openBankIdApp', () => {
+vi.mock('../actions/client-operation/operations/bankid/open-bankid-app', () => ({
+  openBankIdApp: mockOpenBankIdApp,
+}));
+
+const { mockRunWebAuthnRegistration, mockRunWebAuthnAuthentication } = vi.hoisted(() => ({
+  mockRunWebAuthnRegistration: vi.fn(),
+  mockRunWebAuthnAuthentication: vi.fn(),
+}));
+vi.mock('../actions/client-operation/operations/webauthn', async () => {
+  const actual = await vi.importActual<typeof import('../actions/client-operation/operations/webauthn')>(
+    '../actions/client-operation/operations/webauthn'
+  );
   return {
-    openBankIdApp: mockOpenBankIdApp,
+    ...actual,
+    runWebAuthnRegistration: mockRunWebAuthnRegistration,
+    runWebAuthnAuthentication: mockRunWebAuthnAuthentication,
   };
 });
 
@@ -922,7 +937,7 @@ function TestComponent() {
             </button>
           ))}
           {currentStep.dataHelpers.links.map(link =>
-            link.subtype?.startsWith('image/') ? (
+            isQrCodeLink(link) ? (
               <img key={link.id} src={link.href} alt={link.title ?? link.rel} data-testid="link-image" />
             ) : (
               <button key={link.id} type="button" data-testid="link-button" onClick={() => nextStep(link)}>

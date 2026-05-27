@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -26,6 +26,7 @@ export function HaapiStepperSelectFormFieldUI({ field }: { field: HaapiStepperSe
         data-testid={`haapi-form-field-select-${field.name}`}
         name={field.name}
         value={formState.get(field)}
+        required={field.required ?? true}
         onChange={e => formState.set(field, e.target.value)}
         className="haapi-stepper-form-field-select-input"
       >

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -10,6 +10,7 @@
  */
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
+import { isQrCodeLink } from '../../util/isQrCodeLink';
 
 export const HaapiStepperLinkUI = ({
   link,
@@ -18,9 +19,7 @@ export const HaapiStepperLinkUI = ({
   link: HaapiStepperLink;
   onClick: (action: HaapiStepperLink) => void;
 }) => {
-  const isQRCodeLink = link.subtype?.startsWith('image/');
-
-  if (isQRCodeLink) {
+  if (isQrCodeLink(link)) {
     return (
       <button
         type="button"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -15,10 +15,12 @@ import classes from './header.module.css';
 export const Header = () => {
   return (
     <header className={`${classes.header} px2 flex flex-center flex-gap-1 w100`}>
-      <a href="/" className="button button-tiny button-link">
-        <IconVciCredentialHome width={32} height={32} />
-        Return to app
-      </a>
+      <div>
+        <a href="/" className="button button-tiny button-link">
+          <IconVciCredentialHome width={24} height={24} />
+          Return to app
+        </a>
+      </div>
     </header>
   );
 };

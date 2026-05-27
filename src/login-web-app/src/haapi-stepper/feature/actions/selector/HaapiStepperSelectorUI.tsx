@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -35,9 +35,9 @@ interface HaapiStepperSelectorUIProps {
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();
- *   const selectorAction = currentStep?.dataHelpers.selectorActions?.[0];
+ *   const selectorAction = currentStep?.dataHelpers.actions?.selector?.[0];
  *
- *   return {selectorAction && <HaapiStepperSelectorUI action={selectorAction} onSubmit={nextStep} />}
+ *   return selectorAction && <HaapiStepperSelectorUI action={selectorAction} onSubmit={nextStep} />;
  * }
  *
  * <HaapiStepper>

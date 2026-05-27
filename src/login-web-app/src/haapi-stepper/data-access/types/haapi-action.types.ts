@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -99,10 +99,6 @@ export enum HAAPI_ACTION_CLIENT_OPERATIONS {
   BANKID = 'bankid',
   WEBAUTHN_AUTHENTICATION = 'webauthn-authentication',
   WEBAUTHN_REGISTRATION = 'webauthn-registration',
-  /*
-   * @deprecated
-   */
-  ENCAP_AUTO_ACTIVATION = 'encap-auto-activation',
 }
 
 /**
@@ -131,7 +127,6 @@ export interface HaapiBaseClientOperationModel {
  * Other operations that the Curity Identity Server ships with (and may be supported by fully compliant clients) are:
  *
  * * bankid
- * * encap-auto-activation
  * * webauthn-registration
  * * webauthn-authentication
  */
@@ -198,13 +193,53 @@ export interface HaapiWebAuthnRegistrationClientOperationAction extends HaapiCli
 
 export interface HaapiWebAuthnRegistrationClientOperationModel extends HaapiBaseClientOperationModel {
   name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION;
-  arguments:
-    | { credentialCreationOptions: HaapiPublicKeyCredentialCreationOptions }
-    | {
-        platformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
-        crossPlatformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
-      };
+  arguments: HaapiWebAuthnRegistrationArgs;
   continueActions: [HaapiFormAction];
+}
+
+export type HaapiWebAuthnPasskeysRegistrationAction = Omit<HaapiWebAuthnRegistrationClientOperationAction, 'model'> & {
+  model: Omit<HaapiWebAuthnRegistrationClientOperationModel, 'arguments'> & {
+    arguments: HaapiWebAuthnPasskeysArgs;
+  };
+};
+
+export type HaapiWebAuthnAnyDeviceRegistrationAction = Omit<HaapiWebAuthnRegistrationClientOperationAction, 'model'> & {
+  model: Omit<HaapiWebAuthnRegistrationClientOperationModel, 'arguments'> & {
+    arguments: HaapiWebAuthnAnyDeviceArgs;
+  };
+};
+
+/**
+ * Discriminated union of `webauthn-registration` action arguments.
+ *
+ * - Passkeys-mode (`passkey` authenticator or `webauthn` in passkeys-mode): only
+ *   `credentialCreationOptions` is present.
+ * - Any-device-mode (`webauthn` authenticator): one or both of
+ *   `platformCredentialCreationOptions` / `crossPlatformCredentialCreationOptions`.
+ */
+export type HaapiWebAuthnRegistrationArgs = HaapiWebAuthnPasskeysArgs | HaapiWebAuthnAnyDeviceArgs;
+
+export interface HaapiWebAuthnPasskeysArgs {
+  credentialCreationOptions: HaapiPublicKeyCredentialCreationOptions;
+}
+
+export interface HaapiWebAuthnAnyDeviceArgs {
+  platformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
+  crossPlatformCredentialCreationOptions?: HaapiPublicKeyCredentialCreationOptions;
+}
+
+/**
+ * Continue-action payload key for the `webauthn-registration` operation. The value matches the
+ * `*CreationOptions` key the client picked from `model.arguments`.
+ *
+ * - `CREDENTIAL` — passkeys-mode (when `HaapiWebAuthnPasskeysArgs.credentialCreationOptions` is present).
+ * - `PLATFORM_CREDENTIAL` — any-device-mode (when `HaapiWebAuthnAnyDeviceArgs.platformCredentialCreationOptions` is present).
+ * - `CROSS_PLATFORM_CREDENTIAL` — any-device-mode (when `HaapiWebAuthnAnyDeviceArgs.crossPlatformCredentialCreationOptions` is present).
+ */
+export enum HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION {
+  CREDENTIAL = 'credential',
+  PLATFORM_CREDENTIAL = 'platformCredential',
+  CROSS_PLATFORM_CREDENTIAL = 'crossPlatformCredential',
 }
 
 export interface HaapiPublicKeyCredentialCreationOptions {
@@ -220,12 +255,26 @@ export interface HaapiWebAuthnAuthenticationClientOperationAction extends HaapiC
 
 export interface HaapiWebAuthnAuthenticationClientOperationModel extends HaapiBaseClientOperationModel {
   name: HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_AUTHENTICATION;
-  arguments: {
-    credentialRequestOptions: {
-      publicKey: PublicKeyCredentialRequestOptionsJSON;
-    };
-  };
+  arguments: HaapiWebAuthnAuthenticationArgs;
   continueActions: [HaapiFormAction];
+}
+
+/**
+ * Unlike registration, the authentication step emits a SINGLE action that carries the ceremony
+ * spec together with optional descriptor lists used to scope which credentials the assertion will
+ * accept. The browser's WebAuthn API handles credential selection inside the single ceremony, so
+ * there is no client-side action selection for authentication.
+ *
+ * See https://curity.io/docs/haapi-data-model/latest/webauthn-authentication-step.html
+ */
+export interface HaapiWebAuthnAuthenticationArgs {
+  credentialRequestOptions: HaapiPublicKeyCredentialRequestOptions;
+  platformCredentials?: PublicKeyCredentialDescriptorJSON[];
+  crossPlatformCredentials?: PublicKeyCredentialDescriptorJSON[];
+}
+
+export interface HaapiPublicKeyCredentialRequestOptions {
+  publicKey: PublicKeyCredentialRequestOptionsJSON;
 }
 
 /**

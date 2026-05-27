@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -28,6 +28,7 @@ export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepper
         name={field.name}
         checked={formState.get(field)}
         disabled={field.readonly ?? false}
+        required={field.required ?? true}
         onChange={e => formState.set(field, e.target.checked)}
         className="haapi-stepper-form-field-checkbox-input"
       />

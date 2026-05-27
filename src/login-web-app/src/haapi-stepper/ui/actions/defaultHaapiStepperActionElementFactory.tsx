@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -31,7 +31,7 @@ export default function defaultHaapiStepperActionElementFactory(
     case HAAPI_ACTION_TYPES.FORM:
       return (
         <HaapiStepperFormUI
-          key={`form-${action.model.href}`}
+          key={`form-${action.id}`}
           action={action}
           onSubmit={onAction}
           formFieldRenderInterceptor={formFieldRenderInterceptor}
@@ -39,11 +39,9 @@ export default function defaultHaapiStepperActionElementFactory(
       );
 
     case HAAPI_ACTION_TYPES.CLIENT_OPERATION:
-      return (
-        <HaapiStepperClientOperationUI key={`clientop-${action.model.name}`} action={action} onAction={onAction} />
-      );
+      return <HaapiStepperClientOperationUI key={`clientop-${action.id}`} action={action} onAction={onAction} />;
 
     case HAAPI_ACTION_TYPES.SELECTOR:
-      return <HaapiStepperSelectorUI key={`selector-${action.title ?? ''}`} action={action} onSubmit={onAction} />;
+      return <HaapiStepperSelectorUI key={`selector-${action.id}`} action={action} onSubmit={onAction} />;
   }
 }

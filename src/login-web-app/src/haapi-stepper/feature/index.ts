@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -20,10 +20,9 @@ export * from './stepper/data-formatters/polling-step';
 export * from './stepper/data-formatters/problem-step';
 
 export * from './steps/HaapiStepperStepUI';
-
 export * from './actions/form/HaapiStepperFormUI';
 export * from './actions/form/HaapiStepperFormValidationErrorInputWrapper';
 export * from './actions/form/HaapiStepperFormHook';
-export * from './actions/client-operation/HaapiStepperClientOperationUI';
-export * from './actions/client-operation/client-operations';
 export * from './actions/selector/HaapiStepperSelectorUI';
+export * from './actions/client-operation/HaapiStepperClientOperationUI';
+export * from './actions/client-operation/operations/client-operations';

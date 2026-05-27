@@ -1,3 +1,14 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
 import { HAAPI_ACTION_TYPES } from '../src/haapi-stepper/data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '../src/haapi-stepper/data-access/types/haapi-form.types';
 import { HAAPI_STEPS, HaapiActionStep } from '../src/haapi-stepper/data-access/types/haapi-step.types';
