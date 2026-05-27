@@ -9,7 +9,6 @@
  * For further information, please contact Curity AB.
  */
 
-import { Well } from '../../ui/well/Well';
 import { isQrCodeLink } from '../../util/isQrCodeLink';
 import { getLinksElement } from '../steps/step-element-factories';
 import type { ViewNameBuiltInUIProps } from './typings';
