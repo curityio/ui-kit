@@ -10,18 +10,21 @@
  */
 
 import { Layout } from './shared/ui/Layout';
+import { AppConfig } from './shared/feature/app-config/AppConfig';
 import { ErrorBoundary } from './shared/feature/error-handling/ErrorBoundary';
 import { HaapiStepperStepUI } from './haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { HaapiStepper } from './haapi-stepper/feature/stepper/HaapiStepper';
 
 export function App() {
   return (
-    <ErrorBoundary>
-      <HaapiStepper>
-        <Layout>
-          <HaapiStepperStepUI />
-        </Layout>
-      </HaapiStepper>
-    </ErrorBoundary>
+    <AppConfig>
+      <ErrorBoundary>
+        <HaapiStepper>
+          <Layout>
+            <HaapiStepperStepUI />
+          </Layout>
+        </HaapiStepper>
+      </ErrorBoundary>
+    </AppConfig>
   );
 }

@@ -9,7 +9,6 @@
  * For further information, please contact Curity AB.
  */
 
-import { Well } from '../../ui/well/Well';
 import { isQrCodeLink } from '../../util/isQrCodeLink';
 import { getLinksElement } from '../steps/step-element-factories';
 import type { ViewNameBuiltInUIProps } from './typings';
@@ -26,13 +25,13 @@ export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
   const nonQrLinks = links.filter(link => !isQrCodeLink(link));
 
   return (
-    <Well>
+    <>
       {loadingElement}
       {errorElement}
       {messagesElement}
       {qrLink && getLinksElement(props, [qrLink], linkRenderInterceptor)}
       {actionsElement}
       {nonQrLinks.length > 0 && getLinksElement(props, nonQrLinks, linkRenderInterceptor)}
-    </Well>
+    </>
   );
 };
