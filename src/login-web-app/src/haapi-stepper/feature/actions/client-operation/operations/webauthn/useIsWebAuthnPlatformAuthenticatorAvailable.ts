@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { isWebAuthnPlatformAuthenticatorApiAvailable, isWebAuthnPlatformAuthenticatorAvailable } from './utils';
 
 /**
  * Returns whether the device exposes a user-verifying platform authenticator (Touch ID,
@@ -21,8 +22,8 @@ export function useIsWebAuthnPlatformAuthenticatorAvailable(): boolean | undefin
   useEffect(() => {
     let cancelled = false;
 
-    if (isWebAuthnPlatformAuthenticatorApiAvailable) {
-      void resolveAvailability().then(value => {
+    if (isWebAuthnPlatformAuthenticatorApiAvailable()) {
+      void isWebAuthnPlatformAuthenticatorAvailable().then(value => {
         if (!cancelled) {
           setAvailable(value);
         }
@@ -36,13 +37,3 @@ export function useIsWebAuthnPlatformAuthenticatorAvailable(): boolean | undefin
 
   return available;
 }
-
-const isWebAuthnPlatformAuthenticatorApiAvailable =
-  typeof PublicKeyCredential === 'function' && 'isUserVerifyingPlatformAuthenticatorAvailable' in PublicKeyCredential;
-
-const resolveAvailability = (): Promise<boolean> => {
-  if (!isWebAuthnPlatformAuthenticatorApiAvailable) {
-    return Promise.resolve(false);
-  }
-  return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-};

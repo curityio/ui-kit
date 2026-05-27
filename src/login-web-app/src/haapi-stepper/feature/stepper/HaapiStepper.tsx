@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Curity AB. All rights reserved.
+ * Copyright (C) 2026 Curity AB. All rights reserved.
  *
  * The contents of this file are the property of Curity AB.
  * You may not copy or use this file, in either source code
@@ -42,16 +42,19 @@ import type {
 } from './haapi-stepper.types';
 import { useThrowErrorToAppErrorBoundary } from '../../util/useThrowErrorToAppErrorBoundary';
 import { useRefCallback } from '../../util/useRefCallBack';
+import { handleAuthenticationOrRegistrationStep } from './step-handlers/authentication-or-registration-step';
 
 const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
   pollingInterval: 3000,
   bankIdAutostart: true,
+  webAuthnAutostart: true,
   redirectOnAuthenticationCompletedWithSuccess: true,
 };
 
 export interface HaapiStepperConfig {
   pollingInterval: number;
   bankIdAutostart: boolean;
+  webAuthnAutostart: boolean;
   redirectOnAuthenticationCompletedWithSuccess: boolean;
 }
 
@@ -409,6 +412,8 @@ async function processHaapiNextStep(
 
     case HAAPI_STEPS.AUTHENTICATION:
     case HAAPI_STEPS.REGISTRATION:
+      return handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config);
+
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:

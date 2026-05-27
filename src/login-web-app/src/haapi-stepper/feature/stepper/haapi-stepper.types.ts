@@ -1,3 +1,14 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
 import { ReactElement } from 'react';
 import {
   HAAPI_ACTION_TYPES,
@@ -5,6 +16,10 @@ import {
   HaapiClientOperationAction,
   HaapiFormAction,
   HaapiSelectorAction,
+  HaapiWebAuthnAnyDeviceRegistrationAction,
+  HaapiWebAuthnAuthenticationClientOperationAction,
+  HaapiWebAuthnPasskeysRegistrationAction,
+  HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../data-access/types/haapi-action.types';
 import {
   HAAPI_STEPPER_ELEMENT_TYPES,
@@ -105,6 +120,14 @@ export type HaapiStepperClientOperationAction = HaapiClientOperationAction &
     /** Polling session remaining time in seconds before the session expires. */
     maxWaitRemainingTime?: number;
   };
+export type HaapiStepperWebAuthnRegistrationClientOperationAction = HaapiStepperClientOperationAction &
+  HaapiWebAuthnRegistrationClientOperationAction;
+export type HaapiStepperWebAuthnPasskeysRegistrationAction = HaapiStepperClientOperationAction &
+  HaapiWebAuthnPasskeysRegistrationAction;
+export type HaapiStepperWebAuthnAnyDeviceRegistrationAction = HaapiStepperClientOperationAction &
+  HaapiWebAuthnAnyDeviceRegistrationAction;
+export type HaapiStepperWebAuthnAuthenticationClientOperationAction = HaapiStepperClientOperationAction &
+  HaapiWebAuthnAuthenticationClientOperationAction;
 
 /*
  * STEP MESSAGE TYPINGS

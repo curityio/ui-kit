@@ -71,13 +71,15 @@ async function resolveConfig(bootstrapConfig: BootstrapUiConfig): Promise<UiConf
   }
 
   const uiConfigMetadataResponseJSON: UiConfigMetadataResponse = await uiConfigMetadataResponse.json();
-  const { accessControlPolicy, messages, endpoints } = uiConfigMetadataResponseJSON;
-  const invalidMetadataResponse = !accessControlPolicy || !messages || !endpoints;
+  const { accessControlPolicy, messages, endpoints, countries } = uiConfigMetadataResponseJSON;
+  const invalidMetadataResponse = !accessControlPolicy || !messages || !endpoints || !countries;
   const invalidEndpoints = !endpoints.oauthAgent || (!endpoints.userManagement && !endpoints.grantedAuthorization);
 
   if (invalidMetadataResponse || invalidEndpoints) {
     throw new Error('Invalid metadata response');
   }
+
+  countries.sort((a, b) => a.name.localeCompare(b.name));
 
   const normalizedUiConfig = normalizeUiConfig({
     ...bootstrapConfig,
@@ -89,6 +91,7 @@ async function resolveConfig(bootstrapConfig: BootstrapUiConfig): Promise<UiConf
       GRANTED_AUTHORIZATION_API: endpoints.grantedAuthorization,
     },
     messages,
+    countries,
   });
 
   return normalizedUiConfig;

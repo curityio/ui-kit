@@ -9,7 +9,11 @@
  * For further information, please contact Curity AB.
  */
 
-.messages {
-  /* Utility classes from global CSS */
-  /* See well.module.css for notes. */
-}
+const REGIONAL_INDICATOR_OFFSET = 127397;
+
+export const countryFlag = (isoCode: string): string => {
+  if (isoCode.length !== 2) return '';
+  return [...isoCode.toUpperCase()]
+    .map(char => String.fromCodePoint(char.charCodeAt(0) + REGIONAL_INDICATOR_OFFSET))
+    .join('');
+};
