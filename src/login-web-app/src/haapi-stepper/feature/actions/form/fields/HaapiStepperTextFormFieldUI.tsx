@@ -36,6 +36,7 @@ export function HaapiStepperTextFormFieldUI({
         value={formState.get(field)}
         placeholder={field.placeholder}
         autoComplete={autoComplete}
+        required={field.required ?? true}
         onChange={e => formState.set(field, e.target.value)}
       />
     </label>

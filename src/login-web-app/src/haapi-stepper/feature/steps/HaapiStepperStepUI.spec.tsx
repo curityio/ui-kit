@@ -1078,6 +1078,9 @@ describe('HaapiStepperStepUI', () => {
 
         const customInput = screen.getByLabelText(customLabel);
         fireEvent.change(customInput, { target: { value: 'alice@example.com' } });
+        fireEvent.change(screen.getByTestId('haapi-form-field-password-password'), {
+          target: { value: 's3cret' },
+        });
         fireEvent.click(screen.getByRole('button', { name: MockActionTitle }));
 
         expect(mockNextStep).toHaveBeenCalledTimes(1);
@@ -1192,6 +1195,9 @@ describe('HaapiStepperStepUI', () => {
           expect(usernameInput.value).toBe(prefilledUsernameValue);
         });
 
+        fireEvent.change(screen.getByTestId('haapi-form-field-password-password'), {
+          target: { value: 's3cret' },
+        });
         fireEvent.click(screen.getByTestId('form-submit-button'));
 
         expect(mockNextStep).toHaveBeenCalledTimes(1);

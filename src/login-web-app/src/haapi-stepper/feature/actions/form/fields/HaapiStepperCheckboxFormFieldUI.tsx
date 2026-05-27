@@ -28,6 +28,7 @@ export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepper
         name={field.name}
         checked={formState.get(field)}
         disabled={field.readonly ?? false}
+        required={field.required ?? true}
         onChange={e => formState.set(field, e.target.checked)}
         className="haapi-stepper-form-field-checkbox-input"
       />
