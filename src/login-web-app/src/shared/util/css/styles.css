@@ -130,6 +130,8 @@ svg {
 .app-layout {
   place-content: center;
   min-height: 100dvh;
+  padding-block-start: var(--space-3);
+  padding-block-end: var(--space-3);
 }
 
 /* Stepper styles */
@@ -233,12 +235,12 @@ svg {
   height: auto;
   object-fit: contain;
   margin-inline: auto;
-  margin-block: 1.5rem 0;
+  margin-block: var(--space-2);
 }
 
 @media (min-width: 576px) {
   .haapi-stepper-logo {
-    margin-top: 5rem;
+    margin-block-start: var(--space-4);
   }
 }
 
