@@ -10,7 +10,6 @@
  */
 
 import { ReactNode } from 'react';
-import { Header } from './header/Header';
 import { configuration } from '../../haapi-stepper/data-access/bootstrap-configuration';
 import { Well } from '../../haapi-stepper/ui/well/Well';
 
@@ -20,14 +19,13 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      {!logo.isInsideWell && logoElement}
-      <Well>
-        {logo.isInsideWell && logoElement}
-        <div className="h100">
-          <Header />
-          <main className="app-layout">{children}</main>
-        </div>
-      </Well>
+      <main className="app-layout">
+        {!logo.isInsideWell && logoElement}
+        <Well>
+          {logo.isInsideWell && logoElement}
+          <div className="h100">{children}</div>
+        </Well>
+      </main>
     </>
   );
 };

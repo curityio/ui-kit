@@ -20,7 +20,6 @@
   --form-label-font-size: 1rem;
   --color-text: #737373;
   --page-background-color: #f3f5f7;
-  --header-height: 48px;
 }
 
 @font-face {
@@ -53,10 +52,6 @@
 
 body {
   font-family: var(--type-regular);
-
-  &:has(.header) {
-    padding-top: var(--header-height);
-  }
 }
 
 body {
@@ -134,8 +129,7 @@ svg {
 
 .app-layout {
   place-content: center;
-  height: calc(100dvh - var(--header-height));
-  margin-top: var(--header-height);
+  min-height: 100dvh;
 }
 
 /* Stepper styles */
