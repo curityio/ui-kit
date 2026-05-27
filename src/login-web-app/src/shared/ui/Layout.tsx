@@ -10,19 +10,19 @@
  */
 
 import { ReactNode } from 'react';
-import { configuration } from '../../haapi-stepper/data-access/bootstrap-configuration';
 import { Well } from '../../haapi-stepper/ui/well/Well';
+import { useAppConfig } from '../feature/app-config/AppConfigHook';
+import { Logo } from './Logo';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const logo = configuration.theme.logo;
-  const logoElement = <img className="haapi-stepper-logo" src={logo.path} alt="" role="presentation" />;
+  const { isInsideWell } = useAppConfig().theme.logo;
 
   return (
     <>
       <main className="app-layout">
-        {!logo.isInsideWell && logoElement}
+        {!isInsideWell && <Logo />}
         <Well>
-          {logo.isInsideWell && logoElement}
+          {isInsideWell && <Logo />}
           <div className="h100">{children}</div>
         </Well>
       </main>
