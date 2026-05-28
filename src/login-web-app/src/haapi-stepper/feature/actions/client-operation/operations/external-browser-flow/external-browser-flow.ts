@@ -91,14 +91,27 @@ export function runExternalBrowserFlow(
   });
 }
 
+/**
+ * Hardcoded English copy for each `EXTERNAL_BROWSER_FLOW_ERROR_TYPE` bucket. Used as the single
+ * source of user-facing copy until the BE emits the equivalent
+ * `step.metadata.viewData.error.clientOperation.externalBrowserFlow.<key>` keys (tracked
+ * separately). When those keys land, switch `getExternalBrowserFlowErrorMessage` to read from
+ * `currentStep` first and fall back to this map.
+ */
+export const EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES = {
+  launch: 'External browser flow could not start.',
+  resume: 'External browser flow could not be resumed.',
+} as const;
+
 function getExternalBrowserFlowErrorMessage(
   type: EXTERNAL_BROWSER_FLOW_ERROR_TYPE,
   currentStep: HaapiStep | null
-): string | undefined {
-  const externalBrowserFlowErrors = currentStep?.metadata?.viewData?.error?.clientOperation?.externalBrowserFlow;
+): string {
+  // `currentStep` is kept on the signature for forward-compat with BE-supplied viewData copy.
+  void currentStep;
   return type === EXTERNAL_BROWSER_FLOW_ERROR_TYPE.LAUNCH
-    ? externalBrowserFlowErrors?.launch
-    : externalBrowserFlowErrors?.resume;
+    ? EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.launch
+    : EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume;
 }
 
 export const isExternalBrowserFlowClientOperation = (
