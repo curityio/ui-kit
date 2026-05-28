@@ -142,17 +142,25 @@ async function getWebAuthnAuthenticationCredential(
   }
 }
 
+export const WEBAUTHN_ERROR_MESSAGES = {
+  cancelOrTimeout: 'The operation was cancelled or timed out.',
+  registration: 'Registration failed.',
+  authentication: 'Authentication failed.',
+} as const;
+
 function getWebAuthnErrorMessage(
   type: WEBAUTHN_ERROR_TYPE,
   operation: WEBAUTHN_OPERATION,
   currentStep: HaapiStep | null
-): string | undefined {
-  const webauthnErrors = currentStep?.metadata?.viewData?.error?.clientOperation?.webauthn;
+): string {
+  // `currentStep` is kept on the signature for forward-compat with BE-supplied viewData copy;
+  // until those keys land, every bucket resolves to a hardcoded string.
+  void currentStep;
   return type === WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT
-    ? webauthnErrors?.cancelOrTimeout
+    ? WEBAUTHN_ERROR_MESSAGES.cancelOrTimeout
     : operation === WEBAUTHN_OPERATION.REGISTRATION
-      ? webauthnErrors?.registration
-      : webauthnErrors?.authentication;
+      ? WEBAUTHN_ERROR_MESSAGES.registration
+      : WEBAUTHN_ERROR_MESSAGES.authentication;
 }
 
 function getWebAuthnErrorType(error: unknown): WEBAUTHN_ERROR_TYPE {

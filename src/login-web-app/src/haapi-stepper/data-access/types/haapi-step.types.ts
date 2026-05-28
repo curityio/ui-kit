@@ -351,26 +351,4 @@ export interface HaapiMetadata {
   templateArea?: string;
   /** The name for the view that produced the response */
   viewName?: string;
-  /** Categorised view-specific data */
-  viewData?: HaapiMetadataViewData;
-}
-
-export interface HaapiMetadataViewData {
-  error?: HaapiMetadataViewDataError;
-}
-
-export interface HaapiMetadataViewDataError {
-  clientOperation?: HaapiClientOperationErrorMessages;
-}
-export interface HaapiClientOperationErrorMessages {
-  webauthn?: HaapiWebAuthnErrorMessages;
-}
-
-export interface HaapiWebAuthnErrorMessages {
-  /** Cancel or timeout — shared between registration and authentication ceremonies. */
-  cancelOrTimeout?: string;
-  /** Registration ceremony failed for any reason other than cancel/timeout. */
-  registration?: string;
-  /** Authentication ceremony failed for any reason other than cancel/timeout. */
-  authentication?: string;
 }
