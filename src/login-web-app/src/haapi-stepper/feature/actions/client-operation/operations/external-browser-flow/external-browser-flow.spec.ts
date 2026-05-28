@@ -10,25 +10,14 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
-import { runExternalBrowserFlow } from './external-browser-flow';
+import { EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES, runExternalBrowserFlow } from './external-browser-flow';
 import { HAAPI_PROBLEM_STEPS, HAAPI_STEPS } from '../../../../../data-access/types/haapi-step.types';
 import { createMockExternalBrowserFlowAction, createMockStep } from '../../../../../util/tests/mocks';
 
 describe('external-browser-flow', () => {
   const launchOrigin = new URL(createMockExternalBrowserFlowAction().model.arguments.href).origin;
   const closeDelay = 0;
-  const stepWithoutErrorMetadata = createMockStep(HAAPI_STEPS.AUTHENTICATION, { metadata: {} });
-  const failedStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-    metadata: {
-      viewData: {
-        error: {
-          clientOperation: {
-            externalBrowserFlow: { launch: 'Launch error copy.', resume: 'Resume error copy.' },
-          },
-        },
-      },
-    },
-  });
+  const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, { metadata: {} });
 
   let abortController: AbortController;
   let externalWindowClose: ReturnType<typeof vi.fn>;
@@ -50,23 +39,19 @@ describe('external-browser-flow', () => {
     describe('success', () => {
       it('opens the launch URL with for_origin appended', () => {
         const action = createMockExternalBrowserFlowAction();
-        void runExternalBrowserFlow(action, closeDelay, abortController.signal, stepWithoutErrorMetadata);
+        void runExternalBrowserFlow(action, closeDelay, abortController.signal, step);
 
         const expected = new URL(action.model.arguments.href);
         expected.searchParams.set('for_origin', window.location.origin);
 
+        expect(openSpy).toHaveBeenCalledTimes(1);
         const opened = openSpy.mock.calls[0][0] as URL;
         expect(opened.href).toBe(expected.href);
       });
 
       it('awaits postMessage from the external window and resolves with continuation data and nonce payload', async () => {
         const action = createMockExternalBrowserFlowAction();
-        const externalBrowserFlowResult = runExternalBrowserFlow(
-          action,
-          closeDelay,
-          abortController.signal,
-          stepWithoutErrorMetadata
-        );
+        const externalBrowserFlowResult = runExternalBrowserFlow(action, closeDelay, abortController.signal, step);
 
         sendBrowserMessage({ source: fakeExternalWindow, origin: launchOrigin, data: 'nonce-abc' });
 
@@ -80,12 +65,7 @@ describe('external-browser-flow', () => {
 
       it('ignores messages whose source is not the external window', async () => {
         const action = createMockExternalBrowserFlowAction();
-        const externalBrowserFlowResult = runExternalBrowserFlow(
-          action,
-          closeDelay,
-          abortController.signal,
-          stepWithoutErrorMetadata
-        );
+        const externalBrowserFlowResult = runExternalBrowserFlow(action, closeDelay, abortController.signal, step);
 
         sendBrowserMessage({ source: window, origin: launchOrigin, data: 'wrong-source' });
         sendBrowserMessage({ source: fakeExternalWindow, origin: launchOrigin, data: 'nonce-ok' });
@@ -107,14 +87,14 @@ describe('external-browser-flow', () => {
           createMockExternalBrowserFlowAction(),
           closeDelay,
           abortController.signal,
-          failedStep
+          step
         );
 
         expect(result).toMatchObject({
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: 'Launch error copy.' }],
+              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.launch }],
             },
           },
         });
@@ -126,7 +106,7 @@ describe('external-browser-flow', () => {
           createMockExternalBrowserFlowAction(),
           closeDelay,
           abortController.signal,
-          failedStep
+          step
         );
 
         sendBrowserMessage({ source: fakeExternalWindow, origin: 'http://attacker.example', data: 'nonce-x' });
@@ -135,7 +115,7 @@ describe('external-browser-flow', () => {
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: 'Resume error copy.' }],
+              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume }],
             },
           },
         });
@@ -147,7 +127,7 @@ describe('external-browser-flow', () => {
           createMockExternalBrowserFlowAction(),
           closeDelay,
           abortController.signal,
-          failedStep
+          step
         );
 
         sendBrowserMessage({ source: fakeExternalWindow, origin: launchOrigin, data: { not: 'a string' } });
@@ -156,7 +136,7 @@ describe('external-browser-flow', () => {
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: 'Resume error copy.' }],
+              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume }],
             },
           },
         });
@@ -168,7 +148,7 @@ describe('external-browser-flow', () => {
           createMockExternalBrowserFlowAction(),
           closeDelay,
           abortController.signal,
-          failedStep
+          step
         );
 
         abortController.abort();
@@ -177,33 +157,11 @@ describe('external-browser-flow', () => {
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: 'Resume error copy.' }],
+              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume }],
             },
           },
         });
         expect(externalWindowClose).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('metadata-key fallback', () => {
-      it('step has no externalBrowserFlow error copy → synthesised error has no messages', async () => {
-        openSpy.mockReturnValue(null);
-
-        const result = await runExternalBrowserFlow(
-          createMockExternalBrowserFlowAction(),
-          closeDelay,
-          abortController.signal,
-          stepWithoutErrorMetadata
-        );
-
-        expect(result).toMatchObject({
-          clientOperationError: {
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [],
-            },
-          },
-        });
       });
     });
   });
