@@ -19,7 +19,21 @@ export interface BootstrapConfiguration {
       path: string;
       isInsideWell: boolean;
     };
+    /**
+     * Optional per-page icon configuration. Only present when symbols are enabled in the server theme.
+     * Resolved against the current step's `metadata.viewName` (see `resolvePageSymbol`).
+     */
+    pageSymbols?: PageSymbols;
   };
+}
+
+export interface PageSymbols {
+  /** Map of full HAAPI viewName -> symbol path. Highest precedence. */
+  views?: Record<string, string>;
+  /** Map of plugin implementation type (e.g. `html-form`, `bankid`) -> symbol path. */
+  plugins?: Record<string, string>;
+  /** Fallback symbol path used when no per-view / per-plugin entry matches. */
+  default?: string;
 }
 
 // @ts-expect-error window.__CONFIG__ is not declared on the Window type

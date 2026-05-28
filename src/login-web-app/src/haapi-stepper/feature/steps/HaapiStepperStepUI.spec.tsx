@@ -14,6 +14,11 @@ import { useEffect } from 'react';
 import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { HaapiStepperContext } from '../stepper/HaapiStepperContext';
+import { AppConfigContext } from '../../../shared/feature/app-config/AppConfigContext';
+import type {
+  BootstrapConfiguration,
+  PageSymbols,
+} from '../../data-access/bootstrap-configuration';
 import type {
   HaapiStepperAPI,
   HaapiStepperNextStep,
@@ -67,13 +72,34 @@ import {
 } from '../../util/tests/mocks';
 import { HaapiStepperFormFieldUI } from '../actions/form/fields/HaapiStepperFormFieldUI';
 
-const renderWithContext = (ui: React.ReactElement, contextValue: Partial<HaapiStepperAPI> = {}) => {
+const buildAppConfig = (pageSymbols?: PageSymbols): BootstrapConfiguration => ({
+  initialUrl: 'https://example/start',
+  haapi: {} as BootstrapConfiguration['haapi'],
+  theme: {
+    logo: { path: '/assets/logo.svg', isInsideWell: false },
+    pageSymbols,
+  },
+});
+
+/** Returns true when `a` appears before `b` in document order. */
+const rendersBefore = (a: Element, b: Element): boolean =>
+  !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+
+const renderWithContext = (
+  ui: React.ReactElement,
+  contextValue: Partial<HaapiStepperAPI> = {},
+  pageSymbols?: PageSymbols
+) => {
   const value: HaapiStepperAPI = {
     ...defaultStepperAPI,
     ...contextValue,
   };
 
-  return render(<HaapiStepperContext value={value}>{ui}</HaapiStepperContext>);
+  return render(
+    <AppConfigContext value={buildAppConfig(pageSymbols)}>
+      <HaapiStepperContext value={value}>{ui}</HaapiStepperContext>
+    </AppConfigContext>
+  );
 };
 
 describe('HaapiStepperStepUI', () => {
@@ -2020,6 +2046,44 @@ describe('HaapiStepperStepUI', () => {
           expect(screen.queryByTestId('links')).toBeInTheDocument();
         });
       });
+    });
+  });
+
+  describe('Page symbol', () => {
+    it('renders the resolved symbol above the messages/actions/links for the current step', () => {
+      const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+        metadata: { templateArea: 'lwa', viewName: 'authenticator/html-form/index' },
+      });
+
+      renderWithContext(<HaapiStepperStepUI />, { currentStep: step }, {
+        plugins: { 'html-form': '/symbols/html-form.svg' },
+      });
+
+      const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')!;
+      const messages = screen.getByTestId('messages');
+
+      expect(pageSymbol).toHaveAttribute('src', '/symbols/html-form.svg');
+      expect(rendersBefore(pageSymbol, messages)).toBe(true);
+    });
+
+    it('renders nothing when theme.pageSymbols is absent', () => {
+      renderWithContext(<HaapiStepperStepUI />);
+      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+    });
+
+    it('renders the page symbol above the BankID QR link in the BankID built-in UI', () => {
+      const qrLink = createMockQrLink();
+      const step = createPollingStep({ links: [qrLink] });
+
+      renderWithContext(<HaapiStepperStepUI />, { currentStep: step }, {
+        plugins: { bankid: '/symbols/bankid.svg' },
+      });
+
+      const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')!;
+      const qrButton = screen.getByTestId('qr-code-button');
+
+      expect(pageSymbol).toHaveAttribute('src', '/symbols/bankid.svg');
+      expect(rendersBefore(pageSymbol, qrButton)).toBe(true);
     });
   });
 });
