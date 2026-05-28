@@ -199,20 +199,16 @@ describe('webauthn', () => {
         it.each([
           ['TypeError', new TypeError('bad options')],
           ['arbitrary non-DOMException', new Error('something else')],
-        ] as const)('%s → registrationError copy (failed bucket)', async (_label, error) => {
-          mockCredentialsCreate.mockRejectedValue(error);
+        ] as const)(
+          '%s → rethrows so the React error boundary catches the programming bug (does not map to "Registration failed")',
+          async (_label, error) => {
+            mockCredentialsCreate.mockRejectedValue(error);
 
-          await expect(
-            runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
-          ).resolves.toMatchObject({
-            clientOperationError: {
-              app: {
-                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
-              },
-            },
-          });
-        });
+            await expect(
+              runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
+            ).rejects.toBe(error);
+          }
+        );
       });
 
       it('falls back to no message when the matching metadata key is absent (BE has not emitted it yet)', async () => {
@@ -347,6 +343,20 @@ describe('webauthn', () => {
                 },
               },
             });
+          }
+        );
+
+        it.each([
+          ['TypeError', new TypeError('bad options')],
+          ['arbitrary non-DOMException', new Error('something else')],
+        ] as const)(
+          '%s → rethrows so the React error boundary catches the programming bug (does not map to "Authentication failed")',
+          async (_label, error) => {
+            mockCredentialsGet.mockRejectedValue(error);
+
+            await expect(
+              runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
+            ).rejects.toBe(error);
           }
         );
       });
