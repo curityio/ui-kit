@@ -19,13 +19,22 @@ import type { ViewNameBuiltInUIProps } from './typings';
  *  - Lifts the QR code link above the actions so it's the primary element on the screen.
  */
 export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
-  const { currentStep, linkRenderInterceptor, loadingElement, errorElement, messagesElement, actionsElement } = props;
+  const {
+    currentStep,
+    linkRenderInterceptor,
+    loadingElement,
+    errorElement,
+    messagesElement,
+    actionsElement,
+    pageSymbolElement,
+  } = props;
   const { links } = currentStep.dataHelpers;
   const qrLink = links.find(isQrCodeLink);
   const nonQrLinks = links.filter(link => !isQrCodeLink(link));
 
   return (
     <>
+      {pageSymbolElement}
       {loadingElement}
       {errorElement}
       {messagesElement}
