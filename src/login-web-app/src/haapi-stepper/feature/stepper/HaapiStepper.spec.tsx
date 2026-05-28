@@ -404,8 +404,11 @@ describe('HaapiStepper', () => {
 
         describe('Auto-Start', () => {
           beforeEach(() => {
-            mockRunWebAuthnRegistration.mockResolvedValue(undefined);
-            mockRunWebAuthnAuthentication.mockResolvedValue(undefined);
+            // Baseline: every Auto-Start case asserts the runner is not invoked. We resolve to a
+            // sentinel error so an unintended invocation surfaces loudly via error.app instead of
+            // silently progressing the stepper.
+            mockRunWebAuthnRegistration.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            mockRunWebAuthnAuthentication.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
           });
 
           it('should not auto-start when WebAuthn API is not supported', async () => {
@@ -1167,8 +1170,10 @@ vi.mock('../actions/client-operation/operations/bankid/open-bankid-app', () => (
 }));
 
 const { mockRunWebAuthnRegistration, mockRunWebAuthnAuthentication } = vi.hoisted(() => ({
-  mockRunWebAuthnRegistration: vi.fn(),
-  mockRunWebAuthnAuthentication: vi.fn(),
+  mockRunWebAuthnRegistration:
+    vi.fn<typeof import('../actions/client-operation/operations/webauthn').runWebAuthnRegistration>(),
+  mockRunWebAuthnAuthentication:
+    vi.fn<typeof import('../actions/client-operation/operations/webauthn').runWebAuthnAuthentication>(),
 }));
 vi.mock('../actions/client-operation/operations/webauthn', async () => {
   const actual = await vi.importActual<typeof import('../actions/client-operation/operations/webauthn')>(
