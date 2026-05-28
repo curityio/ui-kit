@@ -26,7 +26,6 @@ import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
-import { AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE } from './typings';
 import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
 import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
@@ -55,7 +54,7 @@ const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
 export interface HaapiStepperConfig {
   pollingInterval: number;
   bankIdAutostart: boolean;
-  autoRedirectOnAuthenticationComplete: boolean | AUTO_REDIRECT_ON_AUTHENTICATION_COMPLETE;
+  autoRedirectOnAuthenticationComplete: boolean;
   webAuthnAutostart: boolean;
 }
 
