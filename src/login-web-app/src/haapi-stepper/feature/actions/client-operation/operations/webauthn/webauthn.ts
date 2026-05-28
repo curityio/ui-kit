@@ -87,7 +87,7 @@ async function createWebAuthnRegistrationCredential(
     if (credential === null) {
       return {
         error: getHaapiStepperError(
-          getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+          getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
         ),
       };
     }
@@ -127,7 +127,7 @@ async function getWebAuthnAuthenticationCredential(
     if (credential === null) {
       return {
         error: getHaapiStepperError(
-          getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+          getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
         ),
       };
     }

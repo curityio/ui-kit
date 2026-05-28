@@ -140,16 +140,16 @@ describe('webauthn', () => {
         });
       });
 
-      it('navigator.credentials.create returns null → cancelOrTimeoutError copy', async () => {
+      it('navigator.credentials.create returns null → registrationError copy', async () => {
         mockCredentialsCreate.mockResolvedValue(null);
 
         await expect(
-          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, cancelStep)
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
         ).resolves.toMatchObject({
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
             },
           },
         });
@@ -280,16 +280,16 @@ describe('webauthn', () => {
         });
       });
 
-      it('navigator.credentials.get returns null → cancelOrTimeoutError copy', async () => {
+      it('navigator.credentials.get returns null → authenticationError copy', async () => {
         mockCredentialsGet.mockResolvedValue(null);
 
         await expect(
-          runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, cancelStep)
+          runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, failedStep)
         ).resolves.toMatchObject({
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: cancelStep.metadata?.viewData?.error?.clientOperation?.webauthn?.cancelOrTimeout }],
+              messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.authentication }],
             },
           },
         });
