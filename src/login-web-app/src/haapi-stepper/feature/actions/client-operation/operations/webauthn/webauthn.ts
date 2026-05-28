@@ -142,12 +142,6 @@ async function getWebAuthnAuthenticationCredential(
   }
 }
 
-/**
- * Resolve the user-facing copy for a WebAuthn ceremony failure from the current step's
- * `metadata.viewData.error.clientOperation.webauthn.<key>`, picking the key per the two-tone
- * discriminator (`cancelOrTimeout` / per-ceremony failure). Returns `undefined` when the key
- * is absent so the synthesised error has no message and consumers fall back to their own copy.
- */
 function getWebAuthnErrorMessage(
   type: WEBAUTHN_ERROR_TYPE,
   operation: WEBAUTHN_OPERATION,
