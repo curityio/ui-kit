@@ -359,3 +359,10 @@ export interface HaapiExternalBrowserFlowErrorMessages {
   /** Resume failed — the parent could not consume the postMessage from the external flow (unexpected origin/type, or operation aborted). */
   resume?: string;
 }
+
+export interface HaapiExternalBrowserFlowErrorMessages {
+  /** Launch failed (popup blocked, browser policy, etc.) */
+  launch?: string;
+  /** Resume failed — the parent could not consume the postMessage from the external flow (unexpected origin/type, or operation aborted). */
+  resume?: string;
+}
