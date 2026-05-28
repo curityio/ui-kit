@@ -77,11 +77,6 @@ export async function performClientOperation(
  * a `HaapiUnexpectedProblemStep` via {@link formatErrorStepData} — so they surface via
  * `useHaapiStepper().error.app` like any server-driven problem and consumers handle them
  * through the same channel (e.g. `HaapiStepperErrorNotifier`).
- *
- * Callers resolve the user-facing copy themselves (typically from
- * `step.metadata.viewData.error.clientOperation.<operationKey>`) and pass the resolved string
- * here. Empty/undefined → synthesised step has no `messages` and consumers fall back to
- * whatever copy they choose.
  */
 export function getHaapiStepperError(messageText: string | undefined): HaapiStepperError {
   const messages: HaapiUserMessage[] = messageText ? [{ text: messageText }] : [];
