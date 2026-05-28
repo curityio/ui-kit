@@ -162,7 +162,10 @@ function getWebAuthnErrorMessage(
 }
 
 function getWebAuthnErrorType(error: unknown): WEBAUTHN_ERROR_TYPE {
-  if (error instanceof DOMException && (error.name === 'NotAllowedError' || error.name === 'AbortError')) {
+  if (!(error instanceof DOMException)) {
+    throw error;
+  }
+  if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
     return WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT;
   }
   return WEBAUTHN_ERROR_TYPE.FAILED;
