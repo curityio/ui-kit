@@ -10,16 +10,9 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-<<<<<<< HEAD
 import { runWebAuthnAuthentication, runWebAuthnRegistration, WEBAUTHN_ERROR_MESSAGES } from './webauthn';
 import { HAAPI_PROBLEM_STEPS, HaapiStep } from '../../../../../data-access/types/haapi-step.types';
 import {
-=======
-import { runWebAuthnAuthentication, runWebAuthnRegistration } from './webauthn';
-import { HAAPI_PROBLEM_STEPS, HAAPI_STEPS, HaapiStep } from '../../../../../data-access/types/haapi-step.types';
-import {
-  createMockStep,
->>>>>>> 785722bc0894902788458a7037b74b0c5b2b88cb
   createMockWebAuthnAuthenticationAction,
   createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
   createMockWebAuthnPlatformOnlyAnyDeviceAction,
@@ -119,22 +112,6 @@ describe('webauthn', () => {
     });
 
     describe('error', () => {
-<<<<<<< HEAD
-=======
-      const cancelStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-        metadata: {
-          viewData: {
-            error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the registration.' } } },
-          },
-        },
-      });
-      const failedStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-        metadata: {
-          viewData: { error: { clientOperation: { webauthn: { registration: 'Registration failed.' } } } },
-        },
-      });
-
->>>>>>> 785722bc0894902788458a7037b74b0c5b2b88cb
       it('WebAuthn API not supported → registrationError copy', async () => {
         vi.unstubAllGlobals();
 
@@ -214,48 +191,11 @@ describe('webauthn', () => {
           async (_label, error) => {
             mockCredentialsCreate.mockRejectedValue(error);
 
-<<<<<<< HEAD
             await expect(
               runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, stepWithoutMetadata)
             ).rejects.toBe(error);
           }
         );
-=======
-          await expect(
-            runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, failedStep)
-          ).resolves.toMatchObject({
-            clientOperationError: {
-              app: {
-                type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-                messages: [{ text: failedStep.metadata?.viewData?.error?.clientOperation?.webauthn?.registration }],
-              },
-            },
-          });
-        });
-      });
-
-      it('falls back to no message when the matching metadata key is absent (BE has not emitted it yet)', async () => {
-        mockCredentialsCreate.mockResolvedValue(null);
-        const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-          metadata: { templateArea: 'lwa', viewName: 'unrelated' },
-        });
-
-        await expect(
-          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
-        ).resolves.toMatchObject({
-          clientOperationError: { app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] } },
-        });
-      });
-
-      it('falls back to no message when currentStep is null', async () => {
-        mockCredentialsCreate.mockResolvedValue(null);
-
-        await expect(
-          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, null)
-        ).resolves.toMatchObject({
-          clientOperationError: { app: { type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] } },
-        });
->>>>>>> 785722bc0894902788458a7037b74b0c5b2b88cb
       });
     });
   });
@@ -284,20 +224,6 @@ describe('webauthn', () => {
     });
 
     describe('error', () => {
-<<<<<<< HEAD
-=======
-      const cancelStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-        metadata: {
-          viewData: { error: { clientOperation: { webauthn: { cancelOrTimeout: 'You cancelled the sign-in.' } } } },
-        },
-      });
-      const failedStep = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-        metadata: {
-          viewData: { error: { clientOperation: { webauthn: { authentication: 'Authentication failed.' } } } },
-        },
-      });
-
->>>>>>> 785722bc0894902788458a7037b74b0c5b2b88cb
       it('WebAuthn API not supported → authenticationError copy (failed bucket)', async () => {
         vi.unstubAllGlobals();
 
