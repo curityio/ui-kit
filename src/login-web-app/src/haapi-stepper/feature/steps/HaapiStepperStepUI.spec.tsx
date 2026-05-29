@@ -15,10 +15,7 @@ import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { HaapiStepperContext } from '../stepper/HaapiStepperContext';
 import { AppConfigContext } from '../../../shared/feature/app-config/AppConfigContext';
-import type {
-  BootstrapConfiguration,
-  PageSymbols,
-} from '../../data-access/bootstrap-configuration';
+import type { BootstrapConfiguration, PageSymbols } from '../../data-access/bootstrap-configuration';
 import type {
   HaapiStepperAPI,
   HaapiStepperNextStep,
@@ -2055,9 +2052,13 @@ describe('HaapiStepperStepUI', () => {
         metadata: { templateArea: 'lwa', viewName: 'authenticator/html-form/index' },
       });
 
-      renderWithContext(<HaapiStepperStepUI />, { currentStep: step }, {
-        plugins: { 'html-form': '/symbols/html-form.svg' },
-      });
+      renderWithContext(
+        <HaapiStepperStepUI />,
+        { currentStep: step },
+        {
+          plugins: { 'html-form': '/symbols/html-form.svg' },
+        }
+      );
 
       const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')!;
       const messages = screen.getByTestId('messages');
@@ -2075,9 +2076,13 @@ describe('HaapiStepperStepUI', () => {
       const qrLink = createMockQrLink();
       const step = createPollingStep({ links: [qrLink] });
 
-      renderWithContext(<HaapiStepperStepUI />, { currentStep: step }, {
-        plugins: { bankid: '/symbols/bankid.svg' },
-      });
+      renderWithContext(
+        <HaapiStepperStepUI />,
+        { currentStep: step },
+        {
+          plugins: { bankid: '/symbols/bankid.svg' },
+        }
+      );
 
       const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')!;
       const qrButton = screen.getByTestId('qr-code-button');
