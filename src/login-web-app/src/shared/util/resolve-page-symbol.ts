@@ -43,7 +43,7 @@ export const resolvePageSymbol = (
     return exactMatch;
   }
 
-  const pluginType = viewName.match(PLUGIN_TYPE_FROM_VIEW_NAME)?.[1];
+  const pluginType = PLUGIN_TYPE_FROM_VIEW_NAME.exec(viewName)?.[1];
   const pluginMatch = pluginType ? pageSymbols.plugins?.[pluginType] : undefined;
   if (pluginMatch) {
     return pluginMatch;
