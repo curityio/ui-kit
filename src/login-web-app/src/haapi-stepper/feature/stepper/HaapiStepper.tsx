@@ -371,16 +371,20 @@ async function processHaapiNextStep(
   nextStepError?: HaapiStepperError;
 }> {
   if (isClientOperation(action)) {
-    const clientOperationResponse = await performClientOperation(action, pendingOperation);
+    const { clientOperationData, clientOperationError } = await performClientOperation(
+      action,
+      pendingOperation,
+      currentStep
+    );
 
-    if (!clientOperationResponse) {
-      return {};
+    if (clientOperationError) {
+      return { nextStepError: clientOperationError };
     }
 
     return processHaapiNextStep(
       currentStep,
-      clientOperationResponse.action,
-      clientOperationResponse.payload,
+      clientOperationData.action,
+      clientOperationData.payload,
       pendingOperation,
       nextStep,
       config,

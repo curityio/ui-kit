@@ -43,6 +43,7 @@ import {
   createMockWebAuthnRegistrationAction,
 } from '../../util/tests/mocks';
 import type { HaapiClientOperationAction } from '../../data-access/types/haapi-action.types';
+import { formatErrorStepData } from './data-formatters/problem-step';
 
 describe('HaapiStepper', () => {
   const initialStepType = HAAPI_STEPS.AUTHENTICATION;
@@ -387,10 +388,12 @@ describe('HaapiStepper', () => {
     });
 
     describe('Authentication / Registration Step', () => {
-      describe('WebAuthn Auto-Start', () => {
+      describe('WebAuthn', () => {
+        const authorizationResponseUrl = completedWithSuccessStep.links?.find(
+          link => link.rel === 'authorization-response'
+        )?.href;
+
         beforeEach(() => {
-          mockRunWebAuthnRegistration.mockResolvedValue(null);
-          mockRunWebAuthnAuthentication.mockResolvedValue(null);
           vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
         });
 
@@ -399,78 +402,22 @@ describe('HaapiStepper', () => {
           Reflect.deleteProperty(navigator, 'userAgent');
         });
 
-        it('should not auto-start when WebAuthn API is not supported', async () => {
-          // Remove the PublicKeyCredential stub installed by beforeEach so isWebAuthnApiSupported() returns false.
-          vi.unstubAllGlobals();
-          mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
-
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          const stepRendered = await screen.findByTestId('step-type');
-          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
-
-          expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
-        });
-
-        it('should not auto-start on a non-WebAuthn auth step (e.g. username/password form)', async () => {
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          const stepRendered = await screen.findByTestId('step-type');
-          expect(stepRendered).toHaveTextContent(initialStepType);
-
-          expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
-          expect(mockRunWebAuthnAuthentication).not.toHaveBeenCalled();
-        });
-
-        it('should not auto-start on Safari (non-Chromium) — Safari blocks auto-initiated WebAuthn ceremonies', async () => {
-          stubUserAgent(
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
-          );
-          mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
-
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          const stepRendered = await screen.findByTestId('step-type');
-          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
-
-          expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
-        });
-
-        it('should auto-start on Chromium browsers whose user agent also contains "Safari"', async () => {
-          stubUserAgent(
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-          );
-          mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
-
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          await waitFor(() => {
-            expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+        describe('Auto-Start', () => {
+          beforeEach(() => {
+            // Baseline: every Auto-Start case asserts the runner is not invoked. We resolve to a
+            // sentinel error so an unintended invocation surfaces loudly via error.app instead of
+            // silently progressing the stepper.
+            mockRunWebAuthnRegistration.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            mockRunWebAuthnAuthentication.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
           });
-        });
 
-        describe('config.webAuthnAutostart', () => {
-          it('should not auto-start a WebAuthn registration when config.webAuthnAutostart is false', async () => {
+          it('should not auto-start when WebAuthn API is not supported', async () => {
+            // Remove the PublicKeyCredential stub installed by beforeEach so isWebAuthnApiSupported() returns false.
+            vi.unstubAllGlobals();
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
 
             render(
-              <HaapiStepper config={{ webAuthnAutostart: false }}>
+              <HaapiStepper>
                 <TestComponent />
               </HaapiStepper>
             );
@@ -481,23 +428,230 @@ describe('HaapiStepper', () => {
             expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
           });
 
-          it('should not auto-start a WebAuthn authentication when config.webAuthnAutostart is false', async () => {
-            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
-
+          it('should not auto-start on a non-WebAuthn auth step (e.g. username/password form)', async () => {
             render(
-              <HaapiStepper config={{ webAuthnAutostart: false }}>
+              <HaapiStepper>
                 <TestComponent />
               </HaapiStepper>
             );
 
             const stepRendered = await screen.findByTestId('step-type');
-            expect(stepRendered).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
+            expect(stepRendered).toHaveTextContent(initialStepType);
 
+            expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
             expect(mockRunWebAuthnAuthentication).not.toHaveBeenCalled();
           });
 
-          it('should still run the WebAuthn ceremony on manual click when config.webAuthnAutostart is false', async () => {
+          it('should not auto-start on Safari (non-Chromium) — Safari blocks auto-initiated WebAuthn ceremonies', async () => {
+            stubUserAgent(
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
+            );
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            const stepRendered = await screen.findByTestId('step-type');
+            expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+            expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+          });
+
+          it('should auto-start on Chromium browsers whose user agent also contains "Safari"', async () => {
+            stubUserAgent(
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            );
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            await waitFor(() => {
+              expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+            });
+          });
+
+          describe('config.webAuthnAutostart', () => {
+            it('should not auto-start a WebAuthn registration when config.webAuthnAutostart is false', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const stepRendered = await screen.findByTestId('step-type');
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+              expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+            });
+
+            it('should not auto-start a WebAuthn authentication when config.webAuthnAutostart is false', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const stepRendered = await screen.findByTestId('step-type');
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
+
+              expect(mockRunWebAuthnAuthentication).not.toHaveBeenCalled();
+            });
+
+            it('should still run the WebAuthn ceremony on manual click when config.webAuthnAutostart is false', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await waitFor(() => {
+                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+              });
+            });
+          });
+
+          describe('Registration', () => {
+            describe('passkey', () => {
+              it('should auto-start a single passkeys WebAuthn registration', async () => {
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                await waitFor(() => {
+                  expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                });
+                const action = firstCallAction(mockRunWebAuthnRegistration);
+                expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
+                expect(action.model.arguments).toHaveProperty('credentialCreationOptions');
+              });
+            });
+
+            describe('any-device', () => {
+              it('should auto-start a single platform-only any-device registration when a platform authenticator is available', async () => {
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnPlatformOnlyAnyDeviceAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                await waitFor(() => {
+                  expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                });
+                const action = firstCallAction(mockRunWebAuthnRegistration);
+                expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
+                expect(action.model.arguments).toHaveProperty('platformCredentialCreationOptions');
+                expect(action.model.arguments).not.toHaveProperty('crossPlatformCredentialCreationOptions');
+              });
+
+              it('should auto-start a single cross-platform-only any-device registration', async () => {
+                mockHaapiFetchWebAuthnStep(
+                  HAAPI_STEPS.REGISTRATION,
+                  createMockWebAuthnCrossPlatformOnlyAnyDeviceAction()
+                );
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                await waitFor(() => {
+                  expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                });
+                const action = firstCallAction(mockRunWebAuthnRegistration);
+                expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
+                expect(action.model.arguments).toHaveProperty('crossPlatformCredentialCreationOptions');
+                expect(action.model.arguments).not.toHaveProperty('platformCredentialCreationOptions');
+              });
+
+              it('should not auto-start platform-only any-device when no platform authenticator is available', async () => {
+                vi.stubGlobal(
+                  'PublicKeyCredential',
+                  stubPublicKeyCredential({ platformAuthenticatorAvailable: false })
+                );
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnPlatformOnlyAnyDeviceAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                const stepRendered = await screen.findByTestId('step-type');
+                expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+                expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+              });
+
+              it('should not auto-start when an any-device step has both platform and cross-platform actions', async () => {
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnAnyDeviceBothOptionsAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                const stepRendered = await screen.findByTestId('step-type');
+                expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+                expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+              });
+            });
+          });
+
+          describe('Authentication', () => {
+            it('should auto-start a single WebAuthn authentication action', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+
+              render(
+                <HaapiStepper>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              await waitFor(() => {
+                expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(1);
+              });
+              const action = firstCallAction(mockRunWebAuthnAuthentication);
+              expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_AUTHENTICATION);
+            });
+          });
+        });
+
+        describe('Registration', () => {
+          it('success: continuation routes through processHaapiNextStep and completes by redirecting to the client', async () => {
+            const action = createMockWebAuthnRegistrationAction();
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, action);
+            mockRunWebAuthnRegistration.mockResolvedValueOnce({
+              clientOperationData: {
+                action: action.model.continueActions[0],
+                payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              },
+            });
+            mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
 
             render(
               <HaapiStepper config={{ webAuthnAutostart: false }}>
@@ -509,118 +663,142 @@ describe('HaapiStepper', () => {
             act(() => button.click());
 
             await waitFor(() => {
-              expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+              expect(window.location.href).toBe(authorizationResponseUrl);
+            });
+          });
+
+          describe('error', () => {
+            beforeEach(() => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+              mockRunWebAuthnRegistration.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            });
+
+            it('provides the error via error.app', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+            });
+
+            it('does not throw to the React error boundary', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+              expect(mockThrowErrorToAppErrorBoundary).not.toHaveBeenCalled();
+            });
+
+            it('allows the user to retry — the ceremony replays', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+
+              act(() => button.click());
+              await waitFor(() => {
+                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+              });
+
+              act(() => button.click());
+              await waitFor(() => {
+                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(2);
+              });
             });
           });
         });
 
-        describe('WebAuthn Authentication', () => {
-          it('should auto-start a single WebAuthn authentication action', async () => {
-            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+        describe('Authentication', () => {
+          it('success: continuation routes through processHaapiNextStep and completes by redirecting to the client', async () => {
+            const action = createMockWebAuthnAuthenticationAction();
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, action);
+            mockRunWebAuthnAuthentication.mockResolvedValueOnce({
+              clientOperationData: {
+                action: action.model.continueActions[0],
+                payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              },
+            });
+            mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
 
             render(
-              <HaapiStepper>
+              <HaapiStepper config={{ webAuthnAutostart: false }}>
                 <TestComponent />
               </HaapiStepper>
             );
 
+            const button = await screen.findByTestId('action-button');
+            act(() => button.click());
+
             await waitFor(() => {
-              expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(1);
-            });
-            const action = firstCallAction(mockRunWebAuthnAuthentication);
-            expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_AUTHENTICATION);
-          });
-        });
-
-        describe('WebAuthn Registration', () => {
-          describe('passkey', () => {
-            it('should auto-start a single passkeys WebAuthn registration', async () => {
-              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
-
-              render(
-                <HaapiStepper>
-                  <TestComponent />
-                </HaapiStepper>
-              );
-
-              await waitFor(() => {
-                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
-              });
-              const action = firstCallAction(mockRunWebAuthnRegistration);
-              expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
-              expect(action.model.arguments).toHaveProperty('credentialCreationOptions');
+              expect(window.location.href).toBe(authorizationResponseUrl);
             });
           });
 
-          describe('any-device', () => {
-            it('should auto-start a single platform-only any-device registration when a platform authenticator is available', async () => {
-              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnPlatformOnlyAnyDeviceAction());
+          describe('error', () => {
+            beforeEach(() => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+              mockRunWebAuthnAuthentication.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            });
 
+            it('provides the error via error.app', async () => {
               render(
-                <HaapiStepper>
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
                   <TestComponent />
                 </HaapiStepper>
               );
 
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+            });
+
+            it('does not throw to the React error boundary', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+              expect(mockThrowErrorToAppErrorBoundary).not.toHaveBeenCalled();
+            });
+
+            it('allows the user to retry — the ceremony replays', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+
+              act(() => button.click());
               await waitFor(() => {
-                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(1);
               });
-              const action = firstCallAction(mockRunWebAuthnRegistration);
-              expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
-              expect(action.model.arguments).toHaveProperty('platformCredentialCreationOptions');
-              expect(action.model.arguments).not.toHaveProperty('crossPlatformCredentialCreationOptions');
-            });
 
-            it('should auto-start a single cross-platform-only any-device registration', async () => {
-              mockHaapiFetchWebAuthnStep(
-                HAAPI_STEPS.REGISTRATION,
-                createMockWebAuthnCrossPlatformOnlyAnyDeviceAction()
-              );
-
-              render(
-                <HaapiStepper>
-                  <TestComponent />
-                </HaapiStepper>
-              );
-
+              act(() => button.click());
               await waitFor(() => {
-                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(2);
               });
-              const action = firstCallAction(mockRunWebAuthnRegistration);
-              expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
-              expect(action.model.arguments).toHaveProperty('crossPlatformCredentialCreationOptions');
-              expect(action.model.arguments).not.toHaveProperty('platformCredentialCreationOptions');
-            });
-
-            it('should not auto-start platform-only any-device when no platform authenticator is available', async () => {
-              vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential({ platformAuthenticatorAvailable: false }));
-              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnPlatformOnlyAnyDeviceAction());
-
-              render(
-                <HaapiStepper>
-                  <TestComponent />
-                </HaapiStepper>
-              );
-
-              const stepRendered = await screen.findByTestId('step-type');
-              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
-
-              expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
-            });
-
-            it('should not auto-start when an any-device step has both platform and cross-platform actions', async () => {
-              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnAnyDeviceBothOptionsAction());
-
-              render(
-                <HaapiStepper>
-                  <TestComponent />
-                </HaapiStepper>
-              );
-
-              const stepRendered = await screen.findByTestId('step-type');
-              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
-
-              expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
             });
           });
         });
@@ -992,8 +1170,10 @@ vi.mock('../actions/client-operation/operations/bankid/open-bankid-app', () => (
 }));
 
 const { mockRunWebAuthnRegistration, mockRunWebAuthnAuthentication } = vi.hoisted(() => ({
-  mockRunWebAuthnRegistration: vi.fn(),
-  mockRunWebAuthnAuthentication: vi.fn(),
+  mockRunWebAuthnRegistration:
+    vi.fn<typeof import('../actions/client-operation/operations/webauthn').runWebAuthnRegistration>(),
+  mockRunWebAuthnAuthentication:
+    vi.fn<typeof import('../actions/client-operation/operations/webauthn').runWebAuthnAuthentication>(),
 }));
 vi.mock('../actions/client-operation/operations/webauthn', async () => {
   const actual = await vi.importActual<typeof import('../actions/client-operation/operations/webauthn')>(
@@ -1249,3 +1429,5 @@ function getTextContent(element: HTMLElement): string {
 function getHistoryData(element: HTMLElement): HaapiStepperHistoryEntry[] {
   return JSON.parse(getTextContent(element)) as HaapiStepperHistoryEntry[];
 }
+
+const failedWebAuthnCeremonyError = () => formatErrorStepData({ type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] });
