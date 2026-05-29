@@ -352,10 +352,3 @@ export interface HaapiMetadata {
   /** The name for the view that produced the response */
   viewName?: string;
 }
-
-export interface HaapiExternalBrowserFlowErrorMessages {
-  /** Launch failed (popup blocked, browser policy, etc.) */
-  launch?: string;
-  /** Resume failed — the parent could not consume the postMessage from the external flow (unexpected origin/type, or operation aborted). */
-  resume?: string;
-}
