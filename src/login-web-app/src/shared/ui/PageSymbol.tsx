@@ -31,5 +31,9 @@ export const PageSymbol = ({ viewName }: PageSymbolProps) => {
     return null;
   }
 
-  return <img className="haapi-stepper-page-symbol" src={src} alt="" role="presentation" />;
+  return (
+    <figure className="haapi-stepper-page-symbol" aria-hidden="true">
+      <img className="haapi-stepper-page-symbol-image" src={src} alt="HAAPI Page Symbol" role="presentation" />
+    </figure>
+  );
 };
