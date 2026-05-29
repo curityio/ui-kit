@@ -12,21 +12,21 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Logo } from './Logo';
-import { AppConfigContext } from '../feature/app-config/AppConfigContext';
-import type { BootstrapConfiguration } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../feature/app-config/types';
 
-const buildConfig = (logoPath: string): BootstrapConfiguration => ({
+const buildConfig = (logoPath: string): HaapiAppConfig => ({
   initialUrl: 'https://example/start',
-  haapi: {} as BootstrapConfiguration['haapi'],
+  haapi: {} as HaapiAppConfig['haapi'],
   theme: { logo: { path: logoPath, isInsideWell: false } },
 });
 
 describe('Logo', () => {
   it('renders an image with the src from theme.logo.path', () => {
     render(
-      <AppConfigContext value={buildConfig('/assets/logo.svg')}>
+      <HaapiAppConfigContext value={buildConfig('/assets/logo.svg')}>
         <Logo />
-      </AppConfigContext>
+      </HaapiAppConfigContext>
     );
 
     const img = screen.getByRole('presentation');

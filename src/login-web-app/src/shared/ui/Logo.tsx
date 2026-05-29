@@ -9,9 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { useAppConfig } from '../feature/app-config/AppConfigHook';
+import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 
 export const Logo = () => {
-  const { theme } = useAppConfig();
+  const { theme } = useHaapiAppConfig();
   return <img className="haapi-stepper-logo" src={theme.logo.path} alt="" role="presentation" />;
 };

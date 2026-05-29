@@ -53,7 +53,7 @@ import {
   HaapiTextFormField,
   HaapiUsernameFormField,
 } from '../../data-access';
-import { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
+import { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 
 /**
  * Public API provided by the `HaapiStepper`, accessed via the `useHaapiStepper` hook.
@@ -75,11 +75,22 @@ export interface HaapiStepperAPI {
  * CONFIG TYPINGS
  */
 export interface HaapiStepperConfig {
-  bootstrap: BootstrapConfiguration;
+  bootstrap: HaapiStepperBootstrapConfig;
   pollingInterval: number;
   bankIdAutostart: boolean;
   webAuthnAutostart: boolean;
   autoRedirectOnAuthenticationComplete: boolean;
+}
+
+export interface HaapiStepperBootstrapConfig {
+  initialUrl: string;
+  haapi: HaapiConfiguration;
+}
+
+declare global {
+  interface Window {
+    __CONFIG__?: HaapiStepperBootstrapConfig;
+  }
 }
 
 /*

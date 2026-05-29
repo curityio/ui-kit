@@ -10,6 +10,6 @@
  */
 
 import { createContext } from 'react';
-import type { BootstrapConfiguration } from '../../../haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiAppConfig } from './types';
 
-export const AppConfigContext = createContext<BootstrapConfiguration | null>(null);
+export const HaapiAppConfigContext = createContext<HaapiAppConfig | null>(null);

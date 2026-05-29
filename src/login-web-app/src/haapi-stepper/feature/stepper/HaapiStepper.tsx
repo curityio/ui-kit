@@ -28,8 +28,6 @@ import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
-import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
-import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
   HaapiStepperClientOperationAction,
   HaapiStepperConfig,
@@ -46,14 +44,6 @@ import type {
 import { useThrowErrorToAppErrorBoundary } from '../../util/useThrowErrorToAppErrorBoundary';
 import { useRefCallback } from '../../util/useRefCallBack';
 import { handleAuthenticationOrRegistrationStep } from './step-handlers/authentication-or-registration-step';
-
-const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
-  bootstrap: configuration,
-  pollingInterval: 3000,
-  bankIdAutostart: true,
-  autoRedirectOnAuthenticationComplete: true,
-  webAuthnAutostart: true,
-};
 
 interface HaapiStepperProps {
   children: ReactNode;
@@ -83,6 +73,30 @@ type SetCurrentStepAndUpdateHistoryFn = (
  * - **Action Processing**: Supports multiple action types (forms, links, client operations).
  * - **Error Handling**: Provides comprehensive error state management with user feedback.
  * - **Type Safety**: Offers full TypeScript support with strict typing.
+ *
+ * ## Configuration modes
+ *
+ * The HaapiStepper supports two ways of receiving its bootstrap configuration
+ * (`initialUrl`, HAAPI driver config, theme):
+ *
+ * 1. **Served mode (default)** — the stepper runs inside a server-rendered
+ *    shell (e.g. the Curity Login Web App) that injects the config onto
+ *    `window.__CONFIG__` before the SPA boots. No prop is required:
+ *
+ *    ```tsx
+ *    <HaapiStepper>...</HaapiStepper>
+ *    ```
+ *
+ * 2. **Standalone (library) mode** — when consumed as a library or in any
+ *    context without `window.__CONFIG__`, the consumer supplies the bootstrap
+ *    explicitly via `config.bootstrap`.
+ *
+ *    ```tsx
+ *    <HaapiStepper config={{ bootstrap }}>...</HaapiStepper>
+ *    ```
+ *
+ * See the [HAAPI Stepper README](../../README.md#basic-setup) for the full
+ * configuration reference.
  *
  * ## HAAPI Stepper API
  *
@@ -273,7 +287,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   const [history, setHistory] = useState<HaapiStepperHistoryEntry[]>([]);
   const throwErrorToAppErrorBoundary = useThrowErrorToAppErrorBoundary();
   const pendingOperation = useRef<AbortController | NodeJS.Timeout | null>(null);
-  const configResult = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
+  const configResult = useMemo(() => resolveStepperConfig(config), [config]);
   const { sendHaapiFetchRequest } = useHaapiFetch(configResult.bootstrap.haapi);
 
   const setCurrentStepAndUpdateHistory = useCallback<SetCurrentStepAndUpdateHistoryFn>(
@@ -458,4 +472,21 @@ function getInitialStepLink(initialUrl: string) {
   };
 
   return initialStepLink;
+}
+
+function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): Required<HaapiStepperConfig> {
+  const { bootstrap, ...configResult } = {
+    pollingInterval: 3000,
+    bankIdAutostart: true,
+    webAuthnAutostart: true,
+    autoRedirectOnAuthenticationComplete: true,
+    bootstrap: window.__CONFIG__,
+    ...config,
+  };
+  if (!bootstrap) {
+    throw new Error(
+      'HaapiStepper: no bootstrap configuration available. Pass it via the `config.bootstrap` prop or ensure `window.__CONFIG__` is set.'
+    );
+  }
+  return { ...configResult, bootstrap };
 }

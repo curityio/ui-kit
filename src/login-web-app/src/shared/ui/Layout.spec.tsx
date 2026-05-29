@@ -12,21 +12,21 @@
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 import { Layout } from './Layout';
-import { AppConfigContext } from '../feature/app-config/AppConfigContext';
-import type { BootstrapConfiguration } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../feature/app-config/types';
 
 const renderLayout = (isInsideWell: boolean) => {
-  const config: BootstrapConfiguration = {
+  const config: HaapiAppConfig = {
     initialUrl: 'https://example/start',
-    haapi: {} as BootstrapConfiguration['haapi'],
+    haapi: {} as HaapiAppConfig['haapi'],
     theme: { logo: { path: '/assets/logo.svg', isInsideWell } },
   };
   return render(
-    <AppConfigContext value={config}>
+    <HaapiAppConfigContext value={config}>
       <Layout>
         <div data-testid="content" />
       </Layout>
-    </AppConfigContext>
+    </HaapiAppConfigContext>
   );
 };
 

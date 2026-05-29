@@ -11,11 +11,11 @@
 
 import { ReactNode } from 'react';
 import { Well } from '../../haapi-stepper/ui/well/Well';
-import { useAppConfig } from '../feature/app-config/AppConfigHook';
+import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 import { Logo } from './Logo';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const { isInsideWell } = useAppConfig().theme.logo;
+  const { isInsideWell } = useHaapiAppConfig().theme.logo;
 
   return (
     <>
