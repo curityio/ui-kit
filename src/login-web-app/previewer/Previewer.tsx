@@ -19,6 +19,16 @@ import { formatNextStepData } from '../src/haapi-stepper/feature/stepper/data-fo
 import { HaapiStepperContext } from '../src/haapi-stepper/feature/stepper/HaapiStepperContext';
 import { type HaapiStepperAPI } from '../src/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { HaapiErrorStep } from '../src/haapi-stepper/data-access';
+import { AppConfigContext } from '../src/shared/feature/app-config/AppConfigContext';
+import type { BootstrapConfiguration } from '../src/haapi-stepper/data-access/bootstrap-configuration';
+
+const mockAppConfig: BootstrapConfiguration = {
+  initialUrl: '',
+  haapi: { clientId: '', tokenEndpoint: '' },
+  theme: {
+    logo: { path: '', isInsideWell: false },
+  },
+};
 
 enum Page {
   START = 'start',
@@ -56,10 +66,12 @@ export function Previewer() {
   };
 
   return (
-    <HaapiStepperContext value={mockHaapiStepperValue}>
-      <Layout onNavigate={page => setCurrentPage(page as Page)} currentPage={currentPage}>
-        {renderPreview()}
-      </Layout>
-    </HaapiStepperContext>
+    <AppConfigContext value={mockAppConfig}>
+      <HaapiStepperContext value={mockHaapiStepperValue}>
+        <Layout onNavigate={page => setCurrentPage(page as Page)} currentPage={currentPage}>
+          {renderPreview()}
+        </Layout>
+      </HaapiStepperContext>
+    </AppConfigContext>
   );
 }
