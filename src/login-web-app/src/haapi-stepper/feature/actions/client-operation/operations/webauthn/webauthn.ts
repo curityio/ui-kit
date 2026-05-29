@@ -19,7 +19,7 @@ import type { HaapiStepperError } from '../../../../stepper/haapi-stepper.types'
 import { isPasskeysWebAuthnRegistrationAction, isWebAuthnApiSupported } from './utils';
 import { WEBAUTHN_ERROR_TYPE, WEBAUTHN_OPERATION } from './typings';
 import { ClientOperationResult } from '../typings';
-import { getHaapiStepperError } from '../client-operations';
+import { getHaapiStepperError } from '../helpers';
 
 type WebAuthnCredentialResult =
   | { credential: PublicKeyCredential; error?: undefined }

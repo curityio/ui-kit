@@ -14,15 +14,9 @@ import {
   HAAPI_ACTION_TYPES,
   HaapiAction,
 } from '../../../../data-access/types/haapi-action.types';
-import {
-  HAAPI_PROBLEM_STEPS,
-  HaapiLink,
-  HaapiStep,
-  HaapiUserMessage,
-} from '../../../../data-access/types/haapi-step.types';
+import { HaapiLink, HaapiStep } from '../../../../data-access/types/haapi-step.types';
 import { RefObject } from 'react';
-import { HaapiStepperAction, HaapiStepperError, HaapiStepperLink } from '../../../stepper/haapi-stepper.types';
-import { formatErrorStepData } from '../../../stepper/data-formatters/problem-step';
+import { HaapiStepperAction, HaapiStepperLink } from '../../../stepper/haapi-stepper.types';
 import { isBankIdClientOperation, runBankIdAuthentication } from './bankid';
 import { isExternalBrowserFlowClientOperation, runExternalBrowserFlow } from './external-browser-flow';
 import {
@@ -65,23 +59,4 @@ export async function performClientOperation(
   }
 
   throw new Error(`Unsupported client operation: ${action.model.name}`);
-}
-
-/**
- * Synthesises a {@link HaapiStepperError} for a client-operation failure (IS-11327).
- *
- * Client-operation failures (WebAuthn ceremony cancel / timeout / parse error / unsupported
- * API today; BankID / EBF on the same pattern when their per-operation error handling lands)
- * happen on the client and aren't part of the HAAPI response, so the stepper has no native
- * category for them. We treat them as `AppError`-class problems of the current step — building
- * a `HaapiUnexpectedProblemStep` via {@link formatErrorStepData} — so they surface via
- * `useHaapiStepper().error.app` like any server-driven problem and consumers handle them
- * through the same channel (e.g. `HaapiStepperErrorNotifier`).
- */
-export function getHaapiStepperError(messageText: string | undefined): HaapiStepperError {
-  const messages: HaapiUserMessage[] = messageText ? [{ text: messageText }] : [];
-  return formatErrorStepData({
-    type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-    messages,
-  });
 }
