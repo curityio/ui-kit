@@ -13,7 +13,7 @@ import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 
 export const Logo = () => {
   const { theme } = useHaapiAppConfig();
-  const logo = theme?.logo;
+  const logo = theme.logo;
   if (!logo) {
     return null;
   }

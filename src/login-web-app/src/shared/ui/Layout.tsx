@@ -15,7 +15,7 @@ import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 import { Logo } from './Logo';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const { isInsideWell } = useHaapiAppConfig().theme?.logo ?? {};
+  const { isInsideWell } = useHaapiAppConfig().theme.logo ?? {};
 
   return (
     <>
