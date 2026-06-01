@@ -33,7 +33,11 @@ import {
 } from '../../../shared/util/api-responses';
 import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
-import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
+import type {
+  HaapiStepperCompletedStep,
+  HaapiStepperHistoryEntry,
+  HaapiStepperNextStepAction,
+} from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
 import { isQrCodeLink } from '../../util/isQrCodeLink';
 import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
@@ -854,6 +858,23 @@ describe('HaapiStepper', () => {
           });
         });
 
+        it('should throw error to the error boundary when links exist but none have rel "authorization-response"', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType, { linksWithoutAuthorizationResponse: true });
+
+          await waitFor(() => {
+            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
+            );
+          });
+        });
+
         it('should not update the current step when redirecting', async () => {
           render(
             <HaapiStepper>
@@ -888,6 +909,42 @@ describe('HaapiStepper', () => {
           });
 
           expect(window.location.href).not.toBe(authorizationResponseUrl);
+        });
+
+        it('should add the completed step to history with the full OAuth payload accessible to consumers', async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+          });
+
+          const historyData = getHistoryData(screen.getByTestId('history'));
+          const completedHistoryEntry = historyData[
+            historyData.length - 1
+          ] as HaapiStepperHistoryEntry<HaapiStepperCompletedStep>;
+
+          expect(completedHistoryEntry.step.type).toBe(stepType);
+
+          if (label === 'success') {
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.properties).toMatchObject({
+              code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
+              iss: 'https://localhost:8443/dev/oauth/anonymous',
+              state: 'foo',
+            });
+          } else {
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.error).toBe('server_error');
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.error_description).toBe('An error occurred during authorization');
+          }
         });
       });
     });
@@ -1332,10 +1389,22 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       }
       break;
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-      stepMock = config?.noLinks ? completedWithSuccessStepWithoutLinks : completedWithSuccessStep;
+      if (config?.noLinks) {
+        stepMock = completedWithSuccessStepWithoutLinks;
+      } else if (config?.linksWithoutAuthorizationResponse) {
+        stepMock = { ...completedWithSuccessStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      } else {
+        stepMock = completedWithSuccessStep;
+      }
       break;
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      stepMock = config?.noLinks ? completedWithErrorStepWithoutLinks : completedWithErrorStep;
+      if (config?.noLinks) {
+        stepMock = completedWithErrorStepWithoutLinks;
+      } else if (config?.linksWithoutAuthorizationResponse) {
+        stepMock = { ...completedWithErrorStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      } else {
+        stepMock = completedWithErrorStep;
+      }
       break;
     case HAAPI_STEPS.REGISTRATION:
       stepMock = createRegistrationStep();
