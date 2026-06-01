@@ -506,8 +506,7 @@ describe('HaapiStepper', () => {
           });
 
           it('should not auto-start when WebAuthn API is not supported', async () => {
-            // Remove the PublicKeyCredential stub installed by beforeEach so isWebAuthnApiSupported() returns false.
-            vi.unstubAllGlobals();
+            vi.stubGlobal('PublicKeyCredential', undefined);
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
 
             render(
