@@ -10,27 +10,27 @@
  */
 
 import { use } from 'react';
-import { AppConfigContext } from './AppConfigContext';
+import { HaapiAppConfigContext } from './HaapiAppConfigContext';
 
 /**
- * Hook to access the bootstrap configuration provided by `<AppConfigProvider>`.
+ * Hook to access the bootstrap configuration provided by `<HaapiAppConfig>`.
  *
- * @throws {Error} If used outside of an `<AppConfigProvider>`.
+ * @throws {Error} If used outside of a `<HaapiAppConfig>` provider.
  *
  * @example
  * ```tsx
  * function Logo() {
- *   const { theme } = useAppConfig();
+ *   const { theme } = useHaapiAppConfig();
  *   return <img src={theme.logo.path} alt="" />;
  * }
  * ```
  */
-export function useAppConfig() {
-  const appConfig = use(AppConfigContext);
+export function useHaapiAppConfig() {
+  const haapiAppConfig = use(HaapiAppConfigContext);
 
-  if (!appConfig) {
-    throw new Error('useAppConfig must be used inside AppConfigProvider');
+  if (!haapiAppConfig) {
+    throw new Error('useHaapiAppConfig must be used inside HaapiAppConfig');
   }
 
-  return appConfig;
+  return haapiAppConfig;
 }

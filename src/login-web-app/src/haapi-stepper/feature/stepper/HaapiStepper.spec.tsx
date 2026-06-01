@@ -35,12 +35,12 @@ import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
 import type {
   HaapiStepperCompletedStep,
+  HaapiStepperBootstrapConfig,
   HaapiStepperHistoryEntry,
   HaapiStepperNextStepAction,
 } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
 import { isQrCodeLink } from '../../util/isQrCodeLink';
-import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 import {
   createMockWebAuthnAnyDeviceBothOptionsAction,
   createMockWebAuthnAuthenticationAction,
@@ -57,12 +57,85 @@ describe('HaapiStepper', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal('location', { href: '' });
+    vi.stubGlobal('__CONFIG__', mockConfiguration);
     mockHaapiFetchStep(initialStepType);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     mockHaapiFetch.mockReset();
+  });
+
+  describe('Configuration modes', () => {
+    it('served mode: defaults the bootstrap config to window.__CONFIG__ when no config.bootstrap is passed', () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(mockConfiguration.initialUrl, { method: 'GET' });
+    });
+
+    it('standalone (library) mode: uses config.bootstrap supplied by the consumer, ignoring the default', () => {
+      const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
+        initialUrl: 'https://standalone.example/start',
+        haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+      };
+
+      render(
+        <HaapiStepper config={{ bootstrap: standaloneBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(standaloneBootstrapConfig.initialUrl, { method: 'GET' });
+    });
+
+    it('standalone (library) mode: works without window.__CONFIG__ when config.bootstrap is supplied', async () => {
+      vi.stubGlobal('__CONFIG__', undefined);
+
+      const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
+        initialUrl: 'https://standalone.example/start',
+        haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+      };
+
+      render(
+        <HaapiStepper config={{ bootstrap: standaloneBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(standaloneBootstrapConfig.initialUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
+
+      await goToNextStep(HAAPI_STEPS.POLLING);
+      await waitFor(() => {
+        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+      });
+    });
+
+    it('throws an actionable error when neither window.__CONFIG__ nor config.bootstrap is available', () => {
+      vi.stubGlobal('__CONFIG__', undefined);
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockReturnValue(undefined);
+
+      expect(() =>
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        )
+      ).toThrow(/no bootstrap configuration available.*config\.bootstrap.*window\.__CONFIG__/s);
+
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('Steps', () => {
@@ -80,6 +153,21 @@ describe('HaapiStepper', () => {
       expect(stepRendered).toHaveTextContent(initialStepType);
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
       expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+    });
+
+    it('should use the bootstrap config provided via the stepper config prop instead of the default', async () => {
+      const overrideUrl = 'https://override.example/start';
+
+      render(
+        <HaapiStepper config={{ bootstrap: { initialUrl: overrideUrl, haapi: {} } as HaapiStepperBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledWith(overrideUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
     });
 
     it('should go to the next step and provide the updated current step', async () => {
@@ -418,8 +506,7 @@ describe('HaapiStepper', () => {
           });
 
           it('should not auto-start when WebAuthn API is not supported', async () => {
-            // Remove the PublicKeyCredential stub installed by beforeEach so isWebAuthnApiSupported() returns false.
-            vi.unstubAllGlobals();
+            vi.stubGlobal('PublicKeyCredential', undefined);
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
 
             render(
@@ -1208,23 +1295,20 @@ describe('HaapiStepper', () => {
   });
 });
 
-const mockHaapiFetch = vi.hoisted(() => vi.fn());
-vi.mock('../../data-access/haapi-fetch-initializer', () => {
+const mockHaapiFetch = vi.fn();
+vi.mock('@curity/identityserver-haapi-web-driver', () => {
   return {
-    default: mockHaapiFetch,
+    createHaapiFetch: () => mockHaapiFetch,
   };
 });
 
-const mockConfiguration: Partial<BootstrapConfiguration> = vi.hoisted(() => {
-  return {
-    initialUrl: 'https://example.com/auth',
-  };
-});
-vi.mock('../../data-access/bootstrap-configuration', () => {
-  return {
-    configuration: mockConfiguration,
-  };
-});
+// Default served-mode bootstrap stubbed onto `window.__CONFIG__` in `beforeEach`.
+// Per-test code that needs to simulate a different scenario (library mode without
+// a global, failure mode, …) calls `vi.stubGlobal('__CONFIG__', …)` to override.
+const mockConfiguration: Partial<HaapiStepperBootstrapConfig> = vi.hoisted(() => ({
+  initialUrl: 'https://example.com/auth',
+  haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+}));
 
 const mockThrowErrorToAppErrorBoundary = vi.fn();
 vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({

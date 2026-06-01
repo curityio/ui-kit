@@ -12,26 +12,43 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Logo } from './Logo';
-import { AppConfigContext } from '../feature/app-config/AppConfigContext';
-import type { BootstrapConfiguration } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../feature/app-config/types';
 
-const buildConfig = (logoPath: string): BootstrapConfiguration => ({
+const buildConfig = (logoPath: string): HaapiAppConfig => ({
   initialUrl: 'https://example/start',
-  haapi: {} as BootstrapConfiguration['haapi'],
+  haapi: {} as HaapiAppConfig['haapi'],
   theme: { logo: { path: logoPath, isInsideWell: false } },
 });
 
 describe('Logo', () => {
   it('renders an image with the src from theme.logo.path', () => {
     render(
-      <AppConfigContext value={buildConfig('/assets/logo.svg')}>
+      <HaapiAppConfigContext value={buildConfig('/assets/logo.svg')}>
         <Logo />
-      </AppConfigContext>
+      </HaapiAppConfigContext>
     );
 
     const img = screen.getByRole('presentation');
     expect(img.tagName).toBe('IMG');
     expect(img).toHaveAttribute('src', '/assets/logo.svg');
     expect(img).toHaveClass('haapi-stepper-logo');
+  });
+
+  it('renders nothing when theme.logo is not configured', () => {
+    const configWithoutLogo: HaapiAppConfig = {
+      initialUrl: 'https://example/start',
+      haapi: {} as HaapiAppConfig['haapi'],
+      theme: {},
+    };
+
+    const { container } = render(
+      <HaapiAppConfigContext value={configWithoutLogo}>
+        <Logo />
+      </HaapiAppConfigContext>
+    );
+
+    expect(container.querySelector('img')).toBeNull();
+    expect(screen.queryByRole('presentation')).toBeNull();
   });
 });

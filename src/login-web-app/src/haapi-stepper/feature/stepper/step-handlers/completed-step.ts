@@ -10,7 +10,7 @@
  */
 
 import { HAAPI_STEPS, type HaapiCompletedStep } from '../../../data-access/types/haapi-step.types';
-import type { HaapiStepperConfig } from '../HaapiStepper';
+import type { HaapiStepperConfig } from '../haapi-stepper.types';
 import { formatNextStepData } from '../data-formatters/format-next-step-data';
 
 export function handleCompletedStep(step: HaapiCompletedStep, config: HaapiStepperConfig) {

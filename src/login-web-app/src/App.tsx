@@ -10,7 +10,7 @@
  */
 
 import { Layout } from './shared/ui/Layout';
-import { AppConfig } from './shared/feature/app-config/AppConfig';
+import { HaapiAppConfigProvider } from './shared/feature/app-config/HaapiAppConfigProvider';
 import { ErrorBoundary } from './shared/feature/error-handling/ErrorBoundary';
 import { HaapiStepperStepUI } from './haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { HaapiStepper } from './haapi-stepper/feature/stepper/HaapiStepper';
@@ -18,7 +18,7 @@ import { HaapiStepperErrorNotifier } from './haapi-stepper/feature/stepper/Haapi
 
 export function App() {
   return (
-    <AppConfig>
+    <HaapiAppConfigProvider>
       <ErrorBoundary>
         <HaapiStepper>
           <Layout>
@@ -28,6 +28,6 @@ export function App() {
           </Layout>
         </HaapiStepper>
       </ErrorBoundary>
-    </AppConfig>
+    </HaapiAppConfigProvider>
   );
 }
