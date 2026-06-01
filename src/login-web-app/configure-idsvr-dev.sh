@@ -57,4 +57,4 @@ API_DRIVEN_UI_DIR=$OVERRIDES_DIR/views/api-driven-ui
 
 mkdir -p $API_DRIVEN_UI_DIR
 
-cp ./loader-dev.vm.html $API_DRIVEN_UI_DIR/index.vm
+cp ./loader-dev.vm $API_DRIVEN_UI_DIR/index.vm

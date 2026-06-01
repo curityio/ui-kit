@@ -10,13 +10,22 @@
  */
 
 import { ReactNode } from 'react';
-import { Header } from './header/Header';
+import { Well } from '../../haapi-stepper/ui/well/Well';
+import { useAppConfig } from '../feature/app-config/AppConfigHook';
+import { Logo } from './Logo';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
+  const { isInsideWell } = useAppConfig().theme.logo;
+
   return (
-    <div className="h100">
-      <Header />
-      <main className="app-layout">{children}</main>
-    </div>
+    <>
+      <main className="app-layout">
+        {!isInsideWell && <Logo />}
+        <Well>
+          {isInsideWell && <Logo />}
+          <div className="h100">{children}</div>
+        </Well>
+      </main>
+    </>
   );
 };

@@ -14,94 +14,163 @@ import {
   HaapiWebAuthnAuthenticationClientOperationAction,
   HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../../../../data-access/types/haapi-action.types';
-import { HaapiFetchFormAction } from '../../../../../data-access/types/haapi-fetch.types';
-import {
-  isAnyDeviceWebAuthnRegistrationAction,
-  isPasskeysWebAuthnRegistrationAction,
-  isWebAuthnApiSupported,
-} from './utils';
+import { HaapiStep } from '../../../../../data-access/types/haapi-step.types';
+import type { HaapiStepperError } from '../../../../stepper/haapi-stepper.types';
+import { isPasskeysWebAuthnRegistrationAction, isWebAuthnApiSupported } from './utils';
+import { WEBAUTHN_ERROR_TYPE, WEBAUTHN_OPERATION } from './typings';
+import { ClientOperationResult } from '../typings';
+import { getHaapiStepperError } from '../helpers';
 
-const WEBAUTHN_API_NOT_SUPPORTED_ERROR_MESSAGE = 'WebAuthn API is not supported in this browser';
+type WebAuthnCredentialResult =
+  | { credential: PublicKeyCredential; error?: undefined }
+  | { credential?: undefined; error: HaapiStepperError };
 
-/**
- * Executes the `webauthn-registration` ceremony: prompts the browser for a new public-key
- * credential and returns the HAAPI continue-action with the credential serialised under the
- * payload key matching the option the server offered (`credential` / `platformCredential` /
- * `crossPlatformCredential` (`HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION`)).
- */
 export async function runWebAuthnRegistration(
   action: HaapiWebAuthnRegistrationClientOperationAction,
-  abortSignal: AbortSignal
-): Promise<HaapiFetchFormAction> {
-  if (!isWebAuthnApiSupported()) {
-    throw new Error(WEBAUTHN_API_NOT_SUPPORTED_ERROR_MESSAGE);
+  abortSignal: AbortSignal,
+  currentStep: HaapiStep | null
+): Promise<ClientOperationResult> {
+  const selectedOption = getWebAuthnRegistrationSelectedOption(action);
+  const { credential, error } = await createWebAuthnRegistrationCredential(action, abortSignal, currentStep);
+
+  if (error) {
+    return { clientOperationError: error };
   }
 
-  const selectedOption = getWebAuthnRegistrationSelectedOption(action);
-  const credential = await createWebAuthnRegistrationCredential(action, abortSignal);
-
   return {
-    action: action.model.continueActions[0],
-    payload: { [selectedOption]: credential.toJSON() as unknown },
+    clientOperationData: {
+      action: action.model.continueActions[0],
+      payload: { [selectedOption]: credential.toJSON() as unknown },
+    },
   };
 }
 
-/**
- * Executes the `webauthn-authentication` ceremony: prompts the browser for an existing
- * public-key credential and returns the HAAPI continue-action with the credential serialised
- * under the `credential` payload key.
- */
 export async function runWebAuthnAuthentication(
   action: HaapiWebAuthnAuthenticationClientOperationAction,
-  abortSignal: AbortSignal
-): Promise<HaapiFetchFormAction> {
-  if (!isWebAuthnApiSupported()) {
-    throw new Error(WEBAUTHN_API_NOT_SUPPORTED_ERROR_MESSAGE);
+  abortSignal: AbortSignal,
+  currentStep: HaapiStep | null
+): Promise<ClientOperationResult> {
+  const { credential, error } = await getWebAuthnAuthenticationCredential(action, abortSignal, currentStep);
+
+  if (error) {
+    return { clientOperationError: error };
   }
 
-  const credential = await getWebAuthnAuthenticationCredential(action, abortSignal);
-
   return {
-    action: action.model.continueActions[0],
-    payload: { credential: credential.toJSON() as unknown },
+    clientOperationData: {
+      action: action.model.continueActions[0],
+      payload: { credential: credential.toJSON() as unknown },
+    },
   };
 }
 
 async function createWebAuthnRegistrationCredential(
   action: HaapiWebAuthnRegistrationClientOperationAction,
-  abortSignal: AbortSignal
-): Promise<PublicKeyCredential> {
-  const creationOptions = getWebAuthnRegistrationCreationOptions(action);
-  const publicKey = PublicKeyCredential.parseCreationOptionsFromJSON(creationOptions);
-  const credential = (await navigator.credentials.create({
-    publicKey,
-    signal: abortSignal,
-  })) as PublicKeyCredential | null;
-
-  if (credential === null) {
-    throw new Error('Could not create credential');
+  abortSignal: AbortSignal,
+  currentStep: HaapiStep | null
+): Promise<WebAuthnCredentialResult> {
+  if (!isWebAuthnApiSupported()) {
+    return {
+      error: getHaapiStepperError(
+        getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+      ),
+    };
   }
 
-  return credential;
+  try {
+    const publicKey = PublicKeyCredential.parseCreationOptionsFromJSON(getWebAuthnRegistrationCreationOptions(action));
+    const credential = (await navigator.credentials.create({
+      publicKey,
+      signal: abortSignal,
+    })) as PublicKeyCredential | null;
+
+    if (credential === null) {
+      return {
+        error: getHaapiStepperError(
+          getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+        ),
+      };
+    }
+
+    return { credential };
+  } catch (error) {
+    return {
+      error: getHaapiStepperError(
+        getWebAuthnErrorMessage(getWebAuthnErrorType(error), WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+      ),
+    };
+  }
 }
 
 async function getWebAuthnAuthenticationCredential(
   action: HaapiWebAuthnAuthenticationClientOperationAction,
-  abortSignal: AbortSignal
-): Promise<PublicKeyCredential> {
-  const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(
-    action.model.arguments.credentialRequestOptions.publicKey
-  );
-  const credential = (await navigator.credentials.get({
-    publicKey,
-    signal: abortSignal,
-  })) as PublicKeyCredential | null;
-
-  if (credential === null) {
-    throw new Error('Could not get credential');
+  abortSignal: AbortSignal,
+  currentStep: HaapiStep | null
+): Promise<WebAuthnCredentialResult> {
+  if (!isWebAuthnApiSupported()) {
+    return {
+      error: getHaapiStepperError(
+        getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+      ),
+    };
   }
 
-  return credential;
+  try {
+    const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(
+      action.model.arguments.credentialRequestOptions.publicKey
+    );
+    const credential = (await navigator.credentials.get({
+      publicKey,
+      signal: abortSignal,
+    })) as PublicKeyCredential | null;
+
+    if (credential === null) {
+      return {
+        error: getHaapiStepperError(
+          getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+        ),
+      };
+    }
+
+    return { credential };
+  } catch (error) {
+    return {
+      error: getHaapiStepperError(
+        getWebAuthnErrorMessage(getWebAuthnErrorType(error), WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+      ),
+    };
+  }
+}
+
+export const WEBAUTHN_ERROR_MESSAGES = {
+  cancelOrTimeout: 'The operation was cancelled or timed out.',
+  registration: 'Registration failed.',
+  authentication: 'Authentication failed.',
+} as const;
+
+function getWebAuthnErrorMessage(
+  type: WEBAUTHN_ERROR_TYPE,
+  operation: WEBAUTHN_OPERATION,
+  currentStep: HaapiStep | null
+): string {
+  // `currentStep` is kept on the signature for forward-compat with BE-supplied viewData copy;
+  // until those keys land, every bucket resolves to a hardcoded string.
+  void currentStep;
+  return type === WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT
+    ? WEBAUTHN_ERROR_MESSAGES.cancelOrTimeout
+    : operation === WEBAUTHN_OPERATION.REGISTRATION
+      ? WEBAUTHN_ERROR_MESSAGES.registration
+      : WEBAUTHN_ERROR_MESSAGES.authentication;
+}
+
+function getWebAuthnErrorType(error: unknown): WEBAUTHN_ERROR_TYPE {
+  if (!(error instanceof DOMException)) {
+    throw error;
+  }
+  if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
+    return WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT;
+  }
+  return WEBAUTHN_ERROR_TYPE.FAILED;
 }
 
 function getWebAuthnRegistrationSelectedOption(
@@ -111,17 +180,12 @@ function getWebAuthnRegistrationSelectedOption(
     return HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION.CREDENTIAL;
   }
 
-  if (isAnyDeviceWebAuthnRegistrationAction(action)) {
-    const args = action.model.arguments;
-    if (args.platformCredentialCreationOptions) {
-      return HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION.PLATFORM_CREDENTIAL;
-    }
-    if (args.crossPlatformCredentialCreationOptions) {
-      return HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION.CROSS_PLATFORM_CREDENTIAL;
-    }
+  const anyDeviceWebAuthRegistrationArgs = action.model.arguments;
+  if (anyDeviceWebAuthRegistrationArgs.platformCredentialCreationOptions) {
+    return HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION.PLATFORM_CREDENTIAL;
+  } else {
+    return HAAPI_WEBAUTHN_REGISTRATION_SELECTED_OPTION.CROSS_PLATFORM_CREDENTIAL;
   }
-
-  throw new Error('webauthn-registration action has no credential creation options');
 }
 
 function getWebAuthnRegistrationCreationOptions(
@@ -131,15 +195,10 @@ function getWebAuthnRegistrationCreationOptions(
     return action.model.arguments.credentialCreationOptions.publicKey;
   }
 
-  if (isAnyDeviceWebAuthnRegistrationAction(action)) {
-    const args = action.model.arguments;
-    if (args.platformCredentialCreationOptions) {
-      return args.platformCredentialCreationOptions.publicKey;
-    }
-    if (args.crossPlatformCredentialCreationOptions) {
-      return args.crossPlatformCredentialCreationOptions.publicKey;
-    }
+  const anyDeviceWebAuthRegistrationArgs = action.model.arguments;
+  if (anyDeviceWebAuthRegistrationArgs.platformCredentialCreationOptions) {
+    return anyDeviceWebAuthRegistrationArgs.platformCredentialCreationOptions.publicKey;
+  } else {
+    return anyDeviceWebAuthRegistrationArgs.crossPlatformCredentialCreationOptions.publicKey;
   }
-
-  throw new Error('webauthn-registration action has no credential creation options');
 }

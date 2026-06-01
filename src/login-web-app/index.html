@@ -28,13 +28,7 @@
       }
 
       // Set the configuration object expected by the application
-      window.__CONFIG__ = {
-        initialUrl: arg('initialUrl'),
-        haapi: {
-          clientId: arg('haapi_clientId'),
-          tokenEndpoint: arg('haapi_tokenEndpoint'),
-        },
-      };
+      window.__CONFIG__ = JSON.parse(arg('configuration'));
 
       // Change the current URL to match the original request to Identity Server, so that it looks like the
       // application was loaded directly by the server's template

@@ -18,11 +18,27 @@
   </head>
   <body>
     <script>
+      const configuration = {
+        initialUrl: '$_apiDrivenInitialUrl',
+        haapi: {
+          clientId: '$_apiDrivenClientInfo.clientId',
+          tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        },
+        theme: {
+          logo: {
+            path: '$!logo_path',
+            isInsideWell: #if ($logo_inside) true #else false #end,
+          },
+          #if ($show_symbol)
+          pageSymbols: {
+              default: '$!page_symbol',
+          }
+          #end
+        },
+      };
       const query = new URLSearchParams({
         originalUrl: window.location.href,
-        initialUrl: '$_apiDrivenInitialUrl',
-        haapi_clientId: '$_apiDrivenClientInfo.clientId',
-        haapi_tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        configuration: JSON.stringify(configuration),
       });
 
       const redirect = new URL('/', window.location.href);
