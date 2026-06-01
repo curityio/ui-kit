@@ -24,17 +24,7 @@
           clientId: '$_apiDrivenClientInfo.clientId',
           tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
         },
-        theme: {
-          logo: {
-            path: '$!logo_path',
-            isInsideWell: #if ($logo_inside) true #else false #end,
-          },
-          #if ($show_symbol)
-          pageSymbols: {
-              default: '$!page_symbol',
-          }
-          #end
-        },
+        theme: #parse("fragments/api-driven-ui/theme"),
       };
       const query = new URLSearchParams({
         originalUrl: window.location.href,
