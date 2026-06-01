@@ -2066,7 +2066,7 @@ describe('HaapiStepperStepUI', () => {
         }
       );
 
-      const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')!;
+      const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')!;
       const messages = screen.getByTestId('messages');
 
       expect(pageSymbol).toHaveAttribute('src', '/symbols/html-form.svg');
@@ -2075,7 +2075,7 @@ describe('HaapiStepperStepUI', () => {
 
     it('renders nothing when theme.pageSymbols is absent', () => {
       renderWithContext(<HaapiStepperStepUI />);
-      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toBeNull();
     });
 
     it('renders the page symbol above the BankID QR link in the BankID built-in UI', () => {
@@ -2090,7 +2090,7 @@ describe('HaapiStepperStepUI', () => {
         }
       );
 
-      const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')!;
+      const pageSymbol = document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')!;
       const qrButton = screen.getByTestId('qr-code-button');
 
       expect(pageSymbol).toHaveAttribute('src', '/symbols/bankid.svg');

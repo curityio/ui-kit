@@ -54,7 +54,7 @@ describe('PageSymbol', () => {
     'renders the exact `views` entry for the %s category even when a plugin or default would also match',
     (_, viewName, expected) => {
       renderPageSymbol(viewName, pageSymbols);
-      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toHaveAttribute(
+      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toHaveAttribute(
         'src',
         expected
       );
@@ -69,7 +69,7 @@ describe('PageSymbol', () => {
     'falls back to the plugin-type entry for the %s category when no `views` entry matches',
     (_, viewName, expected) => {
       renderPageSymbol(viewName, pageSymbols);
-      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toHaveAttribute(
+      expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toHaveAttribute(
         'src',
         expected
       );
@@ -78,7 +78,7 @@ describe('PageSymbol', () => {
 
   it('falls back to `default` when neither `views` nor `plugins` matches', () => {
     renderPageSymbol('authenticator/unknown-plugin/index', pageSymbols);
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toHaveAttribute(
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toHaveAttribute(
       'src',
       '/symbols/default.svg'
     );
@@ -86,7 +86,7 @@ describe('PageSymbol', () => {
 
   it('falls back to `default` when the viewName is outside the three plugin categories', () => {
     renderPageSymbol('views/select-authenticator/index', pageSymbols);
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toHaveAttribute(
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toHaveAttribute(
       'src',
       '/symbols/default.svg'
     );
@@ -96,26 +96,26 @@ describe('PageSymbol', () => {
     renderPageSymbol('authenticator/unknown-plugin/index', {
       plugins: { 'html-form': '/symbols/html-form.svg' },
     });
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toBeNull();
   });
 
   it('renders nothing when pageSymbols is absent', () => {
     renderPageSymbol('authenticator/html-form/index', undefined);
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toBeNull();
   });
 
   it('renders nothing when pageSymbols is empty', () => {
     renderPageSymbol('authenticator/html-form/index', {});
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toBeNull();
   });
 
   it('renders nothing when viewName is undefined', () => {
     renderPageSymbol(undefined, pageSymbols);
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toBeNull();
   });
 
   it('renders nothing when viewName is an empty string', () => {
     renderPageSymbol('', pageSymbols);
-    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol')).toBeNull();
+    expect(document.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image')).toBeNull();
   });
 });
