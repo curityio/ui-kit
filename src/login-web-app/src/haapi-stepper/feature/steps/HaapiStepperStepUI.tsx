@@ -14,7 +14,6 @@ import { formatNextStepData } from '../stepper/data-formatters/format-next-step-
 import { getViewNameBuiltInUI } from '../viewnames';
 import type { HaapiStepperAPIWithRequiredCurrentStep } from '../stepper/haapi-stepper.types';
 import { useHaapiStepper } from '../stepper/HaapiStepperHook';
-import { PageSymbol } from '../../../shared/ui/PageSymbol';
 import {
   getActionsElement,
   getErrorElement,
@@ -260,8 +259,6 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
   const linksToDisplay = getLinksToDisplay(error, currentStep);
   const messagesToDisplay = error?.input ? error.input.dataHelpers.messages : currentStep.dataHelpers.messages;
 
-  const pageSymbolElement = <PageSymbol viewName={currentStep.metadata?.viewName} />;
-
   const stepElements = {
     loadingElement,
     errorElement: getErrorElement(haapiStepperUiAPI, errorRenderInterceptor),
@@ -275,7 +272,6 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
       clientOperationActionRenderInterceptor
     ),
     linksElement: getLinksElement(haapiStepperUiAPI, linksToDisplay, linkRenderInterceptor),
-    pageSymbolElement,
   };
 
   const ViewNameBuiltInUI = getViewNameBuiltInUI(haapiStepperUiAPI);
@@ -286,7 +282,6 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
 
   return (
     <>
-      {stepElements.pageSymbolElement}
       {stepElements.loadingElement}
       {stepElements.errorElement}
       {stepElements.messagesElement}

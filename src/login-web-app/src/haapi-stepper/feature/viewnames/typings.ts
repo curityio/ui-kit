@@ -26,5 +26,4 @@ export type ViewNameBuiltInUIProps = HaapiStepperAPIWithRequiredCurrentStep &
     messagesElement: ReactElement;
     actionsElement: ReactElement | null;
     linksElement: ReactElement;
-    pageSymbolElement: ReactElement;
   };

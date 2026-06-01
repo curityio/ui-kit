@@ -9,53 +9,102 @@
  * For further information, please contact Curity AB.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { Layout } from './Layout';
 import { AppConfigContext } from '../feature/app-config/AppConfigContext';
-import type { BootstrapConfiguration } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiStepperContext } from '../../haapi-stepper/feature/stepper/HaapiStepperContext';
+import type { BootstrapConfiguration, PageSymbols } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import type { HaapiStepperAPI, HaapiStepperStep } from '../../haapi-stepper/feature/stepper/haapi-stepper.types';
 
-const renderLayout = (isInsideWell: boolean) => {
+describe('Layout', () => {
+  describe('Logo placement', () => {
+    it('renders the logo inside the well when theme.logo.isInsideWell is true', () => {
+      const { container } = renderLayout({ isInsideWell: true });
+      const well = container.querySelector('.haapi-stepper-well');
+      const logo = container.querySelector('img.haapi-stepper-logo');
+
+      expect(well).not.toBeNull();
+      expect(logo).not.toBeNull();
+      expect(well?.contains(logo)).toBe(true);
+    });
+
+    it('renders the logo before the well (not inside it) when theme.logo.isInsideWell is false', () => {
+      const { container } = renderLayout({ isInsideWell: false });
+      const main = container.querySelector('main.app-layout');
+      const well = container.querySelector('.haapi-stepper-well');
+      const logo = container.querySelector('img.haapi-stepper-logo');
+
+      expect(main).not.toBeNull();
+      expect(well).not.toBeNull();
+      expect(logo).not.toBeNull();
+
+      // Logo is a sibling of the well, not a descendant.
+      expect(well?.contains(logo)).toBe(false);
+      expect(main?.contains(logo)).toBe(true);
+
+      // Logo appears before the well in document order.
+      expect(logo!.compareDocumentPosition(well!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+  });
+
+  describe('Page symbol', () => {
+    it('renders the resolved page symbol above the children for the current step', () => {
+      const { container } = renderLayout({
+        pageSymbols: { plugins: { 'html-form': '/symbols/html-form.svg' } },
+        currentStep: stepWithViewName('authenticator/html-form/index'),
+      });
+
+      const pageSymbol = container.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image');
+      const content = container.querySelector('[data-testid="content"]');
+
+      expect(pageSymbol).not.toBeNull();
+      expect(pageSymbol).toHaveAttribute('src', '/symbols/html-form.svg');
+      // Page symbol appears before the children in document order.
+      expect(pageSymbol!.compareDocumentPosition(content!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('renders nothing for the page symbol when theme.pageSymbols is absent', () => {
+      const { container } = renderLayout({
+        currentStep: stepWithViewName('authenticator/html-form/index'),
+      });
+
+      expect(container.querySelector('img.haapi-stepper-page-symbol-image')).toBeNull();
+    });
+  });
+});
+
+const emptyStepperAPI: HaapiStepperAPI = {
+  loading: false,
+  history: [],
+  nextStep: vi.fn(),
+  currentStep: null,
+  error: null,
+};
+
+const stepWithViewName = (viewName: string): HaapiStepperStep =>
+  ({ metadata: { templateArea: 'lwa', viewName } }) as unknown as HaapiStepperStep;
+
+interface LayoutHarnessOptions {
+  isInsideWell?: boolean;
+  pageSymbols?: PageSymbols;
+  currentStep?: HaapiStepperStep | null;
+}
+
+const renderLayout = ({ isInsideWell = false, pageSymbols, currentStep = null }: LayoutHarnessOptions = {}) => {
   const config: BootstrapConfiguration = {
     initialUrl: 'https://example/start',
     haapi: {} as BootstrapConfiguration['haapi'],
-    theme: { logo: { path: '/assets/logo.svg', isInsideWell } },
+    theme: { logo: { path: '/assets/logo.svg', isInsideWell }, pageSymbols },
   };
+  const stepper: HaapiStepperAPI = { ...emptyStepperAPI, currentStep };
   return render(
     <AppConfigContext value={config}>
-      <Layout>
-        <div data-testid="content" />
-      </Layout>
+      <HaapiStepperContext value={stepper}>
+        <Layout>
+          <div data-testid="content" />
+        </Layout>
+      </HaapiStepperContext>
     </AppConfigContext>
   );
 };
-
-describe('Layout — logo placement', () => {
-  it('renders the logo inside the well when theme.logo.isInsideWell is true', () => {
-    const { container } = renderLayout(true);
-    const well = container.querySelector('.haapi-stepper-well');
-    const logo = container.querySelector('img.haapi-stepper-logo');
-
-    expect(well).not.toBeNull();
-    expect(logo).not.toBeNull();
-    expect(well?.contains(logo)).toBe(true);
-  });
-
-  it('renders the logo before the well (not inside it) when theme.logo.isInsideWell is false', () => {
-    const { container } = renderLayout(false);
-    const main = container.querySelector('main.app-layout');
-    const well = container.querySelector('.haapi-stepper-well');
-    const logo = container.querySelector('img.haapi-stepper-logo');
-
-    expect(main).not.toBeNull();
-    expect(well).not.toBeNull();
-    expect(logo).not.toBeNull();
-
-    // Logo is a sibling of the well, not a descendant.
-    expect(well?.contains(logo)).toBe(false);
-    expect(main?.contains(logo)).toBe(true);
-
-    // Logo appears before the well in document order.
-    expect(logo!.compareDocumentPosition(well!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  });
-});

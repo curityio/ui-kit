@@ -12,10 +12,13 @@
 import { ReactNode } from 'react';
 import { Well } from '../../haapi-stepper/ui/well/Well';
 import { useAppConfig } from '../feature/app-config/AppConfigHook';
+import { useHaapiStepper } from '../../haapi-stepper/feature/stepper/HaapiStepperHook';
 import { Logo } from './Logo';
+import { PageSymbol } from './PageSymbol';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const { isInsideWell } = useAppConfig().theme.logo;
+  const { currentStep } = useHaapiStepper();
 
   return (
     <>
@@ -23,7 +26,10 @@ export const Layout = ({ children }: { children: ReactNode }) => {
         {!isInsideWell && <Logo />}
         <Well>
           {isInsideWell && <Logo />}
-          <div className="h100">{children}</div>
+          <div className="h100">
+            <PageSymbol viewName={currentStep?.metadata?.viewName} />
+            {children}
+          </div>
         </Well>
       </main>
     </>
