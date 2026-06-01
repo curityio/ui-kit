@@ -90,4 +90,57 @@ describe('useHaapiFetch', () => {
     expect(init.body).toBeInstanceOf(URLSearchParams);
     expect((init.body as URLSearchParams).get('username')).toBe('alice');
   });
+
+  describe('Single-config contract', () => {
+    beforeEach(() => {
+      vi.resetModules();
+      createHaapiFetchSpy.mockClear();
+    });
+
+    it('tolerates reference churn when the config values are unchanged (does not re-create the driver)', async () => {
+      const { useHaapiFetch: useFreshHaapiFetch } = await import('./useHaapiFetch');
+
+      const configA = {
+        clientId: 'app-x',
+        tokenEndpoint: 'https://example/token',
+      } as HaapiConfiguration;
+      const configAClone = {
+        clientId: 'app-x',
+        tokenEndpoint: 'https://example/token',
+      } as HaapiConfiguration;
+
+      const { rerender } = renderHook(({ config }) => useFreshHaapiFetch(config), {
+        initialProps: { config: configA },
+      });
+      rerender({ config: configAClone });
+
+      expect(createHaapiFetchSpy).toHaveBeenCalledTimes(1);
+      expect(createHaapiFetchSpy).toHaveBeenCalledWith(configA);
+    });
+
+    it('throws an actionable error when a later call arrives with a semantically different config', async () => {
+      const { useHaapiFetch: useFreshHaapiFetch } = await import('./useHaapiFetch');
+
+      const configA = {
+        clientId: 'app-x',
+        tokenEndpoint: 'https://example/token',
+      } as HaapiConfiguration;
+      const configB = {
+        clientId: 'app-y', // ◄── different OAuth client identity
+        tokenEndpoint: 'https://example/token',
+      } as HaapiConfiguration;
+
+      const { rerender } = renderHook(({ config }) => useFreshHaapiFetch(config), {
+        initialProps: { config: configA },
+      });
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockReturnValue(undefined);
+
+      expect(() => rerender({ config: configB })).toThrow(
+        /HaapiConfiguration changed.*one configuration per page load.*reload the page/s
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+  });
 });

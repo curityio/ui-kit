@@ -80,7 +80,11 @@ const { currentStep, loading, error, nextStep } = useHaapiStepper();
 
 #### Bootstrap Configuration
 
-The `HaapiStepper` needs a **bootstrap configuration** — at minimum an `initialUrl` (where the flow starts) and a `haapi` driver config (the HAAPI web-driver settings). It supports two delivery modes, designed for two different deployment shapes:
+The `HaapiStepper` needs a **bootstrap configuration** — at minimum an `initialUrl` (where the flow starts) and a `haapi` driver config (the HAAPI web-driver settings).
+
+> Only one HAAPI configuration is supported per page load — the underlying driver is a process-global singleton; switching `bootstrap.haapi` mid-page throws (see [`useHaapiFetch.ts`](./data-access/useHaapiFetch.ts)).
+
+The bootstrap configuration supports two delivery modes, designed for two different deployment shapes:
 
 ##### Served mode (default)
 
