@@ -58,4 +58,24 @@ describe('Layout — logo placement', () => {
     // Logo appears before the well in document order.
     expect(logo!.compareDocumentPosition(well!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
+
+  it('renders children and the well but no logo element when theme.logo is not configured', () => {
+    const configWithoutLogo: HaapiAppConfig = {
+      initialUrl: 'https://example/start',
+      haapi: {} as HaapiAppConfig['haapi'],
+      theme: {},
+    };
+
+    const { container, getByTestId } = render(
+      <HaapiAppConfigContext value={configWithoutLogo}>
+        <Layout>
+          <div data-testid="content" />
+        </Layout>
+      </HaapiAppConfigContext>
+    );
+
+    expect(getByTestId('content')).toBeInTheDocument();
+    expect(container.querySelector('.haapi-stepper-well')).not.toBeNull();
+    expect(container.querySelector('img.haapi-stepper-logo')).toBeNull();
+  });
 });

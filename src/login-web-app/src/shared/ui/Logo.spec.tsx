@@ -34,4 +34,21 @@ describe('Logo', () => {
     expect(img).toHaveAttribute('src', '/assets/logo.svg');
     expect(img).toHaveClass('haapi-stepper-logo');
   });
+
+  it('renders nothing when theme.logo is not configured', () => {
+    const configWithoutLogo: HaapiAppConfig = {
+      initialUrl: 'https://example/start',
+      haapi: {} as HaapiAppConfig['haapi'],
+      theme: {},
+    };
+
+    const { container } = render(
+      <HaapiAppConfigContext value={configWithoutLogo}>
+        <Logo />
+      </HaapiAppConfigContext>
+    );
+
+    expect(container.querySelector('img')).toBeNull();
+    expect(screen.queryByRole('presentation')).toBeNull();
+  });
 });

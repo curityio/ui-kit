@@ -13,5 +13,9 @@ import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 
 export const Logo = () => {
   const { theme } = useHaapiAppConfig();
-  return <img className="haapi-stepper-logo" src={theme.logo.path} alt="" role="presentation" />;
+  const logo = theme?.logo;
+  if (!logo) {
+    return null;
+  }
+  return <img className="haapi-stepper-logo" src={logo.path} alt="" role="presentation" />;
 };
