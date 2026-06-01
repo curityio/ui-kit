@@ -25,7 +25,7 @@ import { formatContinueSameStepData } from './data-formatters/continue-same-step
 import { handlePollingStep } from './data-formatters/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
 import { formatNextStepData } from './data-formatters/format-next-step-data';
-import { handleCompletedWithSuccessStep } from './step-handlers/completed-with-success-step';
+import { handleCompletedStep } from './step-handlers/completed-step';
 import { sendHaapiFetchRequest } from '../../data-access/happi-fetch-request';
 import { configuration } from '../../data-access/bootstrap-configuration';
 import type {
@@ -47,15 +47,15 @@ import { handleAuthenticationOrRegistrationStep } from './step-handlers/authenti
 const DEFAULT_CONFIG: Required<HaapiStepperConfig> = {
   pollingInterval: 3000,
   bankIdAutostart: true,
+  autoRedirectOnAuthenticationComplete: true,
   webAuthnAutostart: true,
-  redirectOnAuthenticationCompletedWithSuccess: true,
 };
 
 export interface HaapiStepperConfig {
   pollingInterval: number;
   bankIdAutostart: boolean;
+  autoRedirectOnAuthenticationComplete: boolean;
   webAuthnAutostart: boolean;
-  redirectOnAuthenticationCompletedWithSuccess: boolean;
 }
 
 interface HaapiStepperProps {
@@ -411,16 +411,12 @@ async function processHaapiNextStep(
     case HAAPI_STEPS.POLLING:
       return handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
 
-    case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-      return handleCompletedWithSuccessStep(nextStepResponse, config);
-
     case HAAPI_STEPS.AUTHENTICATION:
     case HAAPI_STEPS.REGISTRATION:
       return handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config);
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
       return { nextStepData: formatNextStepData(nextStepResponse) };
 
     case HAAPI_STEPS.CONTINUE_SAME:
@@ -428,6 +424,10 @@ async function processHaapiNextStep(
         throw new Error('Continue Same Step received after link navigation, but links cannot have continueActions');
       }
       return { nextStepData: formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep) };
+
+    case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
+    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
+      return handleCompletedStep(nextStepResponse, config);
 
     case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
