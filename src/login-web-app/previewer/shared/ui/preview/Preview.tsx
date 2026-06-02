@@ -17,6 +17,7 @@ import { Main } from '../main/Main';
 import { Header } from '../page-header/PageHeader';
 import { PreviewLayout } from '../preview-layout/PreviewLayout';
 import { PageSymbol } from '../../../../src/shared/ui/PageSymbol';
+import { Well } from '../../../../src/haapi-stepper/ui/well/Well';
 
 interface PreviewProps {
   title: string;
@@ -37,8 +38,10 @@ export function Preview({ title, step, onErrorToggle }: PreviewProps) {
     <PreviewLayout>
       <Header title={title} setHasError={handleErrorToggle} />
       <Main>
-        <PageSymbol viewName={currentPage} />
-        <HaapiStepperStepUI />
+        <Well>
+          <PageSymbol viewName={currentPage} />
+          <HaapiStepperStepUI />
+        </Well>
         <JsonRepresentation data={step} />
       </Main>
     </PreviewLayout>
