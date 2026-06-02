@@ -248,6 +248,25 @@ svg {
   margin-block: 0 var(--space-2);
 }
 
+.haapi-stepper-page-symbol {
+  text-align: center;
+  width: var(--login-symbol-size);
+  height: var(--login-symbol-size);
+  display: var(--login-symbol-display);
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--login-symbol-margin-top);
+  margin-bottom: var(--login-symbol-margin-bottom);
+  border-radius: var(--login-symbol-border-radius);
+}
+
+.haapi-stepper-page-symbol-image {
+  width: var(--login-symbol-size);
+  height: var(--login-symbol-size);
+  object-fit: contain;
+}
+
 .haapi-stepper-links {
   @extend .center, .py3, .flex, .flex-column;
 }

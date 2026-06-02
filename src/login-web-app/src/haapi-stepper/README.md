@@ -104,10 +104,10 @@ This is the default behavior and covers the vast majority of deployments (the LW
 When the `HaapiStepper` is consumed as a library — e.g. embedded in a third-party app or any context that doesn't set `window.__CONFIG__` — the consumer supplies the bootstrap configuration explicitly via the `config.bootstrap` prop:
 
 ```tsx
-import { HaapiStepper } from '@curity/login-web-app/haapi-stepper';
-import type { BootstrapConfiguration } from '@curity/login-web-app/haapi-stepper';
+import { HaapiStepper } from './feature';
+import type { HaapiAppConfig } from '../shared/feature/app-config/types';
 
-const bootstrapConfig: BootstrapConfiguration = {
+const bootstrapConfig: HaapiAppConfig = {
   initialUrl: 'https://idsvr.example.com/oauth/v2/oauth-authorize/...',
   haapi: { /* HAAPI web-driver config */ },
   theme: { logo: { path: '/logo.svg', isInsideWell: true } },
