@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { useAppConfig } from '../feature/app-config/AppConfigHook';
+import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 import { resolvePageSymbol } from '../util/resolve-page-symbol';
 
 interface PageSymbolProps {
@@ -24,7 +24,7 @@ interface PageSymbolProps {
  * no entry resolves, this component renders nothing.
  */
 export const PageSymbol = ({ viewName }: PageSymbolProps) => {
-  const { theme } = useAppConfig();
+  const { theme } = useHaapiAppConfig();
   const src = resolvePageSymbol(viewName, theme.pageSymbols);
 
   if (!src) {

@@ -12,12 +12,13 @@
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 import { PageSymbol } from './PageSymbol';
-import { AppConfigContext } from '../feature/app-config/AppConfigContext';
-import type { BootstrapConfiguration, PageSymbols } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import type { PageSymbols } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../feature/app-config/types';
 
-const buildConfig = (pageSymbols?: PageSymbols): BootstrapConfiguration => ({
+const buildConfig = (pageSymbols?: PageSymbols): HaapiAppConfig => ({
   initialUrl: 'https://example/start',
-  haapi: {} as BootstrapConfiguration['haapi'],
+  haapi: {} as HaapiAppConfig['haapi'],
   theme: {
     logo: { path: '/assets/logo.svg', isInsideWell: false },
     pageSymbols,
@@ -26,9 +27,9 @@ const buildConfig = (pageSymbols?: PageSymbols): BootstrapConfiguration => ({
 
 const renderPageSymbol = (viewName: string | undefined, pageSymbols?: PageSymbols) =>
   render(
-    <AppConfigContext value={buildConfig(pageSymbols)}>
+    <HaapiAppConfigContext value={buildConfig(pageSymbols)}>
       <PageSymbol viewName={viewName} />
-    </AppConfigContext>
+    </HaapiAppConfigContext>
   );
 
 describe('PageSymbol', () => {

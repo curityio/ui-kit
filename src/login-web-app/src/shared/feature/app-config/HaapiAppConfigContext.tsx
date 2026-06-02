@@ -9,8 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { createHaapiFetch } from '@curity/identityserver-haapi-web-driver';
-import { configuration } from './bootstrap-configuration';
+import { createContext } from 'react';
+import { HaapiAppConfig } from './types';
 
-const haapiFetch = createHaapiFetch(configuration.haapi);
-export default haapiFetch;
+export const HaapiAppConfigContext = createContext<HaapiAppConfig | null>(null);

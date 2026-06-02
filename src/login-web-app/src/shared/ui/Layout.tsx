@@ -11,14 +11,14 @@
 
 import { ReactNode } from 'react';
 import { Well } from '../../haapi-stepper/ui/well/Well';
-import { useAppConfig } from '../feature/app-config/AppConfigHook';
-import { useHaapiStepper } from '../../haapi-stepper/feature/stepper/HaapiStepperHook';
+import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 import { Logo } from './Logo';
 import { PageSymbol } from './PageSymbol';
+import { useHaapiStepper } from '../../haapi-stepper/feature';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const { isInsideWell } = useAppConfig().theme.logo;
   const { currentStep } = useHaapiStepper();
+  const { isInsideWell } = useHaapiAppConfig().theme.logo ?? {};
 
   return (
     <>

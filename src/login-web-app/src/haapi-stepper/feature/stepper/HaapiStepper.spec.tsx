@@ -20,6 +20,8 @@ import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import {
   authenticationStep,
+  completedWithErrorStep,
+  completedWithErrorStepWithoutLinks,
   completedWithSuccessStep,
   completedWithSuccessStepWithoutLinks,
   continueSameStep,
@@ -31,10 +33,14 @@ import {
 } from '../../../shared/util/api-responses';
 import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
-import type { HaapiStepperHistoryEntry, HaapiStepperNextStepAction } from './haapi-stepper.types';
+import type {
+  HaapiStepperCompletedStep,
+  HaapiStepperBootstrapConfig,
+  HaapiStepperHistoryEntry,
+  HaapiStepperNextStepAction,
+} from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
 import { isQrCodeLink } from '../../util/isQrCodeLink';
-import type { BootstrapConfiguration } from '../../data-access/bootstrap-configuration';
 import {
   createMockWebAuthnAnyDeviceBothOptionsAction,
   createMockWebAuthnAuthenticationAction,
@@ -51,12 +57,85 @@ describe('HaapiStepper', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal('location', { href: '' });
+    vi.stubGlobal('__CONFIG__', mockConfiguration);
     mockHaapiFetchStep(initialStepType);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     mockHaapiFetch.mockReset();
+  });
+
+  describe('Configuration modes', () => {
+    it('served mode: defaults the bootstrap config to window.__CONFIG__ when no config.bootstrap is passed', () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(mockConfiguration.initialUrl, { method: 'GET' });
+    });
+
+    it('standalone (library) mode: uses config.bootstrap supplied by the consumer, ignoring the default', () => {
+      const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
+        initialUrl: 'https://standalone.example/start',
+        haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+      };
+
+      render(
+        <HaapiStepper config={{ bootstrap: standaloneBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(standaloneBootstrapConfig.initialUrl, { method: 'GET' });
+    });
+
+    it('standalone (library) mode: works without window.__CONFIG__ when config.bootstrap is supplied', async () => {
+      vi.stubGlobal('__CONFIG__', undefined);
+
+      const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
+        initialUrl: 'https://standalone.example/start',
+        haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+      };
+
+      render(
+        <HaapiStepper config={{ bootstrap: standaloneBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(standaloneBootstrapConfig.initialUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
+
+      await goToNextStep(HAAPI_STEPS.POLLING);
+      await waitFor(() => {
+        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+      });
+    });
+
+    it('throws an actionable error when neither window.__CONFIG__ nor config.bootstrap is available', () => {
+      vi.stubGlobal('__CONFIG__', undefined);
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockReturnValue(undefined);
+
+      expect(() =>
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        )
+      ).toThrow(/no bootstrap configuration available.*config\.bootstrap.*window\.__CONFIG__/s);
+
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('Steps', () => {
@@ -74,6 +153,21 @@ describe('HaapiStepper', () => {
       expect(stepRendered).toHaveTextContent(initialStepType);
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
       expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+    });
+
+    it('should use the bootstrap config provided via the stepper config prop instead of the default', async () => {
+      const overrideUrl = 'https://override.example/start';
+
+      render(
+        <HaapiStepper config={{ bootstrap: { initialUrl: overrideUrl, haapi: {} } as HaapiStepperBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledWith(overrideUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
     });
 
     it('should go to the next step and provide the updated current step', async () => {
@@ -412,8 +506,7 @@ describe('HaapiStepper', () => {
           });
 
           it('should not auto-start when WebAuthn API is not supported', async () => {
-            // Remove the PublicKeyCredential stub installed by beforeEach so isWebAuthnApiSupported() returns false.
-            vi.unstubAllGlobals();
+            vi.stubGlobal('PublicKeyCredential', undefined);
             mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
 
             render(
@@ -805,12 +898,21 @@ describe('HaapiStepper', () => {
       });
     });
 
-    describe('Completed With Success Step', () => {
-      const authorizationResponseUrl = completedWithSuccessStep.links?.find(
-        link => link.rel === 'authorization-response'
-      )?.href;
+    describe.each([
+      {
+        label: 'success',
+        stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+        stepFixture: completedWithSuccessStep,
+      },
+      {
+        label: 'error',
+        stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+        stepFixture: completedWithErrorStep,
+      },
+    ] as const)('Completed With $label Step', ({ label, stepType, stepFixture }) => {
+      const authorizationResponseUrl = stepFixture.links?.find(link => link.rel === 'authorization-response')?.href;
 
-      describe('redirectOnAuthenticationCompletedWithSuccess enabled (default)', () => {
+      describe('autoRedirectOnAuthenticationComplete enabled (default)', () => {
         it('should redirect to the authorization-response URL', async () => {
           render(
             <HaapiStepper>
@@ -819,7 +921,7 @@ describe('HaapiStepper', () => {
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          await goToNextStep(stepType);
 
           await waitFor(() => {
             expect(window.location.href).toBe(authorizationResponseUrl);
@@ -834,11 +936,28 @@ describe('HaapiStepper', () => {
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS, { noLinks: true });
+          await goToNextStep(stepType, { noLinks: true });
 
           await waitFor(() => {
             expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
-              'redirectOnAuthenticationCompletedWithSuccess is enabled, but the completed-with-success step did not include an authorization-response link.'
+              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
+            );
+          });
+        });
+
+        it('should throw error to the error boundary when links exist but none have rel "authorization-response"', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType, { linksWithoutAuthorizationResponse: true });
+
+          await waitFor(() => {
+            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
             );
           });
         });
@@ -851,7 +970,7 @@ describe('HaapiStepper', () => {
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          await goToNextStep(stepType);
 
           await waitFor(() => {
             expect(window.location.href).toBe(authorizationResponseUrl);
@@ -861,22 +980,58 @@ describe('HaapiStepper', () => {
         });
       });
 
-      describe('redirectOnAuthenticationCompletedWithSuccess disabled', () => {
+      describe('autoRedirectOnAuthenticationComplete disabled', () => {
         it('should render the completed step instead of redirecting', async () => {
           render(
-            <HaapiStepper config={{ redirectOnAuthenticationCompletedWithSuccess: false }}>
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
               <TestComponent />
             </HaapiStepper>
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+          await goToNextStep(stepType);
 
           await waitFor(() => {
-            expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
           });
 
           expect(window.location.href).not.toBe(authorizationResponseUrl);
+        });
+
+        it('should add the completed step to history with the full OAuth payload accessible to consumers', async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+          });
+
+          const historyData = getHistoryData(screen.getByTestId('history'));
+          const completedHistoryEntry = historyData[
+            historyData.length - 1
+          ] as HaapiStepperHistoryEntry<HaapiStepperCompletedStep>;
+
+          expect(completedHistoryEntry.step.type).toBe(stepType);
+
+          if (label === 'success') {
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.properties).toMatchObject({
+              code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
+              iss: 'https://localhost:8443/dev/oauth/anonymous',
+              state: 'foo',
+            });
+          } else {
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.error).toBe('server_error');
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.error_description).toBe('An error occurred during authorization');
+          }
         });
       });
     });
@@ -1140,23 +1295,20 @@ describe('HaapiStepper', () => {
   });
 });
 
-const mockHaapiFetch = vi.hoisted(() => vi.fn());
-vi.mock('../../data-access/haapi-fetch-initializer', () => {
+const mockHaapiFetch = vi.fn();
+vi.mock('@curity/identityserver-haapi-web-driver', () => {
   return {
-    default: mockHaapiFetch,
+    createHaapiFetch: () => mockHaapiFetch,
   };
 });
 
-const mockConfiguration: Partial<BootstrapConfiguration> = vi.hoisted(() => {
-  return {
-    initialUrl: 'https://example.com/auth',
-  };
-});
-vi.mock('../../data-access/bootstrap-configuration', () => {
-  return {
-    configuration: mockConfiguration,
-  };
-});
+// Default served-mode bootstrap stubbed onto `window.__CONFIG__` in `beforeEach`.
+// Per-test code that needs to simulate a different scenario (library mode without
+// a global, failure mode, …) calls `vi.stubGlobal('__CONFIG__', …)` to override.
+const mockConfiguration: Partial<HaapiStepperBootstrapConfig> = vi.hoisted(() => ({
+  initialUrl: 'https://example.com/auth',
+  haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+}));
 
 const mockThrowErrorToAppErrorBoundary = vi.fn();
 vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({
@@ -1321,7 +1473,22 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       }
       break;
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-      stepMock = config?.noLinks ? completedWithSuccessStepWithoutLinks : completedWithSuccessStep;
+      if (config?.noLinks) {
+        stepMock = completedWithSuccessStepWithoutLinks;
+      } else if (config?.linksWithoutAuthorizationResponse) {
+        stepMock = { ...completedWithSuccessStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      } else {
+        stepMock = completedWithSuccessStep;
+      }
+      break;
+    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
+      if (config?.noLinks) {
+        stepMock = completedWithErrorStepWithoutLinks;
+      } else if (config?.linksWithoutAuthorizationResponse) {
+        stepMock = { ...completedWithErrorStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      } else {
+        stepMock = completedWithErrorStep;
+      }
       break;
     case HAAPI_STEPS.REGISTRATION:
       stepMock = createRegistrationStep();

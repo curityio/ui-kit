@@ -78,15 +78,47 @@ const { currentStep, loading, error, nextStep } = useHaapiStepper();
 
 ### Basic Setup
 
+#### Bootstrap Configuration
+
+The `HaapiStepper` needs a **bootstrap configuration** — at minimum an `initialUrl` (where the flow starts) and a `haapi` driver config (the HAAPI web-driver settings).
+
+> Only one HAAPI configuration is supported per page load — the underlying driver is a process-global singleton; switching `bootstrap.haapi` mid-page throws (see [`useHaapiFetch.ts`](./data-access/useHaapiFetch.ts)).
+
+The bootstrap configuration supports two delivery modes, designed for two different deployment shapes:
+
+##### Served mode (default)
+
+When the `HaapiStepper` runs inside a server-rendered shell — like the Curity Login Web App — the shell injects the bootstrap configuration onto `window.__CONFIG__` *before* the SPA boots. In that case, no configuration prop is needed:
+
 ```tsx
-function App() {
-  return (
-    <HaapiStepper>
-      <HaapiComponentExample />
-    </HaapiStepper>
-  );
-}
+// The shell has already injected window.__CONFIG__ — just mount the stepper.
+<HaapiStepper>
+  <HaapiStepperStepUI />
+</HaapiStepper>
 ```
+
+This is the default behavior and covers the vast majority of deployments (the LWA and any other Curity-served frontend).
+
+##### Standalone (library) mode
+
+When the `HaapiStepper` is consumed as a library — e.g. embedded in a third-party app or any context that doesn't set `window.__CONFIG__` — the consumer supplies the bootstrap configuration explicitly via the `config.bootstrap` prop:
+
+```tsx
+import { HaapiStepper } from './feature';
+import type { HaapiAppConfig } from '../shared/feature/app-config/types';
+
+const bootstrapConfig: HaapiAppConfig = {
+  initialUrl: 'https://idsvr.example.com/oauth/v2/oauth-authorize/...',
+  haapi: { /* HAAPI web-driver config */ },
+  theme: { logo: { path: '/logo.svg', isInsideWell: true } },
+};
+
+<HaapiStepper config={{ bootstrap: bootstrapConfig }}>
+  <HaapiStepperStepUI />
+</HaapiStepper>
+```
+
+Both modes can be mixed with `config` overrides for other tunables (e.g. `pollingInterval`, `bankIdAutostart`); see the [`HaapiStepperConfig` type](./feature/stepper/haapi-stepper.types.ts) for the full set.
 
 ### Usage
 
