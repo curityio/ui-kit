@@ -166,13 +166,20 @@ The HAAPI Stepper UI components are the UI representation of the main HAAPI enti
 
 Check out documentation and usage examples in the links below:
 
-* [HaapiStepperFormUI](./feature/actions/form/HaapiStepperFormUI.tsx)
-* [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
-* [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
-* [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
-* [HaapiStepperMessageUI](./ui/messages/HaapiStepperMessageUI.tsx)
-* [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
-* [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
+* [HaapiStepperStepUI](./feature/steps/HaapiStepperStepUI.tsx)
+  * [HaapiStepperActionsUI](./ui/actions/HaapiStepperActionsUI.tsx)
+    * [HaapiStepperFormUI](./feature/actions/form/HaapiStepperFormUI.tsx)
+      * [HaapiStepperFormFieldUI](./feature/actions/form/fields/HaapiStepperFormFieldUI.tsx)
+        * [HaapiStepperTextFormFieldUI](./feature/actions/form/fields/HaapiStepperTextFormFieldUI.tsx)
+        * [HaapiStepperPasswordFormFieldUI](./feature/actions/form/fields/HaapiStepperPasswordFormFieldUI.tsx)
+        * [HaapiStepperCheckboxFormFieldUI](./feature/actions/form/fields/HaapiStepperCheckboxFormFieldUI.tsx)
+        * [HaapiStepperSelectFormFieldUI](./feature/actions/form/fields/HaapiStepperSelectFormFieldUI.tsx)
+    * [HaapiStepperSelectorUI](./feature/actions/selector/HaapiStepperSelectorUI.tsx)
+    * [HaapiStepperClientOperationUI](./feature/actions/client-operation/HaapiStepperClientOperationUI.tsx)
+  * [HaapiStepperMessagesUI](./ui/messages/HaapiStepperMessagesUI.tsx)
+    * [HaapiStepperMessageUI](./ui/messages/HaapiStepperMessageUI.tsx)
+  * [HaapiStepperLinksUI](./ui/links/HaapiStepperLinksUI.tsx)
+    * [HaapiStepperLinkUI](./ui/links/HaapiStepperLinkUI.tsx)
 
 ### CSS Customization
 
