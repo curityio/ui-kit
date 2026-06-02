@@ -19,6 +19,10 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   publicDir: path.resolve(__dirname, '../public'),
+  server: {
+    // Distinct from the Self-Service Portal previewer (5173) so both can run concurrently.
+    port: 5174,
+  },
   css: {
     postcss: {
       plugins: [postcssImport(), postcssExtendRule()],
