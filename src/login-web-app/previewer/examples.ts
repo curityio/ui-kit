@@ -13,7 +13,7 @@ import {
   HaapiActionStep,
   HaapiCompletedStep,
   HaapiErrorStep,
-} from '../src/haapi-stepper/data-access/types/haapi-step.types';
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import { authenticatorExamples } from './examples.authenticators';
 import { authenticationActionExamples } from './examples.authentication-actions';
 import { formExamples } from './examples.forms';

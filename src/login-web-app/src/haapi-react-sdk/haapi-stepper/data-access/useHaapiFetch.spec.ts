@@ -12,7 +12,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import type { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
-import { MEDIA_TYPES } from '../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import { useHaapiFetch } from './useHaapiFetch';
 import { HAAPI_STEPS, type HaapiLink } from './types/haapi-step.types';
 import { HAAPI_ACTION_TYPES, type HaapiFormAction } from './types/haapi-action.types';

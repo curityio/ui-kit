@@ -96,10 +96,11 @@ Within each subdomain, code is organized by these technical layer types:
 
 ```
 src/
-├── haapi-stepper/          # Subdomain: HAAPI authentication flows
-│   ├── feature/            # Smart components (HaapiStepper)
-│   ├── ui/                 # Presentational components
-│   └── util/               # Helper functions (browser-apis)
+├── haapi-react-sdk/        # SDK consumed by the app (alias @curity/haapi-react-sdk)
+│   └── haapi-stepper/      # Subdomain: HAAPI authentication flows
+│       ├── feature/        # Smart components (HaapiStepper)
+│       ├── ui/             # Presentational components
+│       └── util/           # Helper functions (browser-apis)
 ├── shared/                 # Cross-cutting concerns
 │   ├── feature/            # Shared smart components (Form)
 │   ├── ui/                 # Shared presentational components (Spinner, Layout)

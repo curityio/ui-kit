@@ -1,4 +1,4 @@
-import { HaapiStepperBootstrapConfig } from '../../../haapi-stepper/feature';
+import { HaapiStepperBootstrapConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 
 export interface HaapiAppConfig extends HaapiStepperBootstrapConfig {
   theme: {

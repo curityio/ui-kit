@@ -9,10 +9,16 @@
  * For further information, please contact Curity AB.
  */
 
-import { HAAPI_ACTION_TYPES, HAAPI_FORM_ACTION_KINDS } from '../src/haapi-stepper/data-access/types/haapi-action.types';
-import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../src/haapi-stepper/data-access/types/haapi-form.types';
+import {
+  HAAPI_ACTION_TYPES,
+  HAAPI_FORM_ACTION_KINDS,
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
+import {
+  HAAPI_FORM_FIELDS,
+  HTTP_METHODS,
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
 import { MEDIA_TYPES } from '../src/shared/util/types/media.types';
-import { HAAPI_STEPS, HaapiActionStep } from '../src/haapi-stepper/data-access/types/haapi-step.types';
+import { HAAPI_STEPS, HaapiActionStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import { PreviewItemData } from './examples';
 
 const userConsent: HaapiActionStep = {

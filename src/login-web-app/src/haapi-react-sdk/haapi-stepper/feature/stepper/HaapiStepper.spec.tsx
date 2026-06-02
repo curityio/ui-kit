@@ -17,7 +17,7 @@ import {
   HAAPI_FORM_ACTION_KINDS,
 } from '../../data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
-import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../../../shared/util/types/media.types';
 import {
   authenticationStep,
   completedWithErrorStep,
@@ -30,7 +30,7 @@ import {
   pollingBankIdStep,
   pollingPendingStep,
   redirectionStep,
-} from '../../../shared/util/api-responses';
+} from '../../../../shared/util/api-responses';
 import { act } from 'react';
 import { useHaapiStepper } from './HaapiStepperHook';
 import type {

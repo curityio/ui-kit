@@ -16,6 +16,12 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Aliases (mirrored in vite.config.ts resolve.alias) */
+    "baseUrl": ".",
+    "paths": {
+      "@curity/haapi-react-sdk/*": ["src/haapi-react-sdk/*"],
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

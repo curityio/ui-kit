@@ -10,11 +10,11 @@
  */
 
 import { ReactNode } from 'react';
-import { Well } from '../../haapi-stepper/ui/well/Well';
+import { Well } from '@curity/haapi-react-sdk/haapi-stepper/ui/well/Well';
 import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 import { Logo } from './Logo';
 import { PageSymbol } from './PageSymbol';
-import { useHaapiStepper } from '../../haapi-stepper/feature';
+import { useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const { currentStep } = useHaapiStepper();

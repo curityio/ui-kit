@@ -11,7 +11,7 @@
 
 import { describe, test, expect } from 'vitest';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from './types/haapi-form.types';
-import { MEDIA_TYPES } from '../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import { HaapiFormAction, HAAPI_ACTION_TYPES, HAAPI_FORM_ACTION_KINDS } from './types/haapi-action.types';
 import { createRequestForUrl, createRequestForForm } from './haapi-fetch-utils';
 

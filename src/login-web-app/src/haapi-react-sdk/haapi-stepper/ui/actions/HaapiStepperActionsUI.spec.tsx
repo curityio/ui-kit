@@ -13,7 +13,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../../../shared/util/types/media.types';
 import {
   HAAPI_ACTION_CLIENT_OPERATIONS,
   HAAPI_ACTION_TYPES,

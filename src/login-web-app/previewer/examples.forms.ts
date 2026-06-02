@@ -15,13 +15,16 @@ import {
   HaapiActionStep,
   HaapiAuthenticationFailedProblemStep,
   HaapiInputValidationProblemStep,
-} from '../src/haapi-stepper/data-access/types/haapi-step.types';
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import {
   HaapiFormAction,
   HAAPI_ACTION_TYPES,
   HAAPI_FORM_ACTION_KINDS,
-} from '../src/haapi-stepper/data-access/types/haapi-action.types';
-import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../src/haapi-stepper/data-access/types/haapi-form.types';
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
+import {
+  HAAPI_FORM_FIELDS,
+  HTTP_METHODS,
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
 import { PreviewItemData } from './examples';
 
 const formWithHiddenField: HaapiFormAction = {

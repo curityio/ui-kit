@@ -12,9 +12,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { Layout } from './Layout';
-import { HaapiStepperContext } from '../../haapi-stepper/feature/stepper/HaapiStepperContext';
+import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepperContext';
 import type { PageSymbols } from '../feature/app-config/types';
-import type { HaapiStepperAPI, HaapiStepperStep } from '../../haapi-stepper/feature/stepper/haapi-stepper.types';
+import type {
+  HaapiStepperAPI,
+  HaapiStepperStep,
+} from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import type { HaapiAppConfig } from '../feature/app-config/types';
 import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
 

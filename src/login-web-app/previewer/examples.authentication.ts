@@ -9,9 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { HAAPI_ACTION_TYPES } from '../src/haapi-stepper/data-access/types/haapi-action.types';
-import { HTTP_METHODS } from '../src/haapi-stepper/data-access/types/haapi-form.types';
-import { HAAPI_STEPS, HaapiActionStep } from '../src/haapi-stepper/data-access/types/haapi-step.types';
+import { HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
+import { HTTP_METHODS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
+import { HAAPI_STEPS, HaapiActionStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import { PreviewItemData } from './examples';
 
 const authenticationSelectAuthenticator: HaapiActionStep = {

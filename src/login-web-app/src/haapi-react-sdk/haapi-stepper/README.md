@@ -104,7 +104,7 @@ This is the default behavior and covers the vast majority of deployments (the LW
 When the `HaapiStepper` is consumed as a library — e.g. embedded in a third-party app or any context that doesn't set `window.__CONFIG__` — the consumer supplies the bootstrap configuration explicitly via the `config.bootstrap` prop:
 
 ```tsx
-import { HaapiStepper } from './feature';
+import { HaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import type { HaapiAppConfig } from '../shared/feature/app-config/types';
 
 const bootstrapConfig: HaapiAppConfig = {

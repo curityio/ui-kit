@@ -14,11 +14,11 @@ import { StartPage } from './pages/StartPage';
 import { examplesById } from './examples.ts';
 import { Layout } from './shared/ui/layout/Layout';
 import { Preview } from './shared/ui/preview/Preview';
-import { formatErrorStepData } from '../src/haapi-stepper/feature/stepper/data-formatters/problem-step';
-import { formatNextStepData } from '../src/haapi-stepper/feature/stepper/data-formatters/format-next-step-data';
-import { HaapiStepperContext } from '../src/haapi-stepper/feature/stepper/HaapiStepperContext';
-import { type HaapiStepperAPI } from '../src/haapi-stepper/feature/stepper/haapi-stepper.types';
-import { HaapiErrorStep } from '../src/haapi-stepper/data-access';
+import { formatErrorStepData } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/data-formatters/problem-step';
+import { formatNextStepData } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/data-formatters/format-next-step-data';
+import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepperContext';
+import { type HaapiStepperAPI } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import { HaapiErrorStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 import { HaapiAppConfigContext } from '../src/shared/feature/app-config/HaapiAppConfigContext';
 import { HaapiAppConfig } from '../src/shared/feature/app-config/types';
 

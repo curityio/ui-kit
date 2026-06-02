@@ -26,7 +26,7 @@ import type {
 } from '../../feature/stepper/haapi-stepper.types';
 import { formatNextStepData } from '../../feature/stepper/data-formatters/format-next-step-data';
 import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
-import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../../../shared/util/types/media.types';
 import {
   HAAPI_ACTION_CLIENT_OPERATIONS,
   HAAPI_ACTION_TYPES,

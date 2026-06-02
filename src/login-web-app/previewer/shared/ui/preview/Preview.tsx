@@ -10,14 +10,14 @@
  */
 
 import { useState } from 'react';
-import { HaapiActionStep, HaapiCompletedStep } from '../../../../src/haapi-stepper/data-access';
-import { HaapiStepperStepUI } from '../../../../src/haapi-stepper/feature/steps/HaapiStepperStepUI';
+import { HaapiActionStep, HaapiCompletedStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
+import { HaapiStepperStepUI } from '@curity/haapi-react-sdk/haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { JsonRepresentation } from '../json-representation/JsonRepresentation';
 import { Main } from '../main/Main';
 import { Header } from '../page-header/PageHeader';
 import { PreviewLayout } from '../preview-layout/PreviewLayout';
 import { PageSymbol } from '../../../../src/shared/ui/PageSymbol';
-import { Well } from '../../../../src/haapi-stepper/ui/well/Well';
+import { Well } from '@curity/haapi-react-sdk/haapi-stepper/ui/well/Well';
 import { useHaapiAppConfig } from '../../../../src/shared/feature/app-config/HaapiAppConfigHook';
 import { Logo } from '../../../../src/shared/ui/Logo';
 import styles from './preview.module.css';

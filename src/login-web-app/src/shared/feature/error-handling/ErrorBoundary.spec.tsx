@@ -14,7 +14,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act, useState } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
-import { useThrowErrorToAppErrorBoundary } from '../../../haapi-stepper/util/useThrowErrorToAppErrorBoundary';
+import { useThrowErrorToAppErrorBoundary } from '@curity/haapi-react-sdk/haapi-stepper/util/useThrowErrorToAppErrorBoundary';
 
 describe('ErrorBoundary', () => {
   const errorBoundaryFallbackTitle = 'Something went wrong';

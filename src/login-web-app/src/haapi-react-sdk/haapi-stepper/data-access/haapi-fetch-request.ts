@@ -10,7 +10,7 @@
  */
 
 import { FetchLike } from '@curity/identityserver-haapi-web-driver';
-import { MEDIA_TYPES } from '../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
 import { createApiRequest } from './haapi-fetch-utils';
 import { HaapiFetchAction } from './types/haapi-fetch.types';
 import { HaapiStep } from './types/haapi-step.types';
