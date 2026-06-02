@@ -12,7 +12,7 @@
 import { useMemo } from 'react';
 import { createHaapiFetch } from '@curity/identityserver-haapi-web-driver';
 import type { FetchLike, HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
-import { sendHaapiFetchRequest } from './happi-fetch-request';
+import { sendHaapiFetchRequest } from './haapi-fetch-request';
 import type { HaapiFetchAction } from './types/haapi-fetch.types';
 
 // `@curity/identityserver-haapi-web-driver` is a *process-global singleton*:
