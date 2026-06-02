@@ -13,7 +13,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { Layout } from './Layout';
 import { HaapiStepperContext } from '../../haapi-stepper/feature/stepper/HaapiStepperContext';
-import type { PageSymbols } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import type { PageSymbols } from '../feature/app-config/types';
 import type { HaapiStepperAPI, HaapiStepperStep } from '../../haapi-stepper/feature/stepper/haapi-stepper.types';
 import type { HaapiAppConfig } from '../feature/app-config/types';
 import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';

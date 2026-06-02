@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import type { PageSymbols } from '../../haapi-stepper/data-access/bootstrap-configuration';
+import type { PageSymbols } from '../feature/app-config/types';
 
 /**
  * Resolves the page symbol image path for a given HAAPI step `viewName` against the

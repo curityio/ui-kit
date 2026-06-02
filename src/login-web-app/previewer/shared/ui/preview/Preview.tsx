@@ -26,7 +26,7 @@ interface PreviewProps {
 
 export function Preview({ title, step, onErrorToggle }: PreviewProps) {
   const [, setHasError] = useState<boolean>(false);
-  const currentPage = step.metadata?.viewName || 'Unknown view';
+  const currentPage = step.metadata?.viewName ?? 'Unknown view';
 
   const handleErrorToggle = (hasError: boolean) => {
     setHasError(hasError);
