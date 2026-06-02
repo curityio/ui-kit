@@ -19,14 +19,17 @@ import { formatNextStepData } from '../src/haapi-stepper/feature/stepper/data-fo
 import { HaapiStepperContext } from '../src/haapi-stepper/feature/stepper/HaapiStepperContext';
 import { type HaapiStepperAPI } from '../src/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { HaapiErrorStep } from '../src/haapi-stepper/data-access';
-import { AppConfigContext } from '../src/shared/feature/app-config/AppConfigContext';
-import type { BootstrapConfiguration } from '../src/haapi-stepper/data-access/bootstrap-configuration';
+import { HaapiAppConfigContext } from '../src/shared/feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../src/shared/feature/app-config/types';
 
-const mockAppConfig: BootstrapConfiguration = {
+const mockAppConfig: HaapiAppConfig = {
   initialUrl: '',
   haapi: { clientId: '', tokenEndpoint: '' },
   theme: {
-    logo: { path: '', isInsideWell: false },
+    logo: { path: 'https://localhost:8443/assets/images/curity-logo.svg', isInsideWell: false },
+    pageSymbols: {
+      default: 'https://localhost:8443/assets/images/login-symbol-computer.svg',
+    },
   },
 };
 
@@ -66,12 +69,12 @@ export function Previewer() {
   };
 
   return (
-    <AppConfigContext value={mockAppConfig}>
+    <HaapiAppConfigContext value={mockAppConfig}>
       <HaapiStepperContext value={mockHaapiStepperValue}>
         <Layout onNavigate={page => setCurrentPage(page as Page)} currentPage={currentPage}>
           {renderPreview()}
         </Layout>
       </HaapiStepperContext>
-    </AppConfigContext>
+    </HaapiAppConfigContext>
   );
 }

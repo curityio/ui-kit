@@ -16,6 +16,7 @@ import { JsonRepresentation } from '../json-representation/JsonRepresentation';
 import { Main } from '../main/Main';
 import { Header } from '../page-header/PageHeader';
 import { PreviewLayout } from '../preview-layout/PreviewLayout';
+import { PageSymbol } from '../../../../src/shared/ui/PageSymbol';
 
 interface PreviewProps {
   title: string;
@@ -25,6 +26,7 @@ interface PreviewProps {
 
 export function Preview({ title, step, onErrorToggle }: PreviewProps) {
   const [, setHasError] = useState<boolean>(false);
+  const currentPage = step.metadata?.viewName || 'Unknown view';
 
   const handleErrorToggle = (hasError: boolean) => {
     setHasError(hasError);
@@ -35,6 +37,7 @@ export function Preview({ title, step, onErrorToggle }: PreviewProps) {
     <PreviewLayout>
       <Header title={title} setHasError={handleErrorToggle} />
       <Main>
+        <PageSymbol viewName={currentPage} />
         <HaapiStepperStepUI />
         <JsonRepresentation data={step} />
       </Main>
