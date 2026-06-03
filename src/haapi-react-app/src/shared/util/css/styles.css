@@ -388,3 +388,20 @@ svg {
 .is-error {
   @extend .alert, .alert-danger, .w100, .mx-auto;
 }
+
+.haapi-error-notifier-toast {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: color-mix(in srgb, var(--color-danger) 8%, white);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-danger) 30%, transparent);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  z-index: 50;
+
+  h4 {
+    font-size: var(--type-base-size);
+    color: var(--color-danger);
+  }
+}
