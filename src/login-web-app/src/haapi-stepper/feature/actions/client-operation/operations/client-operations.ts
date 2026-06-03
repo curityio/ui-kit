@@ -14,10 +14,9 @@ import {
   HAAPI_ACTION_TYPES,
   HaapiAction,
 } from '../../../../data-access/types/haapi-action.types';
-import { HaapiLink } from '../../../../data-access/types/haapi-step.types';
+import { HaapiLink, HaapiStep } from '../../../../data-access/types/haapi-step.types';
 import { RefObject } from 'react';
 import { HaapiStepperAction, HaapiStepperLink } from '../../../stepper/haapi-stepper.types';
-import { HaapiFetchFormAction } from '../../../../data-access/types/haapi-fetch.types';
 import { isBankIdClientOperation, runBankIdAuthentication } from './bankid';
 import { isExternalBrowserFlowClientOperation, runExternalBrowserFlow } from './external-browser-flow';
 import {
@@ -26,6 +25,7 @@ import {
   runWebAuthnAuthentication,
   runWebAuthnRegistration,
 } from './webauthn';
+import { ClientOperationResult } from './typings';
 
 export function isClientOperation(
   action: HaapiAction | HaapiStepperAction | HaapiLink | HaapiStepperLink
@@ -33,44 +33,29 @@ export function isClientOperation(
   return 'template' in action && action.template === HAAPI_ACTION_TYPES.CLIENT_OPERATION;
 }
 
-/**
- * Performs a client operation, returning a continuation action and values if further action is required, or null if
- * no further action is required or if the operation was aborted.
- */
 export async function performClientOperation(
   action: HaapiClientOperationAction,
-  pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>
-): Promise<HaapiFetchFormAction | null> {
+  pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>,
+  currentStep: HaapiStep | null
+): Promise<ClientOperationResult> {
   const abortController = new AbortController();
   pendingOperation.current = abortController;
+  const signal = abortController.signal;
 
-  try {
-    if (isExternalBrowserFlowClientOperation(action)) {
-      return await runExternalBrowserFlow(action, 2500, abortController.signal);
-    }
+  if (isWebAuthnRegistrationClientOperation(action)) {
+    return runWebAuthnRegistration(action, signal, currentStep);
+  }
 
-    if (isWebAuthnRegistrationClientOperation(action)) {
-      return await runWebAuthnRegistration(action, abortController.signal);
-    }
+  if (isWebAuthnAuthenticationClientOperation(action)) {
+    return runWebAuthnAuthentication(action, signal, currentStep);
+  }
 
-    if (isWebAuthnAuthenticationClientOperation(action)) {
-      return await runWebAuthnAuthentication(action, abortController.signal);
-    }
+  if (isExternalBrowserFlowClientOperation(action)) {
+    return runExternalBrowserFlow(action, 2500, signal, currentStep);
+  }
 
-    if (isBankIdClientOperation(action)) {
-      return await runBankIdAuthentication(action);
-    }
-  } catch (err) {
-    /**
-     * If the operation was aborted by the caller, convert to null - i.e. no further action - instead of error
-     * Note that the cancellation is triggered by code on this file and a 'reason' is not provided, so we can rely on
-     * the error being the default AbortError.
-     */
-    if (abortController.signal.aborted && err instanceof DOMException && err.name === 'AbortError') {
-      return null;
-    }
-
-    throw err;
+  if (isBankIdClientOperation(action)) {
+    return runBankIdAuthentication(action);
   }
 
   throw new Error(`Unsupported client operation: ${action.model.name}`);

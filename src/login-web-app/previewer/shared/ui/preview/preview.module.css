@@ -1,0 +1,24 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+/*
+ * Groups the logo and the well into a single grid item so that the surrounding
+ * `Main` grid always sees exactly two children (this app view + the JSON
+ * representation), regardless of whether the logo renders inside or outside the
+ * well. Mirrors the production layout where the logo stacks above the well.
+ */
+.appView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}

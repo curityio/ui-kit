@@ -14,6 +14,7 @@ import {
   HAAPI_ACTION_TYPES,
   HAAPI_FORM_ACTION_KINDS,
   HaapiClientOperationAction,
+  HaapiExternalBrowserFlowClientOperationAction,
   HaapiFormAction,
   HaapiSelectorAction,
   HaapiWebAuthnAnyDeviceRegistrationAction,
@@ -52,6 +53,7 @@ import {
   HaapiTextFormField,
   HaapiUsernameFormField,
 } from '../../data-access';
+import { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 
 /**
  * Public API provided by the `HaapiStepper`, accessed via the `useHaapiStepper` hook.
@@ -67,6 +69,28 @@ export interface HaapiStepperAPI {
   nextStep: HaapiStepperNextStep;
   // Complete history of all steps and actions taken
   history: HaapiStepperHistoryEntry[];
+}
+
+/*
+ * CONFIG TYPINGS
+ */
+export interface HaapiStepperConfig {
+  bootstrap: HaapiStepperBootstrapConfig;
+  pollingInterval: number;
+  bankIdAutostart: boolean;
+  webAuthnAutostart: boolean;
+  autoRedirectOnAuthenticationComplete: boolean;
+}
+
+export interface HaapiStepperBootstrapConfig {
+  initialUrl: string;
+  haapi: HaapiConfiguration;
+}
+
+declare global {
+  interface Window {
+    __CONFIG__?: HaapiStepperBootstrapConfig;
+  }
 }
 
 /*
@@ -128,6 +152,8 @@ export type HaapiStepperWebAuthnAnyDeviceRegistrationAction = HaapiStepperClient
   HaapiWebAuthnAnyDeviceRegistrationAction;
 export type HaapiStepperWebAuthnAuthenticationClientOperationAction = HaapiStepperClientOperationAction &
   HaapiWebAuthnAuthenticationClientOperationAction;
+export type HaapiStepperExternalBrowserFlowClientOperationAction = HaapiStepperClientOperationAction &
+  HaapiExternalBrowserFlowClientOperationAction;
 
 /*
  * STEP MESSAGE TYPINGS

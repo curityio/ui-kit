@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-export * from './haapi-fetch-utils';
-export * from './haapi-fetch-request';
-export * from './types';
-export * from './useHaapiFetch';
+import { createContext } from 'react';
+import { HaapiAppConfig } from './types';
+
+export const HaapiAppConfigContext = createContext<HaapiAppConfig | null>(null);

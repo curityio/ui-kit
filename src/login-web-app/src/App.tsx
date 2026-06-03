@@ -10,18 +10,24 @@
  */
 
 import { Layout } from './shared/ui/Layout';
+import { HaapiAppConfigProvider } from './shared/feature/app-config/HaapiAppConfigProvider';
 import { ErrorBoundary } from './shared/feature/error-handling/ErrorBoundary';
 import { HaapiStepperStepUI } from './haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { HaapiStepper } from './haapi-stepper/feature/stepper/HaapiStepper';
+import { HaapiStepperErrorNotifier } from './haapi-stepper/feature/stepper/HaapiStepperErrorNotifier';
 
 export function App() {
   return (
-    <ErrorBoundary>
-      <HaapiStepper>
-        <Layout>
-          <HaapiStepperStepUI />
-        </Layout>
-      </HaapiStepper>
-    </ErrorBoundary>
+    <HaapiAppConfigProvider>
+      <ErrorBoundary>
+        <HaapiStepper>
+          <Layout>
+            <HaapiStepperErrorNotifier>
+              <HaapiStepperStepUI />
+            </HaapiStepperErrorNotifier>
+          </Layout>
+        </HaapiStepper>
+      </ErrorBoundary>
+    </HaapiAppConfigProvider>
   );
 }

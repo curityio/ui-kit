@@ -18,11 +18,17 @@
   </head>
   <body>
     <script>
+      const configuration = {
+        initialUrl: '$_apiDrivenInitialUrl',
+        haapi: {
+          clientId: '$_apiDrivenClientInfo.clientId',
+          tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        },
+        theme: #parse("fragments/api-driven-ui/theme"),
+      };
       const query = new URLSearchParams({
         originalUrl: window.location.href,
-        initialUrl: '$_apiDrivenInitialUrl',
-        haapi_clientId: '$_apiDrivenClientInfo.clientId',
-        haapi_tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        configuration: JSON.stringify(configuration),
       });
 
       const redirect = new URL('/', window.location.href);

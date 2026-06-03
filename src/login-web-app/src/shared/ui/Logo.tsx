@@ -9,8 +9,13 @@
  * For further information, please contact Curity AB.
  */
 
-import { createHaapiFetch } from '@curity/identityserver-haapi-web-driver';
-import { configuration } from './bootstrap-configuration';
+import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
 
-const haapiFetch = createHaapiFetch(configuration.haapi);
-export default haapiFetch;
+export const Logo = () => {
+  const { theme } = useHaapiAppConfig();
+  const logo = theme.logo;
+  if (!logo) {
+    return null;
+  }
+  return <img className="haapi-stepper-logo" src={logo.path} alt="" role="presentation" />;
+};

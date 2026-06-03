@@ -16,6 +16,11 @@ import { JsonRepresentation } from '../json-representation/JsonRepresentation';
 import { Main } from '../main/Main';
 import { Header } from '../page-header/PageHeader';
 import { PreviewLayout } from '../preview-layout/PreviewLayout';
+import { PageSymbol } from '../../../../src/shared/ui/PageSymbol';
+import { Well } from '../../../../src/haapi-stepper/ui/well/Well';
+import { useHaapiAppConfig } from '../../../../src/shared/feature/app-config/HaapiAppConfigHook';
+import { Logo } from '../../../../src/shared/ui/Logo';
+import styles from './preview.module.css';
 
 interface PreviewProps {
   title: string;
@@ -25,6 +30,8 @@ interface PreviewProps {
 
 export function Preview({ title, step, onErrorToggle }: PreviewProps) {
   const [, setHasError] = useState<boolean>(false);
+  const currentPage = step.metadata?.viewName ?? 'Unknown view';
+  const { isInsideWell } = useHaapiAppConfig().theme.logo ?? {};
 
   const handleErrorToggle = (hasError: boolean) => {
     setHasError(hasError);
@@ -35,7 +42,14 @@ export function Preview({ title, step, onErrorToggle }: PreviewProps) {
     <PreviewLayout>
       <Header title={title} setHasError={handleErrorToggle} />
       <Main>
-        <HaapiStepperStepUI />
+        <div className={styles.appView}>
+          {!isInsideWell && <Logo />}
+          <Well>
+            {isInsideWell && <Logo />}
+            <PageSymbol viewName={currentPage} />
+            <HaapiStepperStepUI />
+          </Well>
+        </div>
         <JsonRepresentation data={step} />
       </Main>
     </PreviewLayout>
