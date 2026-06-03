@@ -11,7 +11,6 @@
 
 import { IconGeneralClose } from '@curity/ui-kit-icons';
 import { ReactNode, useEffect, useState } from 'react';
-import styles from '../../feature/stepper/haapi-error-notifier.module.css';
 import { useHaapiStepper } from './HaapiStepperHook';
 import { HaapiStepperAppError, HaapiStepperInputError } from './haapi-stepper.types';
 
@@ -53,7 +52,7 @@ export function HaapiStepperErrorNotifier({
   return (
     <>
       {isNotificationVisible && (
-        <div className={styles['haapi-error-notifier-toast']} data-testid="haapi-error-toast" role="alert">
+        <div className="haapi-error-notifier-toast" data-testid="haapi-error-toast" role="alert">
           <div>
             <div className="flex flex-gap-2 flex-center justify-between">
               <h4 className="m0" data-testid="haapi-error-haapi-error-notifier-toast-title">
