@@ -26,6 +26,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@curity/haapi-react-sdk': path.resolve(__dirname, '../src/haapi-react-sdk'),
       '@css': path.resolve(__dirname, '../src/shared/util/css'),
     },
   },
