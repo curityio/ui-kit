@@ -160,7 +160,6 @@
 .consent-entries-list li label.consent-entries-list-checkbox {
   position: absolute;
   right: 0;
-  top: 0;
   display: none;
   padding: 0;
 }
