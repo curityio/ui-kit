@@ -1,0 +1,58 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+import basicSsl from '@vitejs/plugin-basic-ssl';
+import react from '@vitejs/plugin-react';
+import * as path from 'node:path';
+import postcssExtendRule from 'postcss-extend-rule';
+import postcssImport from 'postcss-import';
+import { defineConfig } from 'vitest/config';
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), basicSsl()],
+  base: './',
+  css: {
+    postcss: {
+      plugins: [postcssImport(), postcssExtendRule()],
+    },
+  },
+  server: {
+    port: 8443,
+    proxy: {
+      // Expects Identity Server to be listening on https://localhost:9443
+      // Proxy requests that are not for paths/files on this project (using negative lookahead on the regex)
+      '^/(?!($|@|\\?|src/|node_modules/|fonts/|images/|[^\\.]+\\.html))': {
+        target: 'https://localhost:9443',
+        secure: false,
+      },
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: ['index.html'],
+    },
+  },
+  test: {
+    globals: true, // Enables global `describe`, `it`, etc.
+    environment: 'jsdom', // Simulates a browser environment
+    setupFiles: './setupTests.ts',
+  },
+  resolve: {
+    alias: {
+      '@curity/haapi-react-sdk': path.resolve(__dirname, './src/haapi-react-sdk'),
+      '@': path.resolve(__dirname, './src'),
+      '@shared': path.resolve(__dirname, './src/shared'),
+      '@util': path.resolve(__dirname, './src/util'),
+      '@css': path.resolve(__dirname, './src/shared/util/css'),
+    },
+  },
+});
