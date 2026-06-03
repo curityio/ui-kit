@@ -10,7 +10,7 @@
  */
 
 /**
- * HAAPI view names that the HAAPI React App ships built-in step render interceptors for
+ * HAAPI view names that the HAAPI React SDK ships built-in step render interceptors for
  * (see `VIEW_NAME_BUILT_IN_UIS_MAP` in `./viewname-built-in-uis`).
  *
  * Members map one-to-one to entries in the built-in registry: adding a new member here
