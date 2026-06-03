@@ -1,13 +1,13 @@
-name: Login Web App CI Workflow
+name: HAAPI React App CI Workflow
 
 on:
   push:
     paths:
-      - 'src/login-web-app/**'
+      - 'src/haapi-react-app/**'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - 'src/login-web-app/**'
+      - 'src/haapi-react-app/**'
   workflow_dispatch:
 
 jobs:
@@ -31,16 +31,16 @@ jobs:
         run: npm ci
 
       - name: Check Formatting
-        run: npm run prettier-check -w src/login-web-app
+        run: npm run prettier-check -w src/haapi-react-app
 
       - name: Lint Code
-        run: npm run lint -w src/login-web-app
+        run: npm run lint -w src/haapi-react-app
 
       - name: Build Project
-        run: npm run build:login-web-app
+        run: npm run build:haapi-react-app
 
       - name: Run Tests
-        run: npm run test -w src/login-web-app -- run
+        run: npm run test -w src/haapi-react-app -- run
 
   notify-slack:
     name: Notify Slack

@@ -1,6 +1,6 @@
 {
-  "name": "@curity/login-web-app",
-  "description": "Curity HAAPI Login Web App",
+  "name": "@curity/haapi-react-app",
+  "description": "Curity HAAPI React App",
   "author": "Curity AB",
   "version": "0.0.0",
   "type": "module",

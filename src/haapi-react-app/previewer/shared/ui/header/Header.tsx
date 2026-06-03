@@ -18,7 +18,7 @@ export const Header = () => {
       <div className="flex flex-center">
         <a href="/" className="flex flex-center flex-gap-2">
           <CurityLogo />
-          <span className={classes.logoText}>LWA previewer</span>
+          <span className={classes.logoText}>HAAPI React App previewer</span>
         </a>
       </div>
     </header>

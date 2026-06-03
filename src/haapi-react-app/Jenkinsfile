@@ -18,7 +18,7 @@ properties([
 nexusUtils.withNexusCreds() {
     npmUtils.withNpmCreds() {
         pipelineUtils.withDefaultConfig([nodeLabel: 'CuritySlavev12']) {
-            currentBuild.description = "Login App - ${env.NODE} - ${env.hostname}"
+            currentBuild.description = "HAAPI React App - ${env.NODE} - ${env.hostname}"
             // Checkout the code
             stage('Checkout') {
                 pipelineUtils.curityCliLogin()

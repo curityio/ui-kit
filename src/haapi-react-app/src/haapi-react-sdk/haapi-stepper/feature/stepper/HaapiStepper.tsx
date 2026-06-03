@@ -80,7 +80,7 @@ type SetCurrentStepAndUpdateHistoryFn = (
  * (`initialUrl`, HAAPI driver config, theme):
  *
  * 1. **Served mode (default)** — the stepper runs inside a server-rendered
- *    shell (e.g. the Curity Login Web App) that injects the config onto
+ *    shell (e.g. the Curity HAAPI React App) that injects the config onto
  *    `window.__CONFIG__` before the SPA boots. No prop is required:
  *
  *    ```tsx

@@ -1,4 +1,4 @@
-# Login Web Application
+# HAAPI React App
 
 - [HAAPI Type-0 SPA Client - Login Web App](https://curity.atlassian.net/wiki/spaces/ISC/pages/25067734/HAAPI+Type-0+SPA+Client+-+Login+Web+App) @ Confluence
 

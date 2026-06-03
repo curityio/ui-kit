@@ -88,7 +88,7 @@ The bootstrap configuration supports two delivery modes, designed for two differ
 
 ##### Served mode (default)
 
-When the `HaapiStepper` runs inside a server-rendered shell — like the Curity Login Web App — the shell injects the bootstrap configuration onto `window.__CONFIG__` *before* the SPA boots. In that case, no configuration prop is needed:
+When the `HaapiStepper` runs inside a server-rendered shell — like the Curity HAAPI React App — the shell injects the bootstrap configuration onto `window.__CONFIG__` *before* the SPA boots. In that case, no configuration prop is needed:
 
 ```tsx
 // The shell has already injected window.__CONFIG__ — just mount the stepper.
@@ -97,7 +97,7 @@ When the `HaapiStepper` runs inside a server-rendered shell — like the Curity 
 </HaapiStepper>
 ```
 
-This is the default behavior and covers the vast majority of deployments (the LWA and any other Curity-served frontend).
+This is the default behavior and covers the vast majority of deployments (the HAAPI React App and any other Curity-served frontend).
 
 ##### Standalone (library) mode
 

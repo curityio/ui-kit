@@ -14,11 +14,11 @@ export function StartPage() {
     <div className="mx-auto mw-60 center">
       <img
         src="/images/start.jpg"
-        alt="Login Web App Previewer"
+        alt="HAAPI React App Previewer"
         loading="lazy"
         className="block mx-auto start-page-image"
       />
-      <h1>Login Web App Previewer</h1>
+      <h1>HAAPI React App Previewer</h1>
       <p>Welcome to the previewer. Select a view from the sidebar to see examples.</p>
     </div>
   );
