@@ -19,6 +19,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   publicDir: path.resolve(__dirname, '../public'),
+  server: {
+    port: 5174,
+  },
   css: {
     postcss: {
       plugins: [postcssImport(), postcssExtendRule()],
