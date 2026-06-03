@@ -15,6 +15,7 @@ declare module '@icons' {
   export { default as IconGeneralClose } from './@icons/components/general/IconGeneralClose';
   export { default as IconGeneralDownload } from './@icons/components/general/IconGeneralDownload';
   export { default as IconGeneralEdit } from './@icons/components/general/IconGeneralEdit';
+  export { default as IconGeneralEye } from './@icons/components/general/IconGeneralEye';
   export { default as IconGeneralEyeHide } from './@icons/components/general/IconGeneralEyeHide';
   export { default as IconGeneralKebabMenu } from './@icons/components/general/IconGeneralKebabMenu';
   export { default as IconGeneralLocation } from './@icons/components/general/IconGeneralLocation';

@@ -1,0 +1,49 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    #if (!$_cspImgsrc)
+        #set($_cspImgsrc = "img-src 'self' data:;")
+    #end
+    #parse("fragments/csp")
+
+    <title></title>
+    <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js?v=${_cacheBustingHash}"></script>
+    <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css?v=${_cacheBustingHash}">
+    #if ($_configured_ui_theme_css_path)
+        <link rel="stylesheet" href="${_configured_ui_theme_css_path}"/>
+    #end
+    #if ($_configured_ui_custom_theme_css_path)
+        <link rel="stylesheet" href="${_configured_ui_custom_theme_css_path}">
+    #end
+
+    <link rel="icon" type="image/png" href="$favicon_path">
+    <link rel="apple-touch-icon" href="$favicon_path">
+</head>
+<body>
+<script $nonceAttr>
+    window.__CONFIG__ = {
+        initialUrl: '$_apiDrivenInitialUrl',
+        haapi: {
+            clientId: '$_apiDrivenClientInfo.clientId',
+            tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+        },
+        theme: #parse("fragments/api-driven-ui/theme")
+    };
+</script>
+<div id="root"></div>
+</body>
+</html>

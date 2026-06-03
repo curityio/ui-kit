@@ -1,0 +1,1600 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+import { render, screen, waitFor } from '@testing-library/react';
+import { HaapiStepper } from './HaapiStepper';
+import { HAAPI_POLLING_STATUS, HAAPI_PROBLEM_STEPS, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
+import {
+  HAAPI_ACTION_CLIENT_OPERATIONS,
+  HAAPI_ACTION_TYPES,
+  HAAPI_FORM_ACTION_KINDS,
+} from '../../data-access/types/haapi-action.types';
+import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
+import { MEDIA_TYPES } from '../../../../shared/util/types/media.types';
+import {
+  authenticationStep,
+  completedWithErrorStep,
+  completedWithErrorStepWithoutLinks,
+  completedWithSuccessStep,
+  completedWithSuccessStepWithoutLinks,
+  continueSameStep,
+  createProblemStep,
+  createRegistrationStep,
+  pollingBankIdStep,
+  pollingPendingStep,
+  redirectionStep,
+} from '../../../../shared/util/api-responses';
+import { act } from 'react';
+import { useHaapiStepper } from './HaapiStepperHook';
+import type {
+  HaapiStepperCompletedStep,
+  HaapiStepperBootstrapConfig,
+  HaapiStepperHistoryEntry,
+  HaapiStepperNextStepAction,
+} from './haapi-stepper.types';
+import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
+import { isQrCodeLink } from '../../util/isQrCodeLink';
+import {
+  createMockWebAuthnAnyDeviceBothOptionsAction,
+  createMockWebAuthnAuthenticationAction,
+  createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
+  createMockWebAuthnPlatformOnlyAnyDeviceAction,
+  createMockWebAuthnRegistrationAction,
+} from '../../util/tests/mocks';
+import type { HaapiClientOperationAction } from '../../data-access/types/haapi-action.types';
+import { formatErrorStepData } from './data-formatters/problem-step';
+
+describe('HaapiStepper', () => {
+  const initialStepType = HAAPI_STEPS.AUTHENTICATION;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal('location', { href: '' });
+    vi.stubGlobal('__CONFIG__', mockConfiguration);
+    mockHaapiFetchStep(initialStepType);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    mockHaapiFetch.mockReset();
+  });
+
+  describe('Configuration modes', () => {
+    it('served mode: defaults the bootstrap config to window.__CONFIG__ when no config.bootstrap is passed', () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(mockConfiguration.initialUrl, { method: 'GET' });
+    });
+
+    it('standalone (library) mode: uses config.bootstrap supplied by the consumer, ignoring the default', () => {
+      const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
+        initialUrl: 'https://standalone.example/start',
+        haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+      };
+
+      render(
+        <HaapiStepper config={{ bootstrap: standaloneBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(standaloneBootstrapConfig.initialUrl, { method: 'GET' });
+    });
+
+    it('standalone (library) mode: works without window.__CONFIG__ when config.bootstrap is supplied', async () => {
+      vi.stubGlobal('__CONFIG__', undefined);
+
+      const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
+        initialUrl: 'https://standalone.example/start',
+        haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+      };
+
+      render(
+        <HaapiStepper config={{ bootstrap: standaloneBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+      expect(mockHaapiFetch).toHaveBeenCalledWith(standaloneBootstrapConfig.initialUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
+
+      await goToNextStep(HAAPI_STEPS.POLLING);
+      await waitFor(() => {
+        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+      });
+    });
+
+    it('throws an actionable error when neither window.__CONFIG__ nor config.bootstrap is available', () => {
+      vi.stubGlobal('__CONFIG__', undefined);
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockReturnValue(undefined);
+
+      expect(() =>
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        )
+      ).toThrow(/no bootstrap configuration available.*config\.bootstrap.*window\.__CONFIG__/s);
+
+      consoleErrorSpy.mockRestore();
+    });
+  });
+
+  describe('Steps', () => {
+    it('should initialize the first step with the bootstrap initial URL and render the children', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledWith(mockConfiguration.initialUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+
+      expect(stepRendered).toHaveTextContent(initialStepType);
+      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+    });
+
+    it('should use the bootstrap config provided via the stepper config prop instead of the default', async () => {
+      const overrideUrl = 'https://override.example/start';
+
+      render(
+        <HaapiStepper config={{ bootstrap: { initialUrl: overrideUrl, haapi: {} } as HaapiStepperBootstrapConfig }}>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(mockHaapiFetch).toHaveBeenCalledWith(overrideUrl, { method: 'GET' });
+
+      const stepRendered = await screen.findByTestId('step-type');
+      expect(stepRendered).toHaveTextContent(initialStepType);
+    });
+
+    it('should go to the next step and provide the updated current step', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      const stepRendered = await screen.findByTestId('step-type');
+
+      expect(stepRendered).toHaveTextContent(initialStepType);
+
+      await goToNextStep(HAAPI_STEPS.POLLING);
+
+      await waitFor(() => {
+        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+      });
+
+      await goToNextStep(HAAPI_STEPS.REGISTRATION);
+
+      await waitFor(() => {
+        expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+      });
+    });
+
+    describe('Continue Same Step', () => {
+      describe('With continueActions on the current step', () => {
+        it('should display only Current Step continueActions and merge Current Step and Continue Same Step messages when there are continueActions', async () => {
+          mockHaapiFetch.mockReset();
+          mockHaapiFetchStep(HAAPI_STEPS.AUTHENTICATION, { withContinueActions: true });
+
+          const initialStepMessage = 'Please enter your username to authenticate.';
+          const continueSameStepMessage = 'Message from Continue Same Step with continueActions';
+
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          expect(await screen.findByTestId('step-type')).toHaveTextContent(initialStepType);
+          expect(screen.getByText(initialStepMessage)).toBeInTheDocument();
+
+          const authStepActionButtons = screen.getAllByTestId('action-button');
+          expect(authStepActionButtons).toHaveLength(1);
+          expect(screen.getByTestId('action-button')).toHaveTextContent('Login');
+
+          await goToNextStep(HAAPI_STEPS.CONTINUE_SAME, { withContinueActions: true });
+
+          // Wait for CONTINUE_SAME processing to complete (indicated by the "Continue" button replacing "Login")
+          await waitFor(() => {
+            const continueSameActionButtons = screen.getAllByTestId('action-button');
+            expect(continueSameActionButtons).toHaveLength(1);
+            expect(continueSameActionButtons[0]).toHaveTextContent('Continue');
+          });
+
+          expect(screen.getByTestId('step-type')).toHaveTextContent(initialStepType);
+          expect(screen.getByText(initialStepMessage)).toBeInTheDocument();
+          expect(screen.getByText(continueSameStepMessage)).toBeInTheDocument();
+        });
+      });
+
+      describe('Without continueActions', () => {
+        it('should display no actions and continue same step messages when no continueActions are present', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          const initialStepMessage = 'Please enter your username to authenticate.';
+          const continueSameStepMessage = 'Message from Continue Same Step without continueActions';
+
+          expect(await screen.findByTestId('step-type')).toHaveTextContent(initialStepType);
+          expect(screen.getByText(initialStepMessage)).toBeInTheDocument();
+
+          await goToNextStep(HAAPI_STEPS.CONTINUE_SAME);
+
+          expect(await screen.findByTestId('step-type')).toHaveTextContent(initialStepType);
+
+          await waitFor(() => {
+            expect(screen.queryByText(initialStepMessage)).not.toBeInTheDocument();
+          });
+
+          expect(screen.getByText(continueSameStepMessage)).toBeInTheDocument();
+
+          const authStepActionButtons = screen.queryAllByTestId('action-button');
+          expect(authStepActionButtons).toHaveLength(0);
+        });
+      });
+    });
+
+    describe('Redirection Step', () => {
+      it('should handle redirection steps internally and go to the next non-redirection step', async () => {
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        );
+
+        const stepRendered = await screen.findByTestId('step-type');
+
+        expect(stepRendered).toHaveTextContent(initialStepType);
+
+        // Redirection steps are handled internally, triggering automatically a request to
+        // get the next step, which we mock to be a registration step in mockHaapiFetchStep
+        await goToNextStep(HAAPI_STEPS.REDIRECTION);
+
+        await waitFor(() => {
+          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+        });
+      });
+    });
+
+    describe('Polling Step', () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it('should handle polling steps with PENDING status and automatically poll until DONE', async () => {
+        const pollingInterval = 2000;
+
+        render(
+          <HaapiStepper config={{ pollingInterval }}>
+            <TestComponent />
+          </HaapiStepper>
+        );
+
+        // Initial advance to process initial fetch
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        vi.advanceTimersByTimeAsync(200);
+        // Automatic request to get initial step
+        expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
+
+        const stepRendered = await screen.findByTestId('step-type');
+
+        expect(stepRendered).toHaveTextContent(initialStepType);
+
+        // User click on next step (polling) and request the first polling step
+        await goToNextStep(HAAPI_STEPS.POLLING);
+
+        // Assert first polling step request and rendering
+        expect(mockHaapiFetch).toHaveBeenCalledTimes(2);
+        await waitFor(() => {
+          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+        });
+
+        // Mock the next poll request to still return PENDING and advance timers
+        // This is an automatic poll request (setTimeout, no user action)
+        mockHaapiFetchStep(HAAPI_STEPS.POLLING);
+        await vi.advanceTimersByTimeAsync(pollingInterval);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        vi.runAllTimersAsync();
+
+        // Verify the automatic poll request
+        expect(mockHaapiFetch).toHaveBeenCalledTimes(3);
+        expect(mockHaapiFetch).toHaveBeenCalledWith('/poll', { method: 'GET' });
+        await waitFor(() => {
+          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+        });
+
+        // Mock the next poll request to return DONE and advance timers
+        // This is an automatic poll request (setTimeout, no user action)
+        mockHaapiFetchStep(HAAPI_STEPS.POLLING, { status: HAAPI_POLLING_STATUS.DONE });
+        mockHaapiFetchStep(HAAPI_STEPS.AUTHENTICATION);
+        await vi.advanceTimersByTimeAsync(pollingInterval);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        vi.runAllTimersAsync();
+
+        // Polling DONE status automatically triggers the next step request
+        // this is why we expect two more calls: one for the automatic poll request and one
+        // for the next step request
+        expect(mockHaapiFetch).toHaveBeenCalledTimes(5);
+        expect(mockHaapiFetch).toHaveBeenNthCalledWith(4, '/poll', { method: 'GET' });
+        expect(mockHaapiFetch).toHaveBeenNthCalledWith(5, '/polldone', { method: 'GET' });
+
+        await waitFor(() => {
+          expect(stepRendered).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
+        });
+      });
+
+      describe('BankID Polling Step', () => {
+        it('should display message, start bankid button, cancel button and QR code', async () => {
+          const pollingInterval = 2000;
+
+          render(
+            <HaapiStepper config={{ pollingInterval, bankIdAutostart: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          vi.advanceTimersByTimeAsync(200);
+
+          const stepRendered = await screen.findByTestId('step-type');
+          expect(stepRendered).toHaveTextContent(initialStepType);
+
+          await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
+
+          await waitFor(() => {
+            expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+          });
+
+          const bankIdMessage = screen.getByText('Scan the QR code with your BankID app');
+          expect(bankIdMessage).toBeInTheDocument();
+
+          const actionButtons = screen.getAllByTestId('action-button');
+          expect(actionButtons.some(btn => btn.textContent === 'Start BankID')).toBe(true);
+          expect(actionButtons.some(btn => btn.textContent === 'Cancel')).toBe(true);
+
+          expect(screen.getByTestId('link-image')).toBeInTheDocument();
+        });
+
+        describe('config.bankIdAutostart = true', () => {
+          it('should call openBankIdApp automatically only once', async () => {
+            render(
+              <HaapiStepper config={{ pollingInterval: 2000, bankIdAutostart: true }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            vi.advanceTimersByTimeAsync(200);
+
+            const stepRendered = await screen.findByTestId('step-type');
+            expect(stepRendered).toHaveTextContent(initialStepType);
+
+            await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
+
+            await waitFor(() => {
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+            });
+
+            expect(mockOpenBankIdApp).toHaveBeenCalledTimes(1);
+
+            await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            vi.runAllTimersAsync();
+
+            await waitFor(() => {
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+            });
+
+            expect(mockOpenBankIdApp).toHaveBeenCalledTimes(1);
+          });
+        });
+
+        describe('config.bankIdAutostart = false', () => {
+          it('should not call openBankIdApp automatically', async () => {
+            const pollingInterval = 2000;
+
+            render(
+              <HaapiStepper config={{ pollingInterval, bankIdAutostart: false }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            vi.advanceTimersByTimeAsync(200);
+
+            const stepRendered = await screen.findByTestId('step-type');
+            expect(stepRendered).toHaveTextContent(initialStepType);
+
+            await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
+
+            await waitFor(() => {
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+            });
+
+            expect(mockOpenBankIdApp).not.toHaveBeenCalled();
+
+            await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
+
+            await waitFor(() => {
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.POLLING);
+            });
+
+            expect(mockOpenBankIdApp).not.toHaveBeenCalled();
+          });
+
+          it('should call openBankIdApp when "Start BankID" button is clicked', async () => {
+            const pollingInterval = 2000;
+
+            render(
+              <HaapiStepper config={{ pollingInterval, bankIdAutostart: false }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            vi.advanceTimersByTimeAsync(200);
+
+            await screen.findByTestId('step-type');
+
+            await goToNextStep(HAAPI_STEPS.POLLING, { bankId: true });
+
+            const startButton = await screen.findByRole('button', { name: 'Start BankID' });
+
+            act(() => startButton.click());
+
+            await waitFor(() => {
+              expect(mockOpenBankIdApp).toHaveBeenCalledTimes(1);
+            });
+          });
+        });
+      });
+    });
+
+    describe('Authentication / Registration Step', () => {
+      describe('WebAuthn', () => {
+        const authorizationResponseUrl = completedWithSuccessStep.links?.find(
+          link => link.rel === 'authorization-response'
+        )?.href;
+
+        beforeEach(() => {
+          vi.stubGlobal('PublicKeyCredential', stubPublicKeyCredential());
+        });
+
+        afterEach(() => {
+          vi.unstubAllGlobals();
+          Reflect.deleteProperty(navigator, 'userAgent');
+        });
+
+        describe('Auto-Start', () => {
+          beforeEach(() => {
+            // Baseline: every Auto-Start case asserts the runner is not invoked. We resolve to a
+            // sentinel error so an unintended invocation surfaces loudly via error.app instead of
+            // silently progressing the stepper.
+            mockRunWebAuthnRegistration.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            mockRunWebAuthnAuthentication.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+          });
+
+          it('should not auto-start when WebAuthn API is not supported', async () => {
+            vi.stubGlobal('PublicKeyCredential', undefined);
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            const stepRendered = await screen.findByTestId('step-type');
+            expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+            expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+          });
+
+          it('should not auto-start on a non-WebAuthn auth step (e.g. username/password form)', async () => {
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            const stepRendered = await screen.findByTestId('step-type');
+            expect(stepRendered).toHaveTextContent(initialStepType);
+
+            expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+            expect(mockRunWebAuthnAuthentication).not.toHaveBeenCalled();
+          });
+
+          it('should not auto-start on Safari (non-Chromium) — Safari blocks auto-initiated WebAuthn ceremonies', async () => {
+            stubUserAgent(
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
+            );
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            const stepRendered = await screen.findByTestId('step-type');
+            expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+            expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+          });
+
+          it('should auto-start on Chromium browsers whose user agent also contains "Safari"', async () => {
+            stubUserAgent(
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            );
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            await waitFor(() => {
+              expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+            });
+          });
+
+          describe('config.webAuthnAutostart', () => {
+            it('should not auto-start a WebAuthn registration when config.webAuthnAutostart is false', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const stepRendered = await screen.findByTestId('step-type');
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+              expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+            });
+
+            it('should not auto-start a WebAuthn authentication when config.webAuthnAutostart is false', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const stepRendered = await screen.findByTestId('step-type');
+              expect(stepRendered).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
+
+              expect(mockRunWebAuthnAuthentication).not.toHaveBeenCalled();
+            });
+
+            it('should still run the WebAuthn ceremony on manual click when config.webAuthnAutostart is false', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await waitFor(() => {
+                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+              });
+            });
+          });
+
+          describe('Registration', () => {
+            describe('passkey', () => {
+              it('should auto-start a single passkeys WebAuthn registration', async () => {
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                await waitFor(() => {
+                  expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                });
+                const action = firstCallAction(mockRunWebAuthnRegistration);
+                expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
+                expect(action.model.arguments).toHaveProperty('credentialCreationOptions');
+              });
+            });
+
+            describe('any-device', () => {
+              it('should auto-start a single platform-only any-device registration when a platform authenticator is available', async () => {
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnPlatformOnlyAnyDeviceAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                await waitFor(() => {
+                  expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                });
+                const action = firstCallAction(mockRunWebAuthnRegistration);
+                expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
+                expect(action.model.arguments).toHaveProperty('platformCredentialCreationOptions');
+                expect(action.model.arguments).not.toHaveProperty('crossPlatformCredentialCreationOptions');
+              });
+
+              it('should auto-start a single cross-platform-only any-device registration', async () => {
+                mockHaapiFetchWebAuthnStep(
+                  HAAPI_STEPS.REGISTRATION,
+                  createMockWebAuthnCrossPlatformOnlyAnyDeviceAction()
+                );
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                await waitFor(() => {
+                  expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+                });
+                const action = firstCallAction(mockRunWebAuthnRegistration);
+                expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_REGISTRATION);
+                expect(action.model.arguments).toHaveProperty('crossPlatformCredentialCreationOptions');
+                expect(action.model.arguments).not.toHaveProperty('platformCredentialCreationOptions');
+              });
+
+              it('should not auto-start platform-only any-device when no platform authenticator is available', async () => {
+                vi.stubGlobal(
+                  'PublicKeyCredential',
+                  stubPublicKeyCredential({ platformAuthenticatorAvailable: false })
+                );
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnPlatformOnlyAnyDeviceAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                const stepRendered = await screen.findByTestId('step-type');
+                expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+                expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+              });
+
+              it('should not auto-start when an any-device step has both platform and cross-platform actions', async () => {
+                mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnAnyDeviceBothOptionsAction());
+
+                render(
+                  <HaapiStepper>
+                    <TestComponent />
+                  </HaapiStepper>
+                );
+
+                const stepRendered = await screen.findByTestId('step-type');
+                expect(stepRendered).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+                expect(mockRunWebAuthnRegistration).not.toHaveBeenCalled();
+              });
+            });
+          });
+
+          describe('Authentication', () => {
+            it('should auto-start a single WebAuthn authentication action', async () => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+
+              render(
+                <HaapiStepper>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              await waitFor(() => {
+                expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(1);
+              });
+              const action = firstCallAction(mockRunWebAuthnAuthentication);
+              expect(action.model.name).toBe(HAAPI_ACTION_CLIENT_OPERATIONS.WEBAUTHN_AUTHENTICATION);
+            });
+          });
+        });
+
+        describe('Registration', () => {
+          it('success: continuation routes through processHaapiNextStep and completes by redirecting to the client', async () => {
+            const action = createMockWebAuthnRegistrationAction();
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, action);
+            mockRunWebAuthnRegistration.mockResolvedValueOnce({
+              clientOperationData: {
+                action: action.model.continueActions[0],
+                payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              },
+            });
+            mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+
+            render(
+              <HaapiStepper config={{ webAuthnAutostart: false }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            const button = await screen.findByTestId('action-button');
+            act(() => button.click());
+
+            await waitFor(() => {
+              expect(window.location.href).toBe(authorizationResponseUrl);
+            });
+          });
+
+          describe('error', () => {
+            beforeEach(() => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.REGISTRATION, createMockWebAuthnRegistrationAction());
+              mockRunWebAuthnRegistration.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            });
+
+            it('provides the error via error.app', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+            });
+
+            it('does not throw to the React error boundary', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+              expect(mockThrowErrorToAppErrorBoundary).not.toHaveBeenCalled();
+            });
+
+            it('allows the user to retry — the ceremony replays', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+
+              act(() => button.click());
+              await waitFor(() => {
+                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(1);
+              });
+
+              act(() => button.click());
+              await waitFor(() => {
+                expect(mockRunWebAuthnRegistration).toHaveBeenCalledTimes(2);
+              });
+            });
+          });
+        });
+
+        describe('Authentication', () => {
+          it('success: continuation routes through processHaapiNextStep and completes by redirecting to the client', async () => {
+            const action = createMockWebAuthnAuthenticationAction();
+            mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, action);
+            mockRunWebAuthnAuthentication.mockResolvedValueOnce({
+              clientOperationData: {
+                action: action.model.continueActions[0],
+                payload: { credential: { id: 'cred-id', type: 'public-key' } },
+              },
+            });
+            mockHaapiFetchStep(HAAPI_STEPS.COMPLETED_WITH_SUCCESS);
+
+            render(
+              <HaapiStepper config={{ webAuthnAutostart: false }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            const button = await screen.findByTestId('action-button');
+            act(() => button.click());
+
+            await waitFor(() => {
+              expect(window.location.href).toBe(authorizationResponseUrl);
+            });
+          });
+
+          describe('error', () => {
+            beforeEach(() => {
+              mockHaapiFetchWebAuthnStep(HAAPI_STEPS.AUTHENTICATION, createMockWebAuthnAuthenticationAction());
+              mockRunWebAuthnAuthentication.mockResolvedValue({ clientOperationError: failedWebAuthnCeremonyError() });
+            });
+
+            it('provides the error via error.app', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+            });
+
+            it('does not throw to the React error boundary', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+              act(() => button.click());
+
+              await screen.findByTestId('error-app');
+              expect(mockThrowErrorToAppErrorBoundary).not.toHaveBeenCalled();
+            });
+
+            it('allows the user to retry — the ceremony replays', async () => {
+              render(
+                <HaapiStepper config={{ webAuthnAutostart: false }}>
+                  <TestComponent />
+                </HaapiStepper>
+              );
+
+              const button = await screen.findByTestId('action-button');
+
+              act(() => button.click());
+              await waitFor(() => {
+                expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(1);
+              });
+
+              act(() => button.click());
+              await waitFor(() => {
+                expect(mockRunWebAuthnAuthentication).toHaveBeenCalledTimes(2);
+              });
+            });
+          });
+        });
+      });
+    });
+
+    describe.each([
+      {
+        label: 'success',
+        stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+        stepFixture: completedWithSuccessStep,
+      },
+      {
+        label: 'error',
+        stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+        stepFixture: completedWithErrorStep,
+      },
+    ] as const)('Completed With $label Step', ({ label, stepType, stepFixture }) => {
+      const authorizationResponseUrl = stepFixture.links?.find(link => link.rel === 'authorization-response')?.href;
+
+      describe('autoRedirectOnAuthenticationComplete enabled (default)', () => {
+        it('should redirect to the authorization-response URL', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(window.location.href).toBe(authorizationResponseUrl);
+          });
+        });
+
+        it('should throw error to the error boundary when no authorization-response link exists', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType, { noLinks: true });
+
+          await waitFor(() => {
+            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
+            );
+          });
+        });
+
+        it('should throw error to the error boundary when links exist but none have rel "authorization-response"', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType, { linksWithoutAuthorizationResponse: true });
+
+          await waitFor(() => {
+            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
+            );
+          });
+        });
+
+        it('should not update the current step when redirecting', async () => {
+          render(
+            <HaapiStepper>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(window.location.href).toBe(authorizationResponseUrl);
+          });
+
+          expect(screen.getByTestId('step-type')).toHaveTextContent(initialStepType);
+        });
+      });
+
+      describe('autoRedirectOnAuthenticationComplete disabled', () => {
+        it('should render the completed step instead of redirecting', async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+          });
+
+          expect(window.location.href).not.toBe(authorizationResponseUrl);
+        });
+
+        it('should add the completed step to history with the full OAuth payload accessible to consumers', async () => {
+          render(
+            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+              <TestComponent />
+            </HaapiStepper>
+          );
+
+          await screen.findByTestId('step-type');
+          await goToNextStep(stepType);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+          });
+
+          const historyData = getHistoryData(screen.getByTestId('history'));
+          const completedHistoryEntry = historyData[
+            historyData.length - 1
+          ] as HaapiStepperHistoryEntry<HaapiStepperCompletedStep>;
+
+          expect(completedHistoryEntry.step.type).toBe(stepType);
+
+          if (label === 'success') {
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.properties).toMatchObject({
+              code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
+              iss: 'https://localhost:8443/dev/oauth/anonymous',
+              state: 'foo',
+            });
+          } else {
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.error).toBe('server_error');
+            // @ts-expect-error - narrowing the history step union for test access
+            expect(completedHistoryEntry.step.error_description).toBe('An error occurred during authorization');
+          }
+        });
+      });
+    });
+  });
+
+  describe('Error handling', () => {
+    it('should throw error when useHaapiStepper is used outside provider', () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => ({}));
+
+      expect(() => {
+        render(<TestComponent />);
+      }).toThrow('useHaapiStepper must be used inside HaapiStepper');
+
+      consoleSpy.mockRestore();
+    });
+
+    describe('HAAPI errors', () => {
+      it('should provide the error status for Problem steps', async () => {
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        );
+
+        const step = await screen.findByTestId('step-type');
+
+        expect(step).toHaveTextContent(initialStepType);
+
+        await goToNextStep(HAAPI_PROBLEM_STEPS.INVALID_INPUT);
+
+        await waitFor(() => {
+          const loadingElementRef = screen.queryByTestId('loading');
+          expect(loadingElementRef).not.toBeInTheDocument();
+        });
+
+        expect(screen.getByTestId('error')).toBeInTheDocument();
+        expect(screen.getByTestId('error')).toHaveTextContent('Invalid Input');
+      });
+    });
+
+    describe('Non-HAAPI errors', () => {
+      it('should throw the error to the error boundary when it is not a Problem step', async () => {
+        render(
+          <HaapiStepper>
+            <TestComponent />
+          </HaapiStepper>
+        );
+
+        const testError = new Error('Network error');
+        const step = await screen.findByTestId('step-type');
+
+        expect(step).toHaveTextContent(initialStepType);
+
+        mockHaapiFetch.mockRejectedValueOnce(testError);
+
+        const nextStepButton = await screen.findByTestId('next-step-button');
+        act(() => nextStepButton.click());
+
+        await waitFor(() => {
+          expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(testError.message);
+        });
+      });
+    });
+  });
+
+  describe('Loading', () => {
+    it('should provide the loading status', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+      expect(await screen.findByTestId('step-type')).toHaveTextContent(initialStepType);
+
+      await goToNextStep(HAAPI_STEPS.REGISTRATION);
+
+      await waitFor(() => expect(screen.getByTestId('loading')).toBeInTheDocument());
+
+      expect(await screen.findByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION);
+
+      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('History', () => {
+    const bootstrapLinkAction = {
+      id: 'b5a87494-17d4-48cc-8ce7-c4f75726cdac',
+      href: 'https://example.com/auth',
+      rel: 'self',
+      type: 'link',
+      subtype: 'initial-link',
+    };
+    it('should track history of steps with actions and timestamps', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      const initialStep = HAAPI_STEPS.AUTHENTICATION;
+      const secondStep = HAAPI_STEPS.REGISTRATION;
+      const thirdStep = HAAPI_STEPS.POLLING;
+      let history = await screen.findByTestId('history');
+      let historyData = getHistoryData(history);
+      let previousStepTriggerActionKind = bootstrapLinkAction;
+
+      expect(historyData).toHaveLength(1);
+      expect(historyData[0].step.type).toBe(initialStep);
+      expect(historyData[0].triggeredByAction).toEqual({
+        ...previousStepTriggerActionKind,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        id: expect.anything(),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        href: expect.anything(),
+      });
+      expect(historyData[0].triggeredByPayload).toBeUndefined();
+
+      await goToNextStep(secondStep);
+
+      await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(secondStep));
+
+      history = screen.getByTestId('history');
+      historyData = getHistoryData(history);
+      // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      previousStepTriggerActionKind = getStepMock(initialStep).actions[0].kind;
+
+      expect(historyData).toHaveLength(2);
+      expect(historyData[1].step.type).toBe(secondStep);
+      expect(historyData[1].triggeredByAction).toBeDefined();
+      // @ts-expect-error - skipping for testing purposes
+      expect(historyData[1].triggeredByAction.kind).toBe(previousStepTriggerActionKind);
+
+      await goToNextStep(thirdStep);
+
+      await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(thirdStep));
+
+      history = screen.getByTestId('history');
+      historyData = getHistoryData(history);
+      // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      previousStepTriggerActionKind = getStepMock(secondStep).actions[0].kind;
+
+      expect(historyData).toHaveLength(3);
+      expect(historyData[2].step.type).toBe(thirdStep);
+      expect(historyData[2].triggeredByAction).toBeDefined();
+      // @ts-expect-error - skipping for testing purposes
+      expect(historyData[2].triggeredByAction.kind).toBe(previousStepTriggerActionKind);
+
+      const timestamp1 = new Date(historyData[0].timestamp);
+      const timestamp2 = new Date(historyData[1].timestamp);
+      const timestamp3 = new Date(historyData[2].timestamp);
+
+      expect(timestamp1.getTime()).toBeLessThanOrEqual(timestamp2.getTime());
+      expect(timestamp2.getTime()).toBeLessThanOrEqual(timestamp3.getTime());
+    });
+
+    it('should not include continue same step in history', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      await screen.findByTestId('step-type');
+
+      await goToNextStep(HAAPI_STEPS.CONTINUE_SAME);
+
+      await waitFor(() => {
+        expect(screen.getByText('Message from Continue Same Step without continueActions')).toBeInTheDocument();
+      });
+
+      const history = screen.getByTestId('history');
+      const historyData = getHistoryData(history);
+
+      // Should have authentication twice - once initially, once after continue same
+      // The continue same step itself is NOT in history, but the updated authentication step is
+      expect(historyData).toHaveLength(2);
+      expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
+      expect(historyData[1].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
+      // @ts-expect-error - skipping for testing purposes
+      expect(historyData[1].triggeredByAction.kind).toBe(HAAPI_FORM_ACTION_KINDS.LOGIN);
+    });
+
+    it('should not include redirection steps in history', async () => {
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      await goToNextStep(HAAPI_STEPS.REDIRECTION);
+
+      // Redirection steps are mocked in test to return HAAPI_STEPS.REGISTRATION
+      await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION));
+
+      const history = screen.getByTestId('history');
+      const historyData = getHistoryData(history);
+
+      expect(historyData).toHaveLength(2);
+      expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
+      expect(historyData[1].step.type).toBe(HAAPI_STEPS.REGISTRATION);
+    });
+
+    it('should not include input error problem steps in history', async () => {
+      mockHaapiFetch.mockReset();
+      mockHaapiFetchStep(HAAPI_STEPS.AUTHENTICATION);
+
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      await screen.findByTestId('step-type');
+
+      mockHaapiFetchStep(HAAPI_PROBLEM_STEPS.INVALID_INPUT);
+      await clickNextStepButton();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error-input')).toBeInTheDocument();
+      });
+
+      const history = screen.getByTestId('history');
+      const historyData = getHistoryData(history);
+
+      expect(historyData).toHaveLength(1);
+      expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
+      expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
+    });
+
+    it('should not include app error problem steps in history', async () => {
+      mockHaapiFetch.mockReset();
+      mockHaapiFetchStep(HAAPI_STEPS.AUTHENTICATION);
+
+      render(
+        <HaapiStepper>
+          <TestComponent />
+        </HaapiStepper>
+      );
+
+      await screen.findByTestId('step-type');
+
+      mockHaapiFetchStep(HAAPI_PROBLEM_STEPS.UNEXPECTED);
+      await clickNextStepButton();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error-app')).toBeInTheDocument();
+      });
+
+      const history = screen.getByTestId('history');
+      const historyData = getHistoryData(history);
+
+      expect(historyData).toHaveLength(1);
+      expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
+      expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.AUTHENTICATION);
+    });
+  });
+});
+
+const mockHaapiFetch = vi.fn();
+vi.mock('@curity/identityserver-haapi-web-driver', () => {
+  return {
+    createHaapiFetch: () => mockHaapiFetch,
+  };
+});
+
+// Default served-mode bootstrap stubbed onto `window.__CONFIG__` in `beforeEach`.
+// Per-test code that needs to simulate a different scenario (library mode without
+// a global, failure mode, …) calls `vi.stubGlobal('__CONFIG__', …)` to override.
+const mockConfiguration: Partial<HaapiStepperBootstrapConfig> = vi.hoisted(() => ({
+  initialUrl: 'https://example.com/auth',
+  haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+}));
+
+const mockThrowErrorToAppErrorBoundary = vi.fn();
+vi.mock('../../util/useThrowErrorToAppErrorBoundary', () => ({
+  // eslint-disable-next-line @eslint-react/hooks-extra/no-unnecessary-use-prefix
+  useThrowErrorToAppErrorBoundary: () => mockThrowErrorToAppErrorBoundary,
+}));
+
+const mockOpenBankIdApp = vi.hoisted(() => vi.fn());
+vi.mock('../actions/client-operation/operations/bankid/open-bankid-app', () => ({
+  openBankIdApp: mockOpenBankIdApp,
+}));
+
+const { mockRunWebAuthnRegistration, mockRunWebAuthnAuthentication } = vi.hoisted(() => ({
+  mockRunWebAuthnRegistration:
+    vi.fn<typeof import('../actions/client-operation/operations/webauthn').runWebAuthnRegistration>(),
+  mockRunWebAuthnAuthentication:
+    vi.fn<typeof import('../actions/client-operation/operations/webauthn').runWebAuthnAuthentication>(),
+}));
+vi.mock('../actions/client-operation/operations/webauthn', async () => {
+  const actual = await vi.importActual<typeof import('../actions/client-operation/operations/webauthn')>(
+    '../actions/client-operation/operations/webauthn'
+  );
+  return {
+    ...actual,
+    runWebAuthnRegistration: mockRunWebAuthnRegistration,
+    runWebAuthnAuthentication: mockRunWebAuthnAuthentication,
+  };
+});
+
+/**
+ * Stand-in for the static `PublicKeyCredential` interface used by the WebAuthn
+ * auto-start tests — enough for `isWebAuthnApiSupported()` and
+ * `isWebAuthnPlatformAuthenticatorAvailable()` to resolve. jsdom doesn't expose it.
+ */
+const stubPublicKeyCredential = ({ platformAuthenticatorAvailable = true } = {}) =>
+  Object.assign(vi.fn(), {
+    parseCreationOptionsFromJSON: vi.fn(),
+    parseRequestOptionsFromJSON: vi.fn(),
+    isUserVerifyingPlatformAuthenticatorAvailable: vi.fn(() => Promise.resolve(platformAuthenticatorAvailable)),
+  });
+
+/**
+ * Shadows `navigator.userAgent` with the given string for the duration of a test, exercising
+ * the `requiresWebAuthnUserInteraction` Safari-vs-Chromium UA sniff.
+ */
+const stubUserAgent = (userAgent: string): void => {
+  Object.defineProperty(navigator, 'userAgent', { configurable: true, value: userAgent });
+};
+
+/**
+ * Replaces the next pending `mockHaapiFetch` response with an authentication or
+ * registration step containing the given action — used by the WebAuthn auto-start
+ * tests to stand up a step shape that's not in `getStepMock`.
+ */
+const firstCallAction = (mock: ReturnType<typeof vi.fn>): HaapiClientOperationAction => {
+  const [action] = mock.mock.calls[0] as [HaapiClientOperationAction];
+  return action;
+};
+
+/**
+ * Replaces any pending `mockHaapiFetch` response with an authentication or registration
+ * step containing the given action — used by the WebAuthn auto-start tests to stand up a
+ * step shape that's not in `getStepMock`.
+ *
+ * Resets queued responses (including the default initial-step from the outer `beforeEach`)
+ * so the stepper sees only this WebAuthn step on its initial fetch.
+ */
+const mockHaapiFetchWebAuthnStep = (
+  stepType: HAAPI_STEPS.AUTHENTICATION | HAAPI_STEPS.REGISTRATION,
+  action: HaapiClientOperationAction
+) => {
+  const stepMock = {
+    type: stepType,
+    actions: [action],
+    metadata: { templateArea: 'lwa-test', viewName: 'test' },
+  };
+  mockHaapiFetch.mockReset();
+  mockHaapiFetch.mockImplementationOnce(
+    () =>
+      new Promise(resolve =>
+        setTimeout(
+          () =>
+            resolve({
+              headers: {
+                get: (name: string) => (name === 'Content-Type' ? MEDIA_TYPES.AUTH : null),
+              },
+              json: () => Promise.resolve(stepMock),
+            }),
+          0
+        )
+      )
+  );
+};
+
+const mockHaapiFetchStep = (step: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config: Record<string, unknown> = {}) => {
+  const stepMock = getStepMock(step, config);
+
+  const isProblemStep = (Object.values(HAAPI_PROBLEM_STEPS) as string[]).includes(step);
+  const contentType = isProblemStep ? MEDIA_TYPES.PROBLEM : MEDIA_TYPES.AUTH;
+
+  mockHaapiFetch.mockImplementationOnce(
+    () =>
+      new Promise(resolve =>
+        setTimeout(
+          () =>
+            resolve({
+              headers: {
+                get: (name: string) => (name === 'Content-Type' ? contentType : null),
+              },
+              json: () => Promise.resolve(stepMock),
+            }),
+          0
+        )
+      )
+  );
+
+  if (step === HAAPI_STEPS.REDIRECTION) {
+    // For redirection steps, we need to mock the next step fetch as well to avoid loops
+    mockHaapiFetchStep(HAAPI_STEPS.REGISTRATION);
+  }
+};
+
+function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Record<string, unknown>) {
+  let stepMock;
+
+  switch (stepType) {
+    case HAAPI_STEPS.AUTHENTICATION:
+      stepMock = authenticationStep('/auth/login');
+      // Add continueActions to the action if requested for testing CONTINUE_SAME scenario
+      if (config?.withContinueActions) {
+        // @ts-expect-error skipping for testing purposes
+        stepMock.actions[0].model.continueActions = [
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: HAAPI_FORM_ACTION_KINDS.CONTINUE,
+            title: 'Continue',
+            model: {
+              href: '/auth/continue',
+              method: HTTP_METHODS.POST,
+            },
+          },
+        ];
+      }
+      break;
+    case HAAPI_STEPS.CONTINUE_SAME:
+      stepMock = continueSameStep(config?.withContinueActions as boolean);
+      break;
+    case HAAPI_STEPS.REDIRECTION:
+      stepMock = redirectionStep('/auth/user');
+      break;
+    case HAAPI_STEPS.POLLING:
+      if (config?.bankId) {
+        stepMock =
+          config.status === HAAPI_POLLING_STATUS.DONE
+            ? pollingBankIdStep('/polldone', HAAPI_POLLING_STATUS.DONE)
+            : pollingBankIdStep('/poll');
+      } else {
+        stepMock =
+          config?.status === HAAPI_POLLING_STATUS.DONE
+            ? pollingPendingStep('/polldone', HAAPI_POLLING_STATUS.DONE)
+            : pollingPendingStep('/poll');
+      }
+      break;
+    case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
+      if (config?.noLinks) {
+        stepMock = completedWithSuccessStepWithoutLinks;
+      } else if (config?.linksWithoutAuthorizationResponse) {
+        stepMock = { ...completedWithSuccessStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      } else {
+        stepMock = completedWithSuccessStep;
+      }
+      break;
+    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
+      if (config?.noLinks) {
+        stepMock = completedWithErrorStepWithoutLinks;
+      } else if (config?.linksWithoutAuthorizationResponse) {
+        stepMock = { ...completedWithErrorStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      } else {
+        stepMock = completedWithErrorStep;
+      }
+      break;
+    case HAAPI_STEPS.REGISTRATION:
+      stepMock = createRegistrationStep();
+      break;
+    case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.INVALID_INPUT);
+      break;
+    case HAAPI_PROBLEM_STEPS.AUTHENTICATION_FAILED:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.AUTHENTICATION_FAILED);
+      break;
+    case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS);
+      break;
+    case HAAPI_PROBLEM_STEPS.SESSION_TOKEN_MISMATCH:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.SESSION_TOKEN_MISMATCH);
+      break;
+    case HAAPI_PROBLEM_STEPS.UNEXPECTED:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.UNEXPECTED);
+      break;
+    case HAAPI_PROBLEM_STEPS.TOO_MANY_ATTEMPTS:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.TOO_MANY_ATTEMPTS);
+      break;
+    case HAAPI_PROBLEM_STEPS.GENERIC_USER_ERROR:
+      stepMock = createProblemStep(HAAPI_PROBLEM_STEPS.GENERIC_USER_ERROR);
+      break;
+    default:
+      throw new Error(`Unsupported step type in test mock: ${stepType}`);
+  }
+
+  return stepMock;
+}
+
+function TestComponent() {
+  const { currentStep, loading, error, history, nextStep } = useHaapiStepper();
+
+  return (
+    <div>
+      {loading && <div data-testid="loading">loading</div>}
+      {error && <div data-testid="error">{error.app?.title ?? error.input?.title}</div>}
+      {error?.app && <div data-testid="error-app">{error.app.title}</div>}
+      {error?.input && <div data-testid="error-input">{error.input.title}</div>}
+      {currentStep && (
+        <div data-testid="step-container">
+          <div data-testid="step-type">{currentStep.type}</div>
+          {currentStep.dataHelpers.messages.map(message => (
+            <div key={message.id} data-testid="message">
+              {message.text}
+            </div>
+          ))}
+          {currentStep.dataHelpers.actions?.all.map(action => (
+            <button
+              key={action.id}
+              type="button"
+              data-testid="action-button"
+              onClick={() => nextStep(action as HaapiStepperNextStepAction)}
+            >
+              {action.title}
+            </button>
+          ))}
+          {currentStep.dataHelpers.links.map(link =>
+            isQrCodeLink(link) ? (
+              <img key={link.id} src={link.href} alt={link.title ?? link.rel} data-testid="link-image" />
+            ) : (
+              <button key={link.id} type="button" data-testid="link-button" onClick={() => nextStep(link)}>
+                {link.title ?? link.rel}
+              </button>
+            )
+          )}
+          <button
+            data-testid="next-step-button"
+            onClick={() => {
+              const mockAction = (currentStep as HaapiStepperActionStep).dataHelpers.actions
+                ?.all[0] as HaapiStepperFormAction;
+              nextStep(mockAction);
+            }}
+            type="button"
+          >
+            Next Step
+          </button>
+        </div>
+      )}
+      {history.length && <div data-testid="history">{JSON.stringify(history)}</div>}
+    </div>
+  );
+}
+
+const goToNextStep = async (nextStep: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config: Record<string, unknown> = {}) => {
+  mockHaapiFetchStep(nextStep, config);
+
+  await clickNextStepButton();
+};
+
+const clickNextStepButton = async () => {
+  const nextStepButton = await screen.findByTestId('next-step-button');
+
+  act(() => nextStepButton.click());
+};
+
+function getTextContent(element: HTMLElement): string {
+  const content: string | null = element.textContent;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- textContent is string|null per DOM types but the linter narrows it to string
+  return content ?? '';
+}
+
+function getHistoryData(element: HTMLElement): HaapiStepperHistoryEntry[] {
+  return JSON.parse(getTextContent(element)) as HaapiStepperHistoryEntry[];
+}
+
+const failedWebAuthnCeremonyError = () => formatErrorStepData({ type: HAAPI_PROBLEM_STEPS.UNEXPECTED, messages: [] });

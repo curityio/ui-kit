@@ -1,0 +1,100 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+import { HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
+import { HTTP_METHODS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
+import { HAAPI_STEPS, HaapiActionStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
+import { PreviewItemData } from './examples';
+
+const authenticationSelectAuthenticator: HaapiActionStep = {
+  metadata: {
+    viewName: 'views/select-authenticator/index',
+  },
+  type: HAAPI_STEPS.AUTHENTICATION,
+  actions: [
+    {
+      template: HAAPI_ACTION_TYPES.SELECTOR,
+      kind: 'authenticator-selector',
+      title: 'Login',
+      model: {
+        options: [
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: 'select-authenticator',
+            title: 'Google',
+            properties: {
+              authenticatorType: 'google',
+            },
+            model: {
+              href: '/authentication/authenticate/google',
+              method: HTTP_METHODS.GET,
+            },
+          },
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: 'select-authenticator',
+            title: 'TOTP',
+            properties: {
+              authenticatorType: 'totp',
+            },
+            model: {
+              href: '/authentication/authenticate/totp',
+              method: HTTP_METHODS.GET,
+            },
+          },
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: 'select-authenticator',
+            title: 'Username/password',
+            properties: {
+              authenticatorType: 'html-form',
+            },
+            model: {
+              href: '/authentication/authenticate/user-pwd',
+              method: HTTP_METHODS.GET,
+            },
+          },
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: 'select-authenticator',
+            title: 'Email',
+            properties: {
+              authenticatorType: 'email',
+            },
+            model: {
+              href: '/authentication/authenticate/email',
+              method: HTTP_METHODS.GET,
+            },
+          },
+          {
+            template: HAAPI_ACTION_TYPES.FORM,
+            kind: 'select-authenticator',
+            title: 'SMS',
+            properties: {
+              authenticatorType: 'sms',
+            },
+            model: {
+              href: '/authentication/authenticate/sms',
+              method: HTTP_METHODS.GET,
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+
+export const authenticationExamples: PreviewItemData[] = [
+  {
+    title: 'Select Authenticator',
+    step: authenticationSelectAuthenticator,
+  },
+];

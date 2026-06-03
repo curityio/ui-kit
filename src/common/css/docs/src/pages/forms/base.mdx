@@ -9,6 +9,93 @@ import { IconAuthenticatorGoogle } from '@curity/ui-kit-icons';
 
 # Base
 
+## Common form elements
+
+### Text input
+
+<div className="form-field mw-40 mt2 mb4">
+  <label className="label block" for="text-example">Label</label>
+  <input className="field w100" type="text" name="text-example" placeholder="Enter text" />
+</div>
+
+```html
+<div className="form-field">
+  <label className="label block" for="text-example">Label</label>
+  <input className="field w100" type="text" name="text-example" placeholder="Enter text" />
+</div>
+```
+
+> Note: the `w100` class is used to make the input element take up the full width of its parent container.
+
+### Password input
+
+<div className="form-field mw-40 mt2 mb4">
+  <label for="password-example">Password</label>
+  <input className="field w100" type="password" name="password-example" />
+</div>
+
+```html
+<div className="form-field">
+  <label for="password-example">Password</label>
+  <input className="field w100" type="password" name="password-example" />
+</div>
+```
+
+### Select
+
+<div className="form-field mw-40 mt2 mb4">
+  <label for="select-example">Choose an option</label>
+  <select name="select-example" id="select-example">
+    <option value="">Select...</option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+  </select>
+</div>
+
+```html
+<div className="form-field">
+  <label for="select-example">Choose an option</label>
+  <select name="select-example" id="select-example">
+    <option value="">Select...</option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+  </select>
+</div>
+```
+
+### Checkbox
+
+<div className="form-field mw-40 mt2 mb4">
+  <div className="flex flex-gap-2 flex-center">
+    <input type="checkbox" id="checkbox-example" name="checkbox-example" value="checked" />
+    <label for="checkbox-example">Agree to terms</label>
+  </div>
+</div>
+
+```html
+<div className="form-field">
+  <div className="flex flex-gap-2 flex-center">
+    <input type="checkbox" id="checkbox-example" name="checkbox-example" value="checked" />
+    <label for="checkbox-example">Agree to terms</label>
+  </div>
+</div>
+```
+
+### Submit button
+
+<div className="form-field mw-40 mt2 mb4">
+  <input className="button button-primary button-medium w100" type="submit" value="Submit" />
+</div>
+
+```html
+<div className="form-field">
+  <input className="button button-primary button-medium w100" type="submit" value="Submit" />
+</div>
+```
+
+
 ## Form example
 
 The `.form-field` class can wrap form elements to provide a consistent look and feel. The `.label` class is used to style the label element, and the `.field` class is used to style the input element. The `.w100` class is used to make the input element take up the full width of its parent container.

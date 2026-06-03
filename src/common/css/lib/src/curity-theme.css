@@ -26,7 +26,7 @@
   --well-border-width: 1px;
   --well-box-shadow: rgb(0 0 0 / 5%) 0 6px 24px 0, rgb(0 0 0 / 8%) 0 0 0 1px;
 
-  --login-symbol-display: block;
+  --login-symbol-display: flex;
   --login-symbol-size: 180px;
   --login-symbol-margin-top: 2rem;
   --login-symbol-margin-bottom: 2rem;
@@ -149,7 +149,7 @@
   --authenticator-username-color: var(--color-primary);
   --authenticator-netidaccess-os-color: #000;
   --authenticator-passkeys-color: #626c87;
-  --authenticator-openid-wallet-color: #f2f2f2;
+  --authenticator-openid-wallet-color: #666;
 
   --alert-border-radius: 8px;
   --alert-border-style: solid;
