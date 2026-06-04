@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
+import { useHaapiAppConfig } from '../../feature/app-config/HaapiAppConfigHook';
 
 export const Logo = () => {
   const { theme } = useHaapiAppConfig();
