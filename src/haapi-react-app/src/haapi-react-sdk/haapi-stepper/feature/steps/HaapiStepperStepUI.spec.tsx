@@ -39,7 +39,7 @@ import type {
   HaapiStepperVisibleFormField,
 } from '../stepper/haapi-stepper.types';
 import { HAAPI_FORM_FIELDS } from '../../data-access/types/haapi-form.types';
-import { MEDIA_TYPES } from '../../../../shared/util/types/media.types';
+import { MEDIA_TYPES } from '../../data-access/types/media.types';
 import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
 import {
   HAAPI_FORM_ACTION_KINDS,
