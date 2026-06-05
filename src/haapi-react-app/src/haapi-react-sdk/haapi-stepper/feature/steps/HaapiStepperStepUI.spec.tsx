@@ -93,13 +93,14 @@ describe('HaapiStepperStepUI', () => {
   describe('Loading Rendering', () => {
     describe('Default Rendering', () => {
       describe('No current step present', () => {
-        it('should render loading element when no currentStep and loading=true', () => {
-          renderWithContext(<HaapiStepperStepUI />, {
+        it('should render nothing when no currentStep, even when loading=true', () => {
+          const { container } = renderWithContext(<HaapiStepperStepUI />, {
             currentStep: null,
             loading: true,
           });
 
-          expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+          expect(container.firstChild).toBeNull();
         });
 
         it('should render nothing (null) when no currentStep and loading=false', () => {
@@ -152,22 +153,33 @@ describe('HaapiStepperStepUI', () => {
 
           expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
+
+        it('should not render loading spinner when loading=true but currentStep is not a polling step', () => {
+          renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: createMockStep(HAAPI_STEPS.AUTHENTICATION),
+            loading: true,
+          });
+
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+          expect(screen.queryByTestId('messages')).toBeInTheDocument();
+        });
       });
     });
 
     describe('Custom Rendering', () => {
       describe('Data Customization', () => {
         it('should pass customized data to the default rendering', () => {
-          const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({
-            loading,
-            currentStep,
-            ...rest
-          }) => {
-            return { loading: loading && currentStep?.metadata?.templateArea !== 'lwa', currentStep, ...rest };
+          // The default spinner keys off currentStep, so rewriting it changes what the default
+          // factory renders: replacing the polling-pending step with a non-polling one hides the spinner.
+          const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({ currentStep, ...rest }) => {
+            const nextStep =
+              currentStep?.type === HAAPI_STEPS.POLLING ? createMockStep(HAAPI_STEPS.AUTHENTICATION) : currentStep;
+
+            return { currentStep: nextStep, ...rest };
           };
 
           renderWithContext(<HaapiStepperStepUI loadingRenderInterceptor={loadingRenderInterceptor} />, {
-            loading: true,
+            currentStep: createPollingStep(),
           });
 
           expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
@@ -199,9 +211,7 @@ describe('HaapiStepperStepUI', () => {
 
           unmount();
 
-          const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-            metadata: { viewName: 'views/login/index' },
-          });
+          const step = createPollingStep();
 
           renderWithContext(<HaapiStepperStepUI loadingRenderInterceptor={customLoadingRenderInterceptor} />, {
             loading: true,
@@ -259,7 +269,8 @@ describe('HaapiStepperStepUI', () => {
           });
 
           expect(analyticsTracker).toHaveBeenCalledWith('loading_started', { hasStep: true });
-          expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
+          // `loading` no longer drives the default spinner; the non-polling step renders no spinner.
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
       });
     });

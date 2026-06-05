@@ -210,13 +210,14 @@ import type { HaapiStepperStepUIProps } from './typings';
 export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
   const {
     /**
-     * The default loadingRenderInterceptor factory renders a spinner whenever `loading === true` *or*
-     * `currentStep` is a polling step in `HAAPI_POLLING_STATUS.PENDING`.
+     * The default loadingRenderInterceptor factory renders a spinner whenever `currentStep` is a
+     * polling step in `HAAPI_POLLING_STATUS.PENDING`.
      *
-     * Consumers replacing this interceptor are therefore replacing both signals: returning a React
-     * element only when `loading === true` will hide the polling-pending progress indicator. Either
-     * check `currentStep` explicitly, or return the pass-through `HaapiStepperAPI` data to delegate to
-     * the default factory for the cases you don't want to handle.
+     * Consumers replacing this interceptor take over that signal entirely: returning a React element
+     * based on some other condition (e.g. `loading === true`) will hide the polling-pending progress
+     * indicator for the cases the default factory would have handled. Either check `currentStep`
+     * explicitly, or return the pass-through `HaapiStepperAPI` data to delegate to the default factory
+     * for the cases you don't want to handle.
      */
     loadingRenderInterceptor,
     errorRenderInterceptor,
