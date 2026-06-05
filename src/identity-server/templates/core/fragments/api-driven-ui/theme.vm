@@ -11,12 +11,12 @@
 
 {
     logo: {
-        path: '$!logo_path',
+        path: '$!_tr.encodeJson($logo_path)',
         isInsideWell: #if ($logo_inside) true #else false #end,
     },
 #if ($show_symbol)
     #macro(symbolPath $jsonKey $pathVariable)
-        #if($pathVariable)'$jsonKey': '$!pathVariable',#end
+        #if($pathVariable)'$jsonKey': '$!_tr.encodeJson($pathVariable)',#end
     #end
 
     pageSymbols: {
@@ -47,7 +47,7 @@
         views: {
             ## Nothing to add for now
         },
-        default: '$!page_symbol',
+        default: '$!_tr.encodeJson($page_symbol)',
     }
 #end
 }
