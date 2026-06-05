@@ -218,7 +218,7 @@ svg {
 
 .haapi-stepper-well {
   @extend .p3, .mx-auto;
-  width: clamp(280px, 90%, 560px);
+  width: clamp(280px, 90%, 500px);
   background-color: var(--well-background-color);
   border-width: var(--well-border-width);
   border-style: var(--well-border-style);
