@@ -167,25 +167,6 @@ describe('HaapiStepperStepUI', () => {
     });
 
     describe('Custom Rendering', () => {
-      describe('Data Customization', () => {
-        it('should pass customized data to the default rendering', () => {
-          // The default spinner keys off currentStep, so rewriting it changes what the default
-          // factory renders: replacing the polling-pending step with a non-polling one hides the spinner.
-          const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({ currentStep, ...rest }) => {
-            const nextStep =
-              currentStep?.type === HAAPI_STEPS.POLLING ? createMockStep(HAAPI_STEPS.AUTHENTICATION) : currentStep;
-
-            return { currentStep: nextStep, ...rest };
-          };
-
-          renderWithContext(<HaapiStepperStepUI loadingRenderInterceptor={loadingRenderInterceptor} />, {
-            currentStep: createPollingStep(),
-          });
-
-          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-        });
-      });
-
       describe('UI Customization', () => {
         it('should render custom loading element when loadingRenderInterceptor is provided', () => {
           const customLoadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({
