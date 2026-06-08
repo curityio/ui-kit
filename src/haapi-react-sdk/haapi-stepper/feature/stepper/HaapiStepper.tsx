@@ -248,8 +248,8 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   }
  *
  *   if (
- *     currentStep.view?.templateArea === 'lwa-dev' &&
- *     currentStep.view?.viewName === 'views/select-authenticator/index'
+ *     currentStep.metadata?.templateArea === 'lwa-dev' &&
+ *     currentStep.metadata?.viewName === 'views/select-authenticator/index'
  *   ) {
  *     return (
  *       <div>

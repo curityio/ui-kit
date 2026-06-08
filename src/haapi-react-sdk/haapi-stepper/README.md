@@ -1,11 +1,11 @@
-# HAAPI Frontend Library
+# HAAPI React SDK
 
 ## Conceptual Glossary
 
 - **Flow**: sequence of steps that results in either a successful authentication (`HAAPI_STEPS.COMPLETED_WITH_SUCCESS`) or an error/failure (`HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR`).
 - **Step**: A single stage in the authentication flow, often represented as a screen (e.g., a login page). A step can be composed of actions, links, and messages.
   - [Step types](./util/types/haapi-step.types.ts)
-- **Action**: instructions about how to progress to the next step in the authentication flow. Actions often require specific user input and change the state of the authentication (e.g., submitting a form).
+- **Action**: instructions about how to progress to the next step in the authentication flow. Actions often require specific user input and change the state of the authentication (e.g., submitting a form). There are three kinds of action: **form** (e.g. a username/password login form), **client operation** (e.g. a BankID or WebAuthn operation) and **selector** (e.g. choosing an authenticator).
   - [Action types](./util/types/haapi-action.types.ts)
 - **Link**:  instructions about how to navigate to an alternative but related path (e.g. starting a password reset flow from the main authentication step)
   - [Link](./util/types/haapi-step.types.ts#L300)
@@ -21,16 +21,173 @@ Check out the following HAAPI documentation for in-depth technical details:
 
 ## Purpose
 
-The HAAPI Frontend Library is a set of React components that provides:
- - A built-in, full management of HAAPI flows in the frontend with minimal setup:
-  ```tsx
-    <HaapiStepper>
-      <HaapiStepperStepUI />
-    </HaapiStepper>
-  ```
- - A simple toolbox to fully customize HAAPI flows in the frontend, composed of the [HAAPI Stepper](#haapi-stepper), [HAAPI UI Step](#haapi-ui-step), and [HAAPI UI Components](#haapi-stepper-ui-components).
+The HAAPI Frontend Library is a set of React components that fully manage HAAPI authentication
+flows in the frontend. It works out of the box with minimal setup and lets you customize the UI
+only as far as you need.
 
-## HAAPI Stepper
+## Main Actors Overview
+
+`HaapiStepper` **runs the flow**; everything else is about **how you render it**.
+
+### `HaapiStepper` — runs the flow
+
+A headless provider that manages multi-step HAAPI authentication workflows. Wrap your app in it.
+
+```tsx
+<HaapiStepper>
+  {/* your UI goes here */}
+</HaapiStepper>
+```
+
+### `useHaapiStepper()` — read & advance the flow
+
+A hook that exposes the ongoing `HaapiStepper` authentication flow: its current step and state
+(`currentStep`, `loading`, `error`), the `history` of steps taken so far, and a `nextStep`
+function to advance it.
+
+```tsx
+const { currentStep, loading, error, history, nextStep } = useHaapiStepper();
+```
+
+### `HaapiStepperStepUI` — the default UI
+
+Renders any HAAPI flow step out of the box, providing a complete default **opinionated** login UI. It is the fastest way to get HAAPI flows running, and the starting point you customize from.
+
+```tsx
+<HaapiStepper>
+  <HaapiStepperStepUI />
+</HaapiStepper>
+```
+
+### HAAPI Stepper UI Components — the building blocks
+
+The UI representation of the HAAPI entities (`HaapiStep` → `HaapiStepperStepUI`, `HaapiUserMessage` → `HaapiStepperMessageUI`…). These are the building blocks `HaapiStepperStepUI` is made of, and what you compose your own UI from.
+
+```tsx
+function Step() {
+  const { currentStep, nextStep } = useHaapiStepper();
+  if (!currentStep) return null;
+
+  const { actions, messages, links } = currentStep.dataHelpers;
+
+  return (
+    <>
+      <HaapiStepperMessagesUI messages={messages} />
+      <HaapiStepperActionsUI actions={actions.all} onAction={nextStep} />
+      <HaapiStepperLinksUI links={links} onClick={nextStep} />
+    </>
+  );
+}
+
+<HaapiStepper>
+  <Step />
+</HaapiStepper>
+```
+
+## Optional Customization Overview
+
+Start with the zero-effort default and adopt customization **only as far as you need**.
+
+| | Effort | Control | What you use |
+|---|--------|---------|--------------|
+| Default | None | Low | `HaapiStepper` + `HaapiStepperStepUI` |
+| Styles customization | Very low | Look only | CSS classes (`.haapi-stepper-*`) |
+| Render interceptors | Low | Medium | `HaapiStepperStepUI` + interceptor props |
+| UI composition | High | Full | `HaapiStepper` + `useHaapiStepper` hook + UI components |
+| Mixed | Mixed | Full | a combination of the above |
+
+### Default — works from scratch
+
+Renders the complete HAAPI flow UI.
+
+```tsx
+<HaapiStepper>
+  <HaapiStepperStepUI />
+</HaapiStepper>
+```
+
+### Styles customization
+
+The UI components emit plain `.haapi-stepper-*` CSS class names — restyle the default UI just by
+overriding those classes in your own stylesheet, no code changes needed.
+
+```css
+.haapi-stepper-button {
+  background: #6200ee;
+  border-radius: 8px;
+}
+```
+
+### Customize with render interceptors
+
+Keep the default UI and override one element. A render interceptor is a function that receives
+the `HaapiStepper` API data for the element it targets (`currentStep`, `loading`, `error`,
+`nextStep`…) and returns either a React element to use as the replacement, the API data to render the default UI, or `null` to skip the element from being rendered:
+
+```tsx
+<HaapiStepper>
+  <HaapiStepperStepUI
+    messageRenderInterceptor={({ message }) => {
+      // Return a React element to replace, the API data to render the default, or null to skip
+      return message.classList?.includes('error') ? <MyErrorBanner message={message} /> : message;
+    }}
+  />
+</HaapiStepper>
+```
+
+Interceptors exist for the loading, error, step, actions — **form, client operation and
+selector** — links, messages and form-field layers.
+
+### Customize with UI composition
+
+Build your own UI from the building blocks (`HaapiStepperActionsUI`, `HaapiStepperMessagesUI`,
+`HaapiStepperLinksUI`…); `HaapiStepper` still runs the flow:
+
+```tsx
+function LoginPage() {
+  const { currentStep, loading, nextStep } = useHaapiStepper();
+  if (loading || !currentStep) return <p>Loading…</p>;
+
+  const { actions, messages, links } = currentStep.dataHelpers;
+
+  return (
+    <CustomUI>
+      <h1>Sign in</h1>
+      <HaapiStepperMessagesUI messages={messages} />
+      <HaapiStepperActionsUI actions={actions.all} onAction={nextStep} />
+      <HaapiStepperLinksUI links={links} onClick={nextStep} />
+    </CustomUI>
+  );
+}
+
+<HaapiStepper>
+  <LoginPage />
+</HaapiStepper>
+```
+
+### Mixed — combine the default with your own UI
+
+Render interceptors and UI composition aren't exclusive — mix them wherever it helps. For
+example, return UI building blocks from a render interceptor to restructure *part* of the
+default UI while keeping everything else: a form render interceptor that re-lays-out the same
+fields, a step interceptor that swaps one step's UI, or the headless `HaapiStepper` driving a
+mix of building blocks, plain HTML and third-party components.
+
+```tsx
+// Keep the default everywhere, but give the form your own layout built from the building blocks.
+<HaapiStepperStepUI
+  formActionRenderInterceptor={({ currentStep, nextStep }) => {
+    const action = currentStep.dataHelpers.actions.form[0];
+    return (
+      <MyTwoColumnLayout>
+        <HaapiStepperFormUI action={action} onSubmit={nextStep} />
+      </MyTwoColumnLayout>
+    );
+  }}
+/>
+```
+
+## HAAPI Stepper In Detail
 
 ### Purpose
 
@@ -65,11 +222,12 @@ The `HaapiStepper` sets up the HAAPI API and makes it available to child compone
 The `useHaapiStepper` hook gives access to the HAAPI API to consumer components:
 
 ```tsx
-const { currentStep, loading, error, nextStep } = useHaapiStepper();
+const { currentStep, history, loading, error, nextStep } = useHaapiStepper();
 ```
 
 **State Properties:**
 - `currentStep: HaapiProviderStep | null` - The current step in the flow.
+- `history: HaapiStepperHistoryEntry[]` - The steps taken so far in the flow.
 - `loading: boolean` - The loading state during transitions.
 - `error: HaapiStepperError | null` - Error information if something goes wrong.
 
@@ -121,13 +279,13 @@ Both modes can be mixed with `config` overrides for other tunables (e.g. `pollin
 
 ### Usage
 
-Because `HaapiStepper` does not have a UI, it can be used to build custom flow user interfaces from scratch, or it can be used in combination with the [HaapiStepperStepUI](#haapi-ui-step) component, which provides a ready-to-use, highly customizable, HAAPI UI solution.
+Because `HaapiStepper` does not have a UI, it can be used to build custom flow user interfaces from scratch, or it can be used in combination with the [HaapiStepperStepUI](#haapi-step-ui) component, which provides a ready-to-use, highly customizable, HAAPI UI solution.
 
 Finally, the `HaapiStepper` can be used in combination with the built-in [HAAPI UI Components](#haapi-stepper-ui-components), which help create highly customized UIs while relying on some defaults.
 
-Check out [the HaapiStepper documentation and usage examples](./feature/stepper/HaapiStepper.tsx)
+Check out documentation and usage examples in [`HaapiStepper`](./feature/stepper/HaapiStepper.tsx), and in the test use cases [`HaapiStepper.spec.tsx`](./feature/stepper/HaapiStepper.spec.tsx) (the `Steps`, `Error handling`, `Loading` and `History` describe blocks) for more details.
 
-## HAAPI UI Step
+## HAAPI Step UI
 
 The `HaapiStepperStepUI` component provides a seamless way to implement complete HAAPI authentication flow UIs in your application, allowing extensive customization with minimal setup.
 
@@ -143,7 +301,17 @@ The `HaapiStepperStepUI` component provides a seamless way to implement complete
 
 Because the `HaapiStepperStepUI` handles all possible HAAPI authentication flows with proper user interfaces (UI), it is the fastest and easiest way to get HAAPI up and running in your application. It is also highly customizable and granular, allowing you to customize some aspects while keeping the defaults for the rest.
 
-Check out [the HaapiStepperStepUI documentation and usage examples](./feature/steps/HaapiStepperStepUI.tsx).
+For example, swap a single element via a render interceptor while keeping the default for everything else:
+
+```tsx
+<HaapiStepper>
+  <HaapiStepperStepUI
+    loadingRenderInterceptor={({ loading }) => (loading ? <MySpinner /> : null)}
+  />
+</HaapiStepper>
+```
+
+Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/steps/HaapiStepperStepUI.tsx), and in the test use cases [`HaapiStepperStepUI.spec.tsx`](./feature/steps/HaapiStepperStepUI.spec.tsx) (the `Custom Rendering` describe blocks) for more details.
 
 ### ViewName built-in UIs
 
@@ -151,17 +319,55 @@ The HaapiStepperStepUI ships built-in UIs for specific HAAPI `viewName`s (`step.
 
 Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/steps/HaapiStepperStepUI.tsx), and the test use cases in [`HaapiStepperStepUI.spec.tsx`](./feature/steps/HaapiStepperStepUI.spec.tsx) (`describe('ViewName built-in UIs Rendering')`) for more details.
 
-
-
 ## HAAPI Stepper UI Components
 
 The HAAPI Frontend Library provides some common HAAPI Stepper UI elements that help create highly customized UIs while relying on some defaults.
 
 ### Naming convention
 
-The HAAPI Stepper UI components are the UI representation of the main HAAPI entities, named with a `UI` suffix: `HaapiStepperStepUI` displays/interacts with `HaapiStepperStep`, `HaapiStepperLinkUI` with `HaapiStepperLink`, and so on. Collection components use the plural form (`HaapiStepperActionsUI`, `HaapiStepperLinksUI`, `HaapiStepperMessagesUI`).
+The HAAPI Stepper UI components are the UI representation of the main HAAPI entities, named with a `UI` suffix: `HaapiStepperStepUI` displays/interacts with [`HaapiStep`](./data-access/types/haapi-step.types.ts#L48), `HaapiStepperLinkUI` with [`HaapiLink`](./data-access/types/haapi-step.types.ts#L335), and so on. Collection components use the plural form (`HaapiStepperActionsUI`, `HaapiStepperLinksUI`, `HaapiStepperMessagesUI`).
 
 ### Usage
+
+Compose the building blocks to customize a step. For example, pass a `children` render function
+to `HaapiStepperFormUI` to swap in your own username field and an Ant Design submit button, while
+the built-in `HaapiStepperFormFieldUI` still manages the values and submission:
+
+```tsx
+import { Button } from 'antd';
+
+function LoginForm() {
+  const { currentStep, nextStep } = useHaapiStepper();
+  const formAction = currentStep?.dataHelpers.actions.form[0];
+  if (!formAction) return null;
+
+  return (
+    <HaapiStepperFormUI action={formAction} onSubmit={nextStep}>
+      {({ fields, formState }) => {
+        const username = fields.find(field => field.type === HAAPI_FORM_FIELDS.USERNAME);
+        const otherFields = fields.filter(field => field !== username);
+
+        return (
+          <>
+            {/* Custom username field, wired to the built-in form state */}
+            {username && <CustomUsernameField field={username} formState={formState} />}
+
+            {/* Remaining fields keep the default rendering */}
+            {otherFields.map(field => (
+              <HaapiStepperFormFieldUI key={field.id} field={field} />
+            ))}
+
+            {/* Ant Design submit button (submits the form via type="submit") */}
+            <Button type="primary" htmlType="submit">
+              Sign in
+            </Button>
+          </>
+        );
+      }}
+    </HaapiStepperFormUI>
+  );
+}
+```
 
 Check out documentation and usage examples in the links below:
 
@@ -290,28 +496,28 @@ const { app, input } = error || {};
 
 ##### HAAPI Error Utils
 
-###### HaapiErrorNotifier
+###### HaapiStepperErrorNotifier
 **Purpose**: Toast-based notification system for HAAPI `AppError`s, and optionally, `InputErrors`s:
 
 **Example Usage**:
 ```tsx
-<HaapiErrorNotifier>
+<HaapiStepperErrorNotifier>
   <YourApplication />
-</HaapiErrorNotifier>
+</HaapiStepperErrorNotifier>
 ```
 
 **Features:**
 - Automatically shows notifications for `AppError` and, optionally, `InputError`.
 - Auto-dismisses and manually dismisses with a close button.
 
-###### HaapiValidationErrorInputWrapper (Input-Level Errors)
+###### HaapiStepperFormValidationErrorInputWrapper (Input-Level Errors)
 **Purpose**: A field-specific error display for HAAPI validation `InputError`s:
 
 **Example Usage**:
 ```tsx
-<HaapiValidationErrorInputWrapper fieldName="username">
+<HaapiStepperFormValidationErrorInputWrapper fieldName="username">
   <input name="username" type="text" />
-</HaapiValidationErrorInputWrapper>
+</HaapiStepperFormValidationErrorInputWrapper>
 ```
 
 **Features:**
@@ -324,40 +530,3 @@ const { app, input } = error || {};
 Non-HAAPI errors are network, backend, and frontend errors that are not handled at lower levels.
 
 The `HaapiStepper` throws them as JavaScript errors so they can be caught by the nearest React error boundary.
-
-
-##### Non-HAAPI Error Utils
-
-###### useThrowErrorToAppErrorBoundary
-**Purpose**: A React hook that provides a function to rethrow async errors so they can be caught by React error boundaries.
-
-> **Why is this needed?** React error boundaries only catch errors during rendering, in lifecycle methods, and in constructors. They **do not** catch errors in async operations like event handlers, promises, or `setTimeout` callbacks. This hook bridges that gap by allowing you to manually throw errors that will be caught by the nearest `ErrorBoundary`.
-
-**Example Usage**:
-```tsx
-function MyComponent() {
-  const throwErrorToAppErrorBoundary = useThrowErrorToAppErrorBoundary();
-
-  // Example 1: Async operation error rethrowing
-  const handleAsyncAction = async () => {
-    try {
-      const response = await fetch('/api/critical-data');
-    } catch (error) {
-      // Rethrow async error so the ErrorBoundary can catch it and display the fallback UI
-      throwErrorToAppErrorBoundary('Failed to load critical data. Please refresh the page.');
-    }
-  };
-
-  // Example 2: Promise rejection rethrowing
-  const handlePromiseAction = () => {
-    someAsyncOperation()
-      .catch(error => {
-        // Rethrow async error so the ErrorBoundary can catch it and display the fallback UI
-        throwErrorToAppErrorBoundary('Operation failed unexpectedly');
-      });
-  };
-}
-```
-
-**Integration with HAAPI Stepper**:
-The HAAPI Stepper Provider uses this hook to handle non-HAAPI errors (network failures, unexpected server responses) by throwing them to the application-level error boundary rather than trying to handle them locally.
