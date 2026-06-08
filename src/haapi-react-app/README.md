@@ -1,10 +1,8 @@
 # HAAPI React App
 
-- [HAAPI Type-0 SPA Client - Login Web App](https://curity.atlassian.net/wiki/spaces/ISC/pages/25067734/HAAPI+Type-0+SPA+Client+-+Login+Web+App) @ Confluence
-
 ## Project & tools
 
-Install packages with `curity-cli t && npm i`.
+Install packages with `npm install`.
 
 - React
 - Built with Vite
@@ -52,14 +50,14 @@ To test the updates, enable the API-driven UI in the Identity Server instance an
 
 **Features:**
 - Catches JavaScript errors anywhere in the component tree
-- Displays user-friendly error messages with retry functionality  
+- Displays user-friendly error messages with retry functionality
 - Prevents entire application crashes
 - Includes error reporting for debugging
 
 
 ## Folder Structure
 
-Inspired by the Domain Driven Design approach, this project's folder structure is organized by 2 dimensions/levels:
+Inspired by the Domain-Driven Design approach, this project's folder structure is organized by 2 dimensions/levels:
 
 ### **Dimension 1: Subdomain/Feature**
 - **First level folders** represent different **subdomains or features** the app implements
@@ -76,7 +74,7 @@ Within each subdomain, code is organized by these technical layer types:
 - **Contains**: Business logic components that connect to data sources. "Smart" components that manage state and side effects
 - **Examples**: Components that handle authentication flows, form submissions, API calls
 
-#### **`ui/`** 
+#### **`ui/`**
 - **Purpose**: Presentational components only
 - **Contains**: "Dumb" components focused on rendering. No business logic, just UI rendering based on props
 - **Examples**: Buttons, input fields, layout components, styled elements

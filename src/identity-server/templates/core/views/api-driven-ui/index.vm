@@ -36,10 +36,10 @@
 <body>
 <script $nonceAttr>
     window.__CONFIG__ = {
-        initialUrl: '$_apiDrivenInitialUrl',
+        initialUrl: '$_tr.encodeJson($_apiDrivenInitialUrl)',
         haapi: {
-            clientId: '$_apiDrivenClientInfo.clientId',
-            tokenEndpoint: '$_apiDrivenClientInfo.tokenEndpoint',
+            clientId: '$_tr.encodeJson($_apiDrivenClientInfo.clientId)',
+            tokenEndpoint: '$_tr.encodeJson($_apiDrivenClientInfo.tokenEndpoint)',
         },
         theme: #parse("fragments/api-driven-ui/theme")
     };

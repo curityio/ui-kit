@@ -93,13 +93,14 @@ describe('HaapiStepperStepUI', () => {
   describe('Loading Rendering', () => {
     describe('Default Rendering', () => {
       describe('No current step present', () => {
-        it('should render loading element when no currentStep and loading=true', () => {
-          renderWithContext(<HaapiStepperStepUI />, {
+        it('should render nothing when no currentStep, even when loading=true', () => {
+          const { container } = renderWithContext(<HaapiStepperStepUI />, {
             currentStep: null,
             loading: true,
           });
 
-          expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+          expect(container.firstChild).toBeNull();
         });
 
         it('should render nothing (null) when no currentStep and loading=false', () => {
@@ -152,28 +153,20 @@ describe('HaapiStepperStepUI', () => {
 
           expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
-      });
-    });
 
-    describe('Custom Rendering', () => {
-      describe('Data Customization', () => {
-        it('should pass customized data to the default rendering', () => {
-          const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({
-            loading,
-            currentStep,
-            ...rest
-          }) => {
-            return { loading: loading && currentStep?.metadata?.templateArea !== 'lwa', currentStep, ...rest };
-          };
-
-          renderWithContext(<HaapiStepperStepUI loadingRenderInterceptor={loadingRenderInterceptor} />, {
+        it('should not render loading spinner when loading=true but currentStep is not a polling step', () => {
+          renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: createMockStep(HAAPI_STEPS.AUTHENTICATION),
             loading: true,
           });
 
           expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+          expect(screen.queryByTestId('messages')).toBeInTheDocument();
         });
       });
+    });
 
+    describe('Custom Rendering', () => {
       describe('UI Customization', () => {
         it('should render custom loading element when loadingRenderInterceptor is provided', () => {
           const customLoadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({
@@ -199,9 +192,7 @@ describe('HaapiStepperStepUI', () => {
 
           unmount();
 
-          const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
-            metadata: { viewName: 'views/login/index' },
-          });
+          const step = createPollingStep();
 
           renderWithContext(<HaapiStepperStepUI loadingRenderInterceptor={customLoadingRenderInterceptor} />, {
             loading: true,
@@ -259,7 +250,8 @@ describe('HaapiStepperStepUI', () => {
           });
 
           expect(analyticsTracker).toHaveBeenCalledWith('loading_started', { hasStep: true });
-          expect(screen.queryByTestId('loading-spinner')).toBeInTheDocument();
+          // `loading` no longer drives the default spinner; the non-polling step renders no spinner.
+          expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
         });
       });
     });

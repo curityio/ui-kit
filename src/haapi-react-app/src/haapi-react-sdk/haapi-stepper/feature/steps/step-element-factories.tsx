@@ -40,17 +40,12 @@ export const getLoadingElement = (
   haapiStepperAPI: HaapiStepperAPI,
   loadingRenderInterceptor?: HaapiStepperStepUILoadingRenderInterceptor
 ): ReactElement | null => {
-  const loadingElements = applyRenderInterceptor(
-    [haapiStepperAPI],
-    loadingRenderInterceptor,
-    ({ loading, currentStep }) => {
-      const isPollingPending =
-        currentStep?.type === HAAPI_STEPS.POLLING && currentStep.properties.status === HAAPI_POLLING_STATUS.PENDING;
-      const showSpinner = loading || isPollingPending;
+  const loadingElements = applyRenderInterceptor([haapiStepperAPI], loadingRenderInterceptor, ({ currentStep }) => {
+    const isPollingPending =
+      currentStep?.type === HAAPI_STEPS.POLLING && currentStep.properties.status === HAAPI_POLLING_STATUS.PENDING;
 
-      return showSpinner ? <Spinner width={48} height={48} mode="fullscreen" data-testid="loading-spinner" /> : null;
-    }
-  );
+    return isPollingPending ? <Spinner width={48} height={48} mode="fullscreen" data-testid="loading-spinner" /> : null;
+  });
 
   return loadingElements.length > 0 ? loadingElements[0] : null;
 };
