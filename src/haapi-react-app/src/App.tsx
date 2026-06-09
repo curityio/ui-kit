@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Layout } from './shared/ui/Layout';
+import { Layout } from './shared/ui/Layout/Layout';
 import { HaapiAppConfigProvider } from './shared/feature/app-config/HaapiAppConfigProvider';
 import { ErrorBoundary } from './shared/feature/error-handling/ErrorBoundary';
 import { HaapiStepperStepUI } from '@curity/haapi-react-sdk/haapi-stepper/feature/steps/HaapiStepperStepUI';

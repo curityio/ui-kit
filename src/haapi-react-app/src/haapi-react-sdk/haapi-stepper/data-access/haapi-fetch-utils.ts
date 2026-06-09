@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { MEDIA_TYPES } from '../../../shared/util/types/media.types';
+import { MEDIA_TYPES } from './types/media.types';
 import { HaapiFetchAction, HaapiFetchFormAction } from './types/haapi-fetch.types';
 import { HaapiFormField, HTTP_METHODS } from './types/haapi-form.types';
 import { FetchLike } from '@curity/identityserver-haapi-web-driver';

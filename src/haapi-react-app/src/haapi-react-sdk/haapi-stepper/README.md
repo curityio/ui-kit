@@ -105,12 +105,11 @@ When the `HaapiStepper` is consumed as a library — e.g. embedded in a third-pa
 
 ```tsx
 import { HaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
-import type { HaapiAppConfig } from '../shared/feature/app-config/types';
+import type { HaapiStepperBootstrapConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 
-const bootstrapConfig: HaapiAppConfig = {
+const bootstrapConfig: HaapiStepperBootstrapConfig = {
   initialUrl: 'https://idsvr.example.com/oauth/v2/oauth-authorize/...',
   haapi: { /* HAAPI web-driver config */ },
-  theme: { logo: { path: '/logo.svg', isInsideWell: true } },
 };
 
 <HaapiStepper config={{ bootstrap: bootstrapConfig }}>
