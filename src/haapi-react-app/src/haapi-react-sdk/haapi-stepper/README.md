@@ -105,7 +105,7 @@ When the `HaapiStepper` is consumed as a library — e.g. embedded in a third-pa
 
 ```tsx
 import { HaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
-import type { HaapiStepperBootstrapConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import type { HaapiStepperBootstrapConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 
 const bootstrapConfig: HaapiStepperBootstrapConfig = {
   initialUrl: 'https://idsvr.example.com/oauth/v2/oauth-authorize/...',
