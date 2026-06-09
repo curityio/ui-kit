@@ -29,7 +29,6 @@ interface HaapiStepperMessagesUIProps {
  * @param messages - Array of HAAPI user messages to display
  * @param renderInterceptor - Optional function to customize message rendering
  *
- * @example
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep } = useHaapiStepper();

@@ -114,19 +114,16 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * Built-in HAAPI flow example using HaapiStepperStepUI:
  *
- * @example
- * ```tsx
+ *
  * import { HaapiStepper } from './HaapiStepper';
  * import { HaapiStepperStepUI } from '../steps/HaapiStepperStepUI';
  *
  * <HaapiStepper>
  *   <HaapiStepperStepUI />
  * </HaapiStepper>
- * ```
  *
  * Partial customization example with custom links and default [HAAPI UI components](../../README.MD#haapi-ui-components) for the rest:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -168,7 +165,6 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * Full customization example:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -230,7 +226,6 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * Conditional customization example:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';

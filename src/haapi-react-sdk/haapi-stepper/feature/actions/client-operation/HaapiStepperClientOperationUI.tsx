@@ -27,7 +27,6 @@ interface HaapiStepperClientOperationUIProps {
  * not met (e.g. WebAuthn API missing, or platform authenticator unavailable for platform-only
  * WebAuthn registration).
  *
- * @example
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();

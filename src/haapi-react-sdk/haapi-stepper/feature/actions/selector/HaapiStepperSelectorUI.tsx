@@ -31,7 +31,6 @@ interface HaapiStepperSelectorUIProps {
  * user's choice to the provided onSubmit handler, forwarding the option clicked to the
  * provided `onSubmit` handler.
  *
- * @example
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();

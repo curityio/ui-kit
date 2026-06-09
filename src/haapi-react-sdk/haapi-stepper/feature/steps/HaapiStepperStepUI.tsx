@@ -33,7 +33,6 @@ import type { HaapiStepperStepUIProps } from './typings';
  * In combination with the HaapiStepper, the HaapiStepperStepUI component provides a seamless way to implement
  * complete HAAPI authentication flows in your application, allowing extensive customization, with minimal setup.
  *
- * @example
  * ```tsx
  * <HaapiStepper>
  *  <HaapiStepperStepUI />
@@ -133,7 +132,6 @@ import type { HaapiStepperStepUIProps } from './typings';
  *
  * #### Loading Element Customization Example
  *
- * @example
  * ```tsx
  * // Data Customization: show loading only for specific template areas
  * const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({ loading, currentStep, ...rest }) => {
@@ -160,7 +158,6 @@ import type { HaapiStepperStepUIProps } from './typings';
  *
  * #### Step Element Customization Example
  *
- * @example
  * ```tsx
  * // Data customization: modify step's action, message and link data before default rendering
  * const customStepRenderInterceptor: HaapiStepperStepUIStepRenderInterceptor = ({ currentStep, ...rest }) => ({

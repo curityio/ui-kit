@@ -24,7 +24,6 @@ import { HaapiStepperContext } from './HaapiStepperContext';
  *
  * @throws {Error} If used outside of HaapiStepper
  *
- * @example
  * ```tsx
  * function MyComponent() {
  *   const { currentStep, history, loading, error, nextStep } = useHaapiStepper();

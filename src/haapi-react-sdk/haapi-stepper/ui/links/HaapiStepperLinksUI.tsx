@@ -30,7 +30,6 @@ interface HaapiStepperLinksUIProps {
  * so callers can tweak or fully override individual items, forwarding the
  * link option clicked to the provided `onClick` handler.
  *
- * @example
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();

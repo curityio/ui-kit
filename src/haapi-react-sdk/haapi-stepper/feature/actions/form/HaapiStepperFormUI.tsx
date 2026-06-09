@@ -42,7 +42,6 @@ interface HaapiStepperFormUIProps {
  * Renders a HAAPI form action inside the stepper. Tests in
  * `haapi-stepper/feature/actions/form/HaapiStepperFormUI.spec.tsx` cover the supported usage patterns:
  *
- * @example
  * ```tsx
  * const onSubmit: HaapiStepperNextStep<HaapiStepperFormAction> = (action, payload) => nextStep(action, payload);
  *
@@ -67,7 +66,6 @@ interface HaapiStepperFormUIProps {
  * (e.g. adding elements between fields, field group customizations), consider using the `children` render interceptor
  * as described in the next section.
  *
- * @example
  * ```tsx
  * const formFieldRenderInterceptor: FormFieldRenderInterceptor = (field, formState) => {
  *   if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
@@ -120,7 +118,6 @@ interface HaapiStepperFormUIProps {
  * will prevent the form content from rendering. Also, returning the `HaapiStepperFormAPI` data allows you to
  * delegate back to the default form, optionally with customized data.
  *
- * @example
  * ```tsx
  * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
  *   {({ fields, formState }) => {
@@ -164,7 +161,6 @@ interface HaapiStepperFormUIProps {
  * prompts, analytics, pre-submit validation) before delegating to the incoming `onSubmit`. Tests under
  * “Behavior customization” illustrate this pattern.
  *
- * @example
  * ```tsx
  * const handleSubmit: HaapiStepperNextStep<HaapiStepperFormAction> = (action, payload) => {
  *   if (!window.confirm('Submit the form?')) {
