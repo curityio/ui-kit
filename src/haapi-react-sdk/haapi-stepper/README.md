@@ -21,7 +21,7 @@ Check out the following HAAPI documentation for in-depth technical details:
 
 ## Purpose
 
-The HAAPI Frontend Library is a set of React components that fully manage HAAPI authentication
+The HAAPI React SDK is a set of React components that fully manages HAAPI authentication
 flows in the frontend. It works out of the box with minimal setup and lets you customize the UI
 only as far as you need.
 
@@ -137,6 +137,12 @@ the `HaapiStepper` API data for the element it targets (`currentStep`, `loading`
 
 Interceptors exist for the loading, error, step, actions — **form, client operation and
 selector** — links, messages and form-field layers.
+
+> 💡 **Design pattern note**: always return or pass through the API data.
+>
+> - **To override**: return your custom element.
+> - **To delegate to the default renderer**: return the API data (`{ currentStep, history, loading, error, nextStep }`), optionally modified.
+> - **To remove an element**: return `null`.
 
 ### Customize with UI composition
 
@@ -321,7 +327,7 @@ Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/s
 
 ## HAAPI Stepper UI Components
 
-The HAAPI Frontend Library provides some common HAAPI Stepper UI elements that help create highly customized UIs while relying on some defaults.
+The HAAPI React SDK provides some common HAAPI Stepper UI elements that help create highly customized UIs while relying on some defaults.
 
 ### Naming convention
 
@@ -462,6 +468,17 @@ HAAPI errors are HAAPI `ProblemStep`s (HAAPI flow steps of type [`HAAPI_PROBLEM_
 
 HAAPI errors are classified into two groups:
 
+```text
+HaapiStepperError
+├── app    (Unrecoverable)
+│   ├── UnrecoverableProblemStep
+│   ├── UnexpectedProblemStep
+│   └── CompletedWithErrorStep
+└── input  (Recoverable)
+    ├── ValidationProblemStep
+    └── IncorrectCredentialsProblemStep
+```
+
 **`AppError` (Unrecoverable)**
   - **Description**: Errors that cannot be resolved in the step (action form) where they originated, so they need to be handled at the application level (e.g., show a dedicated error page) and/or require restarting the stepper flow.
     * Like any other problem, they might include `UserMessages` and `Links` that need to be displayed to the user.
@@ -469,7 +486,7 @@ HAAPI errors are classified into two groups:
   - **Examples**: Authentication failed, too many attempts, session mismatches.
   - **Handling**: Displayed as toast notifications and/or a problem step UI.
 
-**`InputErrors` (Recoverable)**
+**`InputError` (Recoverable)**
   - **Description**: Errors that can be resolved in the step (form) where they originated.
       * They should be handled while keeping the step's UI, providing the problem's `UserMessages` and `Links`, and allowing the user to correct the input and resubmit.
   - **Types**: `ValidationProblemStep`, `IncorrectCredentialsProblemStep`. [More details here](./util/types/haapi-step.types.ts).
@@ -497,7 +514,7 @@ const { app, input } = error || {};
 ##### HAAPI Error Utils
 
 ###### HaapiStepperErrorNotifier
-**Purpose**: Toast-based notification system for HAAPI `AppError`s, and optionally, `InputErrors`s:
+**Purpose**: Toast-based notification system for HAAPI `AppError`s, and optionally, `InputError`s:
 
 **Example Usage**:
 ```tsx
