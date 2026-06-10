@@ -88,13 +88,13 @@ function Step() {
 
 Start with the zero-effort default and adopt customization **only as far as you need**.
 
-| | Effort | Control | What you use |
-|---|--------|---------|--------------|
-| Default | None | Low | `HaapiStepper` + `HaapiStepperStepUI` |
-| Styles customization | Very low | Look only | CSS classes (`.haapi-stepper-*`) |
-| Render interceptors | Low | Medium | `HaapiStepperStepUI` + interceptor props |
-| UI composition | High | Full | `HaapiStepper` + `useHaapiStepper` hook + UI components |
-| Mixed | Mixed | Full | a combination of the above |
+| | Effort | Control | What you use | Best for |
+|---|--------|---------|--------------|----------|
+| Default | None | Low | `HaapiStepper` + `HaapiStepperStepUI` | getting HAAPI flows running out of the box |
+| Styles customization | Very low | Look only | CSS classes (`.haapi-stepper-*`) | restyling the default UI |
+| Render interceptors | Low | Medium | `HaapiStepperStepUI` + interceptor props | tweaking the default UI |
+| UI composition | High | Full | `HaapiStepper` + `useHaapiStepper` hook + UI components | custom layout, grouping, complex/behaviour |
+| Mixed | Mixed | Full | a combination of the above | the default UI with localized custom parts |
 
 ### Default — works from scratch
 
@@ -120,9 +120,9 @@ overriding those classes in your own stylesheet, no code changes needed.
 
 ### Customize with render interceptors
 
-Keep the default UI and override one element. A render interceptor is a function that receives
-the `HaapiStepper` API data for the element it targets (`currentStep`, `loading`, `error`,
-`nextStep`…) and returns either a React element to use as the replacement, the API data to render the default UI, or `null` to skip the element from being rendered:
+Render interceptors are the programmatic way to customize the default step UI elements — loader, error, step, actions (form, client operation, selector), links, messages, and form fields.
+
+Each is a function that receives the `HaapiStepper` API data for the target UI element (`currentStep`, `loading`, `error`, `nextStep`…) and returns either a React element to replace the default UI element, the API data to render the default UI element, or `null` to skip the element from being rendered:
 
 ```tsx
 <HaapiStepper>
@@ -135,9 +135,6 @@ the `HaapiStepper` API data for the element it targets (`currentStep`, `loading`
 </HaapiStepper>
 ```
 
-Interceptors exist for the loading, error, step, actions — **form, client operation and
-selector** — links, messages and form-field layers.
-
 > 💡 **Design pattern note**: always return or pass through the API data.
 >
 > - **To override**: return your custom element.
@@ -146,8 +143,9 @@ selector** — links, messages and form-field layers.
 
 ### Customize with UI composition
 
-Build your own UI from the building blocks (`HaapiStepperActionsUI`, `HaapiStepperMessagesUI`,
-`HaapiStepperLinksUI`…); `HaapiStepper` still runs the flow:
+The declarative path to build UIs from scratch. Use it for what the API doesn't expose as elements — grouping (fieldsets/tabs), cross-element layouts, inserting your own elements, and behaviour customizations (tabs, multi-step wizards). Best for layout and complex customizations.
+
+Each HAAPI entity has a corresponding UI component (`HaapiStepperActionsUI`, `HaapiStepperMessagesUI`, `HaapiStepperLinksUI`…). `HaapiStepper` still runs the flow:
 
 ```tsx
 function LoginPage() {
