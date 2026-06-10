@@ -59,8 +59,7 @@ interface HaapiStepperFormUIProps {
  * ### CUSTOMIZATION VIA INTERCEPTORS
  *
  * Use {@link HaapiStepperFormFieldRenderInterceptor} to adjust data, swap components, or omit fields while still
- * leveraging the built-in state management. The interceptor mirrors the “Data customization” and “UI
- * customization” tests.
+ * leveraging the built-in state management.
  *
  * The `formFieldRenderInterceptor` is better suited for customization of form fields. For form-level customization
  * (e.g. adding elements between fields, field group customizations), consider using the `children` render interceptor
@@ -104,11 +103,12 @@ interface HaapiStepperFormUIProps {
  * />
  * ```
  *
+ * See more examples in `HaapiStepperFormUI.spec.tsx` (`describe('Via Interceptors')` → `Data customization` / `UI customization`).
+ *
  * ### CUSTOMIZATION VIA COMPOSITION (CHILDREN RENDER INTERCEPTOR)
  *
  * Passing `children` to the `HaapiStepperFormUI` component disables the default renderer. Provide a render function
- * that receives the visible form `fields`, and the current `formState`. This pattern mirrors the scenarios covered
- * under “Via Composition (children render interceptor)” in the tests.
+ * that receives the visible form `fields`, and the current `formState`.
  *
  * This approach provides full control over the form content, while still leveraging the built-in state management
  * and submission handling. It is better suited for complex customizations, such as adding elements between fields,
@@ -155,11 +155,12 @@ interface HaapiStepperFormUIProps {
  * </HaapiStepperFormUI>
  * ```
  *
+ * See more examples in `HaapiStepperFormUI.spec.tsx` (`describe('Via Composition (children render interceptor)')`).
+ *
  * ### BEHAVIOUR OVERRIDES AROUND SUBMISSION
  *
  * Because `submit` is exposed through context, you can layer on additional behaviour (confirmation
- * prompts, analytics, pre-submit validation) before delegating to the incoming `onSubmit`. Tests under
- * “Behavior customization” illustrate this pattern.
+ * prompts, analytics, pre-submit validation) before delegating to the incoming `onSubmit`.
  *
  * ```tsx
  * const handleSubmit: HaapiStepperNextStep<HaapiStepperFormAction> = (action, payload) => {
@@ -171,6 +172,8 @@ interface HaapiStepperFormUIProps {
  *
  * <HaapiStepperFormUI action={loginAction} onSubmit={handleSubmit} />
  * ```
+ *
+ * See more examples in `HaapiStepperFormUI.spec.tsx` (the `Behavior customization` describe blocks).
  */
 export function HaapiStepperFormUI({
   action,
