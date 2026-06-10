@@ -34,7 +34,7 @@ import type {
   HaapiStepperStepUISelectorActionRenderInterceptor,
   HaapiStepperUserMessage,
 } from '../stepper/haapi-stepper.types';
-import { Spinner } from '../../../../shared/ui/spinner/Spinner';
+import { Spinner } from '../../ui/spinner/Spinner';
 
 export const getLoadingElement = (
   haapiStepperAPI: HaapiStepperAPI,

@@ -11,9 +11,9 @@
 
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Logo } from './Logo';
-import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
-import { HaapiAppConfig } from '../feature/app-config/types';
+import { Logo } from '../Logo/Logo';
+import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../../feature/app-config/types';
 
 const buildConfig = (logoPath: string): HaapiAppConfig => ({
   initialUrl: 'https://example/start',
