@@ -17,5 +17,5 @@ export const Logo = () => {
   if (!logo) {
     return null;
   }
-  return <img className="haapi-stepper-logo" src={logo.path} alt="" role="presentation" />;
+  return <img className="haapi-stepper-logo" src={logo.path} alt="Logo" />;
 };
