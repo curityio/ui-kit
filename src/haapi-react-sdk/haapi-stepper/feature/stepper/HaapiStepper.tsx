@@ -102,7 +102,7 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * Child components can access the following API via the `useHaapiStepper()` hook:
  *
- * - `currentStep: HaapiProviderStep | null` - The current authentication step (null during initial load)
+ * - `currentStep: HaapiStepperStep | null` - The current authentication step (null during initial load)
  * - `history: HaapiStepperHistoryEntry[]` - Complete history of all steps and actions taken, accessible via `history[index]`
  * - `loading: boolean` - Whether the stepper is currently loading (initial load or transitioning between steps)
  * - `error: HaapiStepperError | null` - Current error state (app errors or input validation errors)

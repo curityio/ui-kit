@@ -4,13 +4,13 @@
 
 - **Flow**: sequence of steps that results in either a successful authentication (`HAAPI_STEPS.COMPLETED_WITH_SUCCESS`) or an error/failure (`HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR`).
 - **Step**: A single stage in the authentication flow, often represented as a screen (e.g., a login page). A step can be composed of actions, links, and messages.
-  - [Step types](./util/types/haapi-step.types.ts)
+  - [Step types](./data-access/types/haapi-step.types.ts)
 - **Action**: instructions about how to progress to the next step in the authentication flow. Actions often require specific user input and change the state of the authentication (e.g., submitting a form). There are three kinds of action: **form** (e.g. a username/password login form), **client operation** (e.g. a BankID or WebAuthn operation) and **selector** (e.g. choosing an authenticator).
-  - [Action types](./util/types/haapi-action.types.ts)
+  - [Action types](./data-access/types/haapi-action.types.ts)
 - **Link**:  instructions about how to navigate to an alternative but related path (e.g. starting a password reset flow from the main authentication step)
-  - [Link](./util/types/haapi-step.types.ts#L300)
+  - [Link](./data-access/types/haapi-step.types.ts#L335)
 - **Message**: Text that provides context to the user about the state of the authentication flow and possible interaction options (e.g., validation errors, warnings, or instructions).
-  - [Message](./util/types/haapi-step.types.ts#L290)
+  - [Message](./data-access/types/haapi-step.types.ts#L324)
 
 Check out the following HAAPI documentation for in-depth technical details:
 
@@ -463,7 +463,7 @@ The `HaapiStepper` implements a comprehensive error-handling strategy with multi
 The HAAPI stepper manages errors according to two categories: HAAPI errors and non-HAAPI errors.
 
 #### HAAPI Errors
-HAAPI errors are HAAPI `ProblemStep`s (HAAPI flow steps of type [`HAAPI_PROBLEM_STEPS`](./util/types/haapi-step.types.ts)).
+HAAPI errors are HAAPI `ProblemStep`s (HAAPI flow steps of type [`HAAPI_PROBLEM_STEPS`](./data-access/types/haapi-step.types.ts)).
 
 
 HAAPI errors are classified into two groups:
@@ -482,14 +482,14 @@ HaapiStepperError
 **`AppError` (Unrecoverable)**
   - **Description**: Errors that cannot be resolved in the step (action form) where they originated, so they need to be handled at the application level (e.g., show a dedicated error page) and/or require restarting the stepper flow.
     * Like any other problem, they might include `UserMessages` and `Links` that need to be displayed to the user.
-  - **Types**: `UnrecoverableProblemStep`, `UnexpectedProblemStep`, `CompletedWithErrorStep`. [More details here](./util/types/haapi-step.types.ts).
+  - **Types**: `UnrecoverableProblemStep`, `UnexpectedProblemStep`, `CompletedWithErrorStep`. [More details here](./data-access/types/haapi-step.types.ts).
   - **Examples**: Authentication failed, too many attempts, session mismatches.
   - **Handling**: Displayed as toast notifications and/or a problem step UI.
 
 **`InputError` (Recoverable)**
   - **Description**: Errors that can be resolved in the step (form) where they originated.
       * They should be handled while keeping the step's UI, providing the problem's `UserMessages` and `Links`, and allowing the user to correct the input and resubmit.
-  - **Types**: `ValidationProblemStep`, `IncorrectCredentialsProblemStep`. [More details here](./util/types/haapi-step.types.ts).
+  - **Types**: `ValidationProblemStep`, `IncorrectCredentialsProblemStep`. [More details here](./data-access/types/haapi-step.types.ts).
   - **Examples**: Invalid form fields, incorrect credentials.
   - **Handling**: Displayed below relevant input fields for immediate correction.
 
@@ -509,7 +509,7 @@ const { error } = useHaapiStepper();
 const { app, input } = error || {};
 ```
 
-[`More details here`](./util/types/haapi-step.types.ts).
+[`More details here`](./data-access/types/haapi-step.types.ts).
 
 ##### HAAPI Error Utils
 
