@@ -65,7 +65,7 @@
     "globals": "^16.4.0",
     "jsdom": "^27.0.1",
     "msw": "^2.12.2",
-    "stylelint-config-standard": "^39.0.1",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",
     "vite": "^7.3.1",
