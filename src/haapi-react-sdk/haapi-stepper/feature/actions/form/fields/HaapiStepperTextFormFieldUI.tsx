@@ -15,6 +15,33 @@ import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.type
 import type { HaapiStepperTextFormField, HaapiStepperUsernameFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
+/**
+ * Renders the built-in text input for a HAAPI text/username `field`, wired to the form's state.
+ *
+ * Must be rendered inside a `HaapiStepperFormUI` (it reads `formState` from the form context, so it throws
+ * outside one). Normally you let {@link HaapiStepperFormFieldUI} pick the field component automatically — reach
+ * for this one only to place a specific field yourself in a custom layout:
+ *
+ * ```tsx
+ * // Give the username field its own titled section, keep the default rendering for every other field.
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
+ *   {({ fields }) => (
+ *     <>
+ *       {fields.map(field =>
+ *         field.type === HAAPI_FORM_FIELDS.USERNAME ? (
+ *           <section key={field.name}>
+ *             <h2>Your account</h2>
+ *             <HaapiStepperTextFormFieldUI field={field} />
+ *           </section>
+ *         ) : (
+ *           <HaapiStepperFormFieldUI key={field.name} field={field} />
+ *         )
+ *       )}
+ *     </>
+ *   )}
+ * </HaapiStepperFormUI>
+ * ```
+ */
 export function HaapiStepperTextFormFieldUI({
   field,
 }: {

@@ -35,7 +35,7 @@ interface HaapiStepperLinksUIProps {
  *   const { currentStep, nextStep } = useHaapiStepper();
  *   const links = currentStep?.dataHelpers.links;
  *
- *   return { <HaapiStepperLinksUI links={links} onClick={nextStep} /> };
+ *   return <HaapiStepperLinksUI links={links} onClick={nextStep} />;
  * }
  *
  * <HaapiStepper>

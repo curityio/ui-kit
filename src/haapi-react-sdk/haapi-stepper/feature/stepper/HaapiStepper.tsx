@@ -183,39 +183,41 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   const { actions, links } = currentStep.dataHelpers;
  *
  *   return (
- *     <div>
- *       <h2>Step: {currentStep.type}</h2>
- *       {actions?.form.map(action => (
- *         <div className="mb2" key={action.id}>
- *           <h5>{action.title}</h5>
- *           <button onClick={() => nextStep(action)}>
- *             Select
- *           </button>
- *         </div>
- *       ))}
- *       {actions?.clientOperation.map(action => (
- *         <button key={action.id} onClick={() => nextStep(action)}>
- *           {action.title}
- *         </button>
- *       ))}
- *       {links.map(link => (
- *         <button key={link.id} onClick={() => nextStep(link)}>
- *           {link.title}
- *         </button>
- *       ))}
- *     </div>
- *     <div>
- *       <h3>Authentication Journey</h3>
- *       <p>Steps taken: {history.length}</p>
- *       <ul>
- *         {history.map((historyEntry, index) => (
- *           <li key={index}>
- *             {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
- *             {historyEntry.triggeredByAction && ` (via ${historyEntry.triggeredByAction.title})`}
- *           </li>
+ *     <>
+ *       <div>
+ *         <h2>Step: {currentStep.type}</h2>
+ *         {actions?.form.map(action => (
+ *           <div className="mb2" key={action.id}>
+ *             <h5>{action.title}</h5>
+ *             <button onClick={() => nextStep(action)}>
+ *               Select
+ *             </button>
+ *           </div>
  *         ))}
- *       </ul>
- *     </div>
+ *         {actions?.clientOperation.map(action => (
+ *           <button key={action.id} onClick={() => nextStep(action)}>
+ *             {action.title}
+ *           </button>
+ *         ))}
+ *         {links.map(link => (
+ *           <button key={link.id} onClick={() => nextStep(link)}>
+ *             {link.title}
+ *           </button>
+ *         ))}
+ *       </div>
+ *       <div>
+ *         <h3>Authentication Journey</h3>
+ *         <p>Steps taken: {history.length}</p>
+ *         <ul>
+ *           {history.map((historyEntry, index) => (
+ *             <li key={index}>
+ *               {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
+ *               {historyEntry.triggeredByAction && ` (via ${historyEntry.triggeredByAction.title})`}
+ *             </li>
+ *           ))}
+ *         </ul>
+ *       </div>
+ *     </>
  *   );
  * }
  *
