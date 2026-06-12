@@ -11,6 +11,7 @@
 
 import { IconGeneralClose } from '@curity/ui-kit-icons';
 import { ReactNode, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useHaapiStepper } from './HaapiStepperHook';
 import { HaapiStepperAppError, HaapiStepperInputError } from './haapi-stepper.types';
 
@@ -51,35 +52,37 @@ export function HaapiStepperErrorNotifier({
 
   return (
     <>
-      {isNotificationVisible && (
-        <div className="haapi-error-notifier-toast" data-testid="haapi-error-toast" role="alert">
-          <div>
-            <div className="flex flex-gap-2 flex-center justify-between">
-              <h4 className="m0" data-testid="haapi-error-haapi-error-notifier-toast-title">
-                {errorFormatter(currentError)}
-              </h4>
+      {isNotificationVisible &&
+        createPortal(
+          <div className="haapi-error-notifier-toast" data-testid="haapi-error-toast" role="alert">
+            <div>
+              <div className="flex flex-gap-2 flex-center justify-between">
+                <h4 className="m0" data-testid="haapi-error-haapi-error-notifier-toast-title">
+                  {errorFormatter(currentError)}
+                </h4>
 
-              <button
-                type="button"
-                onClick={handleDismiss}
-                className="button button-tiny button-danger-outline"
-                data-testid="haapi-error-haapi-error-notifier-toast-dismiss"
-                aria-label="Dismiss error"
-              >
-                <IconGeneralClose width={16} height={16} />
-              </button>
-            </div>
-
-            {notificationMessages.length > 0 && (
-              <div data-testid="haapi-error-haapi-error-notifier-toast-messages">
-                {notificationMessages.map(message => (
-                  <p key={message.id}>{message.text}</p>
-                ))}
+                <button
+                  type="button"
+                  onClick={handleDismiss}
+                  className="button button-tiny button-danger-outline"
+                  data-testid="haapi-error-haapi-error-notifier-toast-dismiss"
+                  aria-label="Dismiss error"
+                >
+                  <IconGeneralClose width={16} height={16} />
+                </button>
               </div>
-            )}
-          </div>
-        </div>
-      )}
+
+              {notificationMessages.length > 0 && (
+                <div data-testid="haapi-error-haapi-error-notifier-toast-messages">
+                  {notificationMessages.map(message => (
+                    <p key={message.id}>{message.text}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
 
       {children}
     </>

@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { MEDIA_TYPES } from '../../../../shared/util/types/media.types';
+import { MEDIA_TYPES } from './media.types';
 import { HaapiAction } from './haapi-action.types';
 
 // ============================================================================

@@ -11,9 +11,9 @@
 
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Logo } from './Logo';
-import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
-import { HaapiAppConfig } from '../feature/app-config/types';
+import { Logo } from '../Logo/Logo';
+import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
+import { HaapiAppConfig } from '../../feature/app-config/types';
 
 const buildConfig = (logoPath: string): HaapiAppConfig => ({
   initialUrl: 'https://example/start',
@@ -29,9 +29,10 @@ describe('Logo', () => {
       </HaapiAppConfigContext>
     );
 
-    const img = screen.getByRole('presentation');
+    const img = screen.getByRole('img');
     expect(img.tagName).toBe('IMG');
     expect(img).toHaveAttribute('src', '/assets/logo.svg');
+    expect(img).toHaveAttribute('alt', 'Logo');
     expect(img).toHaveClass('haapi-stepper-logo');
   });
 
@@ -49,6 +50,6 @@ describe('Logo', () => {
     );
 
     expect(container.querySelector('img')).toBeNull();
-    expect(screen.queryByRole('presentation')).toBeNull();
+    expect(screen.queryByRole('img')).toBeNull();
   });
 });

@@ -9,8 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import { useHaapiAppConfig } from '../feature/app-config/HaapiAppConfigHook';
-import { resolvePageSymbol } from '../util/resolve-page-symbol';
+import { useHaapiAppConfig } from '../../feature/app-config/HaapiAppConfigHook';
+import { resolvePageSymbol } from '../../util/resolve-page-symbol';
 
 interface PageSymbolProps {
   viewName: string | undefined;
