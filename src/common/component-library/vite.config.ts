@@ -8,11 +8,17 @@ export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
-    dts({
-      insertTypesEntry: true,
-      tsconfigPath: './tsconfig.app.json',
-      rollupTypes: true,
-    }),
+    // Declaration-file generation is type-only and not needed for runtime previews
+    // (e.g. the StackBlitz previewer boot). Skip it when SKIP_DTS is set to speed up the build.
+    ...(process.env.SKIP_DTS
+      ? []
+      : [
+          dts({
+            insertTypesEntry: true,
+            tsconfigPath: './tsconfig.app.json',
+            rollupTypes: true,
+          }),
+        ]),
   ],
   server: {
     open: false,
