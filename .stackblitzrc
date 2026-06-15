@@ -1,0 +1,7 @@
+{
+  "installDependencies": false,
+  "env": {
+    "SKIP_PRESTART": "1"
+  },
+  "startCommand": "npm install --engine-strict=false --no-audit --no-fund && npm run build -w @curity/ui-kit-css-lib -w @curity/ui-kit-icons -w @curity/ui-kit-css -w @curity/ui-kit-component-library && npm run previewer -w @curity/haapi-react-app -- --host"
+}
