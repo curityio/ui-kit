@@ -31,7 +31,7 @@
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
     "build": "npm run tsBuild && vite build",
     "prebuild:preview": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
-    "build:preview": "vite build",
+    "build:preview": "cross-env SKIP_DTS=1 vite build",
     "tsBuild": "tsc -b",
     "tsBuild:watch": "tsc -b -w",
     "lint": "eslint .",
