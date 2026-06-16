@@ -1,8 +1,4 @@
 {
   "installDependencies": false,
-  "env": {
-    "SKIP_PRESTART": "1",
-    "SKIP_DTS": "1"
-  },
   "startCommand": "npm install --engine-strict=false --no-audit --no-fund && npm run build:preview -w @curity/ui-kit-component-library && npm run previewer -w @curity/haapi-react-app -- --host"
 }
