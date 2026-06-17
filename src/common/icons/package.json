@@ -17,6 +17,7 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "rollup -c",
+    "prepare": "rollup -c",
     "clean": "rm -rf dist && rm -rf dist-ssp && rm -rf src-ssp"
   },
   "devDependencies": {

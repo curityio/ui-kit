@@ -1,0 +1,45 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+## This template is not intended to work in the UI-Builder
+
+#set ($page_symbol = $page_symbol_authenticate_webauthn)
+
+#define($_body)
+    <form id="replaceStaleCredentialForm" method="post" class="login-form hidden">
+        <input type="hidden" name="json"/>
+    </form>
+
+    #parse("authenticator/webauthn/fragments/alerts")
+
+    <div id="waitingDiv" class="hidden">
+        #parse("fragments/spinner")
+    </div>
+
+    <div id="registerDiv" class="area center" >
+        <p>
+            #message("${_templatePrefix}.view.description")
+        </p>
+
+        <div class="flex justify-between mxn1 mt2 mb2">
+            <div class="col-12 px1 mb2">
+                <button id="replaceStaleCredentialButton" class="button button-fullwidth button-primary">
+                    #message("${_templatePrefix}.view.button.register")
+                </button>
+            </div>
+        </div>
+    </div>
+
+#parse("authenticator/webauthn/js/replace-stale-credential")
+
+#end ## /body
+
+#parse("layouts/default")

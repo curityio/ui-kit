@@ -1,0 +1,53 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+{
+    logo: {
+        path: '$!_tr.encodeJson($logo_path)',
+        isInsideWell: #if ($logo_inside) true #else false #end,
+    },
+#if ($show_symbol)
+    #macro(symbolPath $jsonKey $pathVariable)
+        #if($pathVariable)'$jsonKey': '$!_tr.encodeJson($pathVariable)',#end
+    #end
+
+    pageSymbols: {
+        ## Map of plugin implementation type to symbol path.
+        ## Used as a fallback if an exact match for the page symbol is not found in 'views'.
+        plugins: {
+            #* Authenticators *#
+            #symbolPath("bankid" $page_symbol_authenticate_bankid)
+            #symbolPath("duo" $page_symbol_authenticate_pair_device)
+            #symbolPath("email" $page_symbol_authenticate_email)
+            #symbolPath("html-form" $page_symbol_authenticate_htmlform)
+            #symbolPath("openid-wallet" $page_symbol_openid_wallet)
+            #symbolPath("passkeys" $page_symbol_authenticate_passkeys)
+            #symbolPath("sms" $page_symbol_authenticate_sms)
+            #symbolPath("totp" $page_symbol_authenticate_totp)
+            #symbolPath("webauthn" $page_symbol_authenticate_webauthn)
+
+            #* Authentication ACtions *#
+            #symbolPath("opt-in-mfa" $page_symbol_authenticate_opt_in_mfa)
+            #symbolPath("require-active-account" $page_symbol_authenticate_htmlform)
+            #symbolPath("reset-password" $page_symbol_authenticate_htmlform)
+            #symbolPath("signup" $page_symbol_authenticate_htmlform)
+
+            #* Consentors *#
+            #symbolPath("bankid-signing-consentor" $page_symbol_authenticate_bankid)
+        },
+        ## Map of view/template name to symbol path.
+        views: {
+            ## Nothing to add for now
+        },
+        default: '$!_tr.encodeJson($page_symbol)',
+    }
+#end
+}

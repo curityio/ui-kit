@@ -19,12 +19,12 @@
 
 .login-symbol-circle {
   text-align: center;
-  width: calc(var(--login-symbol-size) * 0.75);
-  height: calc(var(--login-symbol-size) * 0.75);
+  width: var(--login-symbol-size);
+  height: var(--login-symbol-size);
   display: flex;
   margin: 0 auto;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   z-index: 2;
   position: relative;
   margin-top: var(--login-symbol-margin-top);
@@ -32,24 +32,11 @@
   border-radius: var(--login-symbol-border-radius);
 }
 
-@media (min-width: 576px) {
-  .login-symbol-circle {
-    width: var(--login-symbol-size);
-    height: var(--login-symbol-size);
-  }
-}
 
 .login-symbol-circle img {
-  width: calc(var(--login-symbol-size) * 0.75);
-  height: calc(var(--login-symbol-size) * 0.75);
+  width: var(--login-symbol-size);
+  height: var(--login-symbol-size);
   object-fit: contain;
-}
-
-@media (min-width: 576px) {
-  .login-symbol-circle img {
-    width: var(--login-symbol-size);
-    height: var(--login-symbol-size);
-  }
 }
 
 @media (min-width: 768px) {

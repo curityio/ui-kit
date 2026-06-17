@@ -1,0 +1,13 @@
+#
+# Copyright (C) 2026 Curity AB. All rights reserved.
+#
+# The contents of this file are the property of Curity AB.
+# You may not copy or use this file, in either source code
+# or executable form, except in compliance with terms
+# set by Curity AB.
+#
+# For further information, please contact Curity AB.
+#
+
+view.description=Din nyckel har registrerats. Din förra nyckel är fortfarande kvar i din webbläsare eller nyckel-hanterare men kommer inte att kunna användas för inloggning längre. För att undvika förvirring, ta bort den gamla nyckeln från din nyckel-hanterare.
+view.button.continue=Fortsätt

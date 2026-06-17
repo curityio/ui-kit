@@ -77,7 +77,7 @@
                         #else
                             #define($claimLabel)#message("$entry.value.displayName")#end
                         #end
-                    <label class="block full-width relative"
+                    <label class="flex flex-gap-1 flex-center relative"
                         #if ($entry.value.required == "true")
 ><input type="checkbox" name="$parameterName" id="$parameterName" checked disabled><label class="consent-entries-list-checkbox"></label><input type="hidden" name="$parameterName"
                         #else

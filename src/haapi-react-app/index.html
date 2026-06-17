@@ -1,0 +1,41 @@
+<!--
+  ~ Copyright (C) 2026 Curity AB. All rights reserved.
+  ~
+  ~ The contents of this file are the property of Curity AB.
+  ~ You may not copy or use this file, in either source code
+  ~ or executable form, except in compliance with terms
+  ~ set by Curity AB.
+  ~
+  ~ For further information, please contact Curity AB.
+  -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HAAPI React App - Development mode</title>
+  </head>
+  <body>
+    <script>
+      function arg(name) {
+        const args = new URL(window.location.href).searchParams;
+        const value = args.get(name);
+        if (value) {
+          return value;
+        }
+        throw new Error(`Missing argument '${name}'`);
+      }
+
+      // Set the configuration object expected by the application
+      window.__CONFIG__ = JSON.parse(arg('configuration'));
+
+      // Change the current URL to match the original request to Identity Server, so that it looks like the
+      // application was loaded directly by the server's template
+      const originalUrl = arg('originalUrl');
+      window.history.replaceState(undefined, '', originalUrl);
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

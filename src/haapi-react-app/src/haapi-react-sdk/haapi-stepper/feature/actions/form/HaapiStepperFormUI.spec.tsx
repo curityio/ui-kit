@@ -1,0 +1,947 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
+
+import { HaapiStepperFormUI } from './HaapiStepperFormUI';
+import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
+import { HAAPI_PROBLEM_STEPS } from '../../../data-access/types/haapi-step.types';
+import { HaapiStepperFormFieldUI } from './fields/HaapiStepperFormFieldUI';
+import { useHaapiStepper } from '../../stepper/HaapiStepperHook';
+import { createHaapiStepperApiMock, createMockFormAction } from '../../../util/tests/mocks';
+import { useEffect } from 'react';
+import {
+  HaapiStepperFormAction,
+  HaapiStepperFormFieldRenderInterceptor,
+  HaapiStepperFormState,
+  HaapiStepperInputError,
+  HaapiStepperNextStep,
+  HaapiStepperVisibleFormField,
+} from '../../stepper/haapi-stepper.types';
+import { HaapiStepperFormSubmitButton } from './HaapiStepperFormSubmitButton';
+import userEvent from '@testing-library/user-event';
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
+describe('HaapiStepperFormUI', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+    vi.clearAllMocks();
+    mockUseHaapiStepper.mockReturnValue(createHaapiStepperApiMock());
+  });
+
+  describe('Default rendering', () => {
+    it('should render visible fields with default components', () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toBeInTheDocument();
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toBeInTheDocument();
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).toBeInTheDocument();
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).toBeInTheDocument();
+      expect(screen.queryByDisplayValue(hiddenContextValue)).not.toBeInTheDocument();
+    });
+
+    it('should submit the correct payload', async () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      const usernameInput = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName));
+      const passwordInput = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName));
+      const countrySelect = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName));
+      const rememberCheckbox = screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName));
+      const submitButton = screen.getByTestId(submitButtonTestId);
+
+      await user.type(usernameInput, usernameValue);
+      await user.type(passwordInput, passwordValue);
+      await user.selectOptions(countrySelect, countryCanadaValue);
+      await user.click(rememberCheckbox);
+
+      await user.click(submitButton);
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      const payload = onSubmit.mock.calls[0]?.[1];
+      expect(Object.fromEntries(payload)).toEqual({
+        [contextFieldName]: hiddenContextValue,
+        [usernameFieldName]: usernameValue,
+        [passwordFieldName]: passwordValue,
+        [rememberMeFieldName]: rememberValue,
+        [countryFieldName]: countryCanadaValue,
+      });
+    });
+
+    it('should show validation errors only after the form submits', async () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+      const validationError: HaapiStepperInputError = {
+        type: HAAPI_PROBLEM_STEPS.INVALID_INPUT,
+        invalidFields: [
+          { name: usernameFieldName, reason: 'missing' },
+          { name: passwordFieldName, reason: 'invalidValue', detail: validationInvalidPasswordMessage },
+        ],
+        dataHelpers: {
+          messages: [],
+          links: [],
+        },
+      };
+
+      const { rerender } = render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      expect(screen.queryByTestId(validationErrorTestId)).not.toBeInTheDocument();
+
+      mockUseHaapiStepper.mockReturnValue(createHaapiStepperApiMock({ error: { app: null, input: validationError } }));
+
+      await user.click(screen.getByTestId(submitButtonTestId));
+
+      rerender(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      await waitFor(() => {
+        expect(screen.getAllByTestId(validationErrorTestId)).toHaveLength(2);
+      });
+      expect(screen.getByText(validationMissingUsernameMessage)).toBeInTheDocument();
+      expect(screen.getByText(validationInvalidPasswordMessage)).toBeInTheDocument();
+    });
+
+    it('should allow showing and hiding password fields without losing their values', async () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const passwordInput = screen.getByTestId(
+        formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName)
+      ) as HTMLInputElement;
+      const showButton = screen.getByRole('button', { name: 'Show password' });
+
+      expect(passwordInput).toHaveAttribute('type', 'password');
+      await user.type(passwordInput, passwordValue);
+
+      await user.click(showButton);
+      const hideButton = screen.getByRole('button', { name: 'Hide password' });
+      expect(passwordInput).toHaveAttribute('type', 'text');
+      expect(hideButton).toHaveAttribute('aria-pressed', 'true');
+      expect(passwordInput.value).toBe(passwordValue);
+
+      await user.click(hideButton);
+      expect(passwordInput).toHaveAttribute('type', 'password');
+      expect(screen.getByRole('button', { name: 'Show password' })).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('should expose HTML autocomplete hints for registration fields', () => {
+      const action = createMockFormAction({
+        kind: HAAPI_FORM_ACTION_KINDS.USER_REGISTER,
+        model: {
+          href: '/register',
+          method: HTTP_METHODS.POST,
+          fields: [
+            { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
+            { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
+          ],
+        },
+      });
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
+        'autocomplete',
+        'username'
+      );
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toHaveAttribute(
+        'autocomplete',
+        'new-password'
+      );
+    });
+
+    it('should expose HTML autocomplete hints for login fields', () => {
+      const action = createLoginFormAction();
+      const onSubmit = vi.fn();
+
+      render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
+
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
+        'autocomplete',
+        'username'
+      );
+      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toHaveAttribute(
+        'autocomplete',
+        'current-password'
+      );
+    });
+
+    describe('HTML required attribute', () => {
+      it('should set the required attribute on text, password, select and checkbox inputs when field.required is true', () => {
+        const action = createMockFormAction({
+          kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+          model: {
+            href: loginFormActionHref,
+            method: HTTP_METHODS.POST,
+            fields: [
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.USERNAME,
+                name: usernameFieldName,
+                label: 'Username',
+                required: true,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.PASSWORD,
+                name: passwordFieldName,
+                label: 'Password',
+                required: true,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.CHECKBOX,
+                name: rememberMeFieldName,
+                label: 'Remember me',
+                value: rememberValue,
+                required: true,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.SELECT,
+                name: countryFieldName,
+                label: 'Country',
+                required: true,
+                options: [{ label: 'Sweden', value: countrySwedenValue }],
+              },
+            ],
+          },
+        });
+
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
+
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).toBeRequired();
+      });
+
+      it('should not set the required attribute when field.required is false', () => {
+        const action = createMockFormAction({
+          kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+          model: {
+            href: loginFormActionHref,
+            method: HTTP_METHODS.POST,
+            fields: [
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.USERNAME,
+                name: usernameFieldName,
+                label: 'Username',
+                required: false,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.PASSWORD,
+                name: passwordFieldName,
+                label: 'Password',
+                required: false,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.CHECKBOX,
+                name: rememberMeFieldName,
+                label: 'Remember me',
+                value: rememberValue,
+                required: false,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.SELECT,
+                name: countryFieldName,
+                label: 'Country',
+                required: false,
+                options: [{ label: 'Sweden', value: countrySwedenValue }],
+              },
+            ],
+          },
+        });
+
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
+
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).not.toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).not.toBeRequired();
+      });
+
+      it('should set the required attribute when field.required is omitted (defaults to true)', () => {
+        const action = createMockFormAction({
+          kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+          model: {
+            href: loginFormActionHref,
+            method: HTTP_METHODS.POST,
+            fields: [
+              { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
+              { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.CHECKBOX,
+                name: rememberMeFieldName,
+                label: 'Remember me',
+                value: rememberValue,
+              },
+              {
+                id: crypto.randomUUID(),
+                type: HAAPI_FORM_FIELDS.SELECT,
+                name: countryFieldName,
+                label: 'Country',
+                options: [{ label: 'Sweden', value: countrySwedenValue }],
+              },
+            ],
+          },
+        });
+
+        render(<HaapiStepperFormUI action={action} onSubmit={vi.fn()} />);
+
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName))).toBeRequired();
+        expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName))).toBeRequired();
+      });
+    });
+  });
+
+  describe('Custom rendering', () => {
+    describe('Via Interceptors', () => {
+      describe('Data customization', () => {
+        it('allows field data customizations before default rendering', () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          const formFieldRenderInterceptor: HaapiStepperFormFieldRenderInterceptor = field => {
+            if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
+              return { ...field, label: interceptedUsernameLabel };
+            }
+            return field;
+          };
+
+          render(
+            <HaapiStepperFormUI
+              action={action}
+              onSubmit={onSubmit}
+              formFieldRenderInterceptor={formFieldRenderInterceptor}
+            />
+          );
+
+          expect(screen.getByLabelText(interceptedUsernameLabel)).toBeInTheDocument();
+        });
+      });
+
+      describe('UI customization', () => {
+        it('supports custom form field components', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          const formFieldRenderInterceptor: HaapiStepperFormFieldRenderInterceptor = (field, formState) => {
+            if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
+              const usernameField = field;
+
+              return (
+                <label className="label block">
+                  {customUsernameLabelWithSuffix}
+                  <input
+                    type="text"
+                    className="field w100"
+                    name={usernameField.name}
+                    value={formState.get(usernameField)}
+                    onChange={e => formState.set(usernameField, e.target.value)}
+                  />
+                </label>
+              );
+            }
+
+            return field;
+          };
+
+          render(
+            <HaapiStepperFormUI
+              action={action}
+              onSubmit={onSubmit}
+              formFieldRenderInterceptor={formFieldRenderInterceptor}
+            />
+          );
+
+          const customUsernameInput = screen.getByLabelText(customUsernameLabelWithSuffix);
+          await user.type(customUsernameInput, usernameValue);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+
+        it('supports excluding fields from the rendered form', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          const formFieldRenderInterceptor: HaapiStepperFormFieldRenderInterceptor = field => {
+            if (field.type === HAAPI_FORM_FIELDS.PASSWORD) {
+              return null;
+            }
+            return field;
+          };
+
+          render(
+            <HaapiStepperFormUI
+              action={action}
+              onSubmit={onSubmit}
+              formFieldRenderInterceptor={formFieldRenderInterceptor}
+            />
+          );
+
+          expect(
+            screen.queryByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))
+          ).not.toBeInTheDocument();
+
+          await fillUsername(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+
+        it('supports inserting additional elements between specific fields', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          const formFieldRenderInterceptor: HaapiStepperFormFieldRenderInterceptor = field => {
+            if (field.name === countryFieldName) {
+              return (
+                <div data-testid="interceptor-country-wrapper">
+                  <HaapiStepperFormFieldUI field={field} />
+                  <p data-testid="interceptor-extra-element">{helperTextBetweenFields}</p>
+                </div>
+              );
+            }
+
+            return field;
+          };
+
+          render(
+            <HaapiStepperFormUI
+              action={action}
+              onSubmit={onSubmit}
+              formFieldRenderInterceptor={formFieldRenderInterceptor}
+            />
+          );
+
+          expect(screen.getByTestId(interceptorExtraElementTestId)).toBeInTheDocument();
+          await fillUsername(user);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+      });
+
+      describe('Behavior customization', () => {
+        it('allows side effects when rendering form fields', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          const CustomFormField = ({
+            field,
+            formState,
+          }: {
+            field: HaapiStepperVisibleFormField;
+            formState: HaapiStepperFormState;
+          }) => {
+            useEffect(() => {
+              if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
+                formState.set(field, prefilledUsernameValue);
+              }
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, [field]);
+
+            return (
+              <div>
+                <HaapiStepperFormFieldUI field={field} />
+              </div>
+            );
+          };
+
+          const formFieldRenderInterceptor: HaapiStepperFormFieldRenderInterceptor = (field, formState) => (
+            <CustomFormField field={field} formState={formState} />
+          );
+
+          render(
+            <HaapiStepperFormUI
+              action={action}
+              onSubmit={onSubmit}
+              formFieldRenderInterceptor={formFieldRenderInterceptor}
+            />
+          );
+
+          const usernameInput: HTMLInputElement = screen.getByTestId(
+            formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName)
+          );
+
+          await waitFor(() => {
+            expect(usernameInput.value).toBe(prefilledUsernameValue);
+          });
+
+          // Username already pre-filled by the CustomFormField useEffect.
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: prefilledUsernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+      });
+    });
+
+    describe('Via Composition (children render interceptor)', () => {
+      describe('Data customization', () => {
+        it('allows field data customization', () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
+              {({ fields }) => (
+                <>
+                  {fields.map(field => {
+                    const customizedLabel = `${field.label ?? field.name} (customized)`;
+                    const customizedField =
+                      field.type === HAAPI_FORM_FIELDS.USERNAME
+                        ? { ...field, placeholder: customPlaceholderForUsername, label: customizedLabel }
+                        : { ...field, label: customizedLabel };
+
+                    return (
+                      <div key={field.name}>
+                        <HaapiStepperFormFieldUI field={customizedField} />
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </HaapiStepperFormUI>
+          );
+
+          expect(screen.getByLabelText(customizedUsernameLabel)).toBeInTheDocument();
+          expect(screen.getByPlaceholderText(customPlaceholderForUsername)).toBeInTheDocument();
+        });
+      });
+
+      describe('UI customization', () => {
+        it('supports default form components', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
+              {({ fields }) => (
+                <>
+                  {fields.map(field => (
+                    <div key={field.name}>
+                      <HaapiStepperFormFieldUI field={field} />
+                    </div>
+                  ))}
+                  <HaapiStepperFormSubmitButton />
+                </>
+              )}
+            </HaapiStepperFormUI>
+          );
+
+          await fillUsername(user);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+
+        it('supports supports custom submit button', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
+              {({ fields }) => (
+                <>
+                  {fields.map(field => (
+                    <div key={field.name}>
+                      <HaapiStepperFormFieldUI field={field} />
+                    </div>
+                  ))}
+                  <button type="submit">{submitButtonLabel}</button>
+                </>
+              )}
+            </HaapiStepperFormUI>
+          );
+
+          await fillUsername(user);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByRole('button', { name: submitButtonLabel }));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+
+        it('supports custom input components', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
+              {({ fields, formState }) => {
+                const usernameField = fields.find(field => field.type === HAAPI_FORM_FIELDS.USERNAME)!;
+                const otherVisibleFields = fields.filter(field => field !== usernameField);
+
+                return (
+                  <>
+                    <div data-testid="composed-custom-input">
+                      <label className="label block">
+                        {customUsernameLabelWithSuffix}
+                        <input
+                          type="text"
+                          className="field w100"
+                          name={usernameField.name}
+                          value={formState.get(usernameField)}
+                          onChange={e => formState.set(usernameField, e.target.value)}
+                        />
+                      </label>
+                    </div>
+                    {otherVisibleFields.map(field => (
+                      <div key={field.name}>
+                        <HaapiStepperFormFieldUI field={field} />
+                      </div>
+                    ))}
+                    <HaapiStepperFormSubmitButton />
+                  </>
+                );
+              }}
+            </HaapiStepperFormUI>
+          );
+
+          const customInput = screen.getByLabelText(customUsernameLabelWithSuffix);
+          await user.type(customInput, usernameValue);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          let payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+
+          const usernameUpdate = usernameValue + 'Test';
+          await user.clear(customInput);
+          await user.type(customInput, usernameUpdate);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(2);
+          payload = onSubmit.mock.calls[1]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameUpdate,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+
+        it('supports excluding fields from the rendered form', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
+              {({ fields }) => (
+                <>
+                  {fields
+                    .filter(field => field.type !== HAAPI_FORM_FIELDS.PASSWORD)
+                    .map(field => (
+                      <div key={field.name}>
+                        <HaapiStepperFormFieldUI field={field} />
+                      </div>
+                    ))}
+                  <HaapiStepperFormSubmitButton />
+                </>
+              )}
+            </HaapiStepperFormUI>
+          );
+
+          expect(
+            screen.queryByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))
+          ).not.toBeInTheDocument();
+
+          await fillUsername(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+
+        it('supports inserting additional elements between fields', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={onSubmit}>
+              {({ fields }) => (
+                <>
+                  {fields.map(field => (
+                    <div key={field.name}>
+                      <label className="label block">
+                        {field.label ?? field.name}:
+                        <HaapiStepperFormFieldUI field={field} />
+                      </label>
+                      {field.type === HAAPI_FORM_FIELDS.USERNAME && (
+                        <p data-testid={composedExtraElementTestId}>{helperTextBetweenFields}</p>
+                      )}
+                    </div>
+                  ))}
+                  <HaapiStepperFormSubmitButton />
+                </>
+              )}
+            </HaapiStepperFormUI>
+          );
+
+          expect(screen.getByTestId(composedExtraElementTestId)).toHaveTextContent(helperTextBetweenFields);
+          await fillUsername(user);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+          await user.click(screen.getByTestId(submitButtonTestId));
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+        });
+      });
+
+      describe('Behavior customization', () => {
+        it('supports custom submission callbacks', async () => {
+          const action = createLoginFormAction();
+          const onSubmit = vi.fn();
+          const handleSubmit: HaapiStepperNextStep<HaapiStepperFormAction> = (action, payload) => {
+            if (window.confirm(confirmSubmissionMessage)) {
+              onSubmit(action, payload);
+            }
+          };
+
+          render(
+            <HaapiStepperFormUI action={action} onSubmit={handleSubmit}>
+              {({ fields }) => (
+                <>
+                  {fields.map(field => (
+                    <div key={field.name}>
+                      <HaapiStepperFormFieldUI field={field} />
+                    </div>
+                  ))}
+                  <button type="submit">{submitButtonLabel}</button>
+                </>
+              )}
+            </HaapiStepperFormUI>
+          );
+
+          const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+          await fillUsername(user);
+          await fillPassword(user);
+          await selectCountry(user);
+          await checkRememberMe(user);
+
+          await user.click(screen.getByRole('button', { name: submitButtonLabel }));
+
+          expect(confirmSpy).toHaveBeenCalledWith(confirmSubmissionMessage);
+          expect(onSubmit).toHaveBeenCalledTimes(1);
+          const payload = onSubmit.mock.calls[0]?.[1];
+          expect(Object.fromEntries(payload)).toEqual({
+            [contextFieldName]: hiddenContextValue,
+            [usernameFieldName]: usernameValue,
+            [passwordFieldName]: passwordValue,
+            [countryFieldName]: countrySwedenValue,
+            [rememberMeFieldName]: rememberValue,
+          });
+          confirmSpy.mockRestore();
+        });
+      });
+    });
+  });
+});
+
+vi.mock('../../stepper/HaapiStepperHook', () => ({
+  useHaapiStepper: vi.fn(() => ({ error: null })),
+}));
+
+const mockUseHaapiStepper = vi.mocked(useHaapiStepper);
+
+const createLoginFormAction = () =>
+  createMockFormAction({
+    id: loginFormId,
+    title: loginFormTitle,
+    kind: HAAPI_FORM_ACTION_KINDS.LOGIN,
+    model: {
+      href: loginFormActionHref,
+      method: HTTP_METHODS.POST,
+      actionTitle: loginFormActionTitle,
+      fields: [
+        { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
+        { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
+        {
+          id: crypto.randomUUID(),
+          type: HAAPI_FORM_FIELDS.CHECKBOX,
+          name: rememberMeFieldName,
+          label: 'Remember me',
+          value: rememberValue,
+        },
+        {
+          id: crypto.randomUUID(),
+          type: HAAPI_FORM_FIELDS.SELECT,
+          name: countryFieldName,
+          label: 'Country',
+          options: [
+            { label: 'Sweden', value: countrySwedenValue },
+            { label: 'Canada', value: countryCanadaValue },
+          ],
+        },
+        { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.HIDDEN, name: contextFieldName, value: hiddenContextValue },
+      ],
+    },
+  });
+
+async function fillUsername(user: ReturnType<typeof userEvent.setup>, value: string = usernameValue): Promise<void> {
+  await user.type(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName)), value);
+}
+
+async function fillPassword(user: ReturnType<typeof userEvent.setup>, value: string = passwordValue): Promise<void> {
+  await user.type(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName)), value);
+}
+
+async function selectCountry(
+  user: ReturnType<typeof userEvent.setup>,
+  value: string = countrySwedenValue
+): Promise<void> {
+  await user.selectOptions(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.SELECT, countryFieldName)), value);
+}
+
+async function checkRememberMe(user: ReturnType<typeof userEvent.setup>): Promise<void> {
+  await user.click(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.CHECKBOX, rememberMeFieldName)));
+}
+
+const formFieldTestId = (type: string, name: string) => `haapi-form-field-${type}-${name}`;
+const submitButtonTestId = 'form-submit-button';
+const validationErrorTestId = 'haapi-validation-error';
+const interceptorExtraElementTestId = 'interceptor-extra-element';
+const composedExtraElementTestId = 'composed-extra-element';
+const helperTextBetweenFields = 'Helper text between fields';
+const usernameFieldName = 'username';
+const passwordFieldName = 'password';
+const rememberMeFieldName = 'rememberMe';
+const countryFieldName = 'country';
+const contextFieldName = 'context';
+const loginFormId = 'form-login';
+const loginFormTitle = 'Login';
+const loginFormActionHref = '/login';
+const loginFormActionTitle = 'Sign In';
+const hiddenContextValue = 'hidden-value';
+const usernameValue = 'alice';
+const passwordValue = 's3cret';
+const rememberValue = 'remember';
+const countryCanadaValue = 'CA';
+const countrySwedenValue = 'SE';
+const validationMissingUsernameMessage = `Field '${usernameFieldName}' is required`;
+const validationInvalidPasswordMessage = 'Wrong password';
+const interceptedUsernameLabel = 'Intercepted Username';
+const customUsernameLabel = 'Custom Username';
+const customUsernameLabelWithSuffix = `${customUsernameLabel}:`;
+const customPlaceholderForUsername = 'Custom placeholder for username';
+const customizedUsernameLabel = 'Username (customized)';
+const confirmSubmissionMessage = 'Do you want to submit the form?';
+const submitButtonLabel = 'Submit';
+const prefilledUsernameValue = 'prefilled-user';

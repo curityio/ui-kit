@@ -11,10 +11,10 @@
   filter: grayscale(1) saturate(1);
 }
 
+.button-social,
 button[type='submit'].button-social,
 button.button-social,
-a.button-social,
-.button-social {
+a.button-social {
   background-color: transparent;
   border: none;
   border-color: var(--form-field-border-color);
@@ -33,7 +33,7 @@ a.button-social,
     border-color 200ms;
 }
 
-:is(.button-social) {
+.button-social {
   --icon-width: 60px;
 
   font-size: calc(var(--button-font-size) * var(--y-medium));
@@ -49,10 +49,10 @@ a.button-social,
   overflow-wrap: anywhere;
 }
 
+.button-social .icon,
 button[type='submit'].button-social .icon,
 button.button-social .icon,
-a.button-social .icon,
-.button-social .icon {
+a.button-social .icon {
   align-items: center;
   background-color: var(--authenticator-color, var(--color-primary));
   border-bottom-left-radius: var(--button-border-radius);
@@ -71,10 +71,10 @@ a.button-social .icon,
   width: var(--icon-width);
 }
 
+.button-social:hover,
 button[type='submit'].button-social:hover,
 button.button-social:hover,
-a.button-social:hover,
-.button-social:hover {
+a.button-social:hover {
   background-color: transparent;
   border-color: var(--form-field-border-color-hover);
   color: var(--color-heading);
@@ -139,8 +139,8 @@ a.button-social-icon .icon,
   &.button-duo { --authenticator-color: var(--authenticator-duo-color); }
   &.button-sign-in-with-apple { --authenticator-color: var(--authenticator-sign-in-with-apple-color); }
   &.button-netidaccess-os { --authenticator-color: var(--authenticator-netidaccess-os-color); }
-  &.button-openid-wallet { --authenticator-color: var(--authenticator-openid-wallet-color); }
   &.button-social-single-color { --authenticator-color: var(--authenticator-social-single-color); }
+  &.button-openid-wallet { --authenticator-color: var(--authenticator-openid-wallet-color); }
 }
 
 .form-field-social-icon {
