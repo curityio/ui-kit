@@ -23,6 +23,9 @@
     <title></title>
     <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js?v=${_cacheBustingHash}"></script>
     <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css?v=${_cacheBustingHash}">
+    #if ($theme_css_path)
+        <link rel="stylesheet" type="text/css" href="${theme_css_path}?v=${_cacheBustingHash}" />
+    #end
     #if ($_configured_ui_theme_css_path)
         <link rel="stylesheet" href="${_configured_ui_theme_css_path}"/>
     #end
