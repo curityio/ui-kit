@@ -21,10 +21,13 @@
     #parse("fragments/csp")
 
     <title></title>
-    <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js?v=${_cacheBustingHash}"></script>
-    <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css?v=${_cacheBustingHash}">
+    #if ($_cacheBustingHash)
+        #set ($_cacheBustingQuery = "?v=" + $_cacheBustingHash)
+    #end
+    <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js$!_cacheBustingQuery"></script>
+    <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css$!_cacheBustingQuery">
     #if ($theme_css_path)
-        <link rel="stylesheet" type="text/css" href="${theme_css_path}?v=${_cacheBustingHash}" />
+        <link rel="stylesheet" type="text/css" href="${theme_css_path}$!_cacheBustingQuery" />
     #end
     #if ($_configured_ui_theme_css_path)
         <link rel="stylesheet" href="${_configured_ui_theme_css_path}"/>
