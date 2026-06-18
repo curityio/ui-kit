@@ -78,6 +78,9 @@
     <script type="module" crossorigin src="${_assetsPath}/index.js?v=${_cacheBustingHash}"></script>
     <link rel="stylesheet" crossorigin href="${_assetsPath}/index.css?v=${_cacheBustingHash}">
     <link rel="stylesheet" crossorigin href="/assets/css/curity-theme.css?v=${_cacheBustingHash}">
+    #if ($theme_css_path)
+        <link rel="stylesheet" type="text/css" href="${theme_css_path}?v=${_cacheBustingHash}" />
+    #end
 #if ($_configured_ui_theme_css_path)
     <link rel="stylesheet" type="text/css" href="${_configured_ui_theme_css_path}?v=${_cacheBustingHash}" />
 #end
