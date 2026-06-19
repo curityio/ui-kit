@@ -213,26 +213,13 @@
 #* Other settings configurable *#
 
 #*
- * IS-7660: Merge the page's img-src (set by authenticators that render inline data: images,
+ * Merge the page's img-src (set by authenticators that render inline data: images,
  * e.g. the TOTP / BankID / Duo QR codes) with the img-src configured in "Look and Feel"
- * (which adds the logo's origin). Overwriting one with the other drops the sources the other
- * needs -- e.g. a logo configured as a URL would strip `data:` and break those QR codes.
- * So union the sources of both directives.
+ * (which adds the logo's origin).
  *#
 #if ($_configured_cspImgsrc)
     #if ($_cspImgsrc)
-        #set ($_combinedImgSrc = "$_configured_cspImgsrc $_cspImgsrc")
-        #set ($_mergedImgSrc = "img-src")
-        #set ($_seenImgSrc = [])
-        ## Union the sources of both directives, avoiding duplicates. The "img-src" prefix and ";" suffix are removed before splitting.
-        #foreach ($_src in $_combinedImgSrc.replace("img-src", " ").replace(";", " ").split(" "))
-            #if (!$_src.isEmpty() && !$_seenImgSrc.contains($_src))
-                ## #set captures add()'s boolean return so Velocity doesn't render "true" into the page
-                #set ($_discard = $_seenImgSrc.add($_src))
-                #set ($_mergedImgSrc = "$_mergedImgSrc $_src")
-            #end
-        #end
-        #set ($_cspImgsrc = "$_mergedImgSrc;")
+        #set ($_cspImgsrc = $CspUtil.combine($_configured_cspImgsrc, $_cspImgsrc))
     #else
         #set ($_cspImgsrc = $_configured_cspImgsrc)
     #end
