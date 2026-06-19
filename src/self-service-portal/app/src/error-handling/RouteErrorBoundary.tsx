@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { getErrorMessage, ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/shared/utils/useRouteTitle';
 import { Alert, Button, Spinner } from '@curity/ui-kit-component-library';
@@ -20,8 +20,9 @@ const RouteErrorBoundaryFallback = ({ error, resetErrorBoundary }: FallbackProps
   const { t } = useTranslation();
   const pageTitle = usePageTitle();
   const [isResettingErrorBoundary, setIsResettingErrorBoundary] = useState(false);
-  const isAppBootstrappingError = error?.message?.includes('Error bootstrapping');
-  const errorMessage = isAppBootstrappingError ? error?.message : `${t('Failed to load')} ${pageTitle} ${t('page')}`;
+  const boundaryMessage = getErrorMessage(error)
+  const isAppBootstrappingError = boundaryMessage && boundaryMessage.includes('Error bootstrapping');
+  const errorMessage = isAppBootstrappingError ? boundaryMessage : `${t('Failed to load')} ${pageTitle} ${t('page')}`;
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;

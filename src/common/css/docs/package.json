@@ -20,15 +20,15 @@
     "@astrojs/react": "^5.0.3",
     "@curity/ui-kit-css": "*",
     "@curity/ui-kit-icons": "*",
-    "astro": "^6.1.6",
+    "astro": "^6.4.6",
     "mdast-util-to-string": "3.2.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19.2.7",
     "rollup": "^4.40.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
+    "@types/react-dom": "^19.2.3",
     "@typescript/twoslash": "^3.2.9",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.12.3"
