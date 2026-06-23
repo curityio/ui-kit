@@ -80,7 +80,6 @@
 #end
     <script type="module" crossorigin src="${_assetsPath}/index.js$!_cacheBustingQuery"></script>
     <link rel="stylesheet" crossorigin href="${_assetsPath}/index.css$!_cacheBustingQuery">
-    <link rel="stylesheet" crossorigin href="/assets/css/curity-theme.css$!_cacheBustingQuery">
     #if ($theme_css_path)
         <link rel="stylesheet" type="text/css" href="${theme_css_path}$!_cacheBustingQuery" />
     #end
