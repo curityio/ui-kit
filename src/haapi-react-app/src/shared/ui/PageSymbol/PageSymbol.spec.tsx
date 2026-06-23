@@ -11,9 +11,9 @@
 
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
-import { PageSymbol } from './PageSymbol';
-import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
-import type { HaapiAppConfig, PageSymbols } from '../feature/app-config/types';
+import { PageSymbol } from '../PageSymbol/PageSymbol';
+import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
+import type { HaapiAppConfig, PageSymbols } from '../../feature/app-config/types';
 
 const buildConfig = (pageSymbols?: PageSymbols): HaapiAppConfig => ({
   initialUrl: 'https://example/start',

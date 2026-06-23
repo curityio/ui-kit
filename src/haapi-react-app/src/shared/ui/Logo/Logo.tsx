@@ -9,7 +9,13 @@
  * For further information, please contact Curity AB.
  */
 
-.messages {
-  /* Utility classes from global CSS */
-  /* See well.module.css for notes. */
-}
+import { useHaapiAppConfig } from '../../feature/app-config/HaapiAppConfigHook';
+
+export const Logo = () => {
+  const { theme } = useHaapiAppConfig();
+  const logo = theme.logo;
+  if (!logo) {
+    return null;
+  }
+  return <img className="haapi-stepper-logo" src={logo.path} alt="Logo" />;
+};

@@ -12,7 +12,7 @@
 import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
-import { resolveAuthenticatorIcon } from '../../../../../shared/ui/icons/authenticator-icons';
+import { resolveAuthenticatorIcon } from '../../../ui/icons/authenticator-icons';
 import { useHaapiStepperForm } from './HaapiStepperFormContext';
 
 interface HaapiStepperFormSubmitButtonProps extends ComponentPropsWithRef<'button'> {

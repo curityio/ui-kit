@@ -11,15 +11,15 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
-import { Layout } from './Layout';
+import { Layout } from '../Layout/Layout';
 import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepperContext';
-import type { PageSymbols } from '../feature/app-config/types';
+import type { PageSymbols } from '../../feature/app-config/types';
 import type {
   HaapiStepperAPI,
   HaapiStepperStep,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
-import type { HaapiAppConfig } from '../feature/app-config/types';
-import { HaapiAppConfigContext } from '../feature/app-config/HaapiAppConfigContext';
+import type { HaapiAppConfig } from '../../feature/app-config/types';
+import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
 
 describe('Layout', () => {
   describe('Logo placement', () => {
