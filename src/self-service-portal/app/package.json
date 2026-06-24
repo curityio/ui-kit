@@ -46,7 +46,7 @@
     "react-verification-input": "^4.2.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "^10.0.1",
     "@graphql-codegen/cli": "^6.0.1",
     "@graphql-codegen/client-preset": "^5.1.0",
     "@parcel/watcher": "^2.5.0",
