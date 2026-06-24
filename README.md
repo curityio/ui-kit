@@ -103,6 +103,12 @@ To deploy build artifacts (assets, templates, and messages) to a production envi
    ```shell
    npm run build
    ```
+   
+   Or build specific projects with `npm run build:<project>` to deploy only those, e.g.:
+   ```shell
+   npm run build:ssp
+   npm run build:haapi-react-app
+   ```
 
 ### Deployment Options
 
@@ -113,6 +119,7 @@ To deploy build artifacts (assets, templates, and messages) to a production envi
 This deploys:
 - Identity Server assets, templates, and messages
 - Self Service Portal to `templates/overrides` and `messages/overrides`
+- HAAPI React App assets to the global `webroot/assets`, with its loader fragment in `templates/overrides`
 
 **Deploy to a specific template area:**
 ```shell
@@ -121,6 +128,7 @@ This deploys:
 This deploys:
 - Identity Server assets, templates, and messages
 - Self Service Portal only to the specified template area (not to overrides)
+- HAAPI React App assets to the global `webroot/assets`, with its loader fragment in the specified template area
 
 ### What Gets Deployed
 
@@ -132,6 +140,10 @@ This deploys:
 **Self Service Portal:**
 - Templates → `${IDSVR_HOME}/usr/share/templates/overrides/apps/self-service-portal` or `template-areas/{area}/apps/self-service-portal`
 - Messages → `${IDSVR_HOME}/usr/share/messages/overrides/{language}/apps/self-service-portal` or `template-areas/{area}/{language}/apps/self-service-portal`
+
+**HAAPI React App:**
+- Assets → `${IDSVR_HOME}/usr/share/webroot/assets/{js,css}`, preserving content-hashed filenames so different builds can coexist
+- Assets fragment → `${IDSVR_HOME}/usr/share/templates/overrides/fragments/api-driven-ui/assets.vm` or `template-areas/{area}/fragments/api-driven-ui/assets.vm`, rewritten to point at the deployed assets
 
 ## License
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
