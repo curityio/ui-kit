@@ -46,7 +46,7 @@
     "npm": ">=10.9.4"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
+    "concurrently": "^10.0.3",
     "cross-env": "^7.0.3"
   }
 }
