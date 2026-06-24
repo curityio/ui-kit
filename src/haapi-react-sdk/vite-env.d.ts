@@ -9,4 +9,4 @@
  * For further information, please contact Curity AB.
  */
 
-import '@testing-library/jest-dom/vitest';
+/// <reference types="vite/client" />

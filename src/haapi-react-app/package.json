@@ -28,6 +28,7 @@
     "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib"
   },
   "dependencies": {
+    "@curity/haapi-react-sdk": "*",
     "@curity/identityserver-haapi-web-driver": "^1.3.0",
     "@curity/ui-kit-icons": "^1.0.0",
     "react": "^19.0.0",

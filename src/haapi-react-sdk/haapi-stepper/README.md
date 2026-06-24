@@ -182,7 +182,7 @@ Check out documentation and usage examples in the links below:
 
 ### CSS Customization
 
-The HAAPI UI components are styled via plain CSS class names — no CSS-in-JS, no inline styles. The components only emit class names; the actual rules live in a stylesheet shipped alongside the components at [`src/shared/util/css/styles.css`](../shared/util/css/styles.css).
+The HAAPI UI components are styled via plain CSS class names — no CSS-in-JS, no inline styles. The components only emit class names; the actual rules live in a stylesheet shipped alongside the host application's global stylesheet. For example, in the case of the `haapi-react-app`, in `haapi-react-app/src/shared/util/css/styles.css`.
 
 #### Importing CSS styles
 
