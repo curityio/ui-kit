@@ -17,7 +17,8 @@ import * as reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  // `docs` is its own workspace (Docusaurus) with its own toolchain; don't lint it from the SDK.
+  { ignores: ['dist', 'docs'] },
   {
     extends: [
       js.configs.recommended,
