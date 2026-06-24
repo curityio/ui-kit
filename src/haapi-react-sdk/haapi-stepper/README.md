@@ -13,9 +13,6 @@ This README is the source for the SDK's interactive documentation. Run it locall
 npm run docs
 ```
 
-Or open it in the browser with no setup — and the code editor hidden — on
-[StackBlitz](https://stackblitz.com/~/github.com/curityio/ui-kit/tree/feature/IS-11008/haapi-react-sdk-docs?view=preview).
-
 <!-- /docs:skip -->
 
 ## Previewer

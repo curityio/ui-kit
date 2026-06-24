@@ -26,9 +26,6 @@ interactive documentation — run it locally from the repo root:
 cd src/haapi-react-sdk/docs && npm run docs
 ```
 
-or open it in the browser with no setup, and the code editor hidden, on
-[StackBlitz](https://stackblitz.com/~/github.com/curityio/ui-kit/tree/feature/IS-11008/haapi-react-sdk-docs?view=preview).
-
 ## Development setup
 
 The Vite development server is used both to serve the application and as a proxy for specific Identity Server endpoints.
