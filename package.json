@@ -22,6 +22,7 @@
     "src/identity-server",
     "src/self-service-portal/app",
     "src/haapi-react-sdk",
+    "src/haapi-react-sdk/docs",
     "src/haapi-react-app"
   ],
   "scripts": {

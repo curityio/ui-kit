@@ -17,6 +17,18 @@ curity-cli t && npm i --prefix "$(git rev-parse --show-toplevel)"
   - IDEs usually have Prettier integrated with the "format code" commands.
   - IntelliJ has a [plugin](https://plugins.jetbrains.com/plugin/10456-prettier). Additional settings in `Languages & Frameworks | JavaScript | Prettier`.
 
+## SDK documentation
+
+This app is built on the [HAAPI React SDK](../haapi-react-sdk/haapi-stepper/README.md). Browse its
+interactive documentation — run it locally from the repo root:
+
+```shell
+cd src/haapi-react-sdk/docs && npm run docs
+```
+
+or open it in the browser with no setup, and the code editor hidden, on
+[StackBlitz](https://stackblitz.com/~/github.com/curityio/ui-kit/tree/feature/IS-11008/haapi-react-sdk-docs?view=preview).
+
 ## Development setup
 
 The Vite development server is used both to serve the application and as a proxy for specific Identity Server endpoints.

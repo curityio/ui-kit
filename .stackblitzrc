@@ -1,0 +1,4 @@
+{
+  "installDependencies": false,
+  "startCommand": "npm install --engine-strict=false --no-audit --no-fund && cd src/haapi-react-sdk/docs && npm run docs -- --host 0.0.0.0 --no-open"
+}
