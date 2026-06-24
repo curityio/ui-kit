@@ -86,24 +86,37 @@ function upshiftHeadings(markdown) {
       if (line.trim().startsWith('```')) {
         inFence = !inFence;
       }
-      return inFence ? line : line.replace(/^(#{3,6})(\s)/, (_, hashes, space) => '#'.repeat(hashes.length - 1) + space);
+      return inFence
+        ? line
+        : line.replace(/^(#{3,6})(\s)/, (_, hashes, space) => '#'.repeat(hashes.length - 1) + space);
     })
     .join('\n');
 }
 
 /** Rewrite in-page `](#section-slug)` links to the section's new page route. */
 function rewriteAnchors(markdown, routeBySlug) {
-  return markdown.replace(/\]\(#([\w-]+)\)/g, (whole, slug) => (routeBySlug.has(slug) ? `](${routeBySlug.get(slug)})` : whole));
+  return markdown.replace(/\]\(#([\w-]+)\)/g, (whole, slug) =>
+    routeBySlug.has(slug) ? `](${routeBySlug.get(slug)})` : whole
+  );
 }
 
 function writeMdx(file, frontmatter, imports, body) {
-  const fm = ['---', ...Object.entries(frontmatter).filter(([, v]) => v != null).map(([k, v]) => `${k}: ${v}`), '---'].join('\n');
+  const fm = [
+    '---',
+    ...Object.entries(frontmatter)
+      .filter(([, v]) => v != null)
+      .map(([k, v]) => `${k}: ${v}`),
+    '---',
+  ].join('\n');
   const content = [fm, GENERATED_NOTE, imports.join('\n'), body].filter(Boolean).join('\n\n');
   fs.writeFileSync(file, `${content.replace(/\n{3,}/g, '\n\n').trimEnd()}\n`);
 }
 
 function splitFile(sourcePath) {
-  const name = path.basename(sourcePath).replace(/^_/, '').replace(/\.mdx?$/, '');
+  const name = path
+    .basename(sourcePath)
+    .replace(/^_/, '')
+    .replace(/\.mdx?$/, '');
   const { data, body: rawBody } = parseFrontmatter(fs.readFileSync(sourcePath, 'utf8'));
   const { imports, body } = extractImports(rawBody);
 
@@ -131,9 +144,7 @@ function splitFile(sourcePath) {
   );
 
   // The index page is the intro, plus the landing section's content duplicated after it when present.
-  const indexBody = landingSection
-    ? [intro, upshiftHeadings(landingSection.body)].filter(Boolean).join('\n\n')
-    : intro;
+  const indexBody = landingSection ? [intro, upshiftHeadings(landingSection.body)].filter(Boolean).join('\n\n') : intro;
   writeMdx(
     path.join(outDir, 'index.mdx'),
     { ...(data.slug && !landingSlug ? { slug: data.slug } : {}), sidebar_position: 0, title: pageTitle },

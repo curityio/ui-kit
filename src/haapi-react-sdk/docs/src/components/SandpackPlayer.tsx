@@ -53,10 +53,7 @@ export default function SandpackPlayer({ files, dependencies = {}, activeFile, e
                 showLineNumbers: true,
               }}
             />
-            <p
-              className="haapi-playground-hint"
-              style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', opacity: 0.75 }}
-            >
+            <p className="haapi-playground-hint" style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', opacity: 0.75 }}>
               ✏️ Interactive — edit the code and the preview updates live.
             </p>
           </>

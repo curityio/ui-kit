@@ -48,7 +48,12 @@ export default function App() {
                   }}
                 >
                   {options.map(option => (
-                    <button key={option.id} type="button" onClick={() => nextStep(option)} style={authenticatorButtonStyle}>
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => nextStep(option)}
+                      style={authenticatorButtonStyle}
+                    >
                       {option.title}
                     </button>
                   ))}

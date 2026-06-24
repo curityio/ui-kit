@@ -40,7 +40,9 @@ function LoginForm() {
               <HaapiStepperFormFieldUI key={field.name} field={field} />
             )
           )}
-          <button type="submit" className="haapi-stepper-button">Sign in</button>
+          <button type="submit" className="haapi-stepper-button">
+            Sign in
+          </button>
         </>
       )}
     </HaapiStepperFormUI>

@@ -36,7 +36,10 @@ const usernameFirstSelectorInterceptor: HaapiStepperStepUISelectorActionRenderIn
     ...action,
     model: {
       ...action.model,
-      options: [...action.model.options.filter(isUsername), ...action.model.options.filter(option => !isUsername(option))],
+      options: [
+        ...action.model.options.filter(isUsername),
+        ...action.model.options.filter(option => !isUsername(option)),
+      ],
     },
   };
 };

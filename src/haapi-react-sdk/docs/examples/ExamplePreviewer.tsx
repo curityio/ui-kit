@@ -80,4 +80,3 @@ const SANDBOX_CONFIG: Partial<HaapiStepperConfig> = {
   bankIdAutostart: false,
   autoRedirectOnAuthenticationComplete: false,
 };
-

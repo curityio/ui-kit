@@ -62,10 +62,7 @@ const resolveLink = symbol => SYMBOL_URLS.get(symbol) ?? null;
 
 /** Write a `_category_.json` for a (sub)category folder. `position` is omitted when undefined. */
 function writeCategory(dir, label, position) {
-  fs.writeFileSync(
-    path.join(dir, '_category_.json'),
-    `${JSON.stringify({ label, position }, null, 2)}\n`
-  );
+  fs.writeFileSync(path.join(dir, '_category_.json'), `${JSON.stringify({ label, position }, null, 2)}\n`);
 }
 
 /** The export's TSDoc as an MDX body (real Markdown + `<DocExample>`), with the import line if needed. */
@@ -81,7 +78,9 @@ function renderBody(entry) {
 
 /** Write one entry's MDX page: frontmatter (title + position) + its TSDoc body. */
 function writeEntry(dir, entry, position) {
-  const frontmatter = ['---', `title: ${JSON.stringify(entry.label)}`, `sidebar_position: ${position}`, '---'].join('\n');
+  const frontmatter = ['---', `title: ${JSON.stringify(entry.label)}`, `sidebar_position: ${position}`, '---'].join(
+    '\n'
+  );
   fs.writeFileSync(path.join(dir, `${entry.id}.mdx`), `${[frontmatter, renderBody(entry)].join('\n\n')}\n`);
 }
 

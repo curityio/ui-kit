@@ -15,7 +15,11 @@ import examples from '../generated/examples.json';
 import exampleDeps from '../generated/exampleDeps.json';
 
 interface DocExampleProps {
-  /** Base name of an example file under `examples/` (e.g. `DefaultRendering`). */
+  /**
+   * The example's file basename under `examples/` (e.g. `DefaultRendering`), used to look up its source
+   * in the generated examples map. Resolved by the generators from the *path* an author references — it is
+   * not written by hand (see the component doc below).
+   */
   id: string;
   /** Accessible label for the playground section. */
   label?: string;
@@ -28,9 +32,14 @@ interface DocExampleProps {
 }
 
 /**
- * Mounts a docs example (`examples/<id>.tsx`) as a live Sandpack playground. Used by any MDX page —
- * hand-written (Overview) or generated (Examples, and the API Reference pages, where the generator emits
- * a `<DocExample>` for each `{@see_example}` marker) — all reusing the shared HAAPI sandbox closure.
+ * Mounts a docs example (`examples/<id>.tsx`) as a live Sandpack playground over the shared HAAPI sandbox
+ * closure.
+ *
+ * This is an internal mount point emitted **only by the docs generators** — it is never authored by hand,
+ * and the `id` is not part of the authoring surface. Sources reference examples by *path*:
+ *   - TSDoc: `{@see_example <path> <label>}` markers → `emit-api-reference`
+ *   - README / markdown: `[<label>](…/examples/<name>.tsx)` links → `build-sandpack-sdk`
+ * Each generator resolves that path to the example's `id` (its file basename) and emits `<DocExample id=…>`.
  */
 export default function DocExample({ id, label, dependencies }: DocExampleProps) {
   const code = (examples as Record<string, string>)[id];

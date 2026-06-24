@@ -49,9 +49,7 @@ export function StepDataDetails({ step }: { step: HaapiStep }) {
         background: 'rgba(127, 127, 127, 0.04)',
       }}
     >
-      <summary
-        style={{ cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, margin: 0, padding: '0.25rem 0' }}
-      >
+      <summary style={{ cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, margin: 0, padding: '0.25rem 0' }}>
         See HAAPI step data
       </summary>
       <pre

@@ -70,7 +70,10 @@ function parseExampleRef(content) {
     return null;
   }
   const id = path.basename(target, '.tsx');
-  const label = tokens.filter(token => token !== target).join(' ').trim();
+  const label = tokens
+    .filter(token => token !== target)
+    .join(' ')
+    .trim();
   return { id, label: label || id };
 }
 
@@ -180,7 +183,12 @@ function readDoc(file, exportName) {
     if (ts.isVariableStatement(node)) {
       return node.declarationList.declarations.some(d => ts.isIdentifier(d.name) && d.name.text === exportName);
     }
-    if (ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) {
+    if (
+      ts.isFunctionDeclaration(node) ||
+      ts.isClassDeclaration(node) ||
+      ts.isInterfaceDeclaration(node) ||
+      ts.isTypeAliasDeclaration(node)
+    ) {
       return node.name?.text === exportName;
     }
     return false;
