@@ -40,6 +40,7 @@ import { useHaapiStepperForm } from '../HaapiStepperFormContext';
  *   )}
  * </HaapiStepperFormUI>
  * ```
+ * {@see_example docs/examples/SelectFieldRendering.tsx Select field with hint}
  */
 export function HaapiStepperSelectFormFieldUI({ field }: { field: HaapiStepperSelectFormField }): ReactElement {
   const { formState, action } = useHaapiStepperForm();

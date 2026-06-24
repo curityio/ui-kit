@@ -25,7 +25,7 @@ interface HaapiStepperSelectorUIProps {
 
 /**
  * @description
- * # SELECTOR ACTION COMPONENT
+ * # Selector action component
  *
  * Presents a HAAPI selector action as a list of nested form options and forwards the
  * user's choice to the provided onSubmit handler, forwarding the option clicked to the
@@ -43,6 +43,7 @@ interface HaapiStepperSelectorUIProps {
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example docs/examples/SelectorUiUsage.tsx Selector UI}
  */
 export function HaapiStepperSelectorUI({ action, onSubmit }: HaapiStepperSelectorUIProps) {
   const options = action.model.options;

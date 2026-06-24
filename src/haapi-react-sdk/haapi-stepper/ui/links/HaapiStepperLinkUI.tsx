@@ -12,6 +12,21 @@
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 import { isQrCodeLink } from '../../util/isQrCodeLink';
 
+/**
+ * @description
+ * # Link component
+ *
+ * Renders a single HAAPI link as a button. A regular link renders a `.haapi-stepper-link` button
+ * showing the link's `title` (falling back to its `rel`); a QR-code link renders a
+ * `.haapi-stepper-link-qr-code` figure with the code image and an expand affordance. Clicking invokes
+ * `onClick` with the link so the caller can advance the flow (usually `nextStep`).
+ *
+ * Use `HaapiStepperLinksUI` to render a step's whole link collection; reach for this component when you
+ * render a single link yourself.
+ *
+ * @param link - The HAAPI link to render
+ * @param onClick - Callback invoked with the link when it is activated (usually `nextStep`)
+ */
 export const HaapiStepperLinkUI = ({
   link,
   onClick,

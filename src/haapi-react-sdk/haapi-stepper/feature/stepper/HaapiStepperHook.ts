@@ -39,6 +39,7 @@ import { HaapiStepperContext } from './HaapiStepperContext';
  *   );
  * }
  * ```
+ * {@see_example docs/examples/UseHaapiStepperHook.tsx useHaapiStepper hook}
  */
 export function useHaapiStepper() {
   const haapiStepperContext = use(HaapiStepperContext);

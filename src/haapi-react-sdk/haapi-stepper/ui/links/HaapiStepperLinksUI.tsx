@@ -24,7 +24,7 @@ interface HaapiStepperLinksUIProps {
 
 /**
  * @description
- * # LINKS COMPONENT
+ * # Links component
  *
  * Renders HAAPI link actions and supports optional render interception
  * so callers can tweak or fully override individual items, forwarding the
@@ -42,6 +42,7 @@ interface HaapiStepperLinksUIProps {
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example docs/examples/LinkUiUsage.tsx Links UI}
  */
 export function HaapiStepperLinksUI({ links, onClick, renderInterceptor }: HaapiStepperLinksUIProps) {
   return (

@@ -41,6 +41,7 @@ import { useHaapiStepperForm } from '../HaapiStepperFormContext';
  *   )}
  * </HaapiStepperFormUI>
  * ```
+ * {@see_example docs/examples/TextFieldRendering.tsx Text field section}
  */
 export function HaapiStepperTextFormFieldUI({
   field,

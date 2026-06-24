@@ -48,6 +48,7 @@ import { useHaapiStepperForm } from '../HaapiStepperFormContext';
  *   )}
  * </HaapiStepperFormUI>
  * ```
+ * {@see_example docs/examples/PasswordFieldRendering.tsx Password field with link}
  */
 export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepperPasswordFormField }): ReactElement {
   const { formState, action } = useHaapiStepperForm();

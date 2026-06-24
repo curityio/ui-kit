@@ -40,6 +40,7 @@ import { useHaapiStepperForm } from '../HaapiStepperFormContext';
  *   )}
  * </HaapiStepperFormUI>
  * ```
+ * {@see_example docs/examples/CheckboxFieldRendering.tsx Checkbox field with terms}
  */
 export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepperCheckboxFormField }): ReactElement {
   const { formState, action } = useHaapiStepperForm();

@@ -38,6 +38,7 @@ import { HaapiStepperPasswordFormFieldUI } from './HaapiStepperPasswordFormField
  *   )}
  * </HaapiStepperFormUI>
  * ```
+ * {@see_example docs/examples/FormUICompositionExample.tsx Custom field layout}
  *
  * To customize a single field, render its specific component ({@link HaapiStepperTextFormFieldUI},
  * {@link HaapiStepperPasswordFormFieldUI}, {@link HaapiStepperCheckboxFormFieldUI},
