@@ -26,8 +26,13 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'HAAPI React SDK',
   tagline: 'Interactive HAAPI React SDK documentation',
-  url: 'http://localhost',
-  baseUrl: '/',
+  // Deploy target is env-driven so local/StackBlitz stay at `/` while CI builds for GitHub Pages
+  // (e.g. DOCS_URL=https://curityio.github.io, DOCS_BASE_URL=/ui-kit/haapi-react-sdk/docs/).
+  url: process.env.DOCS_URL ?? 'http://localhost',
+  baseUrl: process.env.DOCS_BASE_URL ?? '/',
+  organizationName: 'curityio',
+  projectName: 'ui-kit',
+  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
   onBrokenMarkdownLinks: 'throw',
