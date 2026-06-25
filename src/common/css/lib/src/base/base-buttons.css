@@ -29,6 +29,7 @@
   background-color: var(--button-background-color);
   border: none;
   border-radius: var(--button-border-radius);
+  color: white;
   cursor: pointer;
   display: inline-flex;
   font-family: var(--type-sans-bold);
