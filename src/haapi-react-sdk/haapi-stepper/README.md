@@ -7,7 +7,9 @@ flows in the frontend. It works out of the box with minimal setup and lets you c
 
 ## Documentation
 
-This README is the source for the SDK's interactive documentation. Run it locally from the repo root:
+This README is the source for the SDK's interactive documentation. 
+
+> 📖 **[Read the interactive docs online](https://curityio.github.io/ui-kit/haapi-react-sdk/docs/)**, or run it locally from the repo root:
 
 ```shell
 npm run docs
