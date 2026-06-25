@@ -19,8 +19,10 @@ curity-cli t && npm i --prefix "$(git rev-parse --show-toplevel)"
 
 ## SDK documentation
 
-This app is built on the [HAAPI React SDK](../haapi-react-sdk/haapi-stepper/README.md). Browse its
-interactive documentation — run it locally from the repo root:
+This app is built on the [HAAPI React SDK](../haapi-react-sdk/haapi-stepper/README.md). 
+
+> 📖 **[Read the HAAPI React SDK docs online](https://curityio.github.io/ui-kit/haapi-react-sdk/docs/)**, or browse its
+interactive documentation locally from the repo root:
 
 ```shell
 cd src/haapi-react-sdk/docs && npm run docs

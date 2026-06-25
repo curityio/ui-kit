@@ -185,10 +185,9 @@ console.log(
   `[build-sandpack-sdk] wrote ${Object.keys(examplesMap).length} docs examples (${Object.keys(exampleDeps).length} with extra deps) to ${relative(process.cwd(), examplesOutFile)}`
 );
 
-// `landing_section` tells split-docs which `##` section is the docs landing: it stays a visible menu item
-// taking the root `slug: /` (opening with the intro), and its content is duplicated into the category
-// index so clicking the category shows it too.
-const readmeFrontMatter = '---\nslug: /\nsidebar_position: 1\nlanding_section: previewer\n---\n\n';
+// The overview README is the docs landing at the site root (`slug: /`): the root opens on the overview
+// intro, and each `##` section (Previewer, Glossary, …) becomes its own page under the Overview category.
+const readmeFrontMatter = '---\nslug: /\nsidebar_position: 1\n---\n\n';
 const docExampleImport = "import DocExample from '@site/src/components/DocExample';\n\n";
 let readmeBody = readFileSync(readmeFile, 'utf8')
   // Drop repo/npm-only blocks (e.g. "how to run the docs") wrapped in `<!-- docs:skip -->…<!-- /docs:skip -->`
