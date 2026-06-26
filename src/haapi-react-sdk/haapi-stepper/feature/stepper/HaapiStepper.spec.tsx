@@ -40,7 +40,7 @@ import type {
   HaapiStepperNextStepAction,
 } from './haapi-stepper.types';
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
-import { isQrCodeLink } from '../../util/isQrCodeLink';
+import { isQrCodeLink } from '../../util/link-predicates';
 import {
   createMockWebAuthnAnyDeviceBothOptionsAction,
   createMockWebAuthnAuthenticationAction,

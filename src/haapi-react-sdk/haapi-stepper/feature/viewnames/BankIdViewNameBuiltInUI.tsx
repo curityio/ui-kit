@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { isQrCodeLink } from '../../util/isQrCodeLink';
+import { isQrCodeLink } from '../../util/link-predicates';
 import { getLinksElement } from '../steps/step-element-factories';
 import type { ViewNameBuiltInUIProps } from './typings';
 
