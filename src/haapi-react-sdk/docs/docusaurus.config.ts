@@ -28,6 +28,7 @@ const config: Config = {
   tagline: 'Interactive HAAPI React SDK documentation',
   url: 'http://localhost',
   baseUrl: '/',
+  favicon: 'img/favicon.png',
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
   onBrokenMarkdownLinks: 'throw',
@@ -41,6 +42,9 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
         },
         blog: false,
+        theme: {
+          customCss: './src/css/custom.css',
+        },
       } satisfies Preset.Options,
     ],
   ],
@@ -48,7 +52,16 @@ const config: Config = {
   themeConfig: {
     navbar: {
       title: 'HAAPI React SDK',
+      logo: {
+        alt: 'Curity',
+        src: 'img/curity-logo.svg',
+        srcDark: 'img/curity-logo-white.svg',
+      },
       items: [],
+    },
+    footer: {
+      style: 'light',
+      copyright: `Copyright © ${new Date().getFullYear()} Curity AB.`,
     },
     // The API Reference pages nest several levels of TSDoc headings (Customization → dimensions →
     // elements → examples); surface them in the right-hand table of contents.

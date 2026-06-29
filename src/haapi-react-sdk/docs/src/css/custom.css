@@ -1,0 +1,35 @@
+/*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ */
+
+/*
+ * Curity brand palette for the Docusaurus chrome (navbar, links, buttons, sidebar active state).
+ * The primary is the Curity brand colour (`--color-primary: #323c53` from curity-theme.css); dark
+ * mode uses lighter tints so the brand colour stays legible on a dark background.
+ */
+:root {
+  --ifm-color-primary: #323c53;
+  --ifm-color-primary-dark: #2d3649;
+  --ifm-color-primary-darker: #2a3245;
+  --ifm-color-primary-darkest: #232a39;
+  --ifm-color-primary-light: #3a4561;
+  --ifm-color-primary-lighter: #3f4b69;
+  --ifm-color-primary-lightest: #4d5b80;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #9aa6c4;
+  --ifm-color-primary-dark: #8593b6;
+  --ifm-color-primary-darker: #7e89a8;
+  --ifm-color-primary-darkest: #67708a;
+  --ifm-color-primary-light: #aeb8d0;
+  --ifm-color-primary-lighter: #bbc4d8;
+  --ifm-color-primary-lightest: #d3d9e7;
+}
