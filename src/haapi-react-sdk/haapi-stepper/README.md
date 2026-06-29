@@ -3,6 +3,8 @@
 The HAAPI React SDK is a set of React components that fully manages HAAPI authentication
 flows in the frontend. It works out of the box with minimal setup and lets you customize the UI only as far as you need.
 
+[Browse the HAAPI step catalog](../docs/examples/HaapiStepperPreview.tsx)
+
 <!-- docs:skip -->
 
 ## Documentation
