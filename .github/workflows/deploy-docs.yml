@@ -1,0 +1,53 @@
+name: Deploy HAAPI React SDK docs (GitHub Pages)
+
+# Publishes the Docusaurus docs at https://curityio.github.io/ui-kit/haapi-react-sdk/docs/.
+# Demo deploy from the docs feature branch; retarget `branches` to dev/main when promoting.
+on:
+  push:
+    branches:
+      - feature/IS-11008/haapi-react-sdk-docs-github-page
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent Pages deployment; let an in-flight run finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Build docs
+        env:
+          DOCS_URL: https://curityio.github.io
+          DOCS_BASE_URL: /ui-kit/haapi-react-sdk/docs/
+        run: npm run docs:build -w @curity/haapi-react-sdk-docs
+      # GitHub Pages serves the artifact at /ui-kit/; nest the site so the URL is /ui-kit/haapi-react-sdk/docs/.
+      - name: Stage site under /haapi-react-sdk/docs
+        run: |
+          mkdir -p _site/haapi-react-sdk/docs
+          cp -r src/haapi-react-sdk/docs/build/. _site/haapi-react-sdk/docs/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
