@@ -18,6 +18,32 @@ import { HaapiStepperSelectFormFieldUI } from './HaapiStepperSelectFormFieldUI';
 import { HaapiStepperTextFormFieldUI } from './HaapiStepperTextFormFieldUI';
 import { HaapiStepperPasswordFormFieldUI } from './HaapiStepperPasswordFormFieldUI';
 
+/**
+ * Renders the built-in UI for a single HAAPI form `field`, automatically choosing the right input for the
+ * field type (text, password, checkbox or select).
+ *
+ * Must be used inside a `HaapiStepperFormUI` `children` render interceptor — it reads the field's value and
+ * submission state from that form's context, so rendering it anywhere else throws. Reach for it when you want a
+ * custom form layout but still want the default, state-managed inputs for the fields:
+ *
+ * ```tsx
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
+ *   {({ fields }) => (
+ *     <fieldset>
+ *       <legend>Sign in</legend>
+ *       {fields.map(field => (
+ *         <HaapiStepperFormFieldUI key={field.name} field={field} />
+ *       ))}
+ *     </fieldset>
+ *   )}
+ * </HaapiStepperFormUI>
+ * ```
+ * {@see_example docs/examples/FormUICompositionExample.tsx Custom field layout}
+ *
+ * To customize a single field, render its specific component ({@link HaapiStepperTextFormFieldUI},
+ * {@link HaapiStepperPasswordFormFieldUI}, {@link HaapiStepperCheckboxFormFieldUI},
+ * {@link HaapiStepperSelectFormFieldUI}) or your own input wired to the form's `formState`.
+ */
 export function HaapiStepperFormFieldUI({ field }: { field: HaapiStepperVisibleFormField }): ReactElement {
   switch (field.type) {
     case HAAPI_FORM_FIELDS.SELECT:

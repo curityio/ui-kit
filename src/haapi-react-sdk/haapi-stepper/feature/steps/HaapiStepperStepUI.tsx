@@ -26,19 +26,21 @@ import type { HaapiStepperStepUIProps } from './typings';
 
 /**
  * @description
- * # HAAPI UI STEP FEATURES
  *
- * ## BUILT-IN HAAPI AUTHENTICATION FLOW SUPPORT
+ * `HaapiStepperStepUI` is the default UI for HAAPI authentication flows: drop it inside a `HaapiStepper` and it renders every step — out of the box and ready to customize.
  *
- * In combination with the HaapiStepper, the HaapiStepperStepUI component provides a seamless way to implement
- * complete HAAPI authentication flows in your application, allowing extensive customization, with minimal setup.
+ * ## Built-in HAAPI authentication flow support
  *
- * @example
+ * Used together with the `HaapiStepper`, the `HaapiStepperStepUI` renders a proper user interface (UI) for every
+ * HAAPI authentication flow out of the box — making it the fastest and easiest way to get HAAPI up and running
+ * in your application, with minimal setup.
+ *
  * ```tsx
  * <HaapiStepper>
  *  <HaapiStepperStepUI />
  * </HaapiStepper>
  * ```
+ * {@see_example docs/examples/DefaultRendering.tsx Default rendering example}
  *
  * By default, it covers all HAAPI authentication flow steps out-of-the-box including:
  * - Authentication, Registration, User Consent, Consentor, Polling, Redirection, Continue same, Completed and,
@@ -49,16 +51,20 @@ import type { HaapiStepperStepUIProps } from './typings';
  * Note: Redirection, and Continue Same steps are handled automatically by the HaapiStepper and never
  * reach this component
  *
- * ### VIEW NAME BUILT-IN UIs
+ * ### View name built-in UIs
  *
  * The HaapiStepperStepUI ships built-in UIs for specific HAAPI `viewName`s (`step.metadata.viewName`) that need a
  * more tailored UI than the generic step shell can provide (e.g. the BankID requires the QR link to be lifted
  * above the actions). They are displayed by default and can be customized like any other step by using render
  * interceptors.
  *
- * ## CUSTOMIZATION
+ * ## Customization
  *
- * ### CUSTOMIZATION DIMENSIONS
+ * The `HaapiStepperStepUI` is highly customizable and granular: you can customize some aspects (via render
+ * interceptors) while keeping the defaults for the rest, making it the best way to apply partial customizations
+ * to the default UI.
+ *
+ * ### Customization dimensions
  *
  * The `HaapiStepperStepUI` component allows the customization of the HAAPI Authentication flows in 3 dimensions:
  * 1. Data (e.g., modify action titles)
@@ -68,7 +74,7 @@ import type { HaapiStepperStepUIProps } from './typings';
  * 2. UI (e.g., show custom spinner when loading)
  * 3. Behaviour/Logic (e.g., trigger a confirmation dialog on cancel actions)
  *
- * ### CUSTOMIZABLE ELEMENTS (COMPONENTS)
+ * ### Customizable elements (components)
  *
  * Those 3 dimensions can be customized on the following elements:
  * - Loading
@@ -82,7 +88,7 @@ import type { HaapiStepperStepUIProps } from './typings';
  * - Message
  * - Step
  *
- * ### RENDER INTERCEPTORS
+ * ### Render interceptors
  *
  * Customization (data, ui and behaviour) is managed through render interceptors, which allow to intercept the
  * default rendering for the customizable element to provide custom UX while maintaining the underlying HAAPI
@@ -116,7 +122,7 @@ import type { HaapiStepperStepUIProps } from './typings';
  * For example, if only a Loading render interceptor is passed to the `HaapiStepperStepUI`, the step will show the default step UI
  * with a custom loading element when loading.
  *
- * #### RENDER INTERCEPTORS TYPES
+ * #### Render interceptors types
  *
  * - Loading (loadingRenderInterceptor): customizes only loading states (e.g., custom spinner or progress bar)
  * - Error (errorRenderInterceptor): customizes only error displays (e.g., detailed error information)
@@ -129,18 +135,22 @@ import type { HaapiStepperStepUIProps } from './typings';
  * - Message (messageRenderInterceptor): customizes only message rendering (e.g., custom login message display)
  * - Step (stepRenderInterceptor): customizes entire step rendering (e.g., custom authentication step UI)
  *
- * ### CUSTOMIZATION EXAMPLES
+ * ### Customization examples
  *
- * #### Loading Element Customization Example
+ * #### Loading element customization example
  *
- * @example
+ * Data customization: show loading only for specific template areas.
+ *
  * ```tsx
- * // Data Customization: show loading only for specific template areas
  * const loadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({ loading, currentStep, ...rest }) => {
  *   return { loading: loading && currentStep?.metadata?.templateArea !== 'lwa', currentStep, ...rest };
  * };
+ * ```
+ * {@see_example docs/examples/LoadingDataRenderInterceptorExample.tsx Loading customization (data)}
  *
- * // UI Customization: show custom loading component for the select authenticator step and delegate to default rendering otherwise
+ * UI customization: show a custom loading component for the select authenticator step and delegate to default rendering otherwise.
+ *
+ * ```tsx
  * const customLoadingRenderInterceptor: HaapiStepperStepUILoadingRenderInterceptor = ({ loading, currentStep, ...rest }) => {
  *   if (loading && currentStep?.metadata?.viewName?.includes('select-authenticator')) {
  *     return <div data-testid="custom-loading">Authenticating...</div>;
@@ -148,8 +158,12 @@ import type { HaapiStepperStepUIProps } from './typings';
  *
  *   return { loading, currentStep, ...rest };
  * };
+ * ```
+ * {@see_example docs/examples/LoadingRenderInterceptorExample.tsx Loading customization (UI)}
  *
- * // Behavior Customization: trigger analytics event when loading starts
+ * Behaviour customization: trigger an analytics event when loading starts.
+ *
+ * ```tsx
  * const loadingRenderInterceptorWithAnalytics: HaapiStepperStepUILoadingRenderInterceptor = ({ loading, currentStep, ...rest }) => {
  *   if (loading) {
  *     analyticsTracker('loading_started', { hasStep: !!currentStep });
@@ -157,37 +171,50 @@ import type { HaapiStepperStepUIProps } from './typings';
  *   return { loading, currentStep, ...rest };
  * };
  * ```
+ * {@see_example docs/examples/LoadingBehaviorRenderInterceptorExample.tsx Loading customization (behaviour)}
  *
- * #### Step Element Customization Example
+ * #### Step element customization example
  *
- * @example
+ * Data customization: modify the step's message and link data before default rendering.
+ *
  * ```tsx
- * // Data customization: modify step's action, message and link data before default rendering
  * const customStepRenderInterceptor: HaapiStepperStepUIStepRenderInterceptor = ({ currentStep, ...rest }) => ({
  *  currentStep: {
  *    ...currentStep,
- *    actions: currentStep.dataHelpers?.actions?.all?.map(action => ({ ...action, title: `Modified ${action.title}` })),
  *    messages: currentStep.dataHelpers?.messages?.map(message => ({ ...message, text: `Modified ${message.text}` })),
  *    links: currentStep.dataHelpers?.links?.map(link => ({ ...link, title: `Modified ${link.title}` })),
  *  },
  *  ...rest,
  *});
+ * ```
+ * {@see_example docs/examples/StepDataRenderInterceptorExample.tsx Step customization (data)}
  *
- * // UI customization: show custom component for the select authenticator step and delegate to default rendering otherwise
- * const customStepRenderInterceptor: HaapiStepperStepUIStepRenderInterceptor = ({ currentStep, ...rest }) => {
- *   if (currentStep.metadata?.viewName === 'views/select-authenticator/index') {
- *     return (
- *       <div data-testid="custom-step">
- *         <h1>Custom Select Authenticator</h1>
- *         {currentStep?.messages?.[0]?.text}
- *       </div>
- *     );
+ * UI customization: display the select-authenticator step as a custom card grid, and delegate every other step to
+ * default rendering.
+ *
+ * ```tsx
+ * const customStepRenderInterceptor: HaapiStepperStepUIStepRenderInterceptor = ({ currentStep, nextStep, ...rest }) => {
+ *   if (currentStep.metadata?.viewName !== 'views/select-authenticator/index') {
+ *     return { currentStep, nextStep, ...rest };
  *   }
- *   // Delegate to default rendering for other steps
- *   return { currentStep, ...rest };
- * };
  *
- * // Behavior customization: add confirmation dialog to cancel form actions
+ *   const options = currentStep.dataHelpers.actions?.selector?.[0]?.model.options ?? [];
+ *
+ *   return (
+ *     <section>
+ *       <h2>How would you like to sign in?</h2>
+ *       {options.map(option => (
+ *         <button key={option.id} onClick={() => nextStep(option)}>{option.title}</button>
+ *       ))}
+ *     </section>
+ *   );
+ * };
+ * ```
+ * {@see_example docs/examples/StepRenderInterceptorExample.tsx Step customization (UI)}
+ *
+ * Behaviour customization: add a confirmation dialog to cancel form actions.
+ *
+ * ```tsx
  * const stepRenderInterceptorWithBehaviorCustomization: HaapiStepperStepUIStepRenderInterceptor = ({
  *  currentStep,
  *  nextStep,
@@ -204,6 +231,7 @@ import type { HaapiStepperStepUIProps } from './typings';
  *   return { currentStep, nextStep: enhancedNextStep, ...rest };
  * };
  * ```
+ * {@see_example docs/examples/StepBehaviorRenderInterceptorExample.tsx Step customization (behaviour)}
  *
  * See more data, UI and behaviour customization examples in the [unit tests](./haapi-stepper/feature/steps/HaapiStepperStepUI.spec.tsx)
  */

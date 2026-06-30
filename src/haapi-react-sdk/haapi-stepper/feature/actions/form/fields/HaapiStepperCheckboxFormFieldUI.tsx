@@ -14,6 +14,34 @@ import type { ReactElement } from 'react';
 import type { HaapiStepperCheckboxFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
+/**
+ * Renders the built-in checkbox for a HAAPI checkbox `field`, wired to the form's state.
+ *
+ * Must be rendered inside a `HaapiStepperFormUI` (it reads `formState` from the form context, so it throws
+ * outside one). Normally {@link HaapiStepperFormFieldUI} picks it automatically — use it directly only to place
+ * the checkbox yourself in a custom layout:
+ *
+ * ```tsx
+ * // Pair the checkbox with a terms description, keep the default rendering for every other field.
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
+ *   {({ fields }) => (
+ *     <>
+ *       {fields.map(field =>
+ *         field.type === HAAPI_FORM_FIELDS.CHECKBOX ? (
+ *           <section key={field.name}>
+ *             <HaapiStepperCheckboxFormFieldUI field={field} />
+ *             <small>Read our <a href="/terms">terms and conditions</a>.</small>
+ *           </section>
+ *         ) : (
+ *           <HaapiStepperFormFieldUI key={field.name} field={field} />
+ *         )
+ *       )}
+ *     </>
+ *   )}
+ * </HaapiStepperFormUI>
+ * ```
+ * {@see_example docs/examples/CheckboxFieldRendering.tsx Checkbox field with terms}
+ */
 export function HaapiStepperCheckboxFormFieldUI({ field }: { field: HaapiStepperCheckboxFormField }): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const inputId = `${action.id}-${field.name}-input`;

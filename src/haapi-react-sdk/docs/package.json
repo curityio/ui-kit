@@ -1,0 +1,51 @@
+{
+  "name": "@curity/haapi-react-sdk-docs",
+  "description": "Curity HAAPI React SDK documentation (Docusaurus)",
+  "author": "Curity AB",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.22.0",
+    "npm": ">=10.9.4"
+  },
+  "scripts": {
+    "prettier-check": "prettier --check .",
+    "prettier": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "docs:gen": "node scripts/build-sandpack-sdk.mjs",
+    "docs:split": "node scripts/split-docs.mjs",
+    "docs:apiref": "node scripts/emit-api-reference.mjs",
+    "docs:examples": "node scripts/emit-examples.mjs",
+    "docs:check-headings": "node scripts/check-tsdoc-headings.mjs",
+    "docs:build-libs": "npm run build -w @curity/ui-kit-icons -w @curity/ui-kit-css-lib",
+    "predocs": "npm run docs:build-libs && npm run docs:check-headings && npm run docs:gen && npm run docs:split && npm run docs:apiref && npm run docs:examples",
+    "docs": "docusaurus start . --port 3220",
+    "predocs:build": "npm run docs:build-libs && npm run docs:check-headings && npm run docs:gen && npm run docs:split && npm run docs:apiref && npm run docs:examples",
+    "docs:build": "docusaurus build ."
+  },
+  "dependencies": {
+    "@codesandbox/sandpack-react": "^2.20.0",
+    "@curity/haapi-react-sdk": "*",
+    "@docusaurus/core": "^3.10.1",
+    "@docusaurus/preset-classic": "^3.10.1",
+    "@mdx-js/react": "^3.1.1",
+    "clsx": "^2.1.1",
+    "github-slugger": "^2.0.0",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.10.1",
+    "@docusaurus/types": "^3.10.1",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "postcss": "^8.4.0",
+    "postcss-extend-rule": "^4.0.0",
+    "postcss-import": "^16.1.1",
+    "typescript": "~5.7.2"
+  }
+}

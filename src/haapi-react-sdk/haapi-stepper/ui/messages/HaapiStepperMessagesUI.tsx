@@ -21,7 +21,7 @@ interface HaapiStepperMessagesUIProps {
 
 /**
  * @description
- * # MESSAGES COMPONENT
+ * # Messages component
  *
  * Renders HAAPI user messages and supports optional render interception
  * so callers can tweak or fully override individual items.
@@ -29,7 +29,6 @@ interface HaapiStepperMessagesUIProps {
  * @param messages - Array of HAAPI user messages to display
  * @param renderInterceptor - Optional function to customize message rendering
  *
- * @example
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep } = useHaapiStepper();
@@ -42,6 +41,7 @@ interface HaapiStepperMessagesUIProps {
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example docs/examples/MessagesRendering.tsx Messages rendering}
  */
 export function HaapiStepperMessagesUI({ messages, renderInterceptor }: HaapiStepperMessagesUIProps) {
   const messageElements = applyRenderInterceptor(messages, renderInterceptor, defaultHaapiStepperMessageElementFactory);

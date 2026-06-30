@@ -22,6 +22,7 @@
     "src/identity-server",
     "src/self-service-portal/app",
     "src/haapi-react-sdk",
+    "src/haapi-react-sdk/docs",
     "src/haapi-react-app"
   ],
   "scripts": {
@@ -32,7 +33,7 @@
     "start:component-library": "npm run -w src/common/component-library watch",
     "start:identity-server": "npm run -w src/identity-server start",
     "build:identity-server": "npm run -w src/identity-server build",
-    "start:haapi-react-app": "npm run -w src/haapi-react-app start",
+    "start:haapi-react-app": "npm run -w src/haapi-react-app previewer:serve",
     "build:haapi-react-app": "npm run -w src/haapi-react-app build",
     "build:ssp": "npm run -w src/self-service-portal/app build",
     "build:css": "npm run -w src/common/css build",

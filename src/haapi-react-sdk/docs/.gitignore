@@ -1,0 +1,13 @@
+# Dependencies
+/node_modules
+
+# Docusaurus build output
+/build
+/.docusaurus
+
+# Generated Sandpack/example data (npm run docs:gen)
+/src/generated/
+
+# The entire Docusaurus content tree is generated (build-sandpack-sdk → split-docs →
+# emit-api-reference → emit-examples) from the SDK README, examples/*.tsx and TSDoc.
+/content/

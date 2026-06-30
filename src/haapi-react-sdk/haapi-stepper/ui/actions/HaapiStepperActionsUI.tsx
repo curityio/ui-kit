@@ -33,6 +33,34 @@ interface HaapiStepperActionsUIProps {
   container?: ElementType | null;
 }
 
+/**
+ * @description
+ * # Actions component
+ *
+ * Renders a HAAPI step's actions — form, selector, and client-operation — each with the default UI for
+ * its subtype. Pass a per-subtype render interceptor (`formActionRenderInterceptor`,
+ * `selectorActionRenderInterceptor`, `clientOperationActionRenderInterceptor`) to tweak or fully
+ * override a single action kind, and `formFieldRenderInterceptor` to customize the fields inside form
+ * actions. The wrapping element is a `<div className="haapi-stepper-actions">` by default; override it
+ * with `container` (or `null` to render the actions without a wrapper).
+ *
+ * @param actions - The HAAPI actions to render (typically `currentStep.dataHelpers.actions.all`)
+ * @param onAction - Callback to advance the flow when an action is submitted (usually `nextStep`)
+ * @param formActionRenderInterceptor - Optional interceptor for form actions
+ * @param formFieldRenderInterceptor - Optional interceptor for the fields inside form actions
+ * @param selectorActionRenderInterceptor - Optional interceptor for selector actions
+ * @param clientOperationActionRenderInterceptor - Optional interceptor for client-operation actions
+ * @param container - Element type to wrap the actions in, or `null` for no wrapper
+ *
+ * ```tsx
+ * function Step() {
+ *   const { currentStep, nextStep } = useHaapiStepper();
+ *   const actions = currentStep?.dataHelpers.actions.all;
+ *
+ *   return <HaapiStepperActionsUI actions={actions} onAction={nextStep} />;
+ * }
+ * ```
+ */
 export function HaapiStepperActionsUI({
   actions,
   onAction,

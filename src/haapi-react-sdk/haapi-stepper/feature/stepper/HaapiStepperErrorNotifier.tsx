@@ -22,6 +22,23 @@ interface HaapiErrorNotifierProps {
   errorFormatter?: (error: HaapiStepperAppError | HaapiStepperInputError) => string;
 }
 
+/**
+ * @description
+ *
+ * Toast-based notification UI for HAAPI `AppError`s (and, optionally, `InputError`s). Wrap your app so
+ * unrecoverable problems surface as dismissible toasts without each step having to handle them.
+ *
+ * ```tsx
+ * <HaapiStepperErrorNotifier>
+ *   <YourApplication />
+ * </HaapiStepperErrorNotifier>
+ * ```
+ * {@see_example docs/examples/ErrorNotifierExample.tsx Error notifier}
+ *
+ * **Features**
+ * - Automatically shows notifications for `AppError` and, optionally, `InputError`.
+ * - Auto-dismisses after a timeout, and manually via a close button.
+ */
 export function HaapiStepperErrorNotifier({
   children,
   showInputErrorNotifications = true,

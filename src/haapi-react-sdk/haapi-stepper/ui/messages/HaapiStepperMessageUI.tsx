@@ -11,6 +11,21 @@
 
 import { HaapiStepperUserMessage } from '../../feature/stepper/haapi-stepper.types';
 
+/**
+ * @description
+ * # Message component
+ *
+ * Renders a single HAAPI user message. The message's `classList` selects the presentation: `heading`
+ * renders an `<h1 className="haapi-stepper-heading">`, `userCode` a `<code>` inside
+ * `.haapi-stepper-userCode` (e.g. recovery codes), `userName` an emphasized `.haapi-stepper-userName`,
+ * and everything else a plain paragraph. The original `classList` is always preserved on the element so
+ * it can be targeted with CSS.
+ *
+ * Use `HaapiStepperMessagesUI` to render a step's whole message collection; reach for this component
+ * when you render a single message yourself.
+ *
+ * @param message - The HAAPI user message to render
+ */
 export const HaapiStepperMessageUI = ({ message }: { message: HaapiStepperUserMessage }) => {
   const className = message.classList?.join(' ');
   const isHeading = message.classList?.includes('heading');

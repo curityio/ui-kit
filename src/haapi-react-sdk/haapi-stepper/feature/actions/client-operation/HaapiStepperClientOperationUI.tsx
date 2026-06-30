@@ -20,14 +20,13 @@ interface HaapiStepperClientOperationUIProps {
 
 /**
  * @description
- * # CLIENT OPERATION ACTION COMPONENT
+ * # Client operation action component
  *
  * Renders the default UI for a HAAPI client-operation action and forwards the click to
  * `onAction`. The button is disabled when the action's runtime capability requirements are
  * not met (e.g. WebAuthn API missing, or platform authenticator unavailable for platform-only
  * WebAuthn registration).
  *
- * @example
  * ```tsx
  * function HaapiComponentExample() {
  *   const { currentStep, nextStep } = useHaapiStepper();
@@ -42,6 +41,7 @@ interface HaapiStepperClientOperationUIProps {
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example docs/examples/ClientOperationUiUsage.tsx Client operation UI}
  */
 export function HaapiStepperClientOperationUI({
   action,

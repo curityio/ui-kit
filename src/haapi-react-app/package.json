@@ -25,6 +25,7 @@
     "lint": "eslint .",
     "prettier-check": "prettier --check .",
     "previewer": "vite serve previewer --open",
+    "previewer:serve": "vite serve previewer",
     "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib"
   },
   "dependencies": {

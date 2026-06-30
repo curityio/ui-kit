@@ -324,6 +324,14 @@
                 width: fit-content;
             }
 
+            .documentation {
+                margin-top: 1.5rem;
+                width: 100%;
+                text-align: center;
+                border-top: 1px solid #eee;
+                padding-top: 1rem;
+            }
+
             .status {
                 margin-top: auto;
                 padding-top: 1rem;
@@ -525,12 +533,22 @@
                             <span>Open previewer</span>
                         </a>
                         <small class="card-url">http://localhost:5174/</small>
+                        <div class="documentation">
+                            <a
+                                href="https://curityio.github.io/ui-kit/haapi-react-sdk/docs/overview"
+                                target="_blank"
+                                class="button button-primary-outline button-medium w100 mt2"
+                            >
+                                <span>Read HAAPI React SDK documentation</span>
+                            </a>
+                        </div>
                         <div class="commands">
                             <h3>Useful Commands</h3>
                             <code>npm install</code>
                             <code>npm run start:haapi-react-app</code>
                             <code>npm run build:haapi-react-app</code>
                         </div>
+
                         <div
                             class="status"
                             data-tooltip="Note: It may take a few seconds for the preview server to be ready"

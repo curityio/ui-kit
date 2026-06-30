@@ -33,16 +33,16 @@ jobs:
         run: npm ci
 
       - name: SDK — Check Formatting
-        run: npm run prettier-check -w src/haapi-react-sdk
+        run: npm run prettier-check -w @curity/haapi-react-sdk
 
       - name: SDK — Lint
-        run: npm run lint -w src/haapi-react-sdk
+        run: npm run lint -w @curity/haapi-react-sdk
 
       - name: SDK — Typecheck
-        run: npm run typecheck -w src/haapi-react-sdk
+        run: npm run typecheck -w @curity/haapi-react-sdk
 
       - name: SDK — Run Tests
-        run: npm run test -w src/haapi-react-sdk -- run
+        run: npm run test -w @curity/haapi-react-sdk -- run
 
       - name: App — Check Formatting
         run: npm run prettier-check -w src/haapi-react-app
@@ -55,6 +55,20 @@ jobs:
 
       - name: App — Run Tests
         run: npm run test -w src/haapi-react-app -- run
+
+      - name: Docs — Check Formatting
+        run: npm run prettier-check -w @curity/haapi-react-sdk-docs
+
+      # Type-checks the example sources (incl. catalog.ts's mock HAAPI steps) against the SDK's
+      # published types, so the fixtures can't structurally drift from the SDK without failing CI.
+      - name: Docs — Typecheck
+        run: npm run typecheck -w @curity/haapi-react-sdk-docs
+
+      # Runs the full generator chain (predocs:build) then `docusaurus build` with
+      # `onBrokenLinks: 'throw'` — so a generator crash, a broken link/anchor or an MDX
+      # compile error fails the PR instead of surfacing on someone's next local run.
+      - name: Docs — Build
+        run: npm run docs:build -w @curity/haapi-react-sdk-docs
 
   notify-slack:
     name: Notify Slack

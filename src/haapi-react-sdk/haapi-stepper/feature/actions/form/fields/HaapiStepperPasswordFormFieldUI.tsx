@@ -21,6 +21,35 @@ import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.type
 import type { HaapiStepperPasswordFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
+/**
+ * Renders the built-in password input (with a show/hide toggle) for a HAAPI password `field`, wired to the
+ * form's state.
+ *
+ * Must be rendered inside a `HaapiStepperFormUI` (it reads `formState` from the form context, so it throws
+ * outside one). Normally {@link HaapiStepperFormFieldUI} picks it automatically — use it directly only to place
+ * the password field yourself in a custom layout:
+ *
+ * ```tsx
+ * // Add a "forgot password?" link under the password field, keep the default rendering for every other field.
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
+ *   {({ fields }) => (
+ *     <>
+ *       {fields.map(field =>
+ *         field.type === HAAPI_FORM_FIELDS.PASSWORD ? (
+ *           <section key={field.name}>
+ *             <HaapiStepperPasswordFormFieldUI field={field} />
+ *             <a href="/forgot-password">Forgot your password?</a>
+ *           </section>
+ *         ) : (
+ *           <HaapiStepperFormFieldUI key={field.name} field={field} />
+ *         )
+ *       )}
+ *     </>
+ *   )}
+ * </HaapiStepperFormUI>
+ * ```
+ * {@see_example docs/examples/PasswordFieldRendering.tsx Password field with link}
+ */
 export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepperPasswordFormField }): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const [isVisible, setIsVisible] = useState(false);
