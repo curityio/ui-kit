@@ -23,11 +23,9 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { README_FILE, SDK_ROOT, STEPPER_ROOT } from './paths.mjs';
 
-const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const SDK_ROOT = path.resolve(SCRIPT_DIR, '..', '..');
-const ROOTS = [path.join(SDK_ROOT, 'haapi-stepper')];
+const ROOTS = [STEPPER_ROOT];
 const FIX = process.argv.includes('--fix');
 
 // Canonical casing for tokens that must not be lower-cased, keyed by their lower-case form.
@@ -133,9 +131,8 @@ function collectFiles(dir, acc) {
 const files = ROOTS.flatMap(root => (fs.existsSync(root) ? collectFiles(root, []) : []));
 // The SDK README now lives at the package root (an overview of the whole SDK, not just the stepper). It
 // surfaces verbatim on the docs Overview pages, so include it in the same heading-casing check.
-const sdkReadme = path.join(SDK_ROOT, 'README.md');
-if (fs.existsSync(sdkReadme)) {
-  files.push(sdkReadme);
+if (fs.existsSync(README_FILE)) {
+  files.push(README_FILE);
 }
 let warnings = 0;
 let fixed = 0;

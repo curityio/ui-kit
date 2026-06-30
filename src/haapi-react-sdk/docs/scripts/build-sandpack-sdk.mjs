@@ -26,52 +26,60 @@
 
 import { readFileSync, readdirSync, writeFileSync, mkdirSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import postcssImport from 'postcss-import';
 import postcssExtend from 'postcss-extend-rule';
+import {
+  APP_CSS_FILE,
+  CONTENT_DIR,
+  EXAMPLES_DIR,
+  GENERATED_DIR,
+  GITHUB_BLOB_BASE,
+  ICONS_DIST_FILE,
+  README_FILE,
+  REPO_README_DIR,
+  STEPPER_ROOT,
+} from './paths.mjs';
 
-const scriptDir = dirname(fileURLToPath(import.meta.url));
-// The SDK's component source lives in the sibling `haapi-stepper` directory, next to the docs site under
-// the same SDK package (`src/haapi-react-sdk/{docs,haapi-stepper}`).
-const sdkRoot = join(scriptDir, '../../haapi-stepper');
-const outFile = join(scriptDir, '../src/generated/sdkSource.json');
+// The SDK's component source (its TSDoc + types) — walked to build the in-sandbox SDK package.
+const sdkRoot = STEPPER_ROOT;
+const outFile = join(GENERATED_DIR, 'sdkSource.json');
 
 // Production CSS the previewer loads (`@css/styles.css`), with its `@import` of the ui-kit CSS lib
 // inlined into a single stylesheet so the sandbox can serve it as one `/styles.css`.
-const appCssFile = join(scriptDir, '../../../haapi-react-app/src/shared/util/css/styles.css');
-const stylesOutFile = join(scriptDir, '../src/generated/curityStyles.json');
+const appCssFile = APP_CSS_FILE;
+const stylesOutFile = join(GENERATED_DIR, 'curityStyles.json');
 
 // The real (prebuilt) @curity/ui-kit-icons bundle, so the SDK's icons match production.
-const iconsDistFile = join(scriptDir, '../../../common/icons/dist/index.js');
-const iconsOutFile = join(scriptDir, '../src/generated/curityIcons.json');
+const iconsDistFile = ICONS_DIST_FILE;
+const iconsOutFile = join(GENERATED_DIR, 'curityIcons.json');
 
 // The shared example config, served to the sandbox as `/config.ts` so example snippets can
 // `import { config } from './config'` instead of declaring it inline.
-const exampleConfigFile = join(scriptDir, '../examples/config.ts');
-const exampleConfigOutFile = join(scriptDir, '../src/generated/exampleConfig.json');
+const exampleConfigFile = join(EXAMPLES_DIR, 'config.ts');
+const exampleConfigOutFile = join(GENERATED_DIR, 'exampleConfig.json');
 
 // The single source of truth for the docs' example data (`examples/catalog.ts`), copied verbatim into
 // the sandbox as `/catalog.ts` so the web-driver mock and `/StepSelect.tsx` serve the SAME data the docs
 // render. It only imports `@curity/haapi-react-sdk/*` (present in the closure).
-const catalogFile = join(scriptDir, '../examples/catalog.ts');
-const catalogOutFile = join(scriptDir, '../src/generated/catalog.json');
+const catalogFile = join(EXAMPLES_DIR, 'catalog.ts');
+const catalogOutFile = join(GENERATED_DIR, 'catalog.json');
 
-// The SDK's own README (at the package root `src/haapi-react-sdk`, an overview of the whole SDK),
-// surfaced as the docs landing/first page (as MDX, so `{@see_example}` markers can become live
-// `<DocExample>` playgrounds). Front matter is prepended — single source of truth.
-const readmeFile = join(scriptDir, '../../README.md');
+// The SDK's own README (at the package root, an overview of the whole SDK), surfaced as the docs
+// landing/first page (as MDX, so `{@see_example}` markers can become live `<DocExample>` playgrounds).
+// Front matter is prepended — single source of truth.
+const readmeFile = README_FILE;
 // Underscore prefix → Docusaurus ignores this long source; `split-docs.mjs` splits it into `content/overview/`.
-const readmeOutFile = join(scriptDir, '../content/_overview.mdx');
+const readmeOutFile = join(CONTENT_DIR, '_overview.mdx');
 
 // Every docs example file (examples/*.tsx) as { <basename>: <source> }, so MDX pages (the
 // README/overview) can mount any of them as a live playground via `<DocExample id="…">`, and the closure
 // can serve the preview-scaffolding components (ExamplePreviewer/StepSelect/StepDataDetails/
 // AutoSubmitForm) to the sandbox.
-const examplesDir = join(scriptDir, '../examples');
-const examplesOutFile = join(scriptDir, '../src/generated/examples.json');
+const examplesDir = EXAMPLES_DIR;
+const examplesOutFile = join(GENERATED_DIR, 'examples.json');
 // Per-example third-party dependency map (id → { pkg: version }), auto-detected from each example's imports.
-const exampleDepsOutFile = join(scriptDir, '../src/generated/exampleDeps.json');
+const exampleDepsOutFile = join(GENERATED_DIR, 'exampleDeps.json');
 
 const INCLUDE_EXT = /\.(ts|tsx|css)$/;
 const EXCLUDE = [
@@ -212,14 +220,14 @@ let readmeBody = readFileSync(readmeFile, 'utf8')
   // the docs site. Resolved relative to the SDK package dir; absolute (https) and intra-page (#) links are
   // left untouched.
   .replace(/\[([^\]]+)\]\((\.\.?\/[^)]*)\)/g, (_, label, rel) => {
-    let dir = 'src/haapi-react-sdk';
+    let dir = REPO_README_DIR;
     let rest = rel;
     while (rest.startsWith('../')) {
       dir = dir.split('/').slice(0, -1).join('/');
       rest = rest.slice(3);
     }
     rest = rest.replace(/^\.\//, '');
-    return `[${label}](https://github.com/curityio/ui-kit/blob/main/${dir}/${rest})`;
+    return `[${label}](${GITHUB_BLOB_BASE}/${dir}/${rest})`;
   });
 const hasExamples = readmeBody.includes('<DocExample');
 mkdirSync(dirname(readmeOutFile), { recursive: true });
