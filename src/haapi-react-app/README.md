@@ -25,7 +25,7 @@ This app is built on the [HAAPI React SDK](../haapi-react-sdk/haapi-stepper/READ
 interactive documentation locally from the repo root:
 
 ```shell
-cd src/haapi-react-sdk/docs && npm run docs
+npm run docs -w @curity/haapi-react-sdk-docs
 ```
 
 ## Development setup
