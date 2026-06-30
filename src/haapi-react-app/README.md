@@ -5,7 +5,7 @@
 Install all workspaces from the repo root:
 
 ```shell
-curity-cli t && npm i --prefix "$(git rev-parse --show-toplevel)"
+npm i --prefix "$(git rev-parse --show-toplevel)"
 ```
 
 - React
