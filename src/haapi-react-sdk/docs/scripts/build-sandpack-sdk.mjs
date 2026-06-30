@@ -57,9 +57,10 @@ const exampleConfigOutFile = join(scriptDir, '../src/generated/exampleConfig.jso
 const catalogFile = join(scriptDir, '../examples/catalog.ts');
 const catalogOutFile = join(scriptDir, '../src/generated/catalog.json');
 
-// The SDK's own README, surfaced as the docs landing/first page (as MDX, so `{@see_example}` markers
-// can become live `<DocExample>` playgrounds). Front matter is prepended — single source of truth.
-const readmeFile = join(sdkRoot, 'README.md');
+// The SDK's own README (at the package root `src/haapi-react-sdk`, an overview of the whole SDK),
+// surfaced as the docs landing/first page (as MDX, so `{@see_example}` markers can become live
+// `<DocExample>` playgrounds). Front matter is prepended — single source of truth.
+const readmeFile = join(scriptDir, '../../README.md');
 // Underscore prefix → Docusaurus ignores this long source; `split-docs.mjs` splits it into `content/overview/`.
 const readmeOutFile = join(scriptDir, '../content/_overview.mdx');
 
@@ -211,7 +212,7 @@ let readmeBody = readFileSync(readmeFile, 'utf8')
   // the docs site. Resolved relative to the SDK package dir; absolute (https) and intra-page (#) links are
   // left untouched.
   .replace(/\[([^\]]+)\]\((\.\.?\/[^)]*)\)/g, (_, label, rel) => {
-    let dir = 'src/haapi-react-sdk/haapi-stepper';
+    let dir = 'src/haapi-react-sdk';
     let rest = rel;
     while (rest.startsWith('../')) {
       dir = dir.split('/').slice(0, -1).join('/');

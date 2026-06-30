@@ -22,6 +22,12 @@
   --ifm-color-primary-light: #3a4561;
   --ifm-color-primary-lighter: #3f4b69;
   --ifm-color-primary-lightest: #4d5b80;
+
+  /*
+   * Links use the Curity brand link colour (`--color-link` / `--color-link-hover` from
+   */
+  --ifm-link-color: #d859a1;
+  --ifm-link-hover-color: #87148b;
 }
 
 [data-theme='dark'] {
@@ -32,4 +38,8 @@
   --ifm-color-primary-light: #aeb8d0;
   --ifm-color-primary-lighter: #bbc4d8;
   --ifm-color-primary-lightest: #d3d9e7;
+
+  /* Lighter pink so links stay legible on the dark background. */
+  --ifm-link-color: #e889bf;
+  --ifm-link-hover-color: #f0a8d0;
 }

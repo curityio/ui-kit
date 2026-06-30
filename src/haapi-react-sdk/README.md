@@ -3,7 +3,7 @@
 The HAAPI React SDK is a set of React components that fully manages HAAPI authentication
 flows in the frontend. It works out of the box with minimal setup and lets you customize the UI only as far as you need.
 
-[Browse the HAAPI step catalog](../docs/examples/HaapiStepperPreview.tsx)
+[Browse the HAAPI step catalog](docs/examples/HaapiStepperPreview.tsx)
 
 <!-- docs:skip -->
 
@@ -24,19 +24,19 @@ npm run docs
 Browse the default UI for every HAAPI authentication step: pick a step to see how `HaapiStepperStepUI`
 renders it out of the box, then edit the code to see your changes live.
 
-[Browse the HAAPI step catalog](../docs/examples/HaapiStepperPreview.tsx)
+[Browse the HAAPI step catalog](docs/examples/HaapiStepperPreview.tsx)
 
 ## Glossary
 
 - **Flow**: sequence of steps that results in either a successful authentication (`HAAPI_STEPS.COMPLETED_WITH_SUCCESS`) or an error/failure (`HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR`).
 - **Step**: A single stage in the authentication flow, often represented as a screen (e.g., a login page). A step can be composed of actions, links, and messages.
-  - [Step types](./data-access/types/haapi-step.types.ts)
+  - [Step types](./haapi-stepper/data-access/types/haapi-step.types.ts)
 - **Action**: instructions about how to progress to the next step in the authentication flow. Actions often require specific user input and change the state of the authentication (e.g., submitting a form). There are three kinds of action: **form** (e.g. a username/password login form), **client operation** (e.g. a BankID or WebAuthn operation) and **selector** (e.g. choosing an authenticator).
-  - [Action types](./data-access/types/haapi-action.types.ts)
+  - [Action types](./haapi-stepper/data-access/types/haapi-action.types.ts)
 - **Link**:  instructions about how to navigate to an alternative but related path (e.g. starting a password reset flow from the main authentication step)
-  - [Link](./data-access/types/haapi-step.types.ts#L335)
+  - [Link](./haapi-stepper/data-access/types/haapi-step.types.ts#L335)
 - **Message**: Text that provides context to the user about the state of the authentication flow and possible interaction options (e.g., validation errors, warnings, or instructions).
-  - [Message](./data-access/types/haapi-step.types.ts#L324)
+  - [Message](./haapi-stepper/data-access/types/haapi-step.types.ts#L324)
 
 Check out the following HAAPI documentation for in-depth technical details:
 
@@ -83,7 +83,7 @@ Renders any HAAPI flow step out of the box, providing a complete default **opini
 </HaapiStepper>
 ```
 
-[See example](../docs/examples/DefaultRendering.tsx)
+[See example](docs/examples/DefaultRendering.tsx)
 
 [Read more](/api-reference/step-ui)
 
@@ -112,7 +112,7 @@ function Step() {
 </HaapiStepper>
 ```
 
-[See example](../docs/examples/StepBuildingBlocks.tsx)
+[See example](docs/examples/StepBuildingBlocks.tsx)
 
 [Read more](/api-reference/ui-components/ui-components-overview)
 
@@ -138,7 +138,7 @@ Renders the complete HAAPI flow UI.
 </HaapiStepper>
 ```
 
-[See example](../docs/examples/DefaultRendering.tsx)
+[See example](docs/examples/DefaultRendering.tsx)
 
 ### Styles customization
 
@@ -152,7 +152,7 @@ overriding those classes in your own stylesheet, no code changes needed.
 }
 ```
 
-[Restyle the button with CSS](../docs/examples/StylesButtonCustomization.tsx)
+[Restyle the button with CSS](docs/examples/StylesButtonCustomization.tsx)
 
 ### CSS customization
 
@@ -235,7 +235,7 @@ Each is a function that receives the `HaapiStepper` API data for the target UI e
 </HaapiStepper>
 ```
 
-[See example](../docs/examples/MessageRenderInterceptorExample.tsx)
+[See example](docs/examples/MessageRenderInterceptorExample.tsx)
 
 > 💡 **Design pattern note**: always return or pass through the API data.
 >
@@ -271,7 +271,7 @@ function LoginPage() {
 </HaapiStepper>
 ```
 
-[See example](../docs/examples/BuildingBlocksUICompositionExample.tsx)
+[See example](docs/examples/BuildingBlocksUICompositionExample.tsx)
 
 ### Mixed — combine the default with your own UI
 
@@ -295,4 +295,4 @@ mix of building blocks, plain HTML and third-party components.
 />
 ```
 
-[See example](../docs/examples/FormUICompositionExample.tsx)
+[See example](docs/examples/FormUICompositionExample.tsx)

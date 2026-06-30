@@ -25,7 +25,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { apiReferenceStructure, isApiReferenceGroup } from '../api-reference.entries.mjs';
+import { apiReferenceStructure, isApiReferenceGroup } from './api-reference.entries.mjs';
 import { extractDocBlocks, blocksToMdx, hasExamples } from './extract-tsdoc.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));

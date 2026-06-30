@@ -22,7 +22,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { examplesStructure, isExamplesGroup } from '../examples.entries.mjs';
+import { examplesStructure, isExamplesGroup } from './examples.entries.mjs';
 
 const DOCS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../content');
 const OUT_DIR = path.join(DOCS_DIR, 'examples');

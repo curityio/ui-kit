@@ -131,6 +131,12 @@ function collectFiles(dir, acc) {
 }
 
 const files = ROOTS.flatMap(root => (fs.existsSync(root) ? collectFiles(root, []) : []));
+// The SDK README now lives at the package root (an overview of the whole SDK, not just the stepper). It
+// surfaces verbatim on the docs Overview pages, so include it in the same heading-casing check.
+const sdkReadme = path.join(SDK_ROOT, 'README.md');
+if (fs.existsSync(sdkReadme)) {
+  files.push(sdkReadme);
+}
 let warnings = 0;
 let fixed = 0;
 
