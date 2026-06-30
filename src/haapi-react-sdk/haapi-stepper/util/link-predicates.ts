@@ -9,6 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
+import { MEDIA_TYPES } from '../data-access/types/media.types';
 import type { HaapiStepperLink } from '../feature/stepper/haapi-stepper.types';
 
 /**
@@ -18,4 +19,26 @@ import type { HaapiStepperLink } from '../feature/stepper/haapi-stepper.types';
  */
 export const isQrCodeLink = (link: HaapiStepperLink): boolean => {
   return link.subtype?.startsWith('image/') ?? false;
+};
+
+/**
+ * Returns `true` when a link should be followed as an authenticated HAAPI request.
+ *
+ * A link is a HAAPI link when both:
+ * - its URL uses an HTTP(S) protocol; and
+ * - it declares no media `type` (exposed here as `subtype`), or declares HAAPI's media type.
+ */
+export const isHaapiLink = (link: HaapiStepperLink): boolean => {
+  let protocol: string;
+  try {
+    protocol = new URL(link.href, window.location.origin).protocol;
+  } catch {
+    return false;
+  }
+
+  if (protocol !== 'http:' && protocol !== 'https:') {
+    return false;
+  }
+
+  return link.subtype === undefined || link.subtype === (MEDIA_TYPES.AUTH as string);
 };

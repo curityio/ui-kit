@@ -148,7 +148,7 @@ export const createMockLink = (overrides = {}): HaapiStepperLink => ({
   href: '/help',
   id: crypto.randomUUID(),
   type: HAAPI_STEPPER_ELEMENT_TYPES.LINK,
-  subtype: 'help',
+  subtype: undefined,
   ...overrides,
 });
 

@@ -11,11 +11,12 @@
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 import { createMockLink } from '../../util/tests/mocks';
 import { HaapiStepperLinksUI } from './HaapiStepperLinksUI';
+import { MEDIA_TYPES } from '../../data-access/types/media.types.ts';
 
 describe('HaapiStepperLinksUI', () => {
   let onClick: ReturnType<typeof vi.fn<(action: HaapiStepperLink) => void>>;
@@ -42,8 +43,8 @@ describe('HaapiStepperLinksUI', () => {
 
       it('renders link buttons', () => {
         const links = [
-          createMockLink({ title: 'Register', subtype: 'text/html', rel: 'register' }),
-          createMockLink({ title: 'Help', subtype: 'text/html', rel: 'help' }),
+          createMockLink({ title: 'Register', rel: 'register' }),
+          createMockLink({ title: 'Help', rel: 'help' }),
         ];
         render(<HaapiStepperLinksUI links={links} onClick={onClick} />);
 
@@ -55,7 +56,7 @@ describe('HaapiStepperLinksUI', () => {
 
     describe('Custom rendering', () => {
       it('data customization: render interceptor modifies link data before default rendering', () => {
-        const links = [createMockLink({ title: 'Original', subtype: 'text/html', rel: 'help' })];
+        const links = [createMockLink({ title: 'Original', rel: 'help' })];
         render(
           <HaapiStepperLinksUI
             links={links}
@@ -69,7 +70,7 @@ describe('HaapiStepperLinksUI', () => {
       });
 
       it('UI customization: render interceptor replaces default rendering with custom element', () => {
-        const links = [createMockLink({ title: 'Default', subtype: 'text/html', rel: 'help' })];
+        const links = [createMockLink({ title: 'Default', rel: 'help' })];
         render(
           <HaapiStepperLinksUI
             links={links}
@@ -87,7 +88,7 @@ describe('HaapiStepperLinksUI', () => {
       });
 
       it('render interceptor hides links by returning null', () => {
-        const links = [createMockLink({ title: 'Hidden', subtype: 'text/html', rel: 'help' })];
+        const links = [createMockLink({ title: 'Hidden', rel: 'help' })];
         render(<HaapiStepperLinksUI links={links} onClick={onClick} renderInterceptor={() => null} />);
 
         expect(screen.queryByTestId('links')).not.toBeInTheDocument();
@@ -95,8 +96,8 @@ describe('HaapiStepperLinksUI', () => {
 
       it('render interceptor can selectively customize specific links', () => {
         const links = [
-          createMockLink({ title: 'Register', subtype: 'text/html', rel: 'register' }),
-          createMockLink({ title: 'Help', subtype: 'text/html', rel: 'help' }),
+          createMockLink({ title: 'Register', rel: 'register' }),
+          createMockLink({ title: 'Help', rel: 'help' }),
         ];
         render(
           <HaapiStepperLinksUI
@@ -115,14 +116,41 @@ describe('HaapiStepperLinksUI', () => {
   });
 
   describe('Features', () => {
-    describe('Link navigation', () => {
-      it('calls onClick when a link button is clicked', async () => {
-        const link = createMockLink({ title: 'Register', subtype: 'text/html', rel: 'register' });
+    describe.each([undefined, MEDIA_TYPES.AUTH])('Link navigation', (mediaType?: string) => {
+      it('calls onClick when a HAAPI link button is clicked', async () => {
+        const link = createMockLink({ title: 'Register', rel: 'register', subtype: mediaType });
         render(<HaapiStepperLinksUI links={[link]} onClick={onClick} />);
 
         await user.click(screen.getByRole('button', { name: 'Register' }));
 
         expect(onClick).toHaveBeenCalledWith(link);
+      });
+    });
+
+    describe('External links', () => {
+      let openSpy: MockInstance<typeof window.open>;
+
+      beforeEach(() => {
+        openSpy = vi.spyOn(window, 'open').mockReturnValue(null);
+      });
+
+      afterEach(() => {
+        openSpy.mockRestore();
+      });
+
+      it('opens a non-HAAPI link in a new tab instead of making a HAAPI request', async () => {
+        const link = createMockLink({
+          title: 'Privacy Policy',
+          href: 'https://example.com/privacy',
+          subtype: 'text/html',
+          rel: 'privacy-policy',
+        });
+        render(<HaapiStepperLinksUI links={[link]} onClick={onClick} />);
+
+        await user.click(screen.getByRole('button', { name: 'Privacy Policy' }));
+
+        expect(openSpy).toHaveBeenCalledWith('https://example.com/privacy', '_blank', 'noopener,noreferrer');
+        expect(onClick).not.toHaveBeenCalled();
       });
     });
 
@@ -137,7 +165,7 @@ describe('HaapiStepperLinksUI', () => {
             title: 'QR Code',
             rel: 'qr-code',
           }),
-          createMockLink({ title: 'Cancel', subtype: 'text/html', rel: 'cancel' }),
+          createMockLink({ title: 'Cancel', rel: 'cancel' }),
         ];
       });
 

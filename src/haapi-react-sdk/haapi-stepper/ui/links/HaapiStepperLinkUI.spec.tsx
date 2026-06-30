@@ -16,6 +16,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
 import { createMockLink } from '../../util/tests/mocks';
 import { HaapiStepperLinkUI } from './HaapiStepperLinkUI';
+import { MEDIA_TYPES } from '../../data-access/types/media.types';
 
 describe('HaapiStepperLinkUI', () => {
   let onClick: ReturnType<typeof vi.fn<(action: HaapiStepperLink) => void>>;
@@ -27,9 +28,9 @@ describe('HaapiStepperLinkUI', () => {
   });
 
   describe('UI', () => {
-    describe('Non-image links', () => {
+    describe.each([undefined, 'text/html', MEDIA_TYPES.AUTH])('Non-image links', (mediaType?: string) => {
       it('renders a button with title', () => {
-        const link = createMockLink({ title: 'Help', subtype: 'text/html' });
+        const link = createMockLink({ title: 'Help', subtype: mediaType });
         render(<HaapiStepperLinkUI link={link} onClick={onClick} />);
 
         const button = screen.getByRole('button', { name: 'Help' });
@@ -37,7 +38,7 @@ describe('HaapiStepperLinkUI', () => {
       });
 
       it('falls back to rel when title is missing', () => {
-        const link = createMockLink({ title: undefined, rel: 'help', subtype: 'text/html' });
+        const link = createMockLink({ title: undefined, rel: 'help', subtype: mediaType });
         render(<HaapiStepperLinkUI link={link} onClick={onClick} />);
 
         expect(screen.getByRole('button', { name: 'help' })).toBeInTheDocument();
@@ -104,7 +105,7 @@ describe('HaapiStepperLinkUI', () => {
 
   describe('Features', () => {
     it('calls onClick when a non-image link is clicked', async () => {
-      const link = createMockLink({ title: 'Help', subtype: 'text/html' });
+      const link = createMockLink({ title: 'Help' });
       render(<HaapiStepperLinkUI link={link} onClick={onClick} />);
 
       await user.click(screen.getByRole('button', { name: 'Help' }));

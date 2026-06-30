@@ -10,7 +10,7 @@
  */
 
 import { HaapiStepperLink } from '../../feature/stepper/haapi-stepper.types';
-import { isQrCodeLink } from '../../util/isQrCodeLink';
+import { isQrCodeLink } from '../../util/link-predicates';
 
 export const HaapiStepperLinkUI = ({
   link,

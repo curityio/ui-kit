@@ -12,7 +12,7 @@
 import { ReactElement } from 'react';
 import { HaapiStepperLink, HaapiStepperNextStep } from '../../feature/stepper/haapi-stepper.types';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
-import { isQrCodeLink } from '../../util/isQrCodeLink';
+import { isHaapiLink, isQrCodeLink } from '../../util/link-predicates';
 import { defaultHaapiStepperLinkElementFactory } from './defaultHaapiStepperLinkElementFactory';
 import { HaapiStepperQrCodeLinkDialog } from './HaapiStepperQrCodeLinkDialog';
 
@@ -49,10 +49,12 @@ export function HaapiStepperLinksUI({ links, onClick, renderInterceptor }: Haapi
     <HaapiStepperQrCodeLinkDialog links={links}>
       {displayQrCodeInDialog => {
         const handleLinkClick = (link: HaapiStepperLink) => {
-          if (isQrCodeLink(link)) {
+          if (isHaapiLink(link)) {
+            onClick(link);
+          } else if (isQrCodeLink(link)) {
             displayQrCodeInDialog(link);
           } else {
-            onClick(link);
+            window.open(link.href, '_blank', 'noopener,noreferrer');
           }
         };
 
