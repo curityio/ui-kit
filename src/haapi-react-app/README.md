@@ -28,6 +28,15 @@ interactive documentation locally from the repo root:
 npm run docs -w @curity/haapi-react-sdk-docs
 ```
 
+## Previewer
+
+A standalone playground for browsing the SDK's UI against mocked HAAPI steps — pick an example to see how the
+components render every authentication step, without a running Identity Server. Run it from this directory:
+
+```shell
+npm run previewer
+```
+
 ## Development setup
 
 The Vite development server is used both to serve the application and as a proxy for specific Identity Server endpoints.
