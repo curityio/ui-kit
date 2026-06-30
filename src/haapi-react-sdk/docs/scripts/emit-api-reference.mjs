@@ -10,7 +10,7 @@
  */
 
 /*
- * Generates the API Reference docs tree (`docs/api-reference/**`) from the single layout declaration in
+ * Generates the API Reference docs tree (`content/api-reference/**`) from the single layout declaration in
  * `api-reference.entries.mjs`. Each leaf entry → one MDX page whose body is the export's TSDoc, extracted
  * here and written as real Markdown (+ `<DocExample>` playgrounds); each group → a subfolder with its own
  * `_category_.json`. `sidebar_position` follows declaration order.
@@ -29,7 +29,7 @@ import { apiReferenceStructure, isApiReferenceGroup } from '../api-reference.ent
 import { extractDocBlocks, blocksToMdx, hasExamples } from './extract-tsdoc.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DOCS_DIR = path.resolve(SCRIPT_DIR, '../docs');
+const DOCS_DIR = path.resolve(SCRIPT_DIR, '../content');
 const OUT_DIR = path.join(DOCS_DIR, 'api-reference');
 // The SDK package root, where entry `file` paths (`haapi-stepper/<file>`) are resolved from.
 const SDK_ROOT = path.resolve(SCRIPT_DIR, '../..');
@@ -121,4 +121,4 @@ writeCategory(OUT_DIR, 'API Reference', 2);
 const pages = emitItems(apiReferenceStructure, OUT_DIR);
 
 // eslint-disable-next-line no-console
-console.log(`[emit-api-reference] wrote ${pages} pages to docs/api-reference/`);
+console.log(`[emit-api-reference] wrote ${pages} pages to content/api-reference/`);

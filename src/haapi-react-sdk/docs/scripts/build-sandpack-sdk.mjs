@@ -60,8 +60,8 @@ const catalogOutFile = join(scriptDir, '../src/generated/catalog.json');
 // The SDK's own README, surfaced as the docs landing/first page (as MDX, so `{@see_example}` markers
 // can become live `<DocExample>` playgrounds). Front matter is prepended — single source of truth.
 const readmeFile = join(sdkRoot, 'README.md');
-// Underscore prefix → Docusaurus ignores this long source; `split-docs.mjs` splits it into `docs/overview/`.
-const readmeOutFile = join(scriptDir, '../docs/_overview.mdx');
+// Underscore prefix → Docusaurus ignores this long source; `split-docs.mjs` splits it into `content/overview/`.
+const readmeOutFile = join(scriptDir, '../content/_overview.mdx');
 
 // Every docs example file (examples/*.tsx) as { <basename>: <source> }, so MDX pages (the
 // README/overview) can mount any of them as a live playground via `<DocExample id="…">`, and the closure

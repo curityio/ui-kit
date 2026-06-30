@@ -38,6 +38,9 @@ const config: Config = {
       'classic',
       {
         docs: {
+          // `content/` is fully generated (build-sandpack-sdk, split-docs, emit-api-reference,
+          // emit-examples) — kept out of the default `docs/` to avoid a confusing `docs/docs` nesting.
+          path: 'content',
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
         },

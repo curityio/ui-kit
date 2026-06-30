@@ -15,7 +15,7 @@
  * `{@see_example <path> <label>}` markers) — and renders them to MDX: prose verbatim, each marker as a
  * `<DocExample id=… />` (resolved at runtime from the generated examples map) in the snippet's place.
  *
- * `emit-api-reference.mjs` writes the result straight into `docs/api-reference/**`, so the pages are
+ * `emit-api-reference.mjs` writes the result straight into `content/api-reference/**`, so the pages are
  * real Markdown — Docusaurus builds the right-hand table of contents and heading anchors natively.
  */
 
