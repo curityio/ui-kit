@@ -61,7 +61,7 @@ function CustomFlowUI() {
       <List
         size="small"
         dataSource={history}
-        renderItem={entry => (
+        renderItem={(entry: (typeof history)[number]) => (
           <List.Item>
             <Text>
               {entry.step.type} — {entry.timestamp.toLocaleTimeString()}

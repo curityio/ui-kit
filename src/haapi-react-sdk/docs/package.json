@@ -12,6 +12,7 @@
   "scripts": {
     "prettier-check": "prettier --check .",
     "prettier": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "docs:gen": "node scripts/build-sandpack-sdk.mjs",
     "docs:split": "node scripts/split-docs.mjs",
     "docs:apiref": "node scripts/emit-api-reference.mjs",

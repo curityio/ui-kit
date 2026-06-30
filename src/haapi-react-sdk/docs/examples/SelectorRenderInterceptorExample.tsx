@@ -12,7 +12,10 @@
 import { Select } from 'antd';
 import { HaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepper';
 import { HaapiStepperStepUI } from '@curity/haapi-react-sdk/haapi-stepper/feature/steps/HaapiStepperStepUI';
-import type { HaapiStepperStepUISelectorActionRenderInterceptor } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import type {
+  HaapiStepperFormAction,
+  HaapiStepperStepUISelectorActionRenderInterceptor,
+} from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { ExamplePreviewer } from './ExamplePreviewer';
 import { HAAPI_EXAMPLE } from './catalog';
 
@@ -22,7 +25,7 @@ import { HAAPI_EXAMPLE } from './catalog';
  * the flow forward through `nextStep`, exactly like the built-in selector would.
  */
 const selectorActionRenderInterceptor: HaapiStepperStepUISelectorActionRenderInterceptor = ({ action, nextStep }) => {
-  const options = action.model.options;
+  const options = action.model.options as HaapiStepperFormAction[];
 
   return (
     <Select
@@ -32,7 +35,7 @@ const selectorActionRenderInterceptor: HaapiStepperStepUISelectorActionRenderInt
       style={{ width: '100%' }}
       optionFilterProp="label"
       options={options.map(option => ({ label: option.title, value: option.id }))}
-      onChange={value => {
+      onChange={(value: string) => {
         const option = options.find(candidate => candidate.id === value);
         if (option) {
           nextStep(option);

@@ -12,6 +12,7 @@
 import type { CSSProperties } from 'react';
 import { HaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepper';
 import { HaapiStepperStepUI } from '@curity/haapi-react-sdk/haapi-stepper/feature/steps/HaapiStepperStepUI';
+import type { HaapiStepperFormAction } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { ExamplePreviewer } from './ExamplePreviewer';
 import { HAAPI_EXAMPLE } from './catalog';
 
@@ -35,7 +36,7 @@ export default function App() {
 
             const { nextStep } = stepperApi;
             const selector = stepperApi.currentStep.dataHelpers.actions?.selector?.[0];
-            const options = selector?.model.options ?? [];
+            const options = (selector?.model.options ?? []) as HaapiStepperFormAction[];
 
             return (
               <section>

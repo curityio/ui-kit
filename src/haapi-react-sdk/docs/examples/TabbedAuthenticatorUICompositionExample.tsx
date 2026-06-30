@@ -19,7 +19,7 @@ import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/t
 import { HAAPI_ACTION_CLIENT_OPERATIONS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
 import type { HaapiFetchAction } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-fetch.types';
 import type {
-  HaapiStepperAction,
+  HaapiStepperFormAction,
   HaapiStepperStep,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { ExamplePreviewer } from './ExamplePreviewer';
@@ -49,8 +49,7 @@ function TabbedAuthenticatorSelector() {
   }
 
   const selectorAction = selectStep.dataHelpers.actions?.selector[0];
-  // Selector options are already typed as `HaapiStepperAction[]` — no cast needed.
-  const options = selectorAction?.model.options ?? [];
+  const options = (selectorAction?.model.options ?? []) as HaapiStepperFormAction[];
   const bankIdOption = options.find(isBankId);
   const tabOptions = bankIdOption ? [bankIdOption, ...options.filter(option => option !== bankIdOption)] : options;
   const activeTabOption = tabOptions[activeIndex];
@@ -75,7 +74,7 @@ function TabbedAuthenticatorSelector() {
   return (
     <Tabs
       activeKey={String(activeIndex)}
-      onChange={key => selectTabOption(Number(key))}
+      onChange={(key: string) => selectTabOption(Number(key))}
       items={tabOptions.map((option, index) => ({
         key: String(index),
         label: option.title,
@@ -128,7 +127,7 @@ const isCustomAuthenticatorSelectStep = (step: HaapiStepperStep | null) =>
   step.metadata?.templateArea === CUSTOM_SELECT_TEMPLATE_AREA &&
   step.metadata.viewName === CUSTOM_SELECT_VIEW_NAME;
 
-const isBankId = (option: HaapiStepperAction) =>
+const isBankId = (option: HaapiStepperFormAction) =>
   option.properties?.authenticatorType === HAAPI_ACTION_CLIENT_OPERATIONS.BANKID;
 
 const isBankIdWaitStep = (step: HaapiStepperStep) => step.metadata?.viewName === BANKID_WAIT_VIEW_NAME;

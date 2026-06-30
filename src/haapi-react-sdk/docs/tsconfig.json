@@ -1,0 +1,24 @@
+{
+  // Type-checks the docs' example sources against the SDK's published types (run via `npm run typecheck`,
+  // gated in CI). Most importantly `examples/catalog.ts`, whose mock HAAPI steps are annotated with
+  // `HaapiActionStep`/`HaapiStep` etc. — so if the SDK's step model changes, the fixtures stop compiling.
+  // `moduleResolution: bundler` resolves the deep `@curity/haapi-react-sdk/haapi-stepper/*` imports; the
+  // Sandpack/CDN-only packages the playgrounds use (`antd`, `@ant-design/icons`, `@google-recaptcha/*`)
+  // are dev-only deps so tsc can resolve them, and `declarations.d.ts` covers the SDK's CSS-module imports.
+  //
+  // The Docusaurus `src/` components are out of scope — they use `@theme`/`@site` aliases that need the
+  // generated Docusaurus TS project.
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "strict": true
+  },
+  "include": ["examples", "declarations.d.ts"]
+}
