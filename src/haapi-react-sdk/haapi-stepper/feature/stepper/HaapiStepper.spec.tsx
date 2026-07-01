@@ -21,9 +21,11 @@ import { MEDIA_TYPES } from '../../data-access/types/media.types';
 import {
   authenticationStep,
   completedWithErrorStep,
-  completedWithErrorStepWithoutLinks,
+  completedWithErrorStepFormPost,
+  completedWithErrorStepWithoutLinksOrActions,
   completedWithSuccessStep,
-  completedWithSuccessStepWithoutLinks,
+  completedWithSuccessStepFormPost,
+  completedWithSuccessStepWithoutLinksOrActions,
   continueSameStep,
   createProblemStep,
   createRegistrationStep,
@@ -42,6 +44,7 @@ import type {
 import { HaapiStepperActionStep, HaapiStepperFormAction } from './haapi-stepper.types';
 import { isQrCodeLink } from '../../util/link-predicates';
 import {
+  createMockFormAction,
   createMockWebAuthnAnyDeviceBothOptionsAction,
   createMockWebAuthnAuthenticationAction,
   createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
@@ -898,21 +901,134 @@ describe('HaapiStepper', () => {
       });
     });
 
-    describe.each([
-      {
-        label: 'success',
-        stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
-        stepFixture: completedWithSuccessStep,
-      },
-      {
-        label: 'error',
-        stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
-        stepFixture: completedWithErrorStep,
-      },
-    ] as const)('Completed With $label Step', ({ label, stepType, stepFixture }) => {
-      const authorizationResponseUrl = stepFixture.links?.find(link => link.rel === 'authorization-response')?.href;
+    describe('Completed Step', () => {
+      describe.each([
+        {
+          label: 'success - redirect',
+          stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+        },
+        {
+          label: 'error - redirect',
+          stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+        },
+        {
+          label: 'success - Form POST',
+          formPostResponseMode: true,
+          stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+        },
+        {
+          label: 'error - Form POST',
+          formPostResponseMode: true,
+          stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+        },
+      ])('Common - $label', ({ label, stepType, formPostResponseMode }) => {
+        describe('autoRedirectOnAuthenticationComplete enabled (default)', () => {
+          it('should throw error to the error boundary when no authorization-response link or action exists', async () => {
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
 
-      describe('autoRedirectOnAuthenticationComplete enabled (default)', () => {
+            await screen.findByTestId('step-type');
+            await goToNextStep(stepType, { noLinksOrActions: true, formPostResponseMode });
+
+            await waitFor(() => {
+              expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+                `autoRedirectOnAuthenticationComplete is enabled, but the '${stepType}' step did not include an authorization-response link or action.`
+              );
+            });
+          });
+
+          it('should throw error to the error boundary when links or actions exist but none have rel/kind "authorization-response"', async () => {
+            render(
+              <HaapiStepper>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            await screen.findByTestId('step-type');
+            await goToNextStep(stepType, { formPostResponseMode, withoutAuthorizationResponseLinkOrAction: true });
+
+            await waitFor(() => {
+              expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
+                `autoRedirectOnAuthenticationComplete is enabled, but the '${stepType}' step did not include an authorization-response link or action.`
+              );
+            });
+          });
+        });
+
+        describe('autoRedirectOnAuthenticationComplete disabled', () => {
+          it('should render the completed step instead of redirecting', async () => {
+            const initialWindowLocation = window.location.href;
+            render(
+              <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            await screen.findByTestId('step-type');
+            await goToNextStep(stepType, { formPostResponseMode });
+
+            await waitFor(() => {
+              expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+            });
+
+            expect(window.location.href).toBe(initialWindowLocation);
+          });
+
+          it('should add the completed step to history with the full OAuth payload accessible to consumers', async () => {
+            render(
+              <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+                <TestComponent />
+              </HaapiStepper>
+            );
+
+            await screen.findByTestId('step-type');
+            await goToNextStep(stepType, { formPostResponseMode });
+
+            await waitFor(() => {
+              expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+            });
+
+            const historyData = getHistoryData(screen.getByTestId('history'));
+            const completedHistoryEntry = historyData[
+              historyData.length - 1
+            ] as HaapiStepperHistoryEntry<HaapiStepperCompletedStep>;
+
+            expect(completedHistoryEntry.step.type).toBe(stepType);
+
+            if (label.startsWith('success')) {
+              // @ts-expect-error - narrowing the history step union for test access
+              expect(completedHistoryEntry.step.properties).toMatchObject({
+                code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
+                iss: 'https://localhost:8443/dev/oauth/anonymous',
+                state: 'foo',
+              });
+            } else {
+              // @ts-expect-error - narrowing the history step union for test access
+              expect(completedHistoryEntry.step.error).toBe('server_error');
+              // @ts-expect-error - narrowing the history step union for test access
+              expect(completedHistoryEntry.step.error_description).toBe('An error occurred during authorization');
+            }
+          });
+        });
+      });
+
+      describe.each([
+        {
+          label: 'success',
+          stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+          stepFixture: completedWithSuccessStep,
+        },
+        {
+          label: 'error',
+          stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+          stepFixture: completedWithErrorStep,
+        },
+      ] as const)('Redirect/GET - $label', ({ stepType, stepFixture }) => {
+        const authorizationResponseUrl = stepFixture.links?.find(link => link.rel === 'authorization-response')?.href;
+
         it('should redirect to the authorization-response URL', async () => {
           render(
             <HaapiStepper>
@@ -926,112 +1042,64 @@ describe('HaapiStepper', () => {
           await waitFor(() => {
             expect(window.location.href).toBe(authorizationResponseUrl);
           });
-        });
 
-        it('should throw error to the error boundary when no authorization-response link exists', async () => {
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          await screen.findByTestId('step-type');
-          await goToNextStep(stepType, { noLinks: true });
-
-          await waitFor(() => {
-            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
-              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
-            );
-          });
-        });
-
-        it('should throw error to the error boundary when links exist but none have rel "authorization-response"', async () => {
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          await screen.findByTestId('step-type');
-          await goToNextStep(stepType, { linksWithoutAuthorizationResponse: true });
-
-          await waitFor(() => {
-            expect(mockThrowErrorToAppErrorBoundary).toHaveBeenCalledWith(
-              `autoRedirectOnAuthenticationComplete is enabled, but the completed-with-${label} step did not include an authorization-response link.`
-            );
-          });
-        });
-
-        it('should not update the current step when redirecting', async () => {
-          render(
-            <HaapiStepper>
-              <TestComponent />
-            </HaapiStepper>
-          );
-
-          await screen.findByTestId('step-type');
-          await goToNextStep(stepType);
-
-          await waitFor(() => {
-            expect(window.location.href).toBe(authorizationResponseUrl);
-          });
-
+          // current step is not updated
           expect(screen.getByTestId('step-type')).toHaveTextContent(initialStepType);
         });
       });
 
-      describe('autoRedirectOnAuthenticationComplete disabled', () => {
-        it('should render the completed step instead of redirecting', async () => {
-          render(
-            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
-              <TestComponent />
-            </HaapiStepper>
-          );
+      describe.each([
+        {
+          label: 'success',
+          stepType: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+          stepFixture: completedWithSuccessStepFormPost,
+        },
+        {
+          label: 'error',
+          stepType: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+          stepFixture: completedWithErrorStepFormPost,
+        },
+      ] as const)('Form POST - $label', ({ stepType, stepFixture }) => {
+        const formModel = stepFixture.actions[0].model;
 
-          await screen.findByTestId('step-type');
-          await goToNextStep(stepType);
-
-          await waitFor(() => {
-            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
-          });
-
-          expect(window.location.href).not.toBe(authorizationResponseUrl);
+        afterEach(() => {
+          // The handler appends the auto-submit form directly to document.body (outside the
+          // React render container), so Testing Library's cleanup does not remove it.
+          document.body.querySelectorAll('form').forEach(form => form.remove());
         });
 
-        it('should add the completed step to history with the full OAuth payload accessible to consumers', async () => {
+        it('POSTs a form to the authorization-response URL', async () => {
+          const submitSpy = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => undefined);
+
           render(
-            <HaapiStepper config={{ autoRedirectOnAuthenticationComplete: false }}>
+            <HaapiStepper>
               <TestComponent />
             </HaapiStepper>
           );
 
           await screen.findByTestId('step-type');
-          await goToNextStep(stepType);
+          await goToNextStep(stepType, { formPostResponseMode: true });
 
           await waitFor(() => {
-            expect(screen.getByTestId('step-type')).toHaveTextContent(stepType);
+            expect(submitSpy).toHaveBeenCalledTimes(1);
           });
 
-          const historyData = getHistoryData(screen.getByTestId('history'));
-          const completedHistoryEntry = historyData[
-            historyData.length - 1
-          ] as HaapiStepperHistoryEntry<HaapiStepperCompletedStep>;
+          // current step is not updated
+          expect(screen.getByTestId('step-type')).toHaveTextContent(initialStepType);
 
-          expect(completedHistoryEntry.step.type).toBe(stepType);
+          const form = document.body.querySelector('form');
+          expect(form).not.toBeNull();
+          expect(form!.getAttribute('action')).toBe(formModel.href);
+          expect(form!.method.toUpperCase()).toBe(formModel.method);
 
-          if (label === 'success') {
-            // @ts-expect-error - narrowing the history step union for test access
-            expect(completedHistoryEntry.step.properties).toMatchObject({
-              code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
-              iss: 'https://localhost:8443/dev/oauth/anonymous',
-              state: 'foo',
-            });
-          } else {
-            // @ts-expect-error - narrowing the history step union for test access
-            expect(completedHistoryEntry.step.error).toBe('server_error');
-            // @ts-expect-error - narrowing the history step union for test access
-            expect(completedHistoryEntry.step.error_description).toBe('An error occurred during authorization');
-          }
+          const inputs = Array.from(form!.querySelectorAll('input'));
+          expect(inputs).toHaveLength(formModel.fields.length);
+          inputs.forEach((input, index) => {
+            const field = formModel.fields[index];
+            expect(input.type).toBe('hidden');
+            expect(input.name).toBe(field.name);
+            expect(input.value).toBe(field.value);
+          });
         });
       });
     });
@@ -1473,21 +1541,33 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       }
       break;
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-      if (config?.noLinks) {
-        stepMock = completedWithSuccessStepWithoutLinks;
-      } else if (config?.linksWithoutAuthorizationResponse) {
-        stepMock = { ...completedWithSuccessStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      if (config?.noLinksOrActions) {
+        stepMock = completedWithSuccessStepWithoutLinksOrActions;
+      } else if (config?.formPostResponseMode) {
+        stepMock = completedWithSuccessStepFormPost;
+        if (config.withoutAuthorizationResponseLinkOrAction) {
+          stepMock = { ...stepMock, actions: [createMockFormAction()] };
+        }
       } else {
         stepMock = completedWithSuccessStep;
+        if (config?.withoutAuthorizationResponseLinkOrAction) {
+          stepMock = { ...stepMock, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+        }
       }
       break;
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      if (config?.noLinks) {
-        stepMock = completedWithErrorStepWithoutLinks;
-      } else if (config?.linksWithoutAuthorizationResponse) {
-        stepMock = { ...completedWithErrorStep, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+      if (config?.noLinksOrActions) {
+        stepMock = completedWithErrorStepWithoutLinksOrActions;
+      } else if (config?.formPostResponseMode) {
+        stepMock = completedWithErrorStepFormPost;
+        if (config.withoutAuthorizationResponseLinkOrAction) {
+          stepMock = { ...stepMock, actions: [createMockFormAction()] };
+        }
       } else {
         stepMock = completedWithErrorStep;
+        if (config?.withoutAuthorizationResponseLinkOrAction) {
+          stepMock = { ...stepMock, links: [{ href: '/dev/cancel', rel: 'cancel' }] };
+        }
       }
       break;
     case HAAPI_STEPS.REGISTRATION:
