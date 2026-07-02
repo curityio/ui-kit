@@ -13,3 +13,4 @@ export * from './typings';
 export * from './viewname.types';
 export * from './viewname-built-in-uis';
 export * from './BankIdViewNameBuiltInUI';
+export * from './HaapiStepperBankIdQrAccessibilityMessages';
