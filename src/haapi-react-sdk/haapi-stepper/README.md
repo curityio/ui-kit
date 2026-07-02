@@ -231,6 +231,7 @@ The Curity utility composition shown above is just how *this* project chose to i
 | `.haapi-stepper-link-qr-code-dialog` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog |
 | `.haapi-stepper-link-qr-code-dialog-close-button` | `HaapiStepperQrCodeLinkDialog` | Button wrapping the expanded QR code image; closes the dialog when clicked |
 | `.haapi-stepper-link-qr-code-dialog-image` | `HaapiStepperQrCodeLinkDialog` | Fullscreen QR code dialog image |
+| `.haapi-stepper-bankid-qr-accessibility` | `HaapiStepperBankIdQrAccessibilityMessages` | Container for the BankID QR-code accessibility messages (the collapsible "help" and "screen reader" `<details>` sections) |
 | `.haapi-stepper-actions` | `HaapiStepperActionsUI` | Actions container |
 | `.haapi-stepper-heading` | `HaapiStepperMessagesUI` | Heading messages |
 | `.haapi-stepper-userName` | `HaapiStepperMessagesUI` | User name display |

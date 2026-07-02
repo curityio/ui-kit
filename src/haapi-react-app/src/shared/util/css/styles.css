@@ -279,6 +279,24 @@ svg {
   @extend .center, .flex, .flex-column;
 }
 
+.haapi-stepper-bankid-qr-accessibility {
+  details + details {
+    @extend .mt2;
+  }
+
+  details[open] summary {
+    margin-bottom: var(--space-1);
+  }
+
+  details[open]::details-content {
+    padding-block-start: 0;
+  }
+
+  summary + * {
+    margin-block-start: 0;
+  }
+}
+
 .haapi-stepper-heading {
   &:is(h1) {
     font-size: calc(var(--type-base-size) * 1.75);
@@ -298,6 +316,7 @@ svg {
 }
 
 .haapi-stepper-polling-progress {
+  @extend .mt2;
   border-radius: var(--form-field-border-radius);
   background-color: var(--color-grey-subtle);
   outline: 1px solid var(--color-grey-light);

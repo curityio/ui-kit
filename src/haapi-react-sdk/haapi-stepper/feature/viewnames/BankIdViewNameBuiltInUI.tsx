@@ -11,12 +11,15 @@
 
 import { isQrCodeLink } from '../../util/link-predicates';
 import { getLinksElement } from '../steps/step-element-factories';
+import { HaapiStepperBankIdQrAccessibilityMessages } from './HaapiStepperBankIdQrAccessibilityMessages';
 import type { ViewNameBuiltInUIProps } from './typings';
 
 /**
  * Built-in UI for the BankID viewName (`HaapiStepperViewNameBuiltInUI.BANKID`).
  *
  *  - Lifts the QR code link above the actions so it's the primary element on the screen.
+ *  - Renders the QR-code accessibility messages (`metadata.viewData.messages`) as collapsible
+ *    sections below the QR code.
  */
 export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
   const { currentStep, linkRenderInterceptor, loadingElement, errorElement, messagesElement, actionsElement } = props;
@@ -30,6 +33,7 @@ export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
       {errorElement}
       {messagesElement}
       {qrLink && getLinksElement(props, [qrLink], linkRenderInterceptor)}
+      <HaapiStepperBankIdQrAccessibilityMessages messages={currentStep.metadata?.viewData?.messages} />
       {actionsElement}
       {nonQrLinks.length > 0 && getLinksElement(props, nonQrLinks, linkRenderInterceptor)}
     </>

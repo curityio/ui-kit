@@ -344,6 +344,15 @@ export interface HaapiLink {
 }
 
 /**
+ * View-specific data attached to the response. The shape depends on the view that produced it;
+ */
+export interface HaapiViewData {
+  /** Map of message key to its localized text, as sent by the server for this view. */
+  messages?: Record<string, string>;
+  [key: string]: unknown;
+}
+
+/**
  * Object with additional information about the response. A client may ignore the information present in this object.
  */
 export interface HaapiMetadata {
@@ -351,4 +360,6 @@ export interface HaapiMetadata {
   templateArea?: string;
   /** The name for the view that produced the response */
   viewName?: string;
+  /** View-specific data (e.g. localized accessibility messages) for the view that produced the response */
+  viewData?: HaapiViewData;
 }
