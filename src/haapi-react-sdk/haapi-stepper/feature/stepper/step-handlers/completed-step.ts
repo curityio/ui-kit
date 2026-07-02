@@ -25,25 +25,41 @@ export function handleCompletedStep(step: HaapiCompletedStep, config: HaapiStepp
     return { nextStepData: formatNextStepData(step) };
   }
 
-  // Response modes that use redirect/GET
-  const responseLink = step.links?.find(link => link.rel === 'authorization-response');
-  if (responseLink) {
-    window.location.href = responseLink.href;
-    return { nextStepData: undefined };
-  }
-
-  // Form POST response mode
-  const responseAction = step.actions?.find(action => action.kind === HAAPI_FORM_ACTION_KINDS.AUTHORIZATION_RESPONSE);
-  if (responseAction) {
-    const htmlForm = createHtmlForm(responseAction);
-    document.body.appendChild(htmlForm);
-    htmlForm.submit();
+  if (tryHandleRedirectResponse(step) || tryHandleFormPostResponse(step)) {
     return { nextStepData: undefined };
   }
 
   throw new Error(
     `autoRedirectOnAuthenticationComplete is enabled, but the '${step.type}' step did not include an authorization-response link or action.`
   );
+}
+
+/**
+ * Response modes that use redirect/GET.
+ */
+function tryHandleRedirectResponse(step: HaapiCompletedStep): boolean {
+  const responseLink = step.links?.find(link => link.rel === 'authorization-response');
+  if (responseLink) {
+    window.location.href = responseLink.href;
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Form POST response mode.
+ */
+function tryHandleFormPostResponse(step: HaapiCompletedStep): boolean {
+  const responseAction = step.actions?.find(action => action.kind === HAAPI_FORM_ACTION_KINDS.AUTHORIZATION_RESPONSE);
+  if (responseAction) {
+    const htmlForm = createHtmlForm(responseAction);
+    document.body.appendChild(htmlForm);
+    htmlForm.submit();
+    return true;
+  }
+
+  return false;
 }
 
 function createHtmlForm(action: HaapiFormAction): HTMLFormElement {
