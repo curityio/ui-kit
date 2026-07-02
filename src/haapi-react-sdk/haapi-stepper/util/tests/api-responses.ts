@@ -307,7 +307,7 @@ export const completedWithSuccessStep = {
   },
 } as HaapiCompletedWithSuccessStep;
 
-export const completedWithSuccessStepWithoutLinks = {
+export const completedWithSuccessStepWithoutLinksOrActions = {
   type: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
   metadata: {
     viewName: 'templates/oauth/success-authorization-response',
@@ -338,7 +338,7 @@ export const completedWithErrorStep = {
   error_description: 'An error occurred during authorization',
 } as HaapiCompletedWithErrorStep;
 
-export const completedWithErrorStepWithoutLinks = {
+export const completedWithErrorStepWithoutLinksOrActions = {
   type: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
   title: 'Authorization Error',
   messages: [
@@ -350,6 +350,67 @@ export const completedWithErrorStepWithoutLinks = {
   error: 'server_error',
   error_description: 'An error occurred during authorization',
 } as HaapiCompletedWithErrorStep;
+
+export const completedWithSuccessStepFormPost = {
+  type: HAAPI_STEPS.COMPLETED_WITH_SUCCESS,
+  actions: [
+    {
+      template: HAAPI_ACTION_TYPES.FORM,
+      kind: 'authorization-response',
+      model: {
+        href: 'http://client-callback',
+        method: HTTP_METHODS.POST,
+        type: MEDIA_TYPES.FORM_URLENCODED,
+        fields: [
+          { name: 'code', type: HAAPI_FORM_FIELDS.HIDDEN, value: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8' },
+          { name: 'iss', type: HAAPI_FORM_FIELDS.HIDDEN, value: 'https://localhost:8443/dev/oauth/anonymous' },
+          { name: 'state', type: HAAPI_FORM_FIELDS.HIDDEN, value: 'foo' },
+        ],
+      },
+    },
+  ],
+  metadata: {
+    viewName: 'templates/oauth/success-authorization-response',
+  },
+  properties: {
+    code: 'ziQUB25BIR9xbMLnCK0vetFEsVfYsrl8',
+    iss: 'https://localhost:8443/dev/oauth/anonymous',
+    state: 'foo',
+  },
+} satisfies HaapiCompletedWithSuccessStep;
+
+export const completedWithErrorStepFormPost = {
+  type: HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR,
+  title: 'Authorization Error',
+  messages: [
+    {
+      text: 'The authorization process completed with an error.',
+      classList: ['error'],
+    },
+  ],
+  actions: [
+    {
+      template: HAAPI_ACTION_TYPES.FORM,
+      kind: 'authorization-response',
+      model: {
+        href: 'http://client-callback',
+        method: HTTP_METHODS.POST,
+        type: MEDIA_TYPES.FORM_URLENCODED,
+        fields: [
+          { name: 'error', type: HAAPI_FORM_FIELDS.HIDDEN, value: 'server_error' },
+          {
+            name: 'error_description',
+            type: HAAPI_FORM_FIELDS.HIDDEN,
+            value: 'An error occurred during authorization',
+          },
+          { name: 'iss', type: HAAPI_FORM_FIELDS.HIDDEN, value: 'https://localhost:8443/dev/oauth/anonymous' },
+        ],
+      },
+    },
+  ],
+  error: 'server_error',
+  error_description: 'An error occurred during authorization',
+} satisfies HaapiCompletedWithErrorStep;
 
 /**
  * Create a ProblemStep instance by problem type with proper typing

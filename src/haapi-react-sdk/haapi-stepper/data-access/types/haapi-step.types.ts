@@ -217,11 +217,10 @@ export interface HaapiCompletedWithSuccessStep extends HaapiBaseStep {
   properties: HaapiCompletedWithSuccessStepOAuthAuthorizationResponseProperties;
   /** User messages. Should be displayed to users to help them understand the context of an interaction. */
   messages?: HaapiUserMessage[];
-  /**
-   * Array of hyperlinks that may be used to offer an user alternative flows. The "main" flow the user is expected to take should use "actions" instead.
-   * Links can be used, for example, to divert the user to register an account or a device from a login page.
-   */
+  /** If the flow response mode is redirect/GET-based, contains a ready-to-use link with the flow response. */
   links?: HaapiLink[];
+  /** If the flow response mode is form POST, contains a ready-to-use form action with the flow response. */
+  actions?: HaapiFormAction[];
 }
 
 /**
@@ -275,6 +274,8 @@ export interface HaapiCompletedWithErrorStep extends HaapiProblemStepBase {
   error_description?: string;
   /** Issuer identifier */
   iss?: string;
+  /** If the flow response mode is form POST, contains a ready-to-use form action with the flow response. */
+  actions?: HaapiFormAction[];
 }
 
 /**

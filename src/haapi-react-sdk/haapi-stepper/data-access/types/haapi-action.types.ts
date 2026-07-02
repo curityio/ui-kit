@@ -92,6 +92,7 @@ export enum HAAPI_FORM_ACTION_KINDS {
   AUTHENTICATOR_SELECTOR_OPTION = 'select-authenticator',
   CONTINUE = 'continue',
   USER_REGISTER = 'user-register',
+  AUTHORIZATION_RESPONSE = 'authorization-response',
 }
 
 export enum HAAPI_ACTION_CLIENT_OPERATIONS {
