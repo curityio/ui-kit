@@ -30,9 +30,12 @@ import {
   HaapiStepperUserMessage,
 } from '../haapi-stepper.types';
 import {
+  getWebAuthnRegistrationAttachmentKind,
+  isAnyDeviceWebAuthnRegistrationClientOperation,
   isWebAuthnRegistrationClientOperation,
   splitWebAuthnRegistrationAction,
 } from '../../actions/client-operation/operations/webauthn';
+import { getWebAuthnViewDataMessages } from './webauthn/webauthn-view-data-messages';
 
 export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
@@ -96,6 +99,27 @@ function addActionDataHelpers(
         options: actionWithDataHelpers.model.options.map(optionAction => addActionDataHelpers(optionAction, step)),
       },
     };
+  }
+
+  if (
+    actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.CLIENT_OPERATION &&
+    isAnyDeviceWebAuthnRegistrationClientOperation(actionWithDataHelpers)
+  ) {
+    const attachmentKind = getWebAuthnRegistrationAttachmentKind(actionWithDataHelpers);
+    const messages = getWebAuthnViewDataMessages(step.metadata?.viewData?.messages);
+    const attachmentTitle = messages[`button.${attachmentKind}`];
+    if (attachmentTitle) {
+      return {
+        ...actionWithDataHelpers,
+        webauthn: {
+          registrationAttachment: {
+            kind: attachmentKind,
+            title: attachmentTitle,
+            description: messages[`authenticator-attachment.${attachmentKind}`],
+          },
+        },
+      };
+    }
   }
 
   if (step.type === HAAPI_STEPS.POLLING && actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.CLIENT_OPERATION) {

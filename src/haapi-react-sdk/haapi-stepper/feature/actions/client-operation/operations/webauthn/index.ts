@@ -13,3 +13,6 @@ export * from './webauthn';
 export * from './utils';
 export * from './useIsWebAuthnPlatformAuthenticatorAvailable';
 export * from './auto-start';
+export * from './HaapiStepperWebAuthnRegistrationAttachmentCard';
+export * from './webauthn-registration-attachment-icons';
+export * from './webauthn-registration-attachment-icon-map';

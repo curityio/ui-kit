@@ -19,6 +19,7 @@ import {
   createMockExternalBrowserFlowAction,
   createMockStep,
   createMockWebAuthnAnyDeviceBothOptionsAction,
+  createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
   createMockWebAuthnPlatformOnlyAnyDeviceAction,
   createMockWebAuthnRegistrationAction,
   externalBrowserFlowActionTitle,
@@ -28,15 +29,22 @@ import {
 } from '../../../util/tests/mocks';
 import { HaapiStepperActionsUI } from '../../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperClientOperationUI } from './HaapiStepperClientOperationUI';
-import { useIsWebAuthnPlatformAuthenticatorAvailable } from './operations/webauthn';
+import { useIsWebAuthnPlatformAuthenticatorAvailable } from './operations/webauthn/useIsWebAuthnPlatformAuthenticatorAvailable';
+import { WebAuthnRegistrationAttachmentKind } from '../../stepper/haapi-stepper.types';
 
-vi.mock('./operations/webauthn', async () => {
-  const actual = await vi.importActual('./operations/webauthn');
-  return {
-    ...(actual as object),
-    useIsWebAuthnPlatformAuthenticatorAvailable: vi.fn(() => undefined),
-  };
-});
+const PLATFORM_TITLE = 'Built-in';
+const PLATFORM_DESCRIPTION = 'A non-removable built-in device.';
+const PLATFORM_ICON_VIEW_BOX = '0 0 64.2 83.9';
+const CROSS_PLATFORM_TITLE = 'Security key';
+const CROSS_PLATFORM_DESCRIPTION =
+  'A security key, such as a portable key attached through USB or wirelessly through NFC.';
+const CROSS_PLATFORM_ICON_VIEW_BOX = '0 0 49 72.6';
+const REGISTER_VIEW_NAME = 'authenticator/webauthn/register/get';
+const MESSAGE_PREFIX = 'authenticator.webauthn.register.view.';
+
+vi.mock('./operations/webauthn/useIsWebAuthnPlatformAuthenticatorAvailable', () => ({
+  useIsWebAuthnPlatformAuthenticatorAvailable: vi.fn(() => undefined),
+}));
 
 describe('HaapiStepperClientOperationUI', () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -140,6 +148,76 @@ describe('HaapiStepperClientOperationUI', () => {
       expect(
         screen.getByRole('button', { name: `${webAuthnAnyDeviceActionTitle} (Security key)` })
       ).toBeInTheDocument();
+    });
+
+    describe('WebAuthn registration attachment card (any device mode (platform/cross-platform))', () => {
+      it.each([
+        {
+          name: 'platform',
+          makeAction: createMockWebAuthnPlatformOnlyAnyDeviceAction,
+          kind: WebAuthnRegistrationAttachmentKind.PLATFORM,
+          title: PLATFORM_TITLE,
+          description: PLATFORM_DESCRIPTION,
+          iconViewBox: PLATFORM_ICON_VIEW_BOX,
+        },
+        {
+          name: 'cross-platform',
+          makeAction: createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
+          kind: WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM,
+          title: CROSS_PLATFORM_TITLE,
+          description: CROSS_PLATFORM_DESCRIPTION,
+          iconViewBox: CROSS_PLATFORM_ICON_VIEW_BOX,
+        },
+      ])(
+        'renders the $name attachment option as a card (title, description and matching icon)',
+        ({ makeAction, kind, title, description, iconViewBox }) => {
+          const action = { ...makeAction(), webauthn: { registrationAttachment: { kind, title, description } } };
+
+          const { container } = render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
+
+          expect(screen.getByTestId('webauthn-registration-attachment-card')).toBeInTheDocument();
+          expect(screen.getByText(title)).toBeInTheDocument();
+          expect(screen.getByText(description)).toBeInTheDocument();
+          expect(container.querySelector('.haapi-stepper-webauthn-registration-attachment-icon svg')).toHaveAttribute(
+            'viewBox',
+            iconViewBox
+          );
+        }
+      );
+
+      it('renders one card per option when a both-options any-device registration supplies messages', () => {
+        const step = createMockStep(HAAPI_STEPS.REGISTRATION, {
+          actions: [createMockWebAuthnAnyDeviceBothOptionsAction()],
+          metadata: {
+            viewName: REGISTER_VIEW_NAME,
+            viewData: {
+              messages: {
+                [`${MESSAGE_PREFIX}button.platform`]: PLATFORM_TITLE,
+                [`${MESSAGE_PREFIX}button.cross-platform`]: CROSS_PLATFORM_TITLE,
+                [`${MESSAGE_PREFIX}authenticator-attachment.platform`]: PLATFORM_DESCRIPTION,
+                [`${MESSAGE_PREFIX}authenticator-attachment.cross-platform`]: CROSS_PLATFORM_DESCRIPTION,
+              },
+            },
+          },
+        });
+
+        render(<HaapiStepperActionsUI actions={step.dataHelpers.actions?.all} onAction={vi.fn()} />);
+
+        // The both-options action is split upstream into two single-option actions, so it renders as
+        // two separate cards — the component itself never receives both attachments at once.
+        expect(screen.getAllByTestId('webauthn-registration-attachment-card')).toHaveLength(2);
+        expect(screen.getByText(PLATFORM_TITLE)).toBeInTheDocument();
+        expect(screen.getByText(CROSS_PLATFORM_TITLE)).toBeInTheDocument();
+      });
+
+      it('renders the default button (no card) when the action has no attachment copy', () => {
+        render(
+          <HaapiStepperClientOperationUI action={createMockWebAuthnPlatformOnlyAnyDeviceAction()} onAction={vi.fn()} />
+        );
+
+        expect(screen.queryByTestId('webauthn-registration-attachment-card')).not.toBeInTheDocument();
+        expect(screen.getByTestId('client-operation-action')).toBeInTheDocument();
+      });
     });
   });
 });

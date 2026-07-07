@@ -19,7 +19,7 @@ import {
   HaapiWebAuthnPasskeysRegistrationAction,
   HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../../../../data-access/types/haapi-action.types';
-import type { HaapiStepperStep } from '../../../../stepper/haapi-stepper.types';
+import { WebAuthnRegistrationAttachmentKind, type HaapiStepperStep } from '../../../../stepper/haapi-stepper.types';
 
 const WEBAUTHN_PLATFORM_LABEL = 'Built-in';
 const WEBAUTHN_CROSS_PLATFORM_LABEL = 'Security key';
@@ -106,7 +106,7 @@ export const isWebAuthnClientOperationAction = (action: HaapiAction): boolean =>
   isWebAuthnRegistrationClientOperation(action) || isWebAuthnAuthenticationClientOperation(action);
 
 export function isPlatformOnlyAnyDeviceWebAuthnRegistrationAction(action: HaapiAction): boolean {
-  if (!isWebAuthnRegistrationClientOperation(action) || !isAnyDeviceWebAuthnRegistrationAction(action)) {
+  if (!isAnyDeviceWebAuthnRegistrationClientOperation(action)) {
     return false;
   }
 
@@ -136,6 +136,30 @@ export function isAnyDeviceWebAuthnRegistrationAction(
   action: HaapiWebAuthnRegistrationClientOperationAction
 ): action is HaapiWebAuthnAnyDeviceRegistrationAction {
   return !isPasskeysWebAuthnRegistrationAction(action);
+}
+
+/**
+ * Any-device `webauthn-registration` client operation — the only registration case that offers a
+ * platform vs cross-platform attachment choice (passkeys mode collapses them into a single option).
+ * This is exactly the case the built-in attachment-selection card is rendered for.
+ */
+export function isAnyDeviceWebAuthnRegistrationClientOperation(
+  action: HaapiAction
+): action is HaapiWebAuthnAnyDeviceRegistrationAction {
+  return isWebAuthnRegistrationClientOperation(action) && isAnyDeviceWebAuthnRegistrationAction(action);
+}
+
+/**
+ * Which attachment a (split) any-device `webauthn-registration` action carries — platform (built-in)
+ * or cross-platform (security key). Callers must first confirm the action with
+ * `isAnyDeviceWebAuthnRegistrationClientOperation`.
+ */
+export function getWebAuthnRegistrationAttachmentKind(
+  action: HaapiWebAuthnAnyDeviceRegistrationAction
+): WebAuthnRegistrationAttachmentKind {
+  return action.model.arguments.platformCredentialCreationOptions
+    ? WebAuthnRegistrationAttachmentKind.PLATFORM
+    : WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM;
 }
 
 export const isWebAuthnStep = (step: HaapiStepperStep): boolean => {

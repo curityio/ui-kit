@@ -11,6 +11,10 @@
 
 import { HaapiStepperClientOperationAction, HaapiStepperFormAction } from '../../stepper/haapi-stepper.types';
 import { useIsClientOperationAvailable } from './useIsClientOperationAvailable';
+import {
+  HaapiStepperWebAuthnRegistrationAttachmentCard,
+  isAnyDeviceWebAuthnRegistrationClientOperation,
+} from './operations/webauthn';
 
 interface HaapiStepperClientOperationUIProps {
   action: HaapiStepperClientOperationAction;
@@ -49,6 +53,16 @@ export function HaapiStepperClientOperationUI({
   showBankIdSessionTimeLeft = true,
 }: HaapiStepperClientOperationUIProps) {
   const isAvailable = useIsClientOperationAvailable(action);
+
+  if (isAnyDeviceWebAuthnRegistrationClientOperation(action) && action.webauthn?.registrationAttachment) {
+    return (
+      <HaapiStepperWebAuthnRegistrationAttachmentCard
+        action={action}
+        disabled={!isAvailable}
+        onClick={() => onAction(action)}
+      />
+    );
+  }
 
   return (
     <div data-testid="client-operation-action">
