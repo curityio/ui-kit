@@ -11,7 +11,7 @@
 
 import { isQrCodeLink } from '../../util/link-predicates';
 import { getLinksElement } from '../steps/step-element-factories';
-import { HaapiStepperBankIdQrAccessibilityMessages } from './HaapiStepperBankIdQrAccessibilityMessages';
+import { HaapiStepperBankIdQrCodeAccessibilityMessages } from './HaapiStepperBankIdQrCodeAccessibilityMessages';
 import type { ViewNameBuiltInUIProps } from './typings';
 
 /**
@@ -24,18 +24,18 @@ import type { ViewNameBuiltInUIProps } from './typings';
 export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
   const { currentStep, linkRenderInterceptor, loadingElement, errorElement, messagesElement, actionsElement } = props;
   const { links } = currentStep.dataHelpers;
-  const qrLink = links.find(isQrCodeLink);
-  const nonQrLinks = links.filter(link => !isQrCodeLink(link));
+  const qrCodeLink = links.find(isQrCodeLink);
+  const nonQrCodeLinks = links.filter(link => !isQrCodeLink(link));
 
   return (
     <>
       {loadingElement}
       {errorElement}
       {messagesElement}
-      {qrLink && getLinksElement(props, [qrLink], linkRenderInterceptor)}
-      <HaapiStepperBankIdQrAccessibilityMessages messages={currentStep.metadata?.viewData?.messages} />
+      {qrCodeLink && getLinksElement(props, [qrCodeLink], linkRenderInterceptor)}
+      <HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeAccessibility={qrCodeLink?.qrCodeAccessibility} />
       {actionsElement}
-      {nonQrLinks.length > 0 && getLinksElement(props, nonQrLinks, linkRenderInterceptor)}
+      {nonQrCodeLinks.length > 0 && getLinksElement(props, nonQrCodeLinks, linkRenderInterceptor)}
     </>
   );
 };

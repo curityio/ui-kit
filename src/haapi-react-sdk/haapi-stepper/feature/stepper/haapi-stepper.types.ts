@@ -164,7 +164,15 @@ export type HaapiStepperUserMessage = HaapiUserMessage &
 /*
  * STEP LINK TYPINGS
  */
-export type HaapiStepperLink = HaapiLink & HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.LINK>;
+export type HaapiStepperLink = HaapiLink &
+  HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.LINK> & {
+    /**
+     * Render-ready BankID QR-code accessibility copy, resolved from `metadata.viewData.messages`
+     * during step-data formatting. Present only on the QR-code link when the server supplied a
+     * complete section.
+     */
+    qrCodeAccessibility?: HaapiStepperQrCodeAccessibility;
+  };
 
 /*
  * ERROR TYPINGS
@@ -257,6 +265,30 @@ export interface HaapiStepperDataHelpers {
     links: HaapiStepperLink[];
   };
 }
+
+/** QR-code accessibility copy, structured for direct rendering. */
+export interface HaapiStepperQrCodeAccessibility {
+  instruction?: HaapiStepperQrCodeAccessibilitySection;
+  screenReader?: HaapiStepperQrCodeAccessibilitySection;
+}
+
+/** One collapsible QR-code accessibility section (instruction / screen-reader). */
+export interface HaapiStepperQrCodeAccessibilitySection {
+  heading: string;
+  intro?: string;
+  items: HaapiStepperQrCodeAccessibilityItem[];
+  outro: string;
+}
+
+/**
+ * A QR-code accessibility list entry, optionally nesting sub-entries (the screen-reader section is
+ * a nested list).
+ */
+export interface HaapiStepperQrCodeAccessibilityItem {
+  text: string;
+  items?: HaapiStepperQrCodeAccessibilityItem[];
+}
+
 export type HaapiStepperDataHelpersDetails<
   T,
   ST extends T extends HAAPI_STEPPER_ELEMENT_TYPES.ACTION

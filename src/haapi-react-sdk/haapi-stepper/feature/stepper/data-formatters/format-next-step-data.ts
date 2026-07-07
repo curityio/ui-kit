@@ -33,13 +33,15 @@ import {
   isWebAuthnRegistrationClientOperation,
   splitWebAuthnRegistrationAction,
 } from '../../actions/client-operation/operations/webauthn';
+import { isQrCodeLink } from '../../../util/link-predicates';
+import { getQrCodeAccessibility } from './qr-code-accessibility/qr-code-accessibility';
 
 export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
 ): T & HaapiStepperDataHelpers {
   const isStepWithoutActions =
     step.type === HAAPI_STEPS.COMPLETED_WITH_SUCCESS || step.type === HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR;
-  const linksWithDataHelpers = step.links?.map(link => getElementWithDataHelpers(link)) ?? [];
+  const linksWithDataHelpers = step.links?.map(link => addLinkDataHelpers(link, step)) ?? [];
   const messagesWithDataHelpers = step.messages?.map(message => getElementWithDataHelpers(message)) ?? [];
   const dataHelpers = {
     messages: messagesWithDataHelpers,
@@ -64,6 +66,20 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
       actions: actionsWithDataHelpersMap,
     },
   };
+}
+
+function addLinkDataHelpers(
+  link: HaapiLink,
+  step: HaapiActionStep | HaapiCompletedStep | HaapiStepperStep
+): HaapiStepperLink {
+  const linkWithDataHelpers = getElementWithDataHelpers(link);
+  const qrCodeAccessibility = getQrCodeAccessibility(step.metadata?.viewData?.messages);
+
+  if (qrCodeAccessibility && isQrCodeLink(linkWithDataHelpers)) {
+    return { ...linkWithDataHelpers, qrCodeAccessibility };
+  }
+
+  return linkWithDataHelpers;
 }
 
 function getNextStepActions(actions: HaapiAction[]): HaapiAction[] {

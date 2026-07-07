@@ -279,7 +279,7 @@ svg {
   @extend .center, .flex, .flex-column;
 }
 
-.haapi-stepper-bankid-qr-accessibility {
+.haapi-stepper-bankid-qr-code-accessibility {
   details + details {
     @extend .mt2;
   }
