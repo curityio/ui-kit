@@ -344,7 +344,7 @@ export interface HaapiLink {
 }
 
 /**
- * View-specific data attached to the response. The shape depends on the view that produced it;
+ * View-specific data attached to the response. The shape depends on the view that produced it.
  */
 export interface HaapiViewData {
   /** Map of message key to its localized text, as sent by the server for this view. */
