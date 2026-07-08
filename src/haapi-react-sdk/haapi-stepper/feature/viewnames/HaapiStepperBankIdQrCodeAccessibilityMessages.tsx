@@ -9,7 +9,10 @@
  * For further information, please contact Curity AB.
  */
 
-import type { HaapiStepperQrCodeAccessibility, HaapiStepperQrCodeAccessibilityItem } from '../stepper/haapi-stepper.types';
+import type {
+  HaapiStepperQrCodeAccessibility,
+  HaapiStepperQrCodeAccessibilityItem,
+} from '../stepper/haapi-stepper.types';
 
 const QrCodeAccessibilityList = ({ items }: { items: HaapiStepperQrCodeAccessibilityItem[] }) => (
   <ul>
