@@ -34,7 +34,7 @@ import {
   splitWebAuthnRegistrationAction,
 } from '../../actions/client-operation/operations/webauthn';
 import { isQrCodeLink } from '../../../util/link-predicates';
-import { getQrCodeAccessibility } from './qr-code-accessibility/qr-code-accessibility';
+import { getQrCodeViewDataMessages } from './qr-code-view-data-messages';
 
 export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
@@ -73,10 +73,10 @@ function addLinkDataHelpers(
   step: HaapiActionStep | HaapiCompletedStep | HaapiStepperStep
 ): HaapiStepperLink {
   const linkWithDataHelpers = getElementWithDataHelpers(link);
-  const qrCodeAccessibility = getQrCodeAccessibility(step.metadata?.viewData?.messages);
+  const qrCodeMessages = getQrCodeViewDataMessages(step.metadata?.viewData?.messages);
 
-  if (qrCodeAccessibility && isQrCodeLink(linkWithDataHelpers)) {
-    return { ...linkWithDataHelpers, qrCodeAccessibility };
+  if (qrCodeMessages && isQrCodeLink(linkWithDataHelpers)) {
+    return { ...linkWithDataHelpers, qrCodeMessages };
   }
 
   return linkWithDataHelpers;

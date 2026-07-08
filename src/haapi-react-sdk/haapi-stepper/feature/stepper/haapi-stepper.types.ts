@@ -167,11 +167,12 @@ export type HaapiStepperUserMessage = HaapiUserMessage &
 export type HaapiStepperLink = HaapiLink &
   HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.LINK> & {
     /**
-     * Render-ready BankID QR-code accessibility copy, resolved from `metadata.viewData.messages`
-     * during step-data formatting. Present only on the QR-code link when the server supplied a
-     * complete section.
+     * The QR-code messages from `metadata.viewData.messages` (the entries whose key carries the
+     * `.view.qr.` segment), relocated here during step-data formatting with their keys untouched.
+     * Present only on the QR-code link, when the server supplied such messages. Interpreting the
+     * copy (keys, structure, completeness) is up to the consumer rendering the QR code.
      */
-    qrCodeAccessibility?: HaapiStepperQrCodeAccessibility;
+    qrCodeMessages?: Record<string, string>;
   };
 
 /*
@@ -264,29 +265,6 @@ export interface HaapiStepperDataHelpers {
     messages: HaapiStepperUserMessage[];
     links: HaapiStepperLink[];
   };
-}
-
-/** QR-code accessibility copy, structured for direct rendering. */
-export interface HaapiStepperQrCodeAccessibility {
-  instruction?: HaapiStepperQrCodeAccessibilitySection;
-  screenReader?: HaapiStepperQrCodeAccessibilitySection;
-}
-
-/** One collapsible QR-code accessibility section (instruction / screen-reader). */
-export interface HaapiStepperQrCodeAccessibilitySection {
-  heading: string;
-  intro?: string;
-  items: HaapiStepperQrCodeAccessibilityItem[];
-  outro: string;
-}
-
-/**
- * A QR-code accessibility list entry, optionally nesting sub-entries (the screen-reader section is
- * a nested list).
- */
-export interface HaapiStepperQrCodeAccessibilityItem {
-  text: string;
-  items?: HaapiStepperQrCodeAccessibilityItem[];
 }
 
 export type HaapiStepperDataHelpersDetails<
