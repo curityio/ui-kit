@@ -399,6 +399,10 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return { nextStepError: clientOperationError };
     }
 
+    if (clientOperationData.action === null) {
+      return {};
+    }
+
     return processHaapiNextStep({
       ...params,
       action: clientOperationData.action,
