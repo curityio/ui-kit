@@ -16,7 +16,7 @@ import {
   createMockWebAuthnPlatformOnlyAnyDeviceAction,
   webAuthnPlatformOnlyAnyDeviceActionTitle,
 } from '../../../util/tests/mocks';
-import { WebAuthnRegistrationAttachmentKind } from '../../actions/client-operation/operations/webauthn';
+import { WebAuthnRegistrationAttachmentKind } from '../haapi-stepper.types';
 import { getWebAuthnData } from './webauthn-data';
 
 const MESSAGE_PREFIX = 'authenticator.webauthn.register.view.';

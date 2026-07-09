@@ -11,7 +11,7 @@
 
 import type { ReactNode } from 'react';
 
-import { WebAuthnRegistrationAttachmentKind } from './utils';
+import { WebAuthnRegistrationAttachmentKind } from '../../../../stepper/haapi-stepper.types';
 import { IconWebAuthnCrossPlatform, IconWebAuthnPlatform } from './webauthn-registration-attachment-icons';
 
 /**

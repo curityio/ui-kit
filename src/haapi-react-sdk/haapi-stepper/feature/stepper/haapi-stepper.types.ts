@@ -54,7 +54,6 @@ import {
   HaapiUsernameFormField,
 } from '../../data-access';
 import { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
-import type { WebAuthnRegistrationAttachmentKind } from '../actions/client-operation/operations/webauthn/utils';
 
 /**
  * Public API provided by the `HaapiStepper`, accessed via the `useHaapiStepper` hook.
@@ -166,6 +165,12 @@ export interface HaapiStepperWebAuthnRegistrationAttachment {
   title?: string;
   /** The localized attachment option description. */
   description?: string;
+}
+
+/** WebAuthn any-device registration attachment. */
+export enum WebAuthnRegistrationAttachmentKind {
+  PLATFORM = 'platform',
+  CROSS_PLATFORM = 'cross-platform',
 }
 
 export type HaapiStepperWebAuthnRegistrationClientOperationAction = HaapiStepperClientOperationAction &

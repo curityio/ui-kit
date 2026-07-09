@@ -18,7 +18,7 @@ import {
   createMockWebAuthnPlatformOnlyAnyDeviceAction,
 } from '../../../../../util/tests/mocks';
 import { HaapiStepperWebAuthnRegistrationAttachmentCard } from './HaapiStepperWebAuthnRegistrationAttachmentCard';
-import { WebAuthnRegistrationAttachmentKind } from './utils';
+import { WebAuthnRegistrationAttachmentKind } from '../../../../stepper/haapi-stepper.types';
 
 const PLATFORM_ICON_VIEW_BOX = '0 0 64.2 83.9';
 const CROSS_PLATFORM_ICON_VIEW_BOX = '0 0 49 72.6';

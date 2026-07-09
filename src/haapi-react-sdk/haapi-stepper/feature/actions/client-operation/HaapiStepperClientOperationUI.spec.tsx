@@ -29,7 +29,7 @@ import {
 } from '../../../util/tests/mocks';
 import { HaapiStepperActionsUI } from '../../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperClientOperationUI } from './HaapiStepperClientOperationUI';
-import { WebAuthnRegistrationAttachmentKind } from './operations/webauthn/utils';
+import { WebAuthnRegistrationAttachmentKind } from '../../stepper/haapi-stepper.types';
 import { useIsWebAuthnPlatformAuthenticatorAvailable } from './operations/webauthn/useIsWebAuthnPlatformAuthenticatorAvailable';
 
 const PLATFORM_TITLE = 'Built-in';

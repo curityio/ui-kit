@@ -10,11 +10,8 @@
  */
 
 import { HaapiWebAuthnAnyDeviceRegistrationAction } from '../../../data-access/types/haapi-action.types';
-import { HaapiStepperWebAuthnData } from '../haapi-stepper.types';
-import {
-  getWebAuthnRegistrationAttachmentKind,
-  WebAuthnRegistrationAttachmentKind,
-} from '../../actions/client-operation/operations/webauthn';
+import { HaapiStepperWebAuthnData, WebAuthnRegistrationAttachmentKind } from '../haapi-stepper.types';
+import { getWebAuthnRegistrationAttachmentKind } from '../../actions/client-operation/operations/webauthn';
 
 const ATTACHMENT_VIEW_MARKERS = ['.view.button.', '.view.authenticator-attachment.'];
 
