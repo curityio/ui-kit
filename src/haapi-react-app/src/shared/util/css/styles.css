@@ -299,13 +299,8 @@ svg {
 
 /* WebAuthn registration attachment-selection option cards */
 .haapi-stepper-webauthn-registration-attachment {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  width: 100%;
-  margin-block-start: var(--space-2);
-  padding: var(--space-3);
-  text-align: left;
+  @extend .flex, .flex-center, .flex-gap-3, .w100, .mt2, .p3, .left-align;
+
   background-color: transparent;
   color: var(--color-text);
   border: var(--form-field-border-width) var(--form-field-border-style) var(--form-field-border-color);
