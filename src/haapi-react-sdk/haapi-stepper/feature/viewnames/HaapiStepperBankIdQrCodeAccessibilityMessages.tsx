@@ -10,28 +10,28 @@
  */
 
 /**
- * Renders the BankID QR-code accessibility messages carried by the QR-code link
- * (`qrCodeLink.qrCodeMessages`, relocated from `metadata.viewData.messages` by the step-data
- * formatting) as two collapsible sections, mirroring the classic Velocity layout:
+ * Renders the BankID QR-code accessibility messages from the step's `metadata.viewData.messages`
+ * as two collapsible sections, mirroring the classic Velocity layout:
  *
  *  - "Help with scanning the QR code" (`instruction.*`)
  *  - "If you are using a screen reader" (`screen-reader.*`)
  *
- * Interpreting the copy is BankID view knowledge, so this component owns it: messages are looked
- * up by their exact BankID keys, a section is shown only when all of its messages are present, and
- * nothing is rendered against servers that don't emit this view data (or other authenticators).
+ * Interpreting the copy is BankID view knowledge, so this component owns it: messages are selected
+ * and looked up by their exact BankID keys, a section is shown only when all of its messages are
+ * present, and nothing is rendered against servers that don't emit this view data (or other
+ * authenticators).
  *
  * Exported so consumers building a custom BankID UI can reuse it.
  */
 export const HaapiStepperBankIdQrCodeAccessibilityMessages = ({
-  qrCodeMessages,
+  viewDataMessages,
 }: {
-  qrCodeMessages?: Record<string, string>;
+  viewDataMessages?: Record<string, string>;
 }) => {
   // The exact keys the BankID authenticator uses for the QR-code accessibility copy
   // (see `WaitBankIdRepresentationFunction` in the server).
   const qrKey = (suffix: string) => `authenticator.bankid.launch.view.qr.${suffix}`;
-  const qr = (suffix: string) => qrCodeMessages?.[qrKey(suffix)];
+  const qr = (suffix: string) => viewDataMessages?.[qrKey(suffix)];
   const has = (...suffixes: string[]) =>
     suffixes.every(suffix => {
       const value = qr(suffix);

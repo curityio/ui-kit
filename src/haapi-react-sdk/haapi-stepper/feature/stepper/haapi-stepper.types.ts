@@ -164,16 +164,7 @@ export type HaapiStepperUserMessage = HaapiUserMessage &
 /*
  * STEP LINK TYPINGS
  */
-export type HaapiStepperLink = HaapiLink &
-  HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.LINK> & {
-    /**
-     * The QR-code messages from `metadata.viewData.messages` (the entries whose key carries the
-     * `.view.qr.` segment), relocated here during step-data formatting with their keys untouched.
-     * Present only on the QR-code link, when the server supplied such messages. Interpreting the
-     * copy (keys, structure, completeness) is up to the consumer rendering the QR code.
-     */
-    qrCodeMessages?: Record<string, string>;
-  };
+export type HaapiStepperLink = HaapiLink & HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.LINK>;
 
 /*
  * ERROR TYPINGS

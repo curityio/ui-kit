@@ -45,7 +45,7 @@ const ALL_MESSAGES = { ...INSTRUCTION_MESSAGES, ...SCREEN_READER_MESSAGES };
 
 describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
   it('renders both sections, collapsed by default, when all messages are present', () => {
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={ALL_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={ALL_MESSAGES} />);
 
     const instructions = screen.getByTestId('bankid-qr-code-instructions');
     const screenReader = screen.getByTestId('bankid-qr-code-screen-reader');
@@ -58,7 +58,7 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
 
   it('expands and collapses a section when its summary is toggled', async () => {
     const user = userEvent.setup();
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={ALL_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={ALL_MESSAGES} />);
 
     const instructions = screen.getByTestId('bankid-qr-code-instructions');
     const summary = screen.getByText('Help with scanning the QR code');
@@ -73,7 +73,7 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
   });
 
   it('renders every instruction message', () => {
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={ALL_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={ALL_MESSAGES} />);
 
     Object.values(INSTRUCTION_MESSAGES).forEach(text => {
       expect(screen.getByText(text)).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
   });
 
   it('renders every screen-reader message', () => {
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={ALL_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={ALL_MESSAGES} />);
 
     Object.values(SCREEN_READER_MESSAGES).forEach(text => {
       expect(screen.getByText(text)).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
   });
 
   it('renders the nested screen-reader step structure', () => {
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={ALL_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={ALL_MESSAGES} />);
 
     const nestedLeaf = screen.getByText('Windows: Ctrl+Arrow up');
     expect(nestedLeaf).toBeInTheDocument();
@@ -98,19 +98,19 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
   });
 
   it('renders nothing when there are no messages', () => {
-    const { container } = render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={undefined} />);
+    const { container } = render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={undefined} />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it('renders only the instruction section when screen-reader messages are missing', () => {
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={INSTRUCTION_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={INSTRUCTION_MESSAGES} />);
 
     expect(screen.getByTestId('bankid-qr-code-instructions')).toBeInTheDocument();
     expect(screen.queryByTestId('bankid-qr-code-screen-reader')).not.toBeInTheDocument();
   });
 
   it('renders only the screen-reader section when instruction messages are missing', () => {
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={SCREEN_READER_MESSAGES} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={SCREEN_READER_MESSAGES} />);
 
     expect(screen.getByTestId('bankid-qr-code-screen-reader')).toBeInTheDocument();
     expect(screen.queryByTestId('bankid-qr-code-instructions')).not.toBeInTheDocument();
@@ -120,7 +120,7 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
     const incompleteInstructions = Object.fromEntries(
       Object.entries(INSTRUCTION_MESSAGES).filter(([messageKey]) => messageKey !== key('instruction.outro'))
     );
-    render(<HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={incompleteInstructions} />);
+    render(<HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={incompleteInstructions} />);
 
     expect(screen.queryByTestId('bankid-qr-code-instructions')).not.toBeInTheDocument();
   });
@@ -128,7 +128,7 @@ describe('HaapiStepperBankIdQrCodeAccessibilityMessages', () => {
   it('ignores QR-code messages it does not know about (e.g. the expiry countdown)', () => {
     render(
       <HaapiStepperBankIdQrCodeAccessibilityMessages
-        qrCodeMessages={{ ...ALL_MESSAGES, [key('minutes-left')]: '{0} minutes left' }}
+        viewDataMessages={{ ...ALL_MESSAGES, [key('minutes-left')]: '{0} minutes left' }}
       />
     );
 

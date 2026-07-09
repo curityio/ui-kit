@@ -33,7 +33,9 @@ export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
       {errorElement}
       {messagesElement}
       {qrCodeLink && getLinksElement(props, [qrCodeLink], linkRenderInterceptor)}
-      <HaapiStepperBankIdQrCodeAccessibilityMessages qrCodeMessages={qrCodeLink?.qrCodeMessages} />
+      {qrCodeLink && (
+        <HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={currentStep.metadata?.viewData?.messages} />
+      )}
       {actionsElement}
       {nonQrCodeLinks.length > 0 && getLinksElement(props, nonQrCodeLinks, linkRenderInterceptor)}
     </>
