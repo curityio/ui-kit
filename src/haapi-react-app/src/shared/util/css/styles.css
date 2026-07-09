@@ -311,7 +311,10 @@ svg {
   border: var(--form-field-border-width) var(--form-field-border-style) var(--form-field-border-color);
   border-radius: var(--form-field-border-radius);
   cursor: pointer;
-  transition: color 200ms, background-color 200ms, border-color 200ms;
+  transition:
+    color 200ms,
+    background-color 200ms,
+    border-color 200ms;
 
   /* Match the corporate `.button-primary-outline` hover: fill with the brand colour, invert text. */
   &:hover,
