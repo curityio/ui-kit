@@ -19,7 +19,7 @@ import {
   HaapiWebAuthnPasskeysRegistrationAction,
   HaapiWebAuthnRegistrationClientOperationAction,
 } from '../../../../../data-access/types/haapi-action.types';
-import { WebAuthnRegistrationAttachmentKind, type HaapiStepperStep } from '../../../../stepper/haapi-stepper.types';
+import { type HaapiStepperStep } from '../../../../stepper/haapi-stepper.types';
 
 const WEBAUTHN_PLATFORM_LABEL = 'Built-in';
 const WEBAUTHN_CROSS_PLATFORM_LABEL = 'Security key';
@@ -147,6 +147,12 @@ export function isAnyDeviceWebAuthnRegistrationClientOperation(
   action: HaapiAction
 ): action is HaapiWebAuthnAnyDeviceRegistrationAction {
   return isWebAuthnRegistrationClientOperation(action) && isAnyDeviceWebAuthnRegistrationAction(action);
+}
+
+/** WebAuthn any-device registration attachment. */
+export enum WebAuthnRegistrationAttachmentKind {
+  PLATFORM = 'platform',
+  CROSS_PLATFORM = 'cross-platform',
 }
 
 /**

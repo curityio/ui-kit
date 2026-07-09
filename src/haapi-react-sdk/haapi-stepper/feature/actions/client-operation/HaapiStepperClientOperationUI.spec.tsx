@@ -29,8 +29,8 @@ import {
 } from '../../../util/tests/mocks';
 import { HaapiStepperActionsUI } from '../../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperClientOperationUI } from './HaapiStepperClientOperationUI';
+import { WebAuthnRegistrationAttachmentKind } from './operations/webauthn/utils';
 import { useIsWebAuthnPlatformAuthenticatorAvailable } from './operations/webauthn/useIsWebAuthnPlatformAuthenticatorAvailable';
-import { WebAuthnRegistrationAttachmentKind } from '../../stepper/haapi-stepper.types';
 
 const PLATFORM_TITLE = 'Built-in';
 const PLATFORM_DESCRIPTION = 'A non-removable built-in device.';
@@ -41,6 +41,12 @@ const CROSS_PLATFORM_DESCRIPTION =
 const CROSS_PLATFORM_ICON_VIEW_BOX = '0 0 49 72.6';
 const REGISTER_VIEW_NAME = 'authenticator/webauthn/register/get';
 const MESSAGE_PREFIX = 'authenticator.webauthn.register.view.';
+const VIEW_DATA_MESSAGES = {
+  [`${MESSAGE_PREFIX}button.platform`]: PLATFORM_TITLE,
+  [`${MESSAGE_PREFIX}button.cross-platform`]: CROSS_PLATFORM_TITLE,
+  [`${MESSAGE_PREFIX}authenticator-attachment.platform`]: PLATFORM_DESCRIPTION,
+  [`${MESSAGE_PREFIX}authenticator-attachment.cross-platform`]: CROSS_PLATFORM_DESCRIPTION,
+};
 
 vi.mock('./operations/webauthn/useIsWebAuthnPlatformAuthenticatorAvailable', () => ({
   useIsWebAuthnPlatformAuthenticatorAvailable: vi.fn(() => undefined),
@@ -188,35 +194,39 @@ describe('HaapiStepperClientOperationUI', () => {
       it('renders one card per option when a both-options any-device registration supplies messages', () => {
         const step = createMockStep(HAAPI_STEPS.REGISTRATION, {
           actions: [createMockWebAuthnAnyDeviceBothOptionsAction()],
-          metadata: {
-            viewName: REGISTER_VIEW_NAME,
-            viewData: {
-              messages: {
-                [`${MESSAGE_PREFIX}button.platform`]: PLATFORM_TITLE,
-                [`${MESSAGE_PREFIX}button.cross-platform`]: CROSS_PLATFORM_TITLE,
-                [`${MESSAGE_PREFIX}authenticator-attachment.platform`]: PLATFORM_DESCRIPTION,
-                [`${MESSAGE_PREFIX}authenticator-attachment.cross-platform`]: CROSS_PLATFORM_DESCRIPTION,
-              },
-            },
-          },
+          metadata: { viewName: REGISTER_VIEW_NAME, viewData: { messages: VIEW_DATA_MESSAGES } },
         });
 
         render(<HaapiStepperActionsUI actions={step.dataHelpers.actions?.all} onAction={vi.fn()} />);
 
-        // The both-options action is split upstream into two single-option actions, so it renders as
-        // two separate cards — the component itself never receives both attachments at once.
         expect(screen.getAllByTestId('webauthn-registration-attachment-card')).toHaveLength(2);
         expect(screen.getByText(PLATFORM_TITLE)).toBeInTheDocument();
         expect(screen.getByText(CROSS_PLATFORM_TITLE)).toBeInTheDocument();
       });
 
-      it('renders the default button (no card) when the action has no attachment copy', () => {
+      it('renders the cards with the split action titles as fallback when the step carries no messages', () => {
+        const step = createMockStep(HAAPI_STEPS.REGISTRATION, {
+          actions: [createMockWebAuthnAnyDeviceBothOptionsAction()],
+        });
+
+        render(<HaapiStepperActionsUI actions={step.dataHelpers.actions?.all} onAction={vi.fn()} />);
+
+        const cards = screen.getAllByTestId('webauthn-registration-attachment-card');
+        expect(cards).toHaveLength(2);
+        expect(screen.getByText(`${webAuthnAnyDeviceActionTitle} (Built-in)`)).toBeInTheDocument();
+        expect(screen.getByText(`${webAuthnAnyDeviceActionTitle} (Security key)`)).toBeInTheDocument();
+        expect(cards[0].querySelector('.haapi-stepper-webauthn-registration-attachment-description')).toBeNull();
+        expect(cards[1].querySelector('.haapi-stepper-webauthn-registration-attachment-description')).toBeNull();
+      });
+
+      it('renders the default button (no card) when the action carries no webauthn data', () => {
         render(
           <HaapiStepperClientOperationUI action={createMockWebAuthnPlatformOnlyAnyDeviceAction()} onAction={vi.fn()} />
         );
 
         expect(screen.queryByTestId('webauthn-registration-attachment-card')).not.toBeInTheDocument();
         expect(screen.getByTestId('client-operation-action')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: webAuthnPlatformOnlyAnyDeviceActionTitle })).toBeInTheDocument();
       });
     });
   });

@@ -11,7 +11,7 @@
 
 import type { ReactNode } from 'react';
 
-import { WebAuthnRegistrationAttachmentKind } from '../../../..';
+import { WebAuthnRegistrationAttachmentKind } from './utils';
 import { IconWebAuthnCrossPlatform, IconWebAuthnPlatform } from './webauthn-registration-attachment-icons';
 
 /**

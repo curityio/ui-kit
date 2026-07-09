@@ -54,6 +54,7 @@ import {
   HaapiUsernameFormField,
 } from '../../data-access';
 import { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
+import type { WebAuthnRegistrationAttachmentKind } from '../actions/client-operation/operations/webauthn/utils';
 
 /**
  * Public API provided by the `HaapiStepper`, accessed via the `useHaapiStepper` hook.
@@ -144,30 +145,29 @@ export type HaapiStepperClientOperationAction = HaapiClientOperationAction &
     /** Polling session remaining time in seconds before the session expires. */
     maxWaitRemainingTime?: number;
     /**
-     * FE-only WebAuthn data resolved during step-data formatting (not part of the HAAPI
-     * representation). `registrationAttachment` holds the localized attachment copy — resolved from
-     * `metadata.viewData.messages` — for split any-device `webauthn-registration` actions when the
-     * server supplied the attachment messages. Drives the built-in attachment-selection card.
+     * WebAuthn data resolved during step-data formatting. Present only on any-device
+     * `webauthn-registration` actions.
      */
-    webauthn?: {
-      registrationAttachment: HaapiWebAuthnRegistrationAttachment;
-    };
+    webauthn?: HaapiStepperWebAuthnData;
   };
 
-/**
- * WebAuthn any-device registration attachment. The values are the suffixes used in
- * `metadata.viewData.messages` keys (`button.<kind>`, `authenticator-attachment.<kind>`).
- */
-export enum WebAuthnRegistrationAttachmentKind {
-  PLATFORM = 'platform',
-  CROSS_PLATFORM = 'cross-platform',
+/** WebAuthn data resolved during step-data formatting for an any-device registration action. */
+export interface HaapiStepperWebAuthnData {
+  registrationAttachment: HaapiStepperWebAuthnRegistrationAttachment;
 }
 
-export interface HaapiWebAuthnRegistrationAttachment {
+/** The registration attachment option a (split) any-device `webauthn-registration` action carries. */
+export interface HaapiStepperWebAuthnRegistrationAttachment {
+  /** The attachment-selection messages from `metadata.viewData.messages`. */
+  messages?: Record<string, string>;
+  /** The attachment the action carries — platform (built-in) or cross-platform (security key). */
   kind: WebAuthnRegistrationAttachmentKind;
-  title: string;
+  /** The localized attachment option label, falling back to the action title. */
+  title?: string;
+  /** The localized attachment option description. */
   description?: string;
 }
+
 export type HaapiStepperWebAuthnRegistrationClientOperationAction = HaapiStepperClientOperationAction &
   HaapiWebAuthnRegistrationClientOperationAction;
 export type HaapiStepperWebAuthnPasskeysRegistrationAction = HaapiStepperClientOperationAction &

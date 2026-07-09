@@ -13,58 +13,61 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-import { createMockWebAuthnPlatformOnlyAnyDeviceAction } from '../../../../../util/tests/mocks';
 import {
-  HaapiStepperWebAuthnAnyDeviceRegistrationAction,
-  HaapiWebAuthnRegistrationAttachment,
-  WebAuthnRegistrationAttachmentKind,
-} from '../../../../stepper/haapi-stepper.types';
+  createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
+  createMockWebAuthnPlatformOnlyAnyDeviceAction,
+} from '../../../../../util/tests/mocks';
 import { HaapiStepperWebAuthnRegistrationAttachmentCard } from './HaapiStepperWebAuthnRegistrationAttachmentCard';
+import { WebAuthnRegistrationAttachmentKind } from './utils';
 
-const PLATFORM_TITLE = 'Built-in';
-const PLATFORM_DESCRIPTION = 'A non-removable built-in device.';
 const PLATFORM_ICON_VIEW_BOX = '0 0 64.2 83.9';
-const CROSS_PLATFORM_TITLE = 'Security key';
 const CROSS_PLATFORM_ICON_VIEW_BOX = '0 0 49 72.6';
 
-const actionWith = (
-  registrationAttachment?: HaapiWebAuthnRegistrationAttachment
-): HaapiStepperWebAuthnAnyDeviceRegistrationAction => ({
-  ...createMockWebAuthnPlatformOnlyAnyDeviceAction(),
-  webauthn: registrationAttachment ? { registrationAttachment } : undefined,
-});
-
 describe('HaapiStepperWebAuthnRegistrationAttachmentCard', () => {
-  it('renders the title, description and icon resolved from the action attachment', () => {
+  it('renders the title, description and matching icon resolved in the action webauthn data', () => {
+    const action = {
+      ...createMockWebAuthnPlatformOnlyAnyDeviceAction(),
+      webauthn: {
+        registrationAttachment: {
+          kind: WebAuthnRegistrationAttachmentKind.PLATFORM,
+          title: 'Built-in',
+          description: 'A non-removable built-in device.',
+        },
+      },
+    };
+
     const { container } = render(
       <HaapiStepperWebAuthnRegistrationAttachmentCard
-        action={actionWith({
-          kind: WebAuthnRegistrationAttachmentKind.PLATFORM,
-          title: PLATFORM_TITLE,
-          description: PLATFORM_DESCRIPTION,
-        })}
+        registrationAttachment={action.webauthn.registrationAttachment}
         onClick={vi.fn()}
       />
     );
 
-    expect(screen.getByText(PLATFORM_TITLE)).toBeInTheDocument();
-    expect(screen.getByText(PLATFORM_DESCRIPTION)).toBeInTheDocument();
+    expect(screen.getByText('Built-in')).toBeInTheDocument();
+    expect(screen.getByText('A non-removable built-in device.')).toBeInTheDocument();
     expect(container.querySelector('.haapi-stepper-webauthn-registration-attachment-icon svg')).toHaveAttribute(
       'viewBox',
       PLATFORM_ICON_VIEW_BOX
     );
   });
 
-  it('omits the description when the attachment has none, still rendering the icon', () => {
+  it('omits the description when the webauthn data has none, still rendering the icon', () => {
+    const action = {
+      ...createMockWebAuthnCrossPlatformOnlyAnyDeviceAction(),
+      webauthn: {
+        registrationAttachment: { kind: WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM, title: 'Security key' },
+      },
+    };
+
     const { container } = render(
       <HaapiStepperWebAuthnRegistrationAttachmentCard
-        action={actionWith({ kind: WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM, title: CROSS_PLATFORM_TITLE })}
+        registrationAttachment={action.webauthn.registrationAttachment}
         onClick={vi.fn()}
       />
     );
 
     const card = screen.getByTestId('webauthn-registration-attachment-card');
-    expect(screen.getByText(CROSS_PLATFORM_TITLE)).toBeInTheDocument();
+    expect(screen.getByText('Security key')).toBeInTheDocument();
     expect(card.querySelector('.haapi-stepper-webauthn-registration-attachment-description')).toBeNull();
     expect(container.querySelector('.haapi-stepper-webauthn-registration-attachment-icon svg')).toHaveAttribute(
       'viewBox',
@@ -72,18 +75,17 @@ describe('HaapiStepperWebAuthnRegistrationAttachmentCard', () => {
     );
   });
 
-  it('renders nothing when the action carries no attachment', () => {
-    render(<HaapiStepperWebAuthnRegistrationAttachmentCard action={actionWith()} onClick={vi.fn()} />);
-
-    expect(screen.queryByTestId('webauthn-registration-attachment-card')).not.toBeInTheDocument();
-  });
-
   it('calls onClick when the card is clicked', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
+    const action = {
+      ...createMockWebAuthnPlatformOnlyAnyDeviceAction(),
+      webauthn: { registrationAttachment: { kind: WebAuthnRegistrationAttachmentKind.PLATFORM, title: 'Built-in' } },
+    };
+
     render(
       <HaapiStepperWebAuthnRegistrationAttachmentCard
-        action={actionWith({ kind: WebAuthnRegistrationAttachmentKind.PLATFORM, title: PLATFORM_TITLE })}
+        registrationAttachment={action.webauthn.registrationAttachment}
         onClick={onClick}
       />
     );

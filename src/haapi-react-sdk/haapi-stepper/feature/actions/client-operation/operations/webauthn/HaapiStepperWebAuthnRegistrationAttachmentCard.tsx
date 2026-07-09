@@ -9,12 +9,12 @@
  * For further information, please contact Curity AB.
  */
 
-import { HaapiStepperWebAuthnAnyDeviceRegistrationAction } from '../../../../stepper/haapi-stepper.types';
+import { HaapiStepperWebAuthnRegistrationAttachment } from '../../../../stepper/haapi-stepper.types';
 import { REGISTRATION_ATTACHMENT_ICON } from './webauthn-registration-attachment-icon-map';
 
 export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
-  /** The any-device `webauthn-registration` action this option advances the flow with. */
-  action: HaapiStepperWebAuthnAnyDeviceRegistrationAction;
+  /** The (split) any-device `webauthn-registration` action this option advances the flow with. */
+  registrationAttachment: HaapiStepperWebAuthnRegistrationAttachment;
   /** Disables the card (e.g. when the required authenticator capability is unavailable). */
   disabled?: boolean;
   onClick: () => void;
@@ -22,20 +22,16 @@ export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
 
 /**
  * A single WebAuthn registration attachment-selection option, rendered as a clickable card
- * (icon + bold title + description). Resolves the localized copy and icon from the action's
- * `attachment` and wires `onClick` to advance the flow.
+ * (icon + bold title + description).
  *
  * Exported so consumers building a custom WebAuthn registration UI can reuse it.
  */
 export const HaapiStepperWebAuthnRegistrationAttachmentCard = ({
-  action,
+  registrationAttachment,
   disabled,
   onClick,
 }: HaapiStepperWebAuthnRegistrationAttachmentCardProps) => {
-  const registrationAttachment = action.webauthn?.registrationAttachment;
-  if (!registrationAttachment) {
-    return null;
-  }
+  const { kind, title, description } = registrationAttachment;
 
   return (
     <button
@@ -46,14 +42,12 @@ export const HaapiStepperWebAuthnRegistrationAttachmentCard = ({
       onClick={onClick}
     >
       <span className="haapi-stepper-webauthn-registration-attachment-icon" aria-hidden="true">
-        {REGISTRATION_ATTACHMENT_ICON[registrationAttachment.kind]}
+        {REGISTRATION_ATTACHMENT_ICON[kind]}
       </span>
       <span className="haapi-stepper-webauthn-registration-attachment-text">
-        <strong className="haapi-stepper-webauthn-registration-attachment-title">{registrationAttachment.title}</strong>
-        {registrationAttachment.description && (
-          <span className="haapi-stepper-webauthn-registration-attachment-description">
-            {registrationAttachment.description}
-          </span>
+        <strong className="haapi-stepper-webauthn-registration-attachment-title">{title}</strong>
+        {description && (
+          <span className="haapi-stepper-webauthn-registration-attachment-description">{description}</span>
         )}
       </span>
     </button>
