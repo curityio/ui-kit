@@ -383,7 +383,7 @@ interface ProcessHaapiNextStepParams {
 }
 
 async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise<{
-  nextStepData?: HaapiStepperStep;
+  nextStepData?: HaapiStepperStep | null;
   nextStepError?: HaapiStepperError;
 }> {
   const { currentStep, nextStep, history, action, payload, pendingOperation, config, sendHaapiFetchRequest } = params;
@@ -400,7 +400,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     }
 
     if (clientOperationData.action === null) {
-      return {};
+      return { nextStepData: null };
     }
 
     return processHaapiNextStep({
