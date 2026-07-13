@@ -257,6 +257,7 @@ export interface HaapiStepperDataHelpers {
     links: HaapiStepperLink[];
   };
 }
+
 export type HaapiStepperDataHelpersDetails<
   T,
   ST extends T extends HAAPI_STEPPER_ELEMENT_TYPES.ACTION
