@@ -157,8 +157,6 @@ export interface HaapiStepperWebAuthnData {
 
 /** The registration attachment option a (split) any-device `webauthn-registration` action carries. */
 export interface HaapiStepperWebAuthnRegistrationAttachment {
-  /** The attachment-selection messages from `metadata.viewData.messages`. */
-  messages?: Record<string, string>;
   /** The attachment the action carries — platform (built-in) or cross-platform (security key). */
   kind: WebAuthnRegistrationAttachmentKind;
   /** The localized attachment option label, falling back to the action title. */

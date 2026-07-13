@@ -19,10 +19,6 @@ const ATTACHMENT_VIEW_MARKERS = ['.view.button.', '.view.authenticator-attachmen
  * Builds the `webauthn` data of a (split) any-device `webauthn-registration` action — its
  * `registrationAttachment`:
  *
- *  - `messages` — the attachment-selection messages selected from the raw
- *    `metadata.viewData.messages` map (the entries whose key carries the `.view.button.` or
- *    `.view.authenticator-attachment.` segment), keys untouched. Absent when the server supplied
- *    no such messages.
  *  - `kind` — the attachment the action carries, derived from its `model.arguments`.
  *  - `title` / `description` — the attachment option copy resolved from the messages, with the
  *    action title as the `title` fallback.
@@ -47,7 +43,6 @@ export function getWebAuthnData(
   return {
     registrationAttachment: {
       kind,
-      ...(messages && { messages }),
       ...(title !== undefined && { title }),
       ...(description !== undefined && { description }),
     },

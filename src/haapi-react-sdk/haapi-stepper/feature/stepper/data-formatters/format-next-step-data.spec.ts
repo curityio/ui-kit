@@ -47,7 +47,6 @@ describe('formatNextStepData — webauthn data', () => {
     expect(clientOperations[0].webauthn).toEqual({
       registrationAttachment: {
         kind: WebAuthnRegistrationAttachmentKind.PLATFORM,
-        messages: VIEW_DATA_MESSAGES,
         title: 'Built-in',
         description: 'A non-removable built-in device.',
       },
@@ -55,7 +54,6 @@ describe('formatNextStepData — webauthn data', () => {
     expect(clientOperations[1].webauthn).toEqual({
       registrationAttachment: {
         kind: WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM,
-        messages: VIEW_DATA_MESSAGES,
         title: 'Security key',
         description: 'A security key.',
       },

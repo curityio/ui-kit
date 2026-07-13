@@ -37,7 +37,6 @@ describe('getWebAuthnData', () => {
     expect(result).toEqual({
       registrationAttachment: {
         kind: WebAuthnRegistrationAttachmentKind.PLATFORM,
-        messages: VIEW_DATA_MESSAGES,
         title: 'Built-in',
         description: 'A non-removable built-in device.',
       },
@@ -50,7 +49,6 @@ describe('getWebAuthnData', () => {
     expect(result).toEqual({
       registrationAttachment: {
         kind: WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM,
-        messages: VIEW_DATA_MESSAGES,
         title: 'Security key',
         description: 'A security key.',
       },
