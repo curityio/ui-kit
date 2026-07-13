@@ -297,7 +297,6 @@ svg {
   }
 }
 
-/* WebAuthn registration attachment-selection option cards */
 .haapi-stepper-webauthn-registration-attachment {
   @extend .flex, .flex-center, .flex-gap-3, .w100, .mt2, .p3, .left-align;
 
@@ -311,7 +310,6 @@ svg {
     background-color 200ms,
     border-color 200ms;
 
-  /* Match the corporate `.button-primary-outline` hover: fill with the brand colour, invert text. */
   &:hover,
   &:focus-visible {
     background-color: var(--button-color);
@@ -325,11 +323,10 @@ svg {
 }
 
 .haapi-stepper-webauthn-registration-attachment-icon {
-  display: inline-flex;
-  flex-shrink: 0;
+  @extend .inline-flex, .flex-noshrink;
+
   width: 48px;
   height: 48px;
-  /* Brand blue-grey of the source artwork; the icons use currentColor so this can be overridden. */
   color: #626c87;
 
   svg {
