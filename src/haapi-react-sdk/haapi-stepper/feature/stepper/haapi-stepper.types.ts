@@ -143,7 +143,34 @@ export type HaapiStepperClientOperationAction = HaapiClientOperationAction &
     maxWaitTime?: number;
     /** Polling session remaining time in seconds before the session expires. */
     maxWaitRemainingTime?: number;
+    /**
+     * WebAuthn data resolved during step-data formatting. Present only on any-device
+     * `webauthn-registration` actions.
+     */
+    webauthn?: HaapiStepperWebAuthnData;
   };
+
+/** WebAuthn data resolved during step-data formatting for an any-device registration action. */
+export interface HaapiStepperWebAuthnData {
+  registrationAttachment: HaapiStepperWebAuthnRegistrationAttachment;
+}
+
+/** The registration attachment option a (split) any-device `webauthn-registration` action carries. */
+export interface HaapiStepperWebAuthnRegistrationAttachment {
+  /** The attachment the action carries — platform (built-in) or cross-platform (security key). */
+  kind: WebAuthnRegistrationAttachmentKind;
+  /** The localized attachment option label, falling back to the action title. */
+  title?: string;
+  /** The localized attachment option description. */
+  description?: string;
+}
+
+/** WebAuthn any-device registration attachment. */
+export enum WebAuthnRegistrationAttachmentKind {
+  PLATFORM = 'platform',
+  CROSS_PLATFORM = 'cross-platform',
+}
+
 export type HaapiStepperWebAuthnRegistrationClientOperationAction = HaapiStepperClientOperationAction &
   HaapiWebAuthnRegistrationClientOperationAction;
 export type HaapiStepperWebAuthnPasskeysRegistrationAction = HaapiStepperClientOperationAction &

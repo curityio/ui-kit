@@ -297,6 +297,49 @@ svg {
   }
 }
 
+.haapi-stepper-webauthn-registration-attachment {
+  @extend .flex, .flex-center, .flex-gap-3, .w100, .mt2, .p3, .left-align;
+
+  background-color: transparent;
+  color: var(--color-text);
+  border: var(--form-field-border-width) var(--form-field-border-style) var(--form-field-border-color);
+  border-radius: var(--form-field-border-radius);
+  cursor: pointer;
+  transition:
+    color 200ms,
+    background-color 200ms,
+    border-color 200ms;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    color: white;
+
+    .haapi-stepper-webauthn-registration-attachment-icon {
+      color: white;
+    }
+  }
+}
+
+.haapi-stepper-webauthn-registration-attachment-icon {
+  @extend .inline-flex, .flex-noshrink;
+
+  width: 48px;
+  height: 48px;
+  color: #626c87;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.haapi-stepper-webauthn-registration-attachment-title {
+  font-family: var(--type-bold);
+  margin-inline-end: var(--space-2);
+}
+
 .haapi-stepper-heading {
   &:is(h1) {
     font-size: calc(var(--type-base-size) * 1.75);

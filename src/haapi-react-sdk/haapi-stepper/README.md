@@ -147,7 +147,9 @@ Check out [the HaapiStepperStepUI documentation and usage examples](./feature/st
 
 ### ViewName built-in UIs
 
-The HaapiStepperStepUI ships built-in UIs for specific HAAPI `viewName`s (`step.metadata.viewName`) that need a more tailored UI than the generic step shell can provide (e.g. the BankID requires the QR link to be lifted above the actions). They are displayed by default and can be customized like any other step by using render interceptors.
+The HaapiStepperStepUI ships built-in UIs for specific HAAPI `viewName`s (`step.metadata.viewName`) that need a more tailored UI than the generic step shell can provide (e.g. the BankID requires the QR link to be lifted above the actions). 
+
+ViewName built-in UIs operate at the **step** level: they reshape the whole step for a given `viewName`. They are displayed by default and can be customized like any other step by using render interceptors.
 
 Check out documentation and usage examples in [`HaapiStepperStepUI`](./feature/steps/HaapiStepperStepUI.tsx), and the test use cases in [`HaapiStepperStepUI.spec.tsx`](./feature/steps/HaapiStepperStepUI.spec.tsx) (`describe('ViewName built-in UIs Rendering')`) for more details.
 
@@ -237,6 +239,10 @@ The Curity utility composition shown above is just how *this* project chose to i
 | `.haapi-stepper-userName` | `HaapiStepperMessagesUI` | User name display |
 | `.haapi-stepper-userCode` | `HaapiStepperMessagesUI` | User code display (e.g. recovery codes) |
 | `.haapi-stepper-polling-progress` | `HaapiStepperClientOperationUI` | Remaining polling time indicator (e.g. recovery codes) |
+| `.haapi-stepper-webauthn-registration-attachment` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | WebAuthn registration attachment-selection option card (icon + title + description) |
+| `.haapi-stepper-webauthn-registration-attachment-icon` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card icon |
+| `.haapi-stepper-webauthn-registration-attachment-title` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card option label |
+| `.haapi-stepper-webauthn-registration-attachment-description` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card option description |
 | `.haapi-stepper-error-boundary-fallback` | `DefaultErrorFallback` | Error boundary fallback container |
 | `.haapi-validation-errors-container` | `HaapiStepperFormValidationErrorInputWrapper` | Wrapper around a form field that has validation errors. Receives the `.has-errors` modifier class while errors are visible |
 | `.haapi-validation-errors` | `HaapiStepperFormValidationErrorInputWrapper` | Inner container that holds the list of validation error messages |
