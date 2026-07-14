@@ -20,6 +20,7 @@ export * from './stepper/step-handlers/polling-step';
 export * from './stepper/data-formatters/problem-step';
 
 export * from './steps/HaapiStepperStepUI';
+export * from './viewnames/HaapiStepperBankIdPollingProgressUI';
 export * from './actions/form/HaapiStepperFormUI';
 export * from './actions/form/HaapiStepperFormValidationErrorInputWrapper';
 export * from './actions/form/HaapiStepperFormHook';

@@ -9,8 +9,10 @@
  * For further information, please contact Curity AB.
  */
 
+import { HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
 import { isQrCodeLink } from '../../util/link-predicates';
 import { getLinksElement } from '../steps/step-element-factories';
+import { HaapiStepperBankIdPollingProgressUI } from './HaapiStepperBankIdPollingProgressUI';
 import { HaapiStepperBankIdQrCodeAccessibilityMessages } from './HaapiStepperBankIdQrCodeAccessibilityMessages';
 import type { ViewNameBuiltInUIProps } from './typings';
 
@@ -18,6 +20,7 @@ import type { ViewNameBuiltInUIProps } from './typings';
  * Built-in UI for the BankID viewName (`HaapiStepperViewNameBuiltInUI.BANKID`).
  *
  *  - Lifts the QR code link above the actions so it's the primary element on the screen.
+ *  - Renders the polling "authentication time" progress bar (below the QR code when one is present).
  *  - Renders the QR-code accessibility messages (`metadata.viewData.messages`) as collapsible
  *    sections below the QR code.
  */
@@ -33,6 +36,7 @@ export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
       {errorElement}
       {messagesElement}
       {qrCodeLink && getLinksElement(props, [qrCodeLink], linkRenderInterceptor)}
+      {currentStep.type === HAAPI_STEPS.POLLING && <HaapiStepperBankIdPollingProgressUI currentStep={currentStep} />}
       {qrCodeLink && (
         <HaapiStepperBankIdQrCodeAccessibilityMessages viewDataMessages={currentStep.metadata?.viewData?.messages} />
       )}

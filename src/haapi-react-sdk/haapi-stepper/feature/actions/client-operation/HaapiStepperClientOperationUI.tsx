@@ -16,7 +16,6 @@ import { useIsClientOperationAvailable } from './useIsClientOperationAvailable';
 interface HaapiStepperClientOperationUIProps {
   action: HaapiStepperClientOperationAction;
   onAction: (action: HaapiStepperClientOperationAction | HaapiStepperFormAction) => void;
-  showBankIdSessionTimeLeft?: boolean;
 }
 
 /**
@@ -44,11 +43,7 @@ interface HaapiStepperClientOperationUIProps {
  * </HaapiStepper>
  * ```
  */
-export function HaapiStepperClientOperationUI({
-  action,
-  onAction,
-  showBankIdSessionTimeLeft = true,
-}: HaapiStepperClientOperationUIProps) {
+export function HaapiStepperClientOperationUI({ action, onAction }: HaapiStepperClientOperationUIProps) {
   const isAvailable = useIsClientOperationAvailable(action);
 
   if (action.webauthn?.registrationAttachment) {
@@ -63,13 +58,6 @@ export function HaapiStepperClientOperationUI({
 
   return (
     <div data-testid="client-operation-action">
-      {showBankIdSessionTimeLeft && action.maxWaitRemainingTime !== undefined && (
-        <progress
-          className="haapi-stepper-polling-progress"
-          value={action.maxWaitRemainingTime}
-          max={action.maxWaitTime}
-        />
-      )}
       <button type="button" className="haapi-stepper-button" disabled={!isAvailable} onClick={() => onAction(action)}>
         {action.title}
       </button>

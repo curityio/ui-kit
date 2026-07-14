@@ -2017,7 +2017,83 @@ describe('HaapiStepperStepUI', () => {
           expect(screen.queryByTestId('messages')).toBeInTheDocument();
           expect(screen.queryByTestId('links')).toBeInTheDocument();
         });
+
+        it('should render the polling progress bar between the QR code and the actions', () => {
+          const step = createPollingStep({
+            links: [createMockQrLink()],
+            actions: [createMockClientOperationAction({ title: 'Launch BankID App' })],
+            maxWaitTime: '60',
+            maxWaitRemainingTime: '30',
+          });
+
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
+
+          const progress = screen.getByRole('progressbar', { hidden: true });
+          expect(progress).toHaveAttribute('value', '30');
+          expect(progress).toHaveAttribute('max', '60');
+
+          const qrCode = screen.getByTestId('qr-code-button');
+          const actions = screen.getByTestId('client-operation-action');
+          expect(follows(progress, qrCode)).toBe(true);
+          expect(follows(actions, progress)).toBe(true);
+        });
+
+        it('should render the progress bar sourced from the step even without a client-operation (QR-only mode)', () => {
+          const step = createPollingStep({
+            links: [createMockQrLink()],
+            actions: [],
+            maxWaitTime: '60',
+            maxWaitRemainingTime: '30',
+          });
+
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
+
+          expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '30');
+          expect(screen.queryByTestId('client-operation-action')).not.toBeInTheDocument();
+        });
+
+        it('should render the progress bar without a QR code (client-operation-only mode)', () => {
+          const step = createPollingStep({
+            links: [],
+            actions: [createMockClientOperationAction({ title: 'Launch BankID App' })],
+            maxWaitTime: '60',
+            maxWaitRemainingTime: '30',
+          });
+
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
+
+          expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '30');
+          expect(screen.queryByTestId('qr-code-button')).not.toBeInTheDocument();
+        });
+
+        it('should not render a progress bar when the step exposes no remaining wait time', () => {
+          const step = createPollingStep({ links: [createMockQrLink()] });
+
+          renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
+
+          expect(screen.queryByRole('progressbar', { hidden: true })).not.toBeInTheDocument();
+        });
+
+        it.each([HAAPI_POLLING_STATUS.DONE, HAAPI_POLLING_STATUS.FAILED])(
+          'should not render a progress bar for a %s polling step',
+          status => {
+            const step = createPollingStep({
+              status,
+              links: [createMockQrLink()],
+              maxWaitTime: '60',
+              maxWaitRemainingTime: '30',
+            });
+
+            renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
+
+            expect(screen.queryByRole('progressbar', { hidden: true })).not.toBeInTheDocument();
+          }
+        );
       });
     });
   });
 });
+
+/** True when `node` appears after `reference` in document order. */
+const follows = (node: Element, reference: Element) =>
+  Boolean(reference.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);

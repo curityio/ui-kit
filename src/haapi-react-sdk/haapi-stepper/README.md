@@ -238,7 +238,8 @@ The Curity utility composition shown above is just how *this* project chose to i
 | `.haapi-stepper-heading` | `HaapiStepperMessagesUI` | Heading messages |
 | `.haapi-stepper-userName` | `HaapiStepperMessagesUI` | User name display |
 | `.haapi-stepper-userCode` | `HaapiStepperMessagesUI` | User code display (e.g. recovery codes) |
-| `.haapi-stepper-polling-progress` | `HaapiStepperClientOperationUI` | Remaining polling time indicator (e.g. recovery codes) |
+| `.haapi-stepper-polling-progress-bar` | `HaapiStepperBankIdPollingProgressUI` | Remaining polling time indicator (the "authentication time" bar, e.g. BankID) |
+| `.haapi-stepper-polling-progress-duration` | `HaapiStepperBankIdPollingProgressUI` | Numeric time-left readout shown below the bar (e.g. "24 seconds left") |
 | `.haapi-stepper-webauthn-registration-attachment` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | WebAuthn registration attachment-selection option card (icon + title + description) |
 | `.haapi-stepper-webauthn-registration-attachment-icon` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card icon |
 | `.haapi-stepper-webauthn-registration-attachment-title` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card option label |
