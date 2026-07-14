@@ -112,7 +112,7 @@ describe('webauthn', () => {
     });
 
     describe('error', () => {
-      it('WebAuthn API not supported → registrationError copy', async () => {
+      it('WebAuthn API not supported → notSupported copy', async () => {
         vi.unstubAllGlobals();
 
         await expect(
@@ -121,7 +121,7 @@ describe('webauthn', () => {
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: WEBAUTHN_ERROR_MESSAGES.registration }],
+              messages: [{ text: WEBAUTHN_ERROR_MESSAGES.notSupported }],
             },
           },
         });
@@ -224,7 +224,7 @@ describe('webauthn', () => {
     });
 
     describe('error', () => {
-      it('WebAuthn API not supported → authenticationError copy (failed bucket)', async () => {
+      it('WebAuthn API not supported → notSupported copy', async () => {
         vi.unstubAllGlobals();
 
         await expect(
@@ -233,7 +233,7 @@ describe('webauthn', () => {
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: WEBAUTHN_ERROR_MESSAGES.authentication }],
+              messages: [{ text: WEBAUTHN_ERROR_MESSAGES.notSupported }],
             },
           },
         });
@@ -318,6 +318,74 @@ describe('webauthn', () => {
             ).rejects.toBe(error);
           }
         );
+      });
+    });
+  });
+
+  describe('localized error copy from metadata.viewData.messages', () => {
+    const stepWithMessages = (messages: Record<string, string>): HaapiStep =>
+      ({ metadata: { viewData: { messages } } }) as unknown as HaapiStep;
+
+    it('registration failed: uses the server copy (webauthn prefix) when present', async () => {
+      mockCredentialsCreate.mockResolvedValue(null);
+      const step = stepWithMessages({
+        'authenticator.webauthn.register.view.error.registration': 'Kunde inte registrera enheten.',
+      });
+
+      await expect(
+        runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
+      ).resolves.toMatchObject({
+        clientOperationError: { app: { messages: [{ text: 'Kunde inte registrera enheten.' }] } },
+      });
+    });
+
+    it('registration cancel/timeout: uses the server copy when present', async () => {
+      mockCredentialsCreate.mockRejectedValue(new DOMException('cancelled', 'NotAllowedError'));
+      const step = stepWithMessages({
+        'authenticator.webauthn.register.view.error.cancel-or-timeout': 'Avbröts eller tog för lång tid.',
+      });
+
+      await expect(
+        runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
+      ).resolves.toMatchObject({
+        clientOperationError: { app: { messages: [{ text: 'Avbröts eller tog för lång tid.' }] } },
+      });
+    });
+
+    it('registration not-supported: uses the server copy (passkeys prefix) when present', async () => {
+      vi.unstubAllGlobals();
+      const step = stepWithMessages({
+        'authenticator.passkeys.register.view.error.not-supported': 'Passkeys stöds inte i denna webbläsare.',
+      });
+
+      await expect(
+        runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
+      ).resolves.toMatchObject({
+        clientOperationError: { app: { messages: [{ text: 'Passkeys stöds inte i denna webbläsare.' }] } },
+      });
+    });
+
+    it('authentication failed: uses the server copy (authenticate-device prefix) when present', async () => {
+      mockCredentialsGet.mockResolvedValue(null);
+      const step = stepWithMessages({
+        'authenticator.webauthn.authenticate-device.view.error.authentication': 'Kunde inte autentisera.',
+      });
+
+      await expect(
+        runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, step)
+      ).resolves.toMatchObject({
+        clientOperationError: { app: { messages: [{ text: 'Kunde inte autentisera.' }] } },
+      });
+    });
+
+    it('falls back to the hardcoded copy when the step lacks the matching error key', async () => {
+      mockCredentialsCreate.mockResolvedValue(null);
+      const step = stepWithMessages({ 'authenticator.webauthn.register.view.button.platform': 'Built-in' });
+
+      await expect(
+        runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
+      ).resolves.toMatchObject({
+        clientOperationError: { app: { messages: [{ text: WEBAUTHN_ERROR_MESSAGES.registration }] } },
       });
     });
   });
