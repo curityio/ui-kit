@@ -14,3 +14,4 @@ continue-to-login-template=Proceder ao login como %s
 external-browser.launch.use-browser=O processo de autenticação precisa usar um navegador externo
 external-browser.launch.continue=Se você não for redirecionado automaticamente, clique aqui para continuar autenticando
 external-browser.launch.cancel=Cancelar
+external-browser.launch.error.browser-window=Não foi possível abrir um novo separador do navegador, necessário para continuar o processo de autenticação. Isso pode ser devido a pop-ups bloqueados pelo navegador.

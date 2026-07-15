@@ -16,3 +16,4 @@ continue-to-login-template=Proceed to login as %s
 external-browser.launch.use-browser=The authentication process needs to use an external browser
 external-browser.launch.continue=If you are not redirected automatically, click here to continue authenticating
 external-browser.launch.cancel=Cancel
+external-browser.launch.error.browser-window=Couldn't open a new browser tab, required to continue the authentication process. This can be due to pop-ups being blocked by the browser.

@@ -17,7 +17,16 @@ import { createMockExternalBrowserFlowAction, createMockStep } from '../../../..
 describe('external-browser-flow', () => {
   const launchOrigin = new URL(createMockExternalBrowserFlowAction().model.arguments.href).origin;
   const closeDelay = 0;
-  const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, { metadata: {} });
+  const windowOpenError = 'window_open_error';
+  const step = createMockStep(HAAPI_STEPS.AUTHENTICATION, {
+    metadata: {
+      viewData: {
+        messages: {
+          'authenticator.external-browser.launch.error.browser-window': windowOpenError,
+        },
+      },
+    },
+  });
 
   let abortController: AbortController;
   let externalWindowClose: ReturnType<typeof vi.fn>;
@@ -77,6 +86,22 @@ describe('external-browser-flow', () => {
           },
         });
       });
+
+      it('return no-action when abort signal fires (cancellation)', async () => {
+        const externalBrowserFlowResult = runExternalBrowserFlow(
+          createMockExternalBrowserFlowAction(),
+          closeDelay,
+          abortController.signal,
+          step
+        );
+
+        abortController.abort();
+
+        await expect(externalBrowserFlowResult).resolves.toMatchObject({
+          clientOperationData: { action: null },
+        });
+        expect(externalWindowClose).toHaveBeenCalledTimes(1);
+      });
     });
 
     describe('failure', () => {
@@ -94,14 +119,14 @@ describe('external-browser-flow', () => {
           clientOperationError: {
             app: {
               type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.launch }],
+              messages: [{ text: windowOpenError }],
             },
           },
         });
         expect(externalWindowClose).not.toHaveBeenCalled();
       });
 
-      it('message from unexpected origin → resume error copy', async () => {
+      it('message from unexpected origin → rejection', async () => {
         const externalBrowserFlowResult = runExternalBrowserFlow(
           createMockExternalBrowserFlowAction(),
           closeDelay,
@@ -111,18 +136,11 @@ describe('external-browser-flow', () => {
 
         sendBrowserMessage({ source: fakeExternalWindow, origin: 'http://attacker.example', data: 'nonce-x' });
 
-        await expect(externalBrowserFlowResult).resolves.toMatchObject({
-          clientOperationError: {
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume }],
-            },
-          },
-        });
+        await expect(externalBrowserFlowResult).rejects.toThrow(new Error(EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume));
         expect(externalWindowClose).toHaveBeenCalledTimes(1);
       });
 
-      it('message with non-string data → resume error copy', async () => {
+      it('message with non-string data → rejection', async () => {
         const externalBrowserFlowResult = runExternalBrowserFlow(
           createMockExternalBrowserFlowAction(),
           closeDelay,
@@ -132,35 +150,7 @@ describe('external-browser-flow', () => {
 
         sendBrowserMessage({ source: fakeExternalWindow, origin: launchOrigin, data: { not: 'a string' } });
 
-        await expect(externalBrowserFlowResult).resolves.toMatchObject({
-          clientOperationError: {
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume }],
-            },
-          },
-        });
-        expect(externalWindowClose).toHaveBeenCalledTimes(1);
-      });
-
-      it('abort signal fires → resume error copy', async () => {
-        const externalBrowserFlowResult = runExternalBrowserFlow(
-          createMockExternalBrowserFlowAction(),
-          closeDelay,
-          abortController.signal,
-          step
-        );
-
-        abortController.abort();
-
-        await expect(externalBrowserFlowResult).resolves.toMatchObject({
-          clientOperationError: {
-            app: {
-              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
-              messages: [{ text: EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume }],
-            },
-          },
-        });
+        await expect(externalBrowserFlowResult).rejects.toThrow(new Error(EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume));
         expect(externalWindowClose).toHaveBeenCalledTimes(1);
       });
     });

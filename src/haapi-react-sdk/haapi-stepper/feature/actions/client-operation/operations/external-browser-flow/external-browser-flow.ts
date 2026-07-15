@@ -18,7 +18,6 @@ import {
 import { HaapiStep } from '../../../../../data-access/types/haapi-step.types';
 import { ClientOperationResult } from '../typings';
 import { getHaapiStepperError } from '../helpers';
-import { EXTERNAL_BROWSER_FLOW_ERROR_TYPE } from './typings';
 
 /**
  * Executes an external browser flow by opening a new window at the launch URL and waiting for the
@@ -30,16 +29,14 @@ export function runExternalBrowserFlow(
   abortSignal: AbortSignal,
   currentStep: HaapiStep | null
 ): Promise<ClientOperationResult> {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const launchUrl = new URL(action.model.arguments.href, window.location.origin);
     launchUrl.searchParams.set('for_origin', window.location.origin);
 
     const externalWindow = window.open(launchUrl);
     if (!externalWindow) {
       resolve({
-        clientOperationError: getHaapiStepperError(
-          getExternalBrowserFlowErrorMessage(EXTERNAL_BROWSER_FLOW_ERROR_TYPE.LAUNCH, currentStep)
-        ),
+        clientOperationError: getHaapiStepperError(getWindowOpenErrorMessage(currentStep)),
       });
       return;
     }
@@ -50,11 +47,7 @@ export function runExternalBrowserFlow(
       }
       if (event.origin !== launchUrl.origin || typeof event.data !== 'string') {
         cleanup(true);
-        resolve({
-          clientOperationError: getHaapiStepperError(
-            getExternalBrowserFlowErrorMessage(EXTERNAL_BROWSER_FLOW_ERROR_TYPE.RESUME, currentStep)
-          ),
-        });
+        reject(new Error(EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume));
         return;
       }
 
@@ -69,11 +62,7 @@ export function runExternalBrowserFlow(
 
     const onAbort = () => {
       cleanup(true);
-      resolve({
-        clientOperationError: getHaapiStepperError(
-          getExternalBrowserFlowErrorMessage(EXTERNAL_BROWSER_FLOW_ERROR_TYPE.RESUME, currentStep)
-        ),
-      });
+      resolve({ clientOperationData: { action: null } });
     };
 
     window.addEventListener('message', onMessage);
@@ -91,27 +80,16 @@ export function runExternalBrowserFlow(
   });
 }
 
-/**
- * Hardcoded English copy for each `EXTERNAL_BROWSER_FLOW_ERROR_TYPE` bucket. Used as the single
- * source of user-facing copy until the BE emits the equivalent
- * `step.metadata.viewData.error.clientOperation.externalBrowserFlow.<key>` keys (tracked
- * separately). When those keys land, switch `getExternalBrowserFlowErrorMessage` to read from
- * `currentStep` first and fall back to this map.
- */
 export const EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES = {
-  launch: 'External browser flow could not start.',
   resume: 'External browser flow could not be resumed.',
+  launch: 'External browser flow could not start.',
 } as const;
 
-function getExternalBrowserFlowErrorMessage(
-  type: EXTERNAL_BROWSER_FLOW_ERROR_TYPE,
-  currentStep: HaapiStep | null
-): string {
-  // `currentStep` is kept on the signature for forward-compat with BE-supplied viewData copy.
-  void currentStep;
-  return type === EXTERNAL_BROWSER_FLOW_ERROR_TYPE.LAUNCH
-    ? EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.launch
-    : EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume;
+function getWindowOpenErrorMessage(currentStep: HaapiStep | null): string {
+  return (
+    currentStep?.metadata?.viewData?.messages?.['authenticator.external-browser.launch.error.browser-window'] ??
+    EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.launch
+  );
 }
 
 export const isExternalBrowserFlowClientOperation = (

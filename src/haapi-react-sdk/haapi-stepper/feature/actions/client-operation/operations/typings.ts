@@ -14,14 +14,14 @@ import { HaapiStepperError } from '../../../stepper/haapi-stepper.types';
 
 /**
  * Discriminated-union return shape shared by all client-operation runners (WebAuthn,
- * external-browser-flow, BankID — as each ports onto this pattern per IS-11327).
+ * external-browser-flow, BankID).
  *
- * Runners always resolve. Success carries the continuation form action + payload; failure
- * carries a synthesised {@link HaapiStepperError} which `performClientOperation` forwards to the
- * stepper, which routes it through `setError` → `useHaapiStepper().error.app`. Programming
+ * Runners always resolve. Success carries the continuation form action + payload, or explicit null if no action
+ * should be taken; failure carries a synthesised {@link HaapiStepperError} which `performClientOperation` forwards
+ * to the stepper, which routes it through `setError` → `useHaapiStepper().error.app`. Programming
  * bugs / unexpected runtime errors are not represented here — those still throw and escape to
  * the React error boundary.
  */
 export type ClientOperationResult =
-  | { clientOperationData: HaapiFetchFormAction; clientOperationError?: undefined }
+  | { clientOperationData: HaapiFetchFormAction | { action: null }; clientOperationError?: undefined }
   | { clientOperationData?: undefined; clientOperationError: HaapiStepperError };
