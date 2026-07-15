@@ -17,7 +17,7 @@ import {
   webAuthnPlatformOnlyAnyDeviceActionTitle,
 } from '../../../../../util/tests/mocks';
 import { WebAuthnRegistrationAttachmentKind } from '../../../../stepper/haapi-stepper.types';
-import { getWebAuthnRegistrationAttachment } from './webauthn-registration-attachment';
+import { getAnyDeviceWebAuthnRegistrationAttachment } from './webauthn-registration-attachment';
 
 const PREFIX = 'authenticator.webauthn.register.view.';
 const PLATFORM_TITLE = 'Built-in';
@@ -31,9 +31,9 @@ const VIEW_DATA_MESSAGES = {
   [`${PREFIX}authenticator-attachment.cross-platform`]: CROSS_PLATFORM_DESCRIPTION,
 };
 
-describe('getWebAuthnRegistrationAttachment', () => {
+describe('getAnyDeviceWebAuthnRegistrationAttachment', () => {
   it('resolves the platform kind, localized title and description from the view-data messages', () => {
-    const result = getWebAuthnRegistrationAttachment(createMockWebAuthnPlatformOnlyAnyDeviceAction(), {
+    const result = getAnyDeviceWebAuthnRegistrationAttachment(createMockWebAuthnPlatformOnlyAnyDeviceAction(), {
       ...VIEW_DATA_MESSAGES,
       'authenticator.webauthn.register.page.title': 'Register a device',
     });
@@ -46,7 +46,7 @@ describe('getWebAuthnRegistrationAttachment', () => {
   });
 
   it('resolves the cross-platform copy for a cross-platform action', () => {
-    const result = getWebAuthnRegistrationAttachment(
+    const result = getAnyDeviceWebAuthnRegistrationAttachment(
       createMockWebAuthnCrossPlatformOnlyAnyDeviceAction(),
       VIEW_DATA_MESSAGES
     );
@@ -59,7 +59,10 @@ describe('getWebAuthnRegistrationAttachment', () => {
   });
 
   it('falls back to the action title and omits the description when there are no messages', () => {
-    const result = getWebAuthnRegistrationAttachment(createMockWebAuthnPlatformOnlyAnyDeviceAction(), undefined);
+    const result = getAnyDeviceWebAuthnRegistrationAttachment(
+      createMockWebAuthnPlatformOnlyAnyDeviceAction(),
+      undefined
+    );
 
     expect(result).toEqual({
       kind: WebAuthnRegistrationAttachmentKind.PLATFORM,

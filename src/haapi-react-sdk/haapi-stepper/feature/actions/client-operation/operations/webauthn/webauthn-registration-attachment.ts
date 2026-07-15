@@ -23,7 +23,7 @@ import { getWebAuthnRegistrationAttachmentKind } from './utils';
  *  - `title` / `description` — the attachment option copy looked up from `metadata.viewData.messages`,
  *    with the action title as the `title` fallback.
  */
-export function getWebAuthnRegistrationAttachment(
+export function getAnyDeviceWebAuthnRegistrationAttachment(
   action: HaapiWebAuthnAnyDeviceRegistrationAction,
   viewDataMessages?: Record<string, string>
 ): HaapiStepperWebAuthnRegistrationAttachment {

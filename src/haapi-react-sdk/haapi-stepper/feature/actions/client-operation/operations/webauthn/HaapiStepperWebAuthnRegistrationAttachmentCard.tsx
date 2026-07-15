@@ -11,7 +11,7 @@
 
 import { HaapiStepperWebAuthnAnyDeviceRegistrationAction } from '../../../../stepper/haapi-stepper.types';
 import { useHaapiStepper } from '../../../../stepper/HaapiStepperHook';
-import { getWebAuthnRegistrationAttachment } from './webauthn-registration-attachment';
+import { getAnyDeviceWebAuthnRegistrationAttachment } from './webauthn-registration-attachment';
 import { REGISTRATION_ATTACHMENT_ICON } from './webauthn-registration-attachment-icon-map';
 
 export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
@@ -34,7 +34,7 @@ export const HaapiStepperWebAuthnRegistrationAttachmentCard = ({
   onClick,
 }: HaapiStepperWebAuthnRegistrationAttachmentCardProps) => {
   const { currentStep } = useHaapiStepper();
-  const { kind, title, description } = getWebAuthnRegistrationAttachment(
+  const { kind, title, description } = getAnyDeviceWebAuthnRegistrationAttachment(
     action,
     currentStep?.metadata?.viewData?.messages
   );
