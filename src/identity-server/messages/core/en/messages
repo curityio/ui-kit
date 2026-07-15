@@ -20,6 +20,9 @@ error.identifier=Error identifier:
 authentication.success=You have successfully authenticated
 view.title.cancel=Cancel this operation
 
+meta.signin=Sign in
+meta.signin-to=Sign in to
+
 validation.error.username.required=Username is required
 error.password.update.failed=Password update failed
 

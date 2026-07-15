@@ -20,6 +20,9 @@ error.identifier=Felidentifierare:
 authentication.success=Du är inloggad
 view.title.cancel=Avbryt åtgärden
 
+meta.signin=Logga in
+meta.signin-to=Logga in på
+
 validation.error.username.required=Användarnamn måste anges
 error.password.update.failed=Misslyckades att uppdatera lösenordet
 
