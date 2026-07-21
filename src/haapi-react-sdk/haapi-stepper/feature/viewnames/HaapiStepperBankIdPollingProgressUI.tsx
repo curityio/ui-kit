@@ -59,8 +59,10 @@ export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiSteppe
 
   const [remaining, setRemaining] = useState(() => toSeconds(maxWaitRemainingTime));
 
+  const shouldCountDown = status === HAAPI_POLLING_STATUS.PENDING && remaining !== undefined && remaining > 0;
+
   useEffect(() => {
-    if (status !== HAAPI_POLLING_STATUS.PENDING) {
+    if (!shouldCountDown) {
       return;
     }
 
@@ -69,7 +71,7 @@ export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiSteppe
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [status]);
+  }, [shouldCountDown]);
 
   if (remaining === undefined || status !== HAAPI_POLLING_STATUS.PENDING) {
     return null;
