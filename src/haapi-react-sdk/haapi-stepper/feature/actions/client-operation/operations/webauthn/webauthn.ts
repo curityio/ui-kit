@@ -72,7 +72,7 @@ async function createWebAuthnRegistrationCredential(
   if (!isWebAuthnApiSupported()) {
     return {
       error: getHaapiStepperError(
-        getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
+        getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.NOT_SUPPORTED, WEBAUTHN_OPERATION.REGISTRATION, currentStep)
       ),
     };
   }
@@ -110,7 +110,7 @@ async function getWebAuthnAuthenticationCredential(
   if (!isWebAuthnApiSupported()) {
     return {
       error: getHaapiStepperError(
-        getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.FAILED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
+        getWebAuthnErrorMessage(WEBAUTHN_ERROR_TYPE.NOT_SUPPORTED, WEBAUTHN_OPERATION.AUTHENTICATION, currentStep)
       ),
     };
   }
@@ -144,23 +144,48 @@ async function getWebAuthnAuthenticationCredential(
 
 export const WEBAUTHN_ERROR_MESSAGES = {
   cancelOrTimeout: 'The operation was cancelled or timed out.',
+  notSupported: 'WebAuthn is currently not supported in this browser.',
   registration: 'Registration failed.',
   authentication: 'Authentication failed.',
 } as const;
+
+// The stable key suffix each error resolves to in `metadata.viewData.messages`. The full key's
+// prefix varies per authenticator + flow (webauthn/passkeys, register/authenticate-device), but the
+// step carries a single authenticator+flow, so a suffix match uniquely selects the localized copy.
+function getWebAuthnErrorViewDataSuffix(type: WEBAUTHN_ERROR_TYPE, operation: WEBAUTHN_OPERATION): string {
+  switch (type) {
+    case WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT:
+      return '.view.error.cancel-or-timeout';
+    case WEBAUTHN_ERROR_TYPE.NOT_SUPPORTED:
+      return '.view.error.not-supported';
+    case WEBAUTHN_ERROR_TYPE.FAILED:
+      return operation === WEBAUTHN_OPERATION.REGISTRATION ? '.view.error.registration' : '.view.error.authentication';
+  }
+}
+
+function getWebAuthnErrorFallback(type: WEBAUTHN_ERROR_TYPE, operation: WEBAUTHN_OPERATION): string {
+  switch (type) {
+    case WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT:
+      return WEBAUTHN_ERROR_MESSAGES.cancelOrTimeout;
+    case WEBAUTHN_ERROR_TYPE.NOT_SUPPORTED:
+      return WEBAUTHN_ERROR_MESSAGES.notSupported;
+    case WEBAUTHN_ERROR_TYPE.FAILED:
+      return operation === WEBAUTHN_OPERATION.REGISTRATION
+        ? WEBAUTHN_ERROR_MESSAGES.registration
+        : WEBAUTHN_ERROR_MESSAGES.authentication;
+  }
+}
 
 function getWebAuthnErrorMessage(
   type: WEBAUTHN_ERROR_TYPE,
   operation: WEBAUTHN_OPERATION,
   currentStep: HaapiStep | null
 ): string {
-  // `currentStep` is kept on the signature for forward-compat with BE-supplied viewData copy;
-  // until those keys land, every bucket resolves to a hardcoded string.
-  void currentStep;
-  return type === WEBAUTHN_ERROR_TYPE.CANCEL_OR_TIMEOUT
-    ? WEBAUTHN_ERROR_MESSAGES.cancelOrTimeout
-    : operation === WEBAUTHN_OPERATION.REGISTRATION
-      ? WEBAUTHN_ERROR_MESSAGES.registration
-      : WEBAUTHN_ERROR_MESSAGES.authentication;
+  const suffix = getWebAuthnErrorViewDataSuffix(type, operation);
+  const messages = currentStep?.metadata?.viewData?.messages ?? {};
+  const localizedMessage = Object.entries(messages).find(([key]) => key.endsWith(suffix))?.[1];
+
+  return localizedMessage?.length ? localizedMessage : getWebAuthnErrorFallback(type, operation);
 }
 
 function getWebAuthnErrorType(error: unknown): WEBAUTHN_ERROR_TYPE {
