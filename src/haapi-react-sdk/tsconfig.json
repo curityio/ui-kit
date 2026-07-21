@@ -21,6 +21,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
     "noUncheckedSideEffectImports": true,
   },
   "include": ["haapi-stepper", "setupTests.ts", "vitest.config.ts", "vite-env.d.ts"]

@@ -519,6 +519,9 @@ export function createProblemStep(problemType: HAAPI_PROBLEM_STEPS, overrides?: 
         ],
         ...overrides,
       } as HaapiUnexpectedProblemStep;
+
+    default:
+      throw new Error(`Unhandled problem type: ${problemType}`);
   }
 }
 
