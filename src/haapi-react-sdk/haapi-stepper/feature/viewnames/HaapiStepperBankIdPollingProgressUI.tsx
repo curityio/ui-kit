@@ -81,7 +81,9 @@ export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiSteppe
 
   return (
     <>
-      <progress className="haapi-stepper-polling-progress-bar" value={remaining} max={maxValue} aria-hidden="true" />
+      {maxValue !== undefined && (
+        <progress className="haapi-stepper-polling-progress-bar" value={remaining} max={maxValue} aria-hidden="true" />
+      )}
       {readoutLabel && (
         <p className="haapi-stepper-polling-progress-duration" data-testid="polling-progress-duration">
           <span>{readoutValue}</span> <span>{readoutLabel}</span>

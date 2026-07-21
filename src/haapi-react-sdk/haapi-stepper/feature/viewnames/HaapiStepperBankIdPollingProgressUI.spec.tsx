@@ -146,6 +146,20 @@ describe('HaapiStepperBankIdPollingProgressUI', () => {
     expect(screen.queryByTestId('polling-progress-duration')).not.toBeInTheDocument();
   });
 
+  it('renders the readout but no bar when the step has no max wait time', () => {
+    render(
+      <HaapiStepperBankIdPollingProgressUI
+        currentStep={createPollingStep({
+          maxWaitRemainingTime: '20',
+          viewDataMessages: { [QR_SECONDS_LEFT_KEY]: 'seconds left' },
+        })}
+      />
+    );
+
+    expect(screen.queryByRole('progressbar', { hidden: true })).not.toBeInTheDocument();
+    expect(screen.getByTestId('polling-progress-duration')).toHaveTextContent('20 seconds left');
+  });
+
   it('renders nothing when the polling step has no remaining wait time', () => {
     const { container } = render(
       <HaapiStepperBankIdPollingProgressUI currentStep={createPollingStep({ maxWaitTime: '60' })} />
