@@ -51,11 +51,11 @@ export function HaapiStepperSelectorUI({ action, onSubmit }: HaapiStepperSelecto
   return (
     <div className="haapi-stepper-selector" key={action.id} data-testid="selector-action">
       {action.title && <h2 data-testid="form-selector-title">{action.title}</h2>}
-      {options.map(option => {
-        if (option.subtype === HAAPI_ACTION_TYPES.FORM) {
-          return <HaapiStepperFormUI key={option.id} action={option} onSubmit={onSubmit} />;
-        }
-      })}
+      {options.map(option =>
+        option.subtype === HAAPI_ACTION_TYPES.FORM ? (
+          <HaapiStepperFormUI key={option.id} action={option} onSubmit={onSubmit} />
+        ) : null
+      )}
     </div>
   );
 }
