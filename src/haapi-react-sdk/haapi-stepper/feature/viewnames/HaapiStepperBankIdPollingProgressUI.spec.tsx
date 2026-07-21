@@ -91,48 +91,27 @@ describe('HaapiStepperBankIdPollingProgressUI', () => {
     expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '27');
   });
 
-  it('renders a minutes-left readout for minute-scale sessions when the label is present', () => {
+  // "1:00" at exactly 60s matches the Velocity reference (curity-ui.js _qrTimer).
+  it.each([
+    ['90', '1:30 minutes left'],
+    ['65', '1:05 minutes left'],
+    ['60', '1:00 minutes left'],
+    ['600', '10:00 minutes left'],
+    ['59', '59 seconds left'],
+    ['24', '24 seconds left'],
+    ['0', '0 seconds left'],
+  ])('formats %s seconds remaining as "%s"', (maxWaitRemainingTime, expected) => {
     render(
       <HaapiStepperBankIdPollingProgressUI
         currentStep={createPollingStep({
-          maxWaitTime: '120',
-          maxWaitRemainingTime: '90',
-          viewDataMessages: { [QR_MINUTES_LEFT_KEY]: 'minutes left' },
-        })}
-      />
-    );
-
-    expect(screen.getByTestId('polling-progress-duration')).toHaveTextContent('1 minutes left');
-  });
-
-  it('renders a seconds-left readout for second-scale sessions when the label is present', () => {
-    render(
-      <HaapiStepperBankIdPollingProgressUI
-        currentStep={createPollingStep({
-          maxWaitTime: '30',
-          maxWaitRemainingTime: '20',
-          viewDataMessages: { [QR_SECONDS_LEFT_KEY]: 'seconds left' },
-        })}
-      />
-    );
-
-    expect(screen.getByTestId('polling-progress-duration')).toHaveTextContent('20 seconds left');
-  });
-
-  it('shows seconds (not "0 minutes") when a minute-plus session has less than a minute remaining', () => {
-    render(
-      <HaapiStepperBankIdPollingProgressUI
-        currentStep={createPollingStep({
-          maxWaitTime: '120',
-          maxWaitRemainingTime: '24',
+          maxWaitTime: '600',
+          maxWaitRemainingTime,
           viewDataMessages: { [QR_MINUTES_LEFT_KEY]: 'minutes left', [QR_SECONDS_LEFT_KEY]: 'seconds left' },
         })}
       />
     );
 
-    const readout = screen.getByTestId('polling-progress-duration');
-    expect(readout).toHaveTextContent('24 seconds left');
-    expect(readout).not.toHaveTextContent('minutes');
+    expect(screen.getByTestId('polling-progress-duration')).toHaveTextContent(expected);
   });
 
   it('renders only the bar when the step has no unit labels', () => {

@@ -75,9 +75,14 @@ export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiSteppe
   }
 
   const maxValue = toSeconds(maxWaitTime);
-  const showMinutes = remaining >= 60;
+  const totalSeconds = Math.floor(remaining);
+  const showMinutes = totalSeconds >= 60;
   const readoutLabel = showMinutes ? minutesLeftLabel : secondsLeftLabel;
-  const readoutValue = showMinutes ? Math.floor(remaining / 60) : Math.floor(remaining);
+  // Match the Velocity reference (curity-ui.js `_qrTimer`): m:ss with two-digit seconds while at least
+  // a minute remains (e.g. "1:23"), plain seconds below that (e.g. "45").
+  const readoutValue = showMinutes
+    ? `${String(Math.floor(totalSeconds / 60))}:${String(totalSeconds % 60).padStart(2, '0')}`
+    : String(totalSeconds);
 
   return (
     <>
