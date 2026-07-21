@@ -26,7 +26,7 @@ export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
  * A single WebAuthn registration attachment-selection option, rendered as a clickable card
  * (icon + bold title + description).
  *
- * Exported so consumers building a custom WebAuthn registration UI can reuse it.
+ * Must be rendered within `HaapiStepper`, for the current active step's action.
  */
 export const HaapiStepperWebAuthnRegistrationAttachmentCard = ({
   action,

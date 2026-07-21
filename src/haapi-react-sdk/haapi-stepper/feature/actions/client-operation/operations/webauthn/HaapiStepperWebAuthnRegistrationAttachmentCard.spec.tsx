@@ -40,7 +40,7 @@ const mockCurrentStepMessages = (messages?: Record<string, string>) =>
 afterEach(() => vi.mocked(useHaapiStepper).mockReset());
 
 describe('HaapiStepperWebAuthnRegistrationAttachmentCard', () => {
-  it('renders the title, description and matching icon from the step`s data', () => {
+  it("renders the title, description and matching icon from the step's data", () => {
     mockCurrentStepMessages({
       [`${PREFIX}button.platform`]: PLATFORM_TITLE,
       [`${PREFIX}authenticator-attachment.platform`]: PLATFORM_DESCRIPTION,
