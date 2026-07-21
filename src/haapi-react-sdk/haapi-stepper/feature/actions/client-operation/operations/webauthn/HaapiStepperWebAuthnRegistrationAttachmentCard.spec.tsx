@@ -11,7 +11,7 @@
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   createMockWebAuthnCrossPlatformOnlyAnyDeviceAction,
@@ -36,6 +36,10 @@ const mockCurrentStepMessages = (messages?: Record<string, string>) =>
   vi.mocked(useHaapiStepper).mockReturnValue({
     currentStep: (messages ? { metadata: { viewData: { messages } } } : null) as HaapiStepperStep | null,
   } as ReturnType<typeof useHaapiStepper>);
+
+// Safe default so a test that forgets to configure the hook gets a clear assertion
+// failure rather than an opaque "cannot destructure currentStep" crash.
+beforeEach(() => mockCurrentStepMessages(undefined));
 
 afterEach(() => vi.mocked(useHaapiStepper).mockReset());
 
