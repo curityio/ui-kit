@@ -2052,7 +2052,7 @@ describe('HaapiStepperStepUI', () => {
           expect(screen.queryByTestId('client-operation-action')).not.toBeInTheDocument();
         });
 
-        it('should render the progress bar without a QR code (client-operation-only mode)', () => {
+        it('should not render the progress bar without a QR code (client-operation-only mode)', () => {
           const step = createPollingStep({
             links: [],
             actions: [createMockClientOperationAction({ title: 'Launch BankID App' })],
@@ -2062,7 +2062,7 @@ describe('HaapiStepperStepUI', () => {
 
           renderWithContext(<HaapiStepperStepUI />, { currentStep: step });
 
-          expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '30');
+          expect(screen.queryByRole('progressbar', { hidden: true })).not.toBeInTheDocument();
           expect(screen.queryByTestId('qr-code-button')).not.toBeInTheDocument();
         });
 
