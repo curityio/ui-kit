@@ -41,9 +41,10 @@ const toSeconds = (value?: number | string): number | undefined => {
  *
  * The remaining time is seeded from the step's `maxWaitRemainingTime` once and counted down locally,
  * one second at a time, clamped at 0. It is not re-synced on each poll: the server's remaining time
- * can only arrive later/higher than the local count (poll cadence + latency), so it would only ever
- * push the bar backwards. When the countdown reaches 0 the bar simply stays empty; the server decides
- * when the session actually ends by returning a failed polling step.
+ * can only arrive later/higher than the local count (poll cadence + latency), so re-syncing would only
+ * ever jerk the bar backwards. The bar shows elapsed time (so it fills toward timeout, matching the
+ * Velocity reference) while the readout counts remaining time down; the server decides when the session
+ * actually ends by returning a failed polling step.
  *
  * Accessibility: the bar is decorative (`aria-hidden`) — the adjacent numeric readout carries the
  * remaining-time text for assistive tech, and only renders when the localized unit label is present in
@@ -78,8 +79,6 @@ export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiSteppe
   const totalSeconds = Math.floor(remaining);
   const showMinutes = totalSeconds >= 60;
   const readoutLabel = showMinutes ? minutesLeftLabel : secondsLeftLabel;
-  // Match the Velocity reference (curity-ui.js `_qrTimer`): m:ss with two-digit seconds while at least
-  // a minute remains (e.g. "1:23"), plain seconds below that (e.g. "45").
   const readoutValue = showMinutes
     ? `${String(Math.floor(totalSeconds / 60))}:${String(totalSeconds % 60).padStart(2, '0')}`
     : String(totalSeconds);
@@ -87,7 +86,12 @@ export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiSteppe
   return (
     <>
       {maxValue !== undefined && (
-        <progress className="haapi-stepper-polling-progress-bar" value={remaining} max={maxValue} aria-hidden="true" />
+        <progress
+          className="haapi-stepper-polling-progress-bar"
+          value={maxValue - remaining}
+          max={maxValue}
+          aria-hidden="true"
+        />
       )}
       {readoutLabel && (
         <p className="haapi-stepper-polling-progress-duration" data-testid="polling-progress-duration">

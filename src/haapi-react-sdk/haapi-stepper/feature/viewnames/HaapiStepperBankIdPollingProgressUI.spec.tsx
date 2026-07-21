@@ -36,35 +36,35 @@ describe('HaapiStepperBankIdPollingProgressUI', () => {
     });
   };
 
-  it('renders a progress bar reflecting the session remaining time', () => {
+  it('fills the bar with the elapsed portion of the session', () => {
     render(
       <HaapiStepperBankIdPollingProgressUI
-        currentStep={createPollingStep({ maxWaitTime: '60', maxWaitRemainingTime: '30' })}
+        currentStep={createPollingStep({ maxWaitTime: '60', maxWaitRemainingTime: '20' })}
       />
     );
 
     const progress = screen.getByRole('progressbar', { hidden: true });
-    expect(progress).toHaveAttribute('value', '30');
+    expect(progress).toHaveAttribute('value', '40');
     expect(progress).toHaveAttribute('max', '60');
   });
 
-  it('counts the remaining time down once per second, clamped at zero', async () => {
+  it('fills the bar one second at a time, clamped at max', async () => {
     render(
       <HaapiStepperBankIdPollingProgressUI
         currentStep={createPollingStep({ maxWaitTime: '60', maxWaitRemainingTime: '3' })}
       />
     );
 
-    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '3');
+    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '57');
 
     await tick(1000);
-    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '2');
+    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '58');
 
     await tick(5000);
-    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '0');
+    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '60');
   });
 
-  it('counts down locally and ignores the server value on later polls', async () => {
+  it('progresses on the local countdown and ignores the server value on later polls', async () => {
     const { rerender } = render(
       <HaapiStepperBankIdPollingProgressUI
         currentStep={createPollingStep({ maxWaitTime: '60', maxWaitRemainingTime: '30' })}
@@ -72,23 +72,21 @@ describe('HaapiStepperBankIdPollingProgressUI', () => {
     );
 
     await tick(3000);
-    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '27');
+    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '33');
 
-    // A later poll reporting a different remaining time must not disturb the local countdown,
-    // whether it is lower or higher than the current local value.
     rerender(
       <HaapiStepperBankIdPollingProgressUI
         currentStep={createPollingStep({ maxWaitTime: '60', maxWaitRemainingTime: '20' })}
       />
     );
-    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '27');
+    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '33');
 
     rerender(
       <HaapiStepperBankIdPollingProgressUI
         currentStep={createPollingStep({ maxWaitTime: '60', maxWaitRemainingTime: '40' })}
       />
     );
-    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '27');
+    expect(screen.getByRole('progressbar', { hidden: true })).toHaveAttribute('value', '33');
   });
 
   // "1:00" at exactly 60s matches the Velocity reference (curity-ui.js _qrTimer).
