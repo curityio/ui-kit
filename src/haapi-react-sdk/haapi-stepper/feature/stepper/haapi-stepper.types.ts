@@ -138,18 +138,7 @@ export type HaapiStepperSelectorAction = Omit<HaapiSelectorAction, 'model'> &
     };
   };
 export type HaapiStepperClientOperationAction = HaapiClientOperationAction &
-  HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.ACTION, HAAPI_ACTION_TYPES.CLIENT_OPERATION> & {
-    /**
-     * WebAuthn data resolved during step-data formatting. Present only on any-device
-     * `webauthn-registration` actions.
-     */
-    webauthn?: HaapiStepperWebAuthnData;
-  };
-
-/** WebAuthn data resolved during step-data formatting for an any-device registration action. */
-export interface HaapiStepperWebAuthnData {
-  registrationAttachment: HaapiStepperWebAuthnRegistrationAttachment;
-}
+  HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.ACTION, HAAPI_ACTION_TYPES.CLIENT_OPERATION>;
 
 /** The registration attachment option a (split) any-device `webauthn-registration` action carries. */
 export interface HaapiStepperWebAuthnRegistrationAttachment {

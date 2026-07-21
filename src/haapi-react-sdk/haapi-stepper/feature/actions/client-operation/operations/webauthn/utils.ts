@@ -141,11 +141,10 @@ export function isAnyDeviceWebAuthnRegistrationAction(
 /**
  * Any-device `webauthn-registration` client operation — the only registration case that offers a
  * platform vs cross-platform attachment choice (passkeys mode collapses them into a single option).
- * This is exactly the case the built-in attachment-selection card is rendered for.
  */
-export function isAnyDeviceWebAuthnRegistrationClientOperation(
-  action: HaapiAction
-): action is HaapiWebAuthnAnyDeviceRegistrationAction {
+export function isAnyDeviceWebAuthnRegistrationClientOperation<T extends HaapiAction>(
+  action: T
+): action is T & HaapiWebAuthnAnyDeviceRegistrationAction {
   return isWebAuthnRegistrationClientOperation(action) && isAnyDeviceWebAuthnRegistrationAction(action);
 }
 

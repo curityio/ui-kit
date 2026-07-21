@@ -29,11 +29,9 @@ import {
   HaapiStepperUserMessage,
 } from '../haapi-stepper.types';
 import {
-  isAnyDeviceWebAuthnRegistrationClientOperation,
   isWebAuthnRegistrationClientOperation,
   splitWebAuthnRegistrationAction,
 } from '../../actions/client-operation/operations/webauthn';
-import { getWebAuthnData } from './webauthn-data';
 
 export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
@@ -96,16 +94,6 @@ function addActionDataHelpers(
         ...actionWithDataHelpers.model,
         options: actionWithDataHelpers.model.options.map(optionAction => addActionDataHelpers(optionAction, step)),
       },
-    };
-  }
-
-  if (
-    actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.CLIENT_OPERATION &&
-    isAnyDeviceWebAuthnRegistrationClientOperation(actionWithDataHelpers)
-  ) {
-    return {
-      ...actionWithDataHelpers,
-      webauthn: getWebAuthnData(actionWithDataHelpers, step.metadata?.viewData?.messages),
     };
   }
 

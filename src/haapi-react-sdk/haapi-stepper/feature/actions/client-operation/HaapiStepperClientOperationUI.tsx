@@ -11,6 +11,7 @@
 
 import { HaapiStepperClientOperationAction, HaapiStepperFormAction } from '../../stepper/haapi-stepper.types';
 import { HaapiStepperWebAuthnRegistrationAttachmentCard } from './operations/webauthn/HaapiStepperWebAuthnRegistrationAttachmentCard';
+import { isAnyDeviceWebAuthnRegistrationClientOperation } from './operations/webauthn';
 import { useIsClientOperationAvailable } from './useIsClientOperationAvailable';
 
 interface HaapiStepperClientOperationUIProps {
@@ -46,10 +47,10 @@ interface HaapiStepperClientOperationUIProps {
 export function HaapiStepperClientOperationUI({ action, onAction }: HaapiStepperClientOperationUIProps) {
   const isAvailable = useIsClientOperationAvailable(action);
 
-  if (action.webauthn?.registrationAttachment) {
+  if (isAnyDeviceWebAuthnRegistrationClientOperation(action)) {
     return (
       <HaapiStepperWebAuthnRegistrationAttachmentCard
-        registrationAttachment={action.webauthn.registrationAttachment}
+        action={action}
         disabled={!isAvailable}
         onClick={() => onAction(action)}
       />

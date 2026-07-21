@@ -9,12 +9,14 @@
  * For further information, please contact Curity AB.
  */
 
-import { HaapiStepperWebAuthnRegistrationAttachment } from '../../../../stepper/haapi-stepper.types';
+import { HaapiStepperWebAuthnAnyDeviceRegistrationAction } from '../../../../stepper/haapi-stepper.types';
+import { useHaapiStepper } from '../../../../stepper/HaapiStepperHook';
+import { getAnyDeviceWebAuthnRegistrationAttachment } from './webauthn-registration-attachment';
 import { REGISTRATION_ATTACHMENT_ICON } from './webauthn-registration-attachment-icon-map';
 
 export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
   /** The (split) any-device `webauthn-registration` action this option advances the flow with. */
-  registrationAttachment: HaapiStepperWebAuthnRegistrationAttachment;
+  action: HaapiStepperWebAuthnAnyDeviceRegistrationAction;
   /** Disables the card (e.g. when the required authenticator capability is unavailable). */
   disabled?: boolean;
   onClick: () => void;
@@ -24,14 +26,18 @@ export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
  * A single WebAuthn registration attachment-selection option, rendered as a clickable card
  * (icon + bold title + description).
  *
- * Exported so consumers building a custom WebAuthn registration UI can reuse it.
+ * Must be rendered within `HaapiStepper`, for the current active step's action.
  */
 export const HaapiStepperWebAuthnRegistrationAttachmentCard = ({
-  registrationAttachment,
+  action,
   disabled,
   onClick,
 }: HaapiStepperWebAuthnRegistrationAttachmentCardProps) => {
-  const { kind, title, description } = registrationAttachment;
+  const { currentStep } = useHaapiStepper();
+  const { kind, title, description } = getAnyDeviceWebAuthnRegistrationAttachment(
+    action,
+    currentStep?.metadata?.viewData?.messages
+  );
 
   return (
     <button

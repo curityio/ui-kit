@@ -9,22 +9,24 @@
  * For further information, please contact Curity AB.
  */
 
-import { HaapiWebAuthnAnyDeviceRegistrationAction } from '../../../data-access/types/haapi-action.types';
-import { HaapiStepperWebAuthnData, WebAuthnRegistrationAttachmentKind } from '../haapi-stepper.types';
-import { getWebAuthnRegistrationAttachmentKind } from '../../actions/client-operation/operations/webauthn';
+import { HaapiWebAuthnAnyDeviceRegistrationAction } from '../../../../../data-access/types/haapi-action.types';
+import {
+  HaapiStepperWebAuthnRegistrationAttachment,
+  WebAuthnRegistrationAttachmentKind,
+} from '../../../../stepper/haapi-stepper.types';
+import { getWebAuthnRegistrationAttachmentKind } from './utils';
 
 /**
- * Builds the `webauthn` data of a (split) any-device `webauthn-registration` action — its
- * `registrationAttachment`:
+ * Builds the registration attachment of a (split) any-device `webauthn-registration` action:
  *
  *  - `kind` — the attachment the action carries, derived from its `model.arguments`.
  *  - `title` / `description` — the attachment option copy looked up from `metadata.viewData.messages`,
  *    with the action title as the `title` fallback.
  */
-export function getWebAuthnData(
+export function getAnyDeviceWebAuthnRegistrationAttachment(
   action: HaapiWebAuthnAnyDeviceRegistrationAction,
   viewDataMessages?: Record<string, string>
-): HaapiStepperWebAuthnData {
+): HaapiStepperWebAuthnRegistrationAttachment {
   // The exact keys the webauthn authenticator uses for the attachment-selection copy.
   const attachmentKey = (property: 'button' | 'authenticator-attachment', kind: WebAuthnRegistrationAttachmentKind) =>
     `authenticator.webauthn.register.view.${property}.${kind}`;
@@ -34,10 +36,8 @@ export function getWebAuthnData(
   const description = viewDataMessages?.[attachmentKey('authenticator-attachment', kind)];
 
   return {
-    registrationAttachment: {
-      kind,
-      ...(title !== undefined && { title }),
-      ...(description !== undefined && { description }),
-    },
+    kind,
+    ...(title !== undefined && { title }),
+    ...(description !== undefined && { description }),
   };
 }
