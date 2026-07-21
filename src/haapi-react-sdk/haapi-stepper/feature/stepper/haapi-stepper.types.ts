@@ -139,10 +139,6 @@ export type HaapiStepperSelectorAction = Omit<HaapiSelectorAction, 'model'> &
   };
 export type HaapiStepperClientOperationAction = HaapiClientOperationAction &
   HaapiStepperDataHelpersDetails<HAAPI_STEPPER_ELEMENT_TYPES.ACTION, HAAPI_ACTION_TYPES.CLIENT_OPERATION> & {
-    /** Polling session maximum time in seconds before the session expires. */
-    maxWaitTime?: number;
-    /** Polling session remaining time in seconds before the session expires. */
-    maxWaitRemainingTime?: number;
     /**
      * WebAuthn data resolved during step-data formatting. Present only on any-device
      * `webauthn-registration` actions.

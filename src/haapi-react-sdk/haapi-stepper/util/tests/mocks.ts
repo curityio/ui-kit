@@ -12,6 +12,7 @@
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
+  HaapiStepperPollingStep,
   HaapiStepperAction,
   HaapiStepperFormAction,
   HaapiStepperSelectorAction,
@@ -205,20 +206,6 @@ export const createMockExternalBrowserFlowAction = (
     ...overrides,
   }) as HaapiStepperExternalBrowserFlowClientOperationAction;
 
-export const createMockBankIdAction = (
-  overrides: Partial<HaapiStepperClientOperationAction> = {}
-): HaapiStepperClientOperationAction =>
-  createMockClientOperationAction({
-    title: bankIdActionTitle,
-    kind: 'bankid',
-    model: {
-      name: HAAPI_ACTION_CLIENT_OPERATIONS.BANKID,
-      arguments: { href: '/bankid', autoStartToken: 'token' },
-      continueActions: [continueAction],
-    },
-    ...overrides,
-  });
-
 const PUBLIC_KEY = { publicKey: WEBAUTHN_PUBLIC_KEY };
 
 const webAuthnActionMetadata = {
@@ -283,17 +270,25 @@ export const createPollingStep = (
     links?: HaapiStepperLink[];
     actions?: HaapiStepperAction[];
     viewName?: string;
+    maxWaitTime?: string;
+    maxWaitRemainingTime?: string;
+    viewDataMessages?: Record<string, string>;
   } = {}
-) => {
+): HaapiStepperPollingStep => {
   return createMockStep(HAAPI_STEPS.POLLING, {
     metadata: {
       templateArea: 'lwa',
       viewName: overrides.viewName ?? HaapiStepperViewNameBuiltInUI.BANKID,
+      ...(overrides.viewDataMessages !== undefined && { viewData: { messages: overrides.viewDataMessages } }),
     },
-    properties: { status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING },
+    properties: {
+      status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING,
+      ...(overrides.maxWaitTime !== undefined && { maxWaitTime: overrides.maxWaitTime }),
+      ...(overrides.maxWaitRemainingTime !== undefined && { maxWaitRemainingTime: overrides.maxWaitRemainingTime }),
+    },
     ...(overrides.links !== undefined && { links: overrides.links }),
     ...(overrides.actions !== undefined && { actions: overrides.actions }),
-  });
+  }) as HaapiStepperPollingStep;
 };
 
 export const createMockQrLink = (overrides: Partial<HaapiStepperLink> = {}) => {

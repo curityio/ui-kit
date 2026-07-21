@@ -358,14 +358,18 @@ svg {
   width: min(100%, 100px);
 }
 
-.haapi-stepper-polling-progress {
-  @extend .mt2;
+.haapi-stepper-polling-progress-bar {
+  @extend .mt2, .mb2;
+  display: block;
+  width: 100%;
+  max-width: 250px;
+  margin-inline: auto;
+  border: none;
   border-radius: var(--form-field-border-radius);
   background-color: var(--color-grey-subtle);
-  outline: 1px solid var(--color-grey-light);
-  outline-offset: 2px;
-  border: none;
 
+  /* Set the track/fill at class specificity — the base `progress` element rules lose the cascade
+     here, which left the fill as the browser default (blue) instead of the brand colour. */
   &::-webkit-progress-bar {
     background-color: var(--color-grey-subtle);
     border-radius: var(--form-field-border-radius);
@@ -380,6 +384,11 @@ svg {
     background-color: var(--color-spot);
     border-radius: var(--form-field-border-radius);
   }
+}
+
+.haapi-stepper-polling-progress-duration {
+  @extend .center;
+  margin-block-start: var(--space-1);
 }
 
 .haapi-stepper-link-qr-code-button {

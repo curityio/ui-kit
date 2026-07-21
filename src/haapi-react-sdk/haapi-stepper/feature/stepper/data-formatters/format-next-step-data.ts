@@ -22,7 +22,6 @@ import {
 } from '../../../data-access/types';
 import {
   HaapiStepperAction,
-  HaapiStepperClientOperationAction,
   HaapiStepperDataHelpers,
   HaapiStepperDataHelpersActionsMap,
   HaapiStepperLink,
@@ -108,18 +107,6 @@ function addActionDataHelpers(
       ...actionWithDataHelpers,
       webauthn: getWebAuthnData(actionWithDataHelpers, step.metadata?.viewData?.messages),
     };
-  }
-
-  if (step.type === HAAPI_STEPS.POLLING && actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.CLIENT_OPERATION) {
-    const clientOperationPollingAction = {
-      ...actionWithDataHelpers,
-      ...(step.properties.maxWaitTime != null && { maxWaitTime: step.properties.maxWaitTime }),
-      ...(step.properties.maxWaitRemainingTime != null && {
-        maxWaitRemainingTime: step.properties.maxWaitRemainingTime,
-      }),
-    };
-
-    return clientOperationPollingAction as HaapiStepperClientOperationAction;
   }
 
   return { ...action, ...actionWithDataHelpers };

@@ -15,7 +15,6 @@ import userEvent from '@testing-library/user-event';
 
 import { HAAPI_STEPS } from '../../../data-access/types/haapi-step.types';
 import {
-  createMockBankIdAction,
   createMockExternalBrowserFlowAction,
   createMockStep,
   createMockWebAuthnAnyDeviceBothOptionsAction,
@@ -86,26 +85,6 @@ describe('HaapiStepperClientOperationUI', () => {
 
       expect(onAction).toHaveBeenCalledTimes(1);
       expect(onAction).toHaveBeenCalledWith(action);
-    });
-  });
-
-  describe('BankID polling progress', () => {
-    it('renders a progress bar reflecting the session remaining time', () => {
-      const action = createMockBankIdAction({ maxWaitTime: 60, maxWaitRemainingTime: 30 });
-
-      render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} />);
-
-      const progress = screen.getByRole('progressbar');
-      expect(progress).toHaveAttribute('value', '30');
-      expect(progress).toHaveAttribute('max', '60');
-    });
-
-    it('hides the progress bar when showBankIdSessionTimeLeft is false', () => {
-      const action = createMockBankIdAction({ maxWaitTime: 60, maxWaitRemainingTime: 30 });
-
-      render(<HaapiStepperClientOperationUI action={action} onAction={vi.fn()} showBankIdSessionTimeLeft={false} />);
-
-      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
     });
   });
 
