@@ -176,6 +176,24 @@ describe('webauthn', () => {
         });
       });
 
+      it('falls back to the English copy when the server message is an empty string', async () => {
+        mockCredentialsCreate.mockResolvedValue(null);
+        const stepWithEmptyMessage = stepWithMessages({
+          'authenticator.webauthn.register.view.error.registration': '',
+        });
+
+        await expect(
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, stepWithEmptyMessage)
+        ).resolves.toMatchObject({
+          clientOperationError: {
+            app: {
+              type: HAAPI_PROBLEM_STEPS.UNEXPECTED,
+              messages: [{ text: WEBAUTHN_ERROR_MESSAGES.registration }],
+            },
+          },
+        });
+      });
+
       describe('parseCreationOptionsFromJSON throws', () => {
         it.each(['EncodingError', 'SecurityError'] as const)(
           '%s → registration copy (failed bucket)',
@@ -302,9 +320,9 @@ describe('webauthn', () => {
           },
         });
 
-        const localizedErrorMessage = 'WebAuthn stöds inte i denna webbläsare.';
+        const localizedErrorMessage = 'Passkeys stöds inte i denna webbläsare.';
         const localizedStep = stepWithMessages({
-          'authenticator.webauthn.authenticate-device.view.error.not-supported': localizedErrorMessage,
+          'authenticator.passkeys.authenticate-device.view.error.not-supported': localizedErrorMessage,
         });
         await expect(
           runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, localizedStep)
@@ -458,6 +476,55 @@ describe('webauthn', () => {
           }
         );
       });
+    });
+  });
+
+  describe('selects the matching error copy from a full view-data message set', () => {
+    const registrationErrors = (prefix: string) => ({
+      [`${prefix}.register.view.error.registration`]: `${prefix} registration failed`,
+      [`${prefix}.register.view.error.cancel-or-timeout`]: `${prefix} registration cancelled`,
+      [`${prefix}.register.view.error.not-supported`]: `${prefix} registration not supported`,
+    });
+    const authenticationErrors = (prefix: string) => ({
+      [`${prefix}.authenticate-device.view.error.authentication`]: `${prefix} authentication failed`,
+      [`${prefix}.authenticate-device.view.error.cancel-or-timeout`]: `${prefix} authentication cancelled`,
+      [`${prefix}.authenticate-device.view.error.not-supported`]: `${prefix} authentication not supported`,
+    });
+
+    it.each(['authenticator.webauthn', 'authenticator.passkeys'])('registration errors (%s)', async prefix => {
+      const messages = registrationErrors(prefix);
+      const step = stepWithMessages(messages);
+      const expectRegistrationError = (text: string) =>
+        expect(
+          runWebAuthnRegistration(createMockWebAuthnRegistrationAction(), abortSignal, step)
+        ).resolves.toMatchObject({ clientOperationError: { app: { messages: [{ text }] } } });
+
+      mockCredentialsCreate.mockResolvedValue(null);
+      await expectRegistrationError(messages[`${prefix}.register.view.error.registration`]);
+
+      mockCredentialsCreate.mockRejectedValue(new DOMException('cancelled', 'NotAllowedError'));
+      await expectRegistrationError(messages[`${prefix}.register.view.error.cancel-or-timeout`]);
+
+      vi.unstubAllGlobals();
+      await expectRegistrationError(messages[`${prefix}.register.view.error.not-supported`]);
+    });
+
+    it.each(['authenticator.webauthn', 'authenticator.passkeys'])('authentication errors (%s)', async prefix => {
+      const messages = authenticationErrors(prefix);
+      const step = stepWithMessages(messages);
+      const expectAuthenticationError = (text: string) =>
+        expect(
+          runWebAuthnAuthentication(createMockWebAuthnAuthenticationAction(), abortSignal, step)
+        ).resolves.toMatchObject({ clientOperationError: { app: { messages: [{ text }] } } });
+
+      mockCredentialsGet.mockResolvedValue(null);
+      await expectAuthenticationError(messages[`${prefix}.authenticate-device.view.error.authentication`]);
+
+      mockCredentialsGet.mockRejectedValue(new DOMException('cancelled', 'NotAllowedError'));
+      await expectAuthenticationError(messages[`${prefix}.authenticate-device.view.error.cancel-or-timeout`]);
+
+      vi.unstubAllGlobals();
+      await expectAuthenticationError(messages[`${prefix}.authenticate-device.view.error.not-supported`]);
     });
   });
 });

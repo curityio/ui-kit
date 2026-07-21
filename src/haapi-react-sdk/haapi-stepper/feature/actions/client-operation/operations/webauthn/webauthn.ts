@@ -185,7 +185,7 @@ function getWebAuthnErrorMessage(
   const messages = currentStep?.metadata?.viewData?.messages ?? {};
   const localizedMessage = Object.entries(messages).find(([key]) => key.endsWith(suffix))?.[1];
 
-  return localizedMessage ?? getWebAuthnErrorFallback(type, operation);
+  return localizedMessage?.length ? localizedMessage : getWebAuthnErrorFallback(type, operation);
 }
 
 function getWebAuthnErrorType(error: unknown): WEBAUTHN_ERROR_TYPE {
