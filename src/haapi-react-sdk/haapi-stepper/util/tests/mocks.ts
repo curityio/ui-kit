@@ -206,20 +206,6 @@ export const createMockExternalBrowserFlowAction = (
     ...overrides,
   }) as HaapiStepperExternalBrowserFlowClientOperationAction;
 
-export const createMockBankIdAction = (
-  overrides: Partial<HaapiStepperClientOperationAction> = {}
-): HaapiStepperClientOperationAction =>
-  createMockClientOperationAction({
-    title: bankIdActionTitle,
-    kind: 'bankid',
-    model: {
-      name: HAAPI_ACTION_CLIENT_OPERATIONS.BANKID,
-      arguments: { href: '/bankid', autoStartToken: 'token' },
-      continueActions: [continueAction],
-    },
-    ...overrides,
-  });
-
 const PUBLIC_KEY = { publicKey: WEBAUTHN_PUBLIC_KEY };
 
 const webAuthnActionMetadata = {
