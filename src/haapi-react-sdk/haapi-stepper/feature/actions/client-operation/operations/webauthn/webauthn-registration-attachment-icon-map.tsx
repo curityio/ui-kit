@@ -10,15 +10,15 @@
  */
 
 import type { ReactNode } from 'react';
+import { IconAuthenticatorWebauthnCrossPlatform, IconAuthenticatorWebauthnPlatform } from '@curity/ui-kit-icons';
 
 import { WebAuthnRegistrationAttachmentKind } from '../../../../stepper/haapi-stepper.types';
-import { IconWebAuthnCrossPlatform, IconWebAuthnPlatform } from './webauthn-registration-attachment-icons';
 
 /**
- * Maps each WebAuthn attachment kind to its inline icon. Kept apart from the icon component module
- * so that file only exports components (react-refresh constraint).
+ * Maps each WebAuthn attachment kind to its icon from the shared `@curity/ui-kit-icons` package.
+ * The icons use `currentColor`, so their color follows the surrounding text color.
  */
 export const REGISTRATION_ATTACHMENT_ICON: Record<WebAuthnRegistrationAttachmentKind, ReactNode> = {
-  [WebAuthnRegistrationAttachmentKind.PLATFORM]: <IconWebAuthnPlatform />,
-  [WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM]: <IconWebAuthnCrossPlatform />,
+  [WebAuthnRegistrationAttachmentKind.PLATFORM]: <IconAuthenticatorWebauthnPlatform />,
+  [WebAuthnRegistrationAttachmentKind.CROSS_PLATFORM]: <IconAuthenticatorWebauthnCrossPlatform />,
 };

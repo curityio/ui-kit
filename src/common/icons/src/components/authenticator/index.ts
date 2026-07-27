@@ -40,5 +40,7 @@ export { default as IconAuthenticatorStackexchange } from './IconAuthenticatorSt
 export { default as IconAuthenticatorTotp } from './IconAuthenticatorTotp';
 export { default as IconAuthenticatorUser } from './IconAuthenticatorUser';
 export { default as IconAuthenticatorWebauthn } from './IconAuthenticatorWebauthn';
+export { default as IconAuthenticatorWebauthnCrossPlatform } from './IconAuthenticatorWebauthnCrossPlatform';
+export { default as IconAuthenticatorWebauthnPlatform } from './IconAuthenticatorWebauthnPlatform';
 export { default as IconAuthenticatorWindows } from './IconAuthenticatorWindows';
 export { default as IconAuthenticatorX } from './IconAuthenticatorX';

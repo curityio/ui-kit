@@ -298,8 +298,9 @@ svg {
 }
 
 .haapi-stepper-webauthn-registration-attachment {
-  @extend .flex, .flex-center, .flex-gap-3, .w100, .mt2, .p3, .left-align;
+  @extend .button, .w100, .mb2, .p3;
 
+  justify-content: unset;
   background-color: transparent;
   color: var(--color-text);
   border: var(--form-field-border-width) var(--form-field-border-style) var(--form-field-border-color);
@@ -315,24 +316,12 @@ svg {
     background-color: var(--button-color);
     border-color: var(--button-color);
     color: white;
-
-    .haapi-stepper-webauthn-registration-attachment-icon {
-      color: white;
-    }
   }
 }
 
 .haapi-stepper-webauthn-registration-attachment-icon {
-  @extend .inline-flex, .flex-noshrink;
-
   width: 48px;
   height: 48px;
-  color: #626c87;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
 }
 
 .haapi-stepper-webauthn-registration-attachment-title {
