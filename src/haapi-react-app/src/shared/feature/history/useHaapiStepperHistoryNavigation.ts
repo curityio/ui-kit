@@ -40,6 +40,9 @@ interface BrowserHistory {
  * recorded as a browser entry, and pressing back/forward re-opens the corresponding step via `nextStep`.
  *
  * Non-reproducible steps:
+ * A step is *reproducible* when the action that produced it can be safely re-issued to reconstruct it — a GET
+ * link or a GET form. *Non-reproducible* steps (POST forms, client operations such as BankID / WebAuthn) can't
+ * be re-issued (they may mutate state or consume single-use tokens), so back/forward must not re-open them.
  * In order to match the browser navigation index with the `HaapiStepper` steps history (stored in `browserHistoryRef`),
  * the browser history keeps track of all the steps the user has reached, even if they are non-reproducible. As a result,
  * when navigating back/forward we have to skip over them to the nearest reproducible step in that direction, and sync
