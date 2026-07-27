@@ -298,7 +298,7 @@ svg {
 }
 
 .haapi-stepper-webauthn-registration-attachment {
-  @extend .button, .w100, .mb2, .p3;
+  @extend .button, .w100, .mb2, .p3, .left-align;
 
   justify-content: unset;
   background-color: transparent;
@@ -320,8 +320,9 @@ svg {
 }
 
 .haapi-stepper-webauthn-registration-attachment-icon {
-  width: 48px;
-  height: 48px;
+  @extend .flex-noshrink;
+  width: 60px;
+  height: 60px;
 }
 
 .haapi-stepper-webauthn-registration-attachment-title {
