@@ -10,7 +10,7 @@
  */
 
 import { useHaapiAppConfig } from '../../feature/app-config/HaapiAppConfigHook';
-import { resolvePageSymbol } from '../../util/resolve-page-symbol';
+import { resolvePageSymbol } from '../../util/page-symbol-utils';
 
 interface PageSymbolProps {
   viewName: string | undefined;

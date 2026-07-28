@@ -69,6 +69,7 @@ export interface HaapiStepperAPI {
   nextStep: HaapiStepperNextStep;
   // Complete history of all steps and actions taken
   history: HaapiStepperHistoryEntry[];
+  config: HaapiStepperConfig;
 }
 
 /*
@@ -85,6 +86,22 @@ export interface HaapiStepperConfig {
 export interface HaapiStepperBootstrapConfig {
   initialUrl: string;
   haapi: HaapiConfiguration;
+  theme: {
+    logo?: {
+      path: string;
+      isInsideWell: boolean;
+    };
+    pageSymbols?: HaapiStepperPageSymbols;
+  };
+}
+
+export interface HaapiStepperPageSymbols {
+  /** Map of full HAAPI viewName -> symbol path. Highest precedence. */
+  views?: Record<string, string>;
+  /** Map of plugin implementation type (e.g. `html-form`, `bankid`) -> symbol path. */
+  plugins?: Record<string, string>;
+  /** Fallback symbol path used when no per-view / per-plugin entry matches. */
+  default?: string;
 }
 
 declare global {

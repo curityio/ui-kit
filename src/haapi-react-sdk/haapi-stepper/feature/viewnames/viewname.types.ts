@@ -18,4 +18,5 @@
  */
 export enum HaapiStepperViewNameBuiltInUI {
   BANKID = 'authenticator/bankid/wait/index',
+  USER_CONSENT = 'views/oauth/consent',
 }

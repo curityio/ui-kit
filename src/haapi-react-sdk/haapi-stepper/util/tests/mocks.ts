@@ -164,6 +164,20 @@ export const defaultStepperAPI: HaapiStepperAPI = {
   error: null,
   history: [],
   nextStep: mockNextStep,
+  config: {
+    bootstrap: {
+      initialUrl: '/start',
+      haapi: {
+        clientId: 'client',
+        tokenEndpoint: '/token',
+      },
+      theme: {},
+    },
+    pollingInterval: 0,
+    bankIdAutostart: false,
+    webAuthnAutostart: false,
+    autoRedirectOnAuthenticationComplete: false,
+  },
 };
 
 // ============================================================================
@@ -289,6 +303,18 @@ export const createPollingStep = (
     ...(overrides.links !== undefined && { links: overrides.links }),
     ...(overrides.actions !== undefined && { actions: overrides.actions }),
   }) as HaapiStepperPollingStep;
+};
+
+/**
+ * Builds a user consent step mock, optionally with a `clientLogo` in view data.
+ */
+export const createUserConsentStep = ({ clientLogo }: { clientLogo?: string } = {}): HaapiStepperStep => {
+  return createMockStep(HAAPI_STEPS.USER_CONSENT, {
+    metadata: {
+      viewName: HaapiStepperViewNameBuiltInUI.USER_CONSENT,
+      ...(clientLogo !== undefined && { viewData: { clientLogo } }),
+    },
+  });
 };
 
 export const createMockQrLink = (overrides: Partial<HaapiStepperLink> = {}) => {

@@ -12,12 +12,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { Layout } from '../Layout/Layout';
-import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepperContext';
-import type { PageSymbols } from '../../feature/app-config/types';
+import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import type {
   HaapiStepperAPI,
   HaapiStepperStep,
-} from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+  HaapiStepperPageSymbols,
+} from '@curity/haapi-react-sdk/haapi-stepper/feature';
+import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 import type { HaapiAppConfig } from '../../feature/app-config/types';
 import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
 
@@ -82,23 +83,25 @@ describe('Layout', () => {
 
       expect(container.querySelector('img.haapi-stepper-page-symbol-image')).toBeNull();
     });
+
+    it('page symbol is not rendered for a user consent step, even when one is configured for its viewName', () => {
+      const { container, getByTestId } = renderLayout({
+        pageSymbols: { views: { 'views/oauth/consent': '/symbols/consent.svg' } },
+        currentStep: stepWithViewName('views/oauth/consent', HAAPI_STEPS.USER_CONSENT),
+      });
+
+      expect(container.querySelector('img.haapi-stepper-page-symbol-image')).toBeNull();
+      expect(getByTestId('content')).toBeInTheDocument();
+    });
   });
 });
 
-const emptyStepperAPI: HaapiStepperAPI = {
-  loading: false,
-  history: [],
-  nextStep: vi.fn(),
-  currentStep: null,
-  error: null,
-};
-
-const stepWithViewName = (viewName: string): HaapiStepperStep =>
-  ({ metadata: { templateArea: 'lwa', viewName } }) as unknown as HaapiStepperStep;
+const stepWithViewName = (viewName: string, type?: HAAPI_STEPS): HaapiStepperStep =>
+  ({ type, metadata: { viewName } }) as unknown as HaapiStepperStep;
 
 interface LayoutHarnessOptions {
   isInsideWell?: boolean;
-  pageSymbols?: PageSymbols;
+  pageSymbols?: HaapiStepperPageSymbols;
   currentStep?: HaapiStepperStep | null;
   withoutLogo?: boolean;
 }
@@ -114,10 +117,24 @@ const renderLayout = ({
     haapi: {} as HaapiAppConfig['haapi'],
     theme: { logo: withoutLogo ? undefined : { path: '/assets/logo.svg', isInsideWell }, pageSymbols },
   };
-  const stepper: HaapiStepperAPI = { ...emptyStepperAPI, currentStep };
+  const stepperAPI: HaapiStepperAPI = {
+    loading: false,
+    history: [],
+    nextStep: vi.fn(),
+    currentStep,
+    error: null,
+    config: {
+      bootstrap: config,
+      pollingInterval: 0,
+      bankIdAutostart: false,
+      webAuthnAutostart: false,
+      autoRedirectOnAuthenticationComplete: false,
+    },
+  };
+
   return render(
     <HaapiAppConfigContext value={config}>
-      <HaapiStepperContext value={stepper}>
+      <HaapiStepperContext value={stepperAPI}>
         <Layout>
           <div data-testid="content" />
         </Layout>

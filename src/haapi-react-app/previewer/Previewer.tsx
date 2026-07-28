@@ -49,6 +49,13 @@ const baseContextValue: Omit<HaapiStepperAPI, 'currentStep' | 'error'> = {
   loading: false,
   nextStep,
   history: [],
+  config: {
+    bootstrap: mockAppConfig,
+    pollingInterval: 0,
+    bankIdAutostart: false,
+    webAuthnAutostart: false,
+    autoRedirectOnAuthenticationComplete: false,
+  },
 };
 
 export function Previewer() {
