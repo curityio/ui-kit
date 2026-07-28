@@ -13,7 +13,10 @@ import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
-import { HAAPI_STEPPER_ELEMENT_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
+import {
+  HAAPI_STEPPER_ELEMENT_TYPES,
+  HAAPI_STEPS,
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import type {
   HaapiStepperFormAction,
   HaapiStepperHistoryEntry,
@@ -108,7 +111,26 @@ function setup() {
     rerender({ h: fake.nav });
   };
 
-  return { nextStep, fake, reachStep };
+  // Simulates a polling tick: a POLLING step whose GET poll action carries a fresh id each time (as the SDK
+  // stamps a new UUID per tick).
+  const reachPollingStep = () => {
+    const pollAction = {
+      id: `poll-${history.length}`,
+      template: HAAPI_ACTION_TYPES.FORM,
+      model: { method: HTTP_METHODS.GET },
+    } as HaapiStepperNextStepAction;
+    history = [
+      ...history,
+      {
+        step: { type: HAAPI_STEPS.POLLING },
+        triggeredByAction: pollAction,
+        timestamp: new Date(),
+      } as HaapiStepperHistoryEntry,
+    ];
+    rerender({ h: fake.nav });
+  };
+
+  return { nextStep, fake, reachStep, reachPollingStep };
 }
 
 describe('useHaapiStepperHistoryNavigation', () => {
@@ -218,6 +240,23 @@ describe('useHaapiStepperHistoryNavigation', () => {
     expect(fake.raw.pushEntry).toHaveBeenCalledTimes(2);
     expect(fake.raw.pushEntry).toHaveBeenNthCalledWith(1, { index: 1 }); // getForm
     expect(fake.raw.pushEntry).toHaveBeenNthCalledWith(2, { index: 1 }); // postForm replaced it
+  });
+
+  it('does not record browser entries for polling steps, so they never flood the history', () => {
+    const { fake, reachStep, reachPollingStep } = setup();
+    reachStep(link); // 0 — reproducible, recorded once
+    reachPollingStep(); // tick 1 — skipped
+    reachPollingStep(); // tick 2 — skipped
+    reachPollingStep(); // tick 3 — skipped
+
+    // Polling added nothing: only link@0 was recorded.
+    expect(fake.raw.replaceEntry).toHaveBeenCalledTimes(1);
+    expect(fake.raw.pushEntry).not.toHaveBeenCalled();
+
+    // The next real step after polling takes index 1 — polling consumed no indices.
+    reachStep(getForm);
+    expect(fake.raw.pushEntry).toHaveBeenCalledTimes(1);
+    expect(fake.raw.pushEntry).toHaveBeenCalledWith({ index: 1 });
   });
 
   it('does not record a new entry when a step is re-opened via back navigation', () => {

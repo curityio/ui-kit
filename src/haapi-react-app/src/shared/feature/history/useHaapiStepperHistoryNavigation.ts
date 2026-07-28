@@ -11,6 +11,7 @@
 
 import { type RefObject, useEffect, useRef } from 'react';
 import { useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
+import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import type {
   HaapiStepperAPI,
   HaapiStepperHistoryEntry,
@@ -99,26 +100,41 @@ function syncBrowserHistoryOnStepperHistoryChange(
   const currentBrowserHistoryEntry =
     currentBrowserHistoryIndex >= 0 ? currentBrowserHistoryEntries[currentBrowserHistoryIndex] : undefined;
 
-  if (isSameStepperHistoryEntry(currentBrowserHistoryEntry, currentStepperHistoryEntry)) {
+  const updateBrowserHistoryAndNavigation =
+    !isSameStepperHistoryEntry(currentBrowserHistoryEntry, currentStepperHistoryEntry) &&
+    currentStepperHistoryEntry.step.type !== HAAPI_STEPS.POLLING;
+
+  if (!updateBrowserHistoryAndNavigation) {
     return;
   }
 
   const nextBrowserHistoryIndex = currentBrowserHistoryIndex + 1;
+  updateBrowserHistory(browserHistoryRef, currentStepperHistoryEntry, nextBrowserHistoryIndex);
+  updateBrowserNavigation(browserNavigation, nextBrowserHistoryIndex);
+}
+
+function updateBrowserHistory(
+  browserHistoryRef: RefObject<BrowserHistory>,
+  stepperHistoryEntry: HaapiStepperHistoryEntry,
+  nextBrowserHistoryIndex: number
+): void {
   /*
    * If the user navigates back and then takes a new action, the browser drops those forward entries (steps).
    * We mirror it by keeping only the entries up to the current step before appending the new one.
    */
-  const entriesUpToCurrentStep = currentBrowserHistoryEntries.slice(0, nextBrowserHistoryIndex);
+  const entriesUpToCurrentStep = browserHistoryRef.current.entries.slice(0, nextBrowserHistoryIndex);
   const nextBrowserHistoryEntry = {
-    reproducible: isReproducibleHistoryEntry(currentStepperHistoryEntry),
-    action: currentStepperHistoryEntry.triggeredByAction,
-    payload: currentStepperHistoryEntry.triggeredByPayload,
+    reproducible: isReproducibleHistoryEntry(stepperHistoryEntry),
+    action: stepperHistoryEntry.triggeredByAction,
+    payload: stepperHistoryEntry.triggeredByPayload,
   };
   browserHistoryRef.current = {
     entries: [...entriesUpToCurrentStep, nextBrowserHistoryEntry],
     index: nextBrowserHistoryIndex,
   };
+}
 
+function updateBrowserNavigation(browserNavigation: HistoryNavigation, nextBrowserHistoryIndex: number): void {
   const browserHistoryEntryIndex = { index: nextBrowserHistoryIndex } satisfies BrowserHistoryEntryIndex;
   if (nextBrowserHistoryIndex === 0) {
     // The first step reuses the history entry the app was loaded with instead of pushing a new one.

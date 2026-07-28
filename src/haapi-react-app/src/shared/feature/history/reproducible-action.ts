@@ -11,6 +11,7 @@
 
 import { HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
+import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import type {
   HaapiStepperHistoryEntry,
   HaapiStepperNextStepAction,
@@ -51,5 +52,9 @@ export function isReproducibleAction(action: HaapiStepperNextStepAction): boolea
  * produced it is reproducible (see {@link isReproducibleAction}).
  */
 export function isReproducibleHistoryEntry(entry: HaapiStepperHistoryEntry): boolean {
+  if (entry.step.type === HAAPI_STEPS.POLLING) {
+    return false;
+  }
+
   return isReproducibleAction(entry.triggeredByAction);
 }

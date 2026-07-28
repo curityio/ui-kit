@@ -12,7 +12,10 @@
 import { describe, expect, it } from 'vitest';
 import { HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
-import { HAAPI_STEPPER_ELEMENT_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
+import {
+  HAAPI_STEPPER_ELEMENT_TYPES,
+  HAAPI_STEPS,
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import type {
   HaapiStepperClientOperationAction,
   HaapiStepperFormAction,
@@ -45,10 +48,10 @@ describe('isReproducibleAction', () => {
   });
 });
 
-describe('isReproducibleHistoryEntry', () => {
-  const entryFor = (action: HaapiStepperNextStepAction): HaapiStepperHistoryEntry =>
-    ({ step: {}, triggeredByAction: action, timestamp: new Date() }) as HaapiStepperHistoryEntry;
+const entryFor = (action: HaapiStepperNextStepAction, stepType?: HAAPI_STEPS): HaapiStepperHistoryEntry =>
+  ({ step: { type: stepType }, triggeredByAction: action, timestamp: new Date() }) as HaapiStepperHistoryEntry;
 
+describe('isReproducibleHistoryEntry', () => {
   it('is reproducible when the entry was produced by a reproducible action', () => {
     expect(isReproducibleHistoryEntry(entryFor(link))).toBe(true);
     expect(isReproducibleHistoryEntry(entryFor(formWith(HTTP_METHODS.GET)))).toBe(true);
@@ -57,5 +60,9 @@ describe('isReproducibleHistoryEntry', () => {
   it('is not reproducible when the entry was produced by a non-reproducible action', () => {
     expect(isReproducibleHistoryEntry(entryFor(formWith(HTTP_METHODS.POST)))).toBe(false);
     expect(isReproducibleHistoryEntry(entryFor(clientOperation))).toBe(false);
+  });
+
+  it('is not reproducible for a polling step even though its poll action is a GET form', () => {
+    expect(isReproducibleHistoryEntry(entryFor(formWith(HTTP_METHODS.GET), HAAPI_STEPS.POLLING))).toBe(false);
   });
 });
