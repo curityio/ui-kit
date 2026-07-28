@@ -153,9 +153,11 @@ function syncStepperHistoryOnBrowserHistoryChange(
       haapiStepperRef.current,
       currentBrowserHistoryEntries[destinationBrowserHistoryIndex]
     );
+    // Update the in-memory index before triggering another `popstate` via `history.go(...)`.
+    browserHistoryRef.current = { ...browserHistoryRef.current, index: destinationBrowserHistoryIndex };
     // If we skipped over non-reproducible entries, move the browser onto the step we actually re-opened.
     moveBrowserHistoryTo(destinationBrowserHistoryIndex, currentBrowserHistoryIndex, browserNavigation);
-    browserHistoryRef.current = { ...browserHistoryRef.current, index: destinationBrowserHistoryIndex };
+  }
   } else {
     // Nothing reproducible in that direction (before the first step, or forward into a non-reproducible
     // step) — keep the user where they are.
