@@ -75,7 +75,7 @@ There are two options how to take the SSP application into use:
 
 ### SSP served under the Identity Server
 
-In this scenario no `.env` file is needed — the Identity Server injects the configuration into the html template at runtime.
+In this scenario, no `.env` file is needed — the Identity Server injects the configuration into the HTML template at runtime.
 
 1. Copy the contents of the `dist/assets` directory to the Identity Server under the following path:
    `${IDSVR_HOME}/usr/share/webroot/assets/apps/self-service-portal/`
