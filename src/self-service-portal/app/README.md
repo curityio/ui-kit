@@ -79,10 +79,9 @@ In this scenario no `.env` file is needed — the Identity Server injects the co
 
 1. Copy the contents of the `dist/assets` directory to the Identity Server under the following path:
    `${IDSVR_HOME}/usr/share/webroot/assets/apps/self-service-portal/`
-2. Strip the build hash from the names of the copied `.js`, `.css` and `.png` files, i.e. remove everything from
-   the first `-` up to the file extension (e.g. `index-CGtZaNre.js` → `index.js`, `index-C6-sz5cl.css` → `index.css`,
-   `favicon-N3oNuNFs.png` → `favicon.png`). The Identity Server html template references these files without the hash.
-   Leave the names of all other files (e.g. fonts) unchanged, as they are referenced by their hashed names.
+2. Rename the copied entrypoint assets to match what the Identity Server html template references:
+   `index-*.js` → `index.js`, `index-*.css` → `index.css`, `favicon-*.png` → `favicon.png`.
+   Do not rename other hashed assets (eg chunks, fonts, images), since they are referenced by their hashed names.
 3. In case the html template needs to be customized, check the parent README.md for instructions.
 4. Create a Self-Service Portal Application in the Identity Server.
    Follow the instructions in the [Identity Server documentation](https://curity.io/docs/idsvr/latest/application-service-admin-guide/applications/self-service-portal.html) to set up the SSP.
