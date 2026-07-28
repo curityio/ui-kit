@@ -32,7 +32,7 @@ export interface ReproducibleStep {
  * - **Client operations** (BankID, WebAuthn, external-browser-flow) resolve to single-use POST
  *   continue-actions → never reproducible.
  *
- * Steps produced by non-reproducible actions are kept out of the navigation history entirely.
+ * Steps produced by non-reproducible actions are still recorded, but are skipped when navigating back/forward.
  */
 export function isReproducibleAction(action: HaapiStepperNextStepAction): boolean {
   if ('href' in action) {
