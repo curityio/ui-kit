@@ -206,15 +206,11 @@ describe('useHaapiStepperHistoryNavigation', () => {
     expect(fake.position()).toBe(0); // snapped back onto link@0
   });
 
-  it('keeps the user in the flow when going back from the first step', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0 (the only step)
-
-    fake.navigate(-1); // back past the first step
-
-    expect(nextStep).not.toHaveBeenCalled();
-    expect(fake.position()).toBe(0);
-  });
+  // R1 ("Back on the first step must stay in the app, no reload") is deferred — see the PR description.
+  // Without a sentinel history entry seeded behind the first step, Back leaves the document and the browser
+  // reloads (a cross-document navigation that never fires `popstate`). The fake browser can't model that
+  // reload, so asserting it here would give false confidence; left skipped until the sentinel is implemented.
+  it.skip('R1: Back on the first step stays in the app without reloading (needs sentinel entry)', () => {});
 
   it('lands on the nearest reproducible step when the browser jumps multiple entries', () => {
     const { nextStep, fake, reachStep } = setup();
