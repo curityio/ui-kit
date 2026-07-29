@@ -1,3 +1,6 @@
 .prettierrc
 tsconfig.*
 README.md
+
+# The docs are their own workspace with its own prettier-check (run via `-w src/haapi-react-sdk`).
+docs
