@@ -2107,7 +2107,6 @@ describe('HaapiStepperStepUI', () => {
           },
         });
 
-        // TODO IS-6007 adjust test after proper display of logos section
         it('should render logos section and remainder items when logos are available', () => {
           const step = createUserConsentStep({ clientLogo: clientLogoPath });
 
@@ -2120,6 +2119,17 @@ describe('HaapiStepperStepUI', () => {
           expect(companyLogo).toHaveAttribute('src', companyLogoPath);
           expect(clientLogo).toHaveAttribute('src', clientLogoPath);
           expect(follows(clientLogo, companyLogo)).toBe(true);
+
+          const logos = screen.getByTestId('consent-logos');
+          expect(logos).toContainElement(companyLogo);
+          expect(logos).toContainElement(clientLogo);
+          expect(companyLogo).toHaveClass('haapi-stepper-consent-logo-image');
+          expect(companyLogo).not.toHaveClass('haapi-stepper-consent-logo-image-client');
+          expect(clientLogo).toHaveClass('haapi-stepper-consent-logo-image-client');
+
+          // The checkmark joining the two logos is decorative.
+          const checkmark = logos.querySelector('.haapi-stepper-consent-logos-checkmark svg');
+          expect(checkmark).toHaveAttribute('aria-hidden', 'true');
 
           const messages = screen.getByTestId('messages');
           const action = screen.getByTestId('form-action');
@@ -2137,6 +2147,7 @@ describe('HaapiStepperStepUI', () => {
             ...withCompanyLogo(companyLogoPath),
           });
 
+          expect(screen.queryByTestId('consent-logos')).not.toBeInTheDocument();
           expect(screen.queryAllByRole('img')).toHaveLength(0);
           expect(screen.queryByTestId('messages')).toBeInTheDocument();
         });
@@ -2149,6 +2160,7 @@ describe('HaapiStepperStepUI', () => {
             ...withCompanyLogo(),
           });
 
+          expect(screen.queryByTestId('consent-logos')).not.toBeInTheDocument();
           expect(screen.queryAllByRole('img')).toHaveLength(0);
           expect(screen.queryByTestId('messages')).toBeInTheDocument();
         });
