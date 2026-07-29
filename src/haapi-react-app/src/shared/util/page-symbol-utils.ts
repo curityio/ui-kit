@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import type { HaapiStepperPageSymbols } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import type { HaapiStepperStepSymbolsConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { HAAPI_STEPS, HaapiActionStep, HaapiCompletedStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 
 /**
@@ -26,7 +26,7 @@ import { HAAPI_STEPS, HaapiActionStep, HaapiCompletedStep } from '@curity/haapi-
  */
 export const resolvePageSymbol = (
   viewName: string | undefined,
-  pageSymbols: HaapiStepperPageSymbols | undefined
+  pageSymbols: HaapiStepperStepSymbolsConfig | undefined
 ): string | undefined => {
   /**
    * Extracts the plugin implementation type from a HAAPI `viewName` of the form

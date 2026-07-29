@@ -91,11 +91,11 @@ export interface HaapiStepperBootstrapConfig {
       path: string;
       isInsideWell: boolean;
     };
-    pageSymbols?: HaapiStepperPageSymbols;
+    pageSymbols?: HaapiStepperStepSymbolsConfig;
   };
 }
 
-export interface HaapiStepperPageSymbols {
+export interface HaapiStepperStepSymbolsConfig {
   /** Map of full HAAPI viewName -> symbol path. Highest precedence. */
   views?: Record<string, string>;
   /** Map of plugin implementation type (e.g. `html-form`, `bankid`) -> symbol path. */

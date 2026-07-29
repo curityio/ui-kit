@@ -14,9 +14,9 @@ import { render } from '@testing-library/react';
 import { PageSymbol } from '../PageSymbol/PageSymbol';
 import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
 import type { HaapiAppConfig } from '../../feature/app-config/types';
-import type { HaapiStepperPageSymbols } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import type { HaapiStepperStepSymbolsConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 
-const buildConfig = (pageSymbols?: HaapiStepperPageSymbols): HaapiAppConfig => ({
+const buildConfig = (pageSymbols?: HaapiStepperStepSymbolsConfig): HaapiAppConfig => ({
   initialUrl: 'https://example/start',
   haapi: {} as HaapiAppConfig['haapi'],
   theme: {
@@ -25,7 +25,7 @@ const buildConfig = (pageSymbols?: HaapiStepperPageSymbols): HaapiAppConfig => (
   },
 });
 
-const renderPageSymbol = (viewName: string | undefined, pageSymbols?: HaapiStepperPageSymbols) =>
+const renderPageSymbol = (viewName: string | undefined, pageSymbols?: HaapiStepperStepSymbolsConfig) =>
   render(
     <HaapiAppConfigContext value={buildConfig(pageSymbols)}>
       <PageSymbol viewName={viewName} />
@@ -33,7 +33,7 @@ const renderPageSymbol = (viewName: string | undefined, pageSymbols?: HaapiStepp
   );
 
 describe('PageSymbol', () => {
-  const pageSymbols: HaapiStepperPageSymbols = {
+  const pageSymbols: HaapiStepperStepSymbolsConfig = {
     views: {
       'authenticator/html-form/create-account/post': '/symbols/create-account.svg',
       'authentication-action/email-verifier/confirm': '/symbols/email-verifier-confirm.svg',

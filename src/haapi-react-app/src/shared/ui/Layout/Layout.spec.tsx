@@ -16,7 +16,7 @@ import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/featu
 import type {
   HaapiStepperAPI,
   HaapiStepperStep,
-  HaapiStepperPageSymbols,
+  HaapiStepperStepSymbolsConfig,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 import type { HaapiAppConfig } from '../../feature/app-config/types';
@@ -101,7 +101,7 @@ const stepWithViewName = (viewName: string, type?: HAAPI_STEPS): HaapiStepperSte
 
 interface LayoutHarnessOptions {
   isInsideWell?: boolean;
-  pageSymbols?: HaapiStepperPageSymbols;
+  pageSymbols?: HaapiStepperStepSymbolsConfig;
   currentStep?: HaapiStepperStep | null;
   withoutLogo?: boolean;
 }
