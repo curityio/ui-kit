@@ -63,7 +63,8 @@ the step catalog, …). Nothing in it ever becomes a page.
    (e.g. `docs/sections/02-examples/01-render-interceptors/`) for its own page in the Examples menu.
 2. Name it ending in `HaapiReactSDKPlaygroundExample` — for example
    `StepLinksHaapiReactSDKPlaygroundExample.tsx`. The file name (minus `.tsx`) is the example's id.
-3. Write a small app with a `default` `App` export, usually wrapped in `<ExamplePreviewer>`.
+3. Write a small app with a `default` `App` export, usually wrapped in `<ExamplePreviewer>`. Every
+   example is typechecked, linted and smoke-rendered (`docs/DocsExamples.spec.tsx`) by this repo's CI.
 4. Link it from this README or add a `{@see_example}` marker to the TSDoc of the component (see above). If you placed it under `examples/`, it gets its own page in the Examples menu automatically.
 5. Re-run the generator to see the result.
 

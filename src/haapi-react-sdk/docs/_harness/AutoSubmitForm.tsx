@@ -59,7 +59,9 @@ export function AutoSubmitForm({ children }: { children: ReactNode }) {
       const fillableTypes = ['text', 'email', 'password', 'tel', 'url', 'number'];
       container?.querySelectorAll<HTMLInputElement>('input').forEach(input => {
         if (fillableTypes.includes(input.type) && !input.value) {
-          setNativeValue?.call(input, 'preview');
+          // Password fields get a unique filler: submitting a common word like "preview" as a password
+          // trips Chrome's data-breach warning dialog over the docs page.
+          setNativeValue?.call(input, input.type === 'password' ? 'preview-docs-playground-42!' : 'preview');
           input.dispatchEvent(new Event('input', { bubbles: true }));
         }
       });
