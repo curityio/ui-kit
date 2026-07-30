@@ -115,7 +115,7 @@ function setup() {
   // stamps a new UUID per tick).
   const reachPollingStep = () => {
     const pollAction = {
-      id: `poll-${history.length}`,
+      id: `poll-${String(history.length)}`,
       template: HAAPI_ACTION_TYPES.FORM,
       model: { method: HTTP_METHODS.GET },
     } as HaapiStepperNextStepAction;
@@ -209,8 +209,7 @@ describe('useHaapiStepperHistoryNavigation', () => {
   // R1 ("Back on the first step must stay in the app, no reload") is deferred — see the PR description.
   // Without a sentinel history entry seeded behind the first step, Back leaves the document and the browser
   // reloads (a cross-document navigation that never fires `popstate`). The fake browser can't model that
-  // reload, so asserting it here would give false confidence; left skipped until the sentinel is implemented.
-  it.skip('R1: Back on the first step stays in the app without reloading (needs sentinel entry)', () => {});
+  // reload, so a test here would assert false confidence — R1 gets its test when the sentinel lands.
 
   it('lands on the nearest reproducible step when the browser jumps multiple entries', () => {
     const { nextStep, fake, reachStep } = setup();
