@@ -86,6 +86,7 @@ describe('HaapiStepper', () => {
       const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
         initialUrl: 'https://standalone.example/start',
         haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+        theme: {},
       };
 
       render(
@@ -104,6 +105,7 @@ describe('HaapiStepper', () => {
       const standaloneBootstrapConfig: HaapiStepperBootstrapConfig = {
         initialUrl: 'https://standalone.example/start',
         haapi: {} as HaapiStepperBootstrapConfig['haapi'],
+        theme: {},
       };
 
       render(

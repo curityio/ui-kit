@@ -15,6 +15,7 @@ import { Logo } from '../Logo/Logo';
 import { PageSymbol } from '../PageSymbol/PageSymbol';
 import { useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import { Well } from '../Well';
+import { showPageSymbol } from '../../util/page-symbol-utils';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const { currentStep } = useHaapiStepper();
@@ -27,7 +28,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
         <Well>
           {isInsideWell && <Logo />}
           <div className="h100">
-            <PageSymbol viewName={currentStep?.metadata?.viewName} />
+            {showPageSymbol(currentStep) && <PageSymbol viewName={currentStep?.metadata?.viewName} />}
             {children}
           </div>
         </Well>

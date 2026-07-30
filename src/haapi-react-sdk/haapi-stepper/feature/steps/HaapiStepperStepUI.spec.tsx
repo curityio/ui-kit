@@ -58,6 +58,7 @@ import {
   createMockQrLink,
   createMockSelectorAction,
   createMockStep,
+  createUserConsentStep,
   defaultStepperAPI,
   MockActionTitle,
   MockLinkText,
@@ -2089,6 +2090,80 @@ describe('HaapiStepperStepUI', () => {
             expect(screen.queryByRole('progressbar', { hidden: true })).not.toBeInTheDocument();
           }
         );
+      });
+
+      describe('User Consent viewName built-in UI', () => {
+        const companyLogoPath = '/assets/images/company-logo.svg';
+        const clientLogoPath = '/assets/images/client-logo.svg';
+
+        // Context override adding (or omitting) the company logo in the theme configuration
+        const withCompanyLogo = (path?: string): Partial<HaapiStepperAPI> => ({
+          config: {
+            ...defaultStepperAPI.config,
+            bootstrap: {
+              ...defaultStepperAPI.config.bootstrap,
+              theme: path ? { logo: { path, isInsideWell: false } } : {},
+            },
+          },
+        });
+
+        it('should render logos section and remainder items when logos are available', () => {
+          const step = createUserConsentStep({ clientLogo: clientLogoPath });
+
+          renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: step,
+            ...withCompanyLogo(companyLogoPath),
+          });
+
+          const [companyLogo, clientLogo] = screen.getAllByRole('img');
+          expect(companyLogo).toHaveAttribute('src', companyLogoPath);
+          expect(clientLogo).toHaveAttribute('src', clientLogoPath);
+          expect(follows(clientLogo, companyLogo)).toBe(true);
+
+          const logos = screen.getByTestId('consent-logos');
+          expect(logos).toContainElement(companyLogo);
+          expect(logos).toContainElement(clientLogo);
+          expect(companyLogo).toHaveClass('haapi-stepper-consent-logo-image');
+          expect(companyLogo).not.toHaveClass('haapi-stepper-consent-logo-image-client');
+          expect(clientLogo).toHaveClass('haapi-stepper-consent-logo-image-client');
+
+          // The checkmark joining the two logos is decorative.
+          const checkmark = logos.querySelector('.haapi-stepper-consent-logos-checkmark svg');
+          expect(checkmark).toHaveAttribute('aria-hidden', 'true');
+
+          const messages = screen.getByTestId('messages');
+          const action = screen.getByTestId('form-action');
+          const links = screen.getByTestId('links');
+          expect(follows(messages, clientLogo)).toBe(true);
+          expect(follows(action, messages)).toBe(true);
+          expect(follows(links, action)).toBe(true);
+        });
+
+        it('should not render the logos section when only the company logo is available', () => {
+          const step = createUserConsentStep();
+
+          renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: step,
+            ...withCompanyLogo(companyLogoPath),
+          });
+
+          expect(screen.queryByTestId('consent-logos')).not.toBeInTheDocument();
+          expect(screen.queryAllByRole('img')).toHaveLength(0);
+          expect(screen.queryByTestId('messages')).toBeInTheDocument();
+        });
+
+        it('should not render the logos when only the client logo is available', () => {
+          const step = createUserConsentStep({ clientLogo: clientLogoPath });
+
+          renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: step,
+            ...withCompanyLogo(),
+          });
+
+          expect(screen.queryByTestId('consent-logos')).not.toBeInTheDocument();
+          expect(screen.queryAllByRole('img')).toHaveLength(0);
+          expect(screen.queryByTestId('messages')).toBeInTheDocument();
+        });
       });
     });
   });
