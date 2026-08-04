@@ -131,7 +131,7 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  * ```
  * {@see_example ./docs/sections/00-overview/DefaultRenderingHaapiReactSDKPlaygroundExample.tsx}
  *
- * Partial customization example with custom links and default [HAAPI UI components](../../README.MD#haapi-ui-components) for the rest:
+ * Partial customization example with custom links and default [HAAPI UI components](../../../README.md#haapi-stepper-ui-components--the-building-blocks) for the rest:
  *
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';

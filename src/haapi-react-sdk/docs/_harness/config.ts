@@ -26,5 +26,5 @@ export const MOCK_HAAPI = { clientId: 'docs', tokenEndpoint: 'https://mock.inval
  * prop.
  */
 export function bootstrapForStep(step: string): HaapiStepperBootstrapConfig {
-  return { initialUrl: `/${step}`, haapi: MOCK_HAAPI };
+  return { initialUrl: `/${step}`, haapi: MOCK_HAAPI, theme: {} };
 }
