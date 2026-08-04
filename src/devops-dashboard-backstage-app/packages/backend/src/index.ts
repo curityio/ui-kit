@@ -28,6 +28,9 @@ backend.add(import('@backstage/plugin-auth-backend'));
 // See https://backstage.io/docs/backend-system/building-backends/migrating#the-auth-plugin
 backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 // See https://backstage.io/docs/auth/guest/provider
+// Curity Identity Server sign-in: OIDC provider with a sub-based sign-in
+// resolver (dev-server test users have no email claim)
+backend.add(import('./modules/curityOidcAuthProvider'));
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend'));
