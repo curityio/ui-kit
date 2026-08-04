@@ -10,30 +10,20 @@
  */
 
 import { type RefObject, useEffect, useRef } from 'react';
-import { useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
-import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
+import {HaapiStepperFormAction, useHaapiStepper} from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import type {
   HaapiStepperAPI,
-  HaapiStepperHistoryEntry,
   HaapiStepperNextStepAction,
   HaapiStepperNextStepPayload,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { browserHistoryNavigation, type HistoryNavigation } from '../../util/browser-apis';
 import { isReproducibleHistoryEntry } from './reproducible-action';
 
-interface BrowserHistoryEntryData {
-  reproducible: boolean;
-  action: HaapiStepperNextStepAction;
-  payload?: HaapiStepperNextStepPayload;
-}
-
 interface BrowserHistoryEntryIndex {
+  action?: HaapiStepperNextStepAction;
+  payload?: HaapiStepperNextStepPayload;
   index: number;
-}
-
-interface BrowserHistory {
-  entries: BrowserHistoryEntryData[];
-  index: number;
+  reproducible: boolean;
 }
 
 /**
@@ -64,30 +54,22 @@ export function useHaapiStepperHistoryNavigation(
   const haapiStepper = useHaapiStepper();
   const haapiStepperRef = useRef(haapiStepper);
   haapiStepperRef.current = haapiStepper;
-
-  // Every Browser History entries and their corresponding index and `HaapiStepper` history data required to reproduce
-  // the entry/step (action + optional payload).
-  const browserHistoryRef = useRef<BrowserHistory>({ entries: [], index: -1 });
+  const indexRef = useRef(0);
 
   useEffect(() => {
-    syncBrowserHistoryOnStepperHistoryChange(haapiStepperRef, browserHistoryRef, browserNavigation);
+    syncBrowserHistoryOnStepperHistoryChange(haapiStepperRef, indexRef, browserNavigation);
   }, [haapiStepper.history, browserNavigation]);
 
   useEffect(() => {
     return browserNavigation.addEntryChangeListener(state =>
-      syncStepperHistoryOnBrowserHistoryChange(
-        state as BrowserHistoryEntryIndex | null,
-        haapiStepperRef,
-        browserHistoryRef,
-        browserNavigation
-      )
+      syncStepperHistoryOnBrowserHistoryChange(state as BrowserHistoryEntryIndex | null, indexRef, haapiStepperRef, browserNavigation)
     );
   }, [browserNavigation]);
 }
 
 function syncBrowserHistoryOnStepperHistoryChange(
   haapiStepperRef: RefObject<HaapiStepperAPI>,
-  browserHistoryRef: RefObject<BrowserHistory>,
+  indexRef: RefObject<number>,
   browserNavigation: HistoryNavigation
 ): void {
   const stepperHistory = haapiStepperRef.current.history;
@@ -96,122 +78,43 @@ function syncBrowserHistoryOnStepperHistoryChange(
   }
 
   const currentStepperHistoryEntry = stepperHistory[stepperHistory.length - 1];
-  const { entries: currentBrowserHistoryEntries, index: currentBrowserHistoryIndex } = browserHistoryRef.current;
-  const currentBrowserHistoryEntry =
-    currentBrowserHistoryIndex >= 0 ? currentBrowserHistoryEntries[currentBrowserHistoryIndex] : undefined;
-
-  const updateBrowserHistoryAndNavigation =
-    !isSameStepperHistoryEntry(currentBrowserHistoryEntry, currentStepperHistoryEntry) &&
-    currentStepperHistoryEntry.step.type !== HAAPI_STEPS.POLLING;
-
-  if (!updateBrowserHistoryAndNavigation) {
+  const currentBrowserHistoryEntry = browserNavigation.getState() as BrowserHistoryEntryIndex | undefined | null;
+  if (currentBrowserHistoryEntry?.action?.id === currentStepperHistoryEntry.triggeredByAction.id) {
     return;
   }
 
-  const nextBrowserHistoryIndex = currentBrowserHistoryIndex + 1;
-  updateBrowserHistory(browserHistoryRef, currentStepperHistoryEntry, nextBrowserHistoryIndex);
-  updateBrowserNavigation(browserNavigation, nextBrowserHistoryIndex);
-}
 
-function updateBrowserHistory(
-  browserHistoryRef: RefObject<BrowserHistory>,
-  stepperHistoryEntry: HaapiStepperHistoryEntry,
-  nextBrowserHistoryIndex: number
-): void {
-  /*
-   * If the user navigates back and then takes a new action, the browser drops those forward entries (steps).
-   * We mirror it by keeping only the entries up to the current step before appending the new one.
-   */
-  const entriesUpToCurrentStep = browserHistoryRef.current.entries.slice(0, nextBrowserHistoryIndex);
-  const nextBrowserHistoryEntry = {
-    reproducible: isReproducibleHistoryEntry(stepperHistoryEntry),
-    action: stepperHistoryEntry.triggeredByAction,
-    payload: stepperHistoryEntry.triggeredByPayload,
-  };
-  browserHistoryRef.current = {
-    entries: [...entriesUpToCurrentStep, nextBrowserHistoryEntry],
-    index: nextBrowserHistoryIndex,
-  };
-}
+      indexRef.current = indexRef.current + 1;
+    const newBrowserHistoryEntry: BrowserHistoryEntryIndex = {
+      action: currentStepperHistoryEntry.triggeredByAction,
+      payload: currentStepperHistoryEntry.triggeredByPayload,
+        index: indexRef.current,
+        reproducible: isReproducibleHistoryEntry(currentStepperHistoryEntry),
+    };
+    if (!currentBrowserHistoryEntry) {
+      browserNavigation.replaceEntry(newBrowserHistoryEntry);
+    } else {
+      browserNavigation.pushEntry(newBrowserHistoryEntry, 'href' in currentStepperHistoryEntry.triggeredByAction ? currentStepperHistoryEntry.triggeredByAction.href : (currentStepperHistoryEntry.triggeredByAction as HaapiStepperFormAction).model.href);
+    }
 
-function updateBrowserNavigation(browserNavigation: HistoryNavigation, nextBrowserHistoryIndex: number): void {
-  const browserHistoryEntryIndex = { index: nextBrowserHistoryIndex } satisfies BrowserHistoryEntryIndex;
-  if (nextBrowserHistoryIndex === 0) {
-    // The first step reuses the history entry the app was loaded with instead of pushing a new one.
-    browserNavigation.replaceEntry(browserHistoryEntryIndex);
-  } else {
-    browserNavigation.pushEntry(browserHistoryEntryIndex);
-  }
 }
 
 function syncStepperHistoryOnBrowserHistoryChange(
-  currentBrowserHistoryEntry: BrowserHistoryEntryIndex | null,
-  haapiStepperRef: RefObject<HaapiStepperAPI>,
-  browserHistoryRef: RefObject<BrowserHistory>,
-  browserNavigation: HistoryNavigation
-): void {
-  const currentBrowserHistoryIndex = currentBrowserHistoryEntry?.index ?? -1;
-  const { entries: currentBrowserHistoryEntries, index: previousBrowserHistoryIndex } = browserHistoryRef.current;
-  const isSameBrowserHistoryEntry = currentBrowserHistoryIndex === previousBrowserHistoryIndex;
-  if (isSameBrowserHistoryEntry) {
+    currentBrowserHistoryEntry: BrowserHistoryEntryIndex | null,
+    indexRef: React.RefObject<number>,
+    haapiStepperRef: React.RefObject<HaapiStepperAPI>    ,
+    browserNavigation: HistoryNavigation): void {
+  if (!currentBrowserHistoryEntry) {
     return;
   }
 
-  const destinationBrowserHistoryIndex = findReproducibleBrowserHistoryEntryIndex(
-    currentBrowserHistoryEntries,
-    currentBrowserHistoryIndex,
-    previousBrowserHistoryIndex
-  );
-  const reproducibleStep = destinationBrowserHistoryIndex !== -1;
+  if(currentBrowserHistoryEntry.reproducible) {
+    haapiStepperRef.current.nextStep(currentBrowserHistoryEntry.action!, currentBrowserHistoryEntry.payload);
 
-  if (reproducibleStep) {
-    advanceHaapiStepperToTheNextStep(
-      haapiStepperRef.current,
-      currentBrowserHistoryEntries[destinationBrowserHistoryIndex]
-    );
-    // Update the in-memory index before triggering another `popstate` via `history.go(...)`.
-    browserHistoryRef.current = { ...browserHistoryRef.current, index: destinationBrowserHistoryIndex };
-    // If we skipped over non-reproducible entries, move the browser onto the step we actually re-opened.
-    moveBrowserHistoryTo(destinationBrowserHistoryIndex, currentBrowserHistoryIndex, browserNavigation);
-  } else {
-    // Nothing reproducible in that direction (before the first step, or forward into a non-reproducible
-    // step) — keep the user where they are.
-    moveBrowserHistoryTo(previousBrowserHistoryIndex, currentBrowserHistoryIndex, browserNavigation);
-  }
-}
-
-function isSameStepperHistoryEntry(
-  browserHistoryEntry: BrowserHistoryEntryData | undefined,
-  stepperHistoryEntry: HaapiStepperHistoryEntry
-): boolean {
-  return browserHistoryEntry?.action.id === stepperHistoryEntry.triggeredByAction.id;
-}
-
-function advanceHaapiStepperToTheNextStep(haapiStepper: HaapiStepperAPI, entry: BrowserHistoryEntryData): void {
-  haapiStepper.nextStep(entry.action, entry.payload);
-}
-
-function moveBrowserHistoryTo(
-  destinationIndex: number,
-  currentIndex: number,
-  browserNavigation: HistoryNavigation
-): void {
-  const delta = destinationIndex - currentIndex;
-  if (delta !== 0) {
+  }else {
+    const delta = currentBrowserHistoryEntry.index > indexRef.current ? 1 : -1;
+    indexRef.current = indexRef.current + delta;
     browserNavigation.go(delta);
   }
-}
 
-function findReproducibleBrowserHistoryEntryIndex(
-  browserHistoryEntries: BrowserHistoryEntryData[],
-  currentIndex: number,
-  fromIndex: number
-): number {
-  const direction = currentIndex < fromIndex ? -1 : 1;
-  for (let i = currentIndex; i >= 0 && i < browserHistoryEntries.length; i += direction) {
-    if (browserHistoryEntries[i].reproducible) {
-      return i;
-    }
-  }
-  return -1;
 }

@@ -21,13 +21,14 @@ export interface HistoryNavigation {
   replaceEntry(state: unknown): void;
 
   /** Appends a new history entry (keeping the current URL), discarding any forward entries. */
-  pushEntry(state: unknown): void;
-
-  /** Moves the browser through its history by `delta` entries (negative = back, positive = forward). */
-  go(delta: number): void;
+  pushEntry(state: unknown, url: string): void;
 
   /** The state attached to the current history entry (null when none was set). */
   getState(): unknown;
+
+  getLength(): number;
+
+  go(delta: number): void;
 }
 
 // Stateless wrapper over `window.history`. It holds no per-flow state (e.g. "is this the first entry?"):
@@ -47,16 +48,20 @@ class BrowserHistoryNavigation implements HistoryNavigation {
     window.history.replaceState(state, '');
   }
 
-  pushEntry(state: unknown): void {
-    window.history.pushState(state, '');
-  }
-
-  go(delta: number): void {
-    window.history.go(delta);
+  pushEntry(state: unknown, url: string): void {
+    window.history.pushState(state, '', url);
   }
 
   getState(): unknown {
     return window.history.state;
+  }
+
+  getLength(): number {
+      return window.history.length;
+  }
+
+  go(delta: number): void {
+    window.history.go(delta);
   }
 }
 
