@@ -80,7 +80,9 @@ techdocs:
 auth:
   environment: development
   session:
-    secret: backstage-dev-session-secret # dev-only; the oidc provider requires session support
+    # Required by the oidc provider. Dev value comes from the gitignored
+    # app-config.local.yaml — create it with:  git apply src/devops-dashboard-backstage-app/dev-secrets.patch
+    secret: ${BACKSTAGE_SESSION_SECRET}
   # see https://backstage.io/docs/auth/ to learn about auth providers
   providers:
     # See https://backstage.io/docs/auth/guest/provider
@@ -94,7 +96,8 @@ auth:
       development:
         metadataUrl: https://localhost:8443/dev/oauth/anonymous/.well-known/openid-configuration
         clientId: devops_dashboard_backstage
-        clientSecret: Password1 # dev-only client on the local server
+        # Dev value comes from the gitignored app-config.local.yaml (see dev-secrets.patch)
+        clientSecret: ${CURITY_BACKSTAGE_CLIENT_SECRET}
         # openid/profile/email are requested by default; add the admin API scope
         additionalScopes: 'urn:se:curity:scopes:admin:api'
         prompt: auto
