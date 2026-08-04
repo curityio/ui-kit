@@ -10,14 +10,12 @@
  */
 
 import { ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { HaapiClientOperationAction, HaapiFormAction } from '../../data-access/types/haapi-action.types';
 import type { HaapiFetchAction } from '../../data-access/types/haapi-fetch.types';
 import { useHaapiFetch } from '../../data-access/useHaapiFetch';
 import {
   HAAPI_PROBLEM_STEPS,
   HAAPI_STEPPER_ELEMENT_TYPES,
   HAAPI_STEPS,
-  HaapiLink,
   HaapiStep,
 } from '../../data-access/types/haapi-step.types';
 
@@ -26,13 +24,11 @@ import { isClientOperation, performClientOperation } from '../actions/client-ope
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './step-handlers/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
-import { formatNextStepData } from './data-formatters/format-next-step-data';
+import { formatNextStepData, getElementWithDataHelpers } from './data-formatters/format-next-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
 import type {
-  HaapiStepperClientOperationAction,
   HaapiStepperConfig,
   HaapiStepperError,
-  HaapiStepperFormAction,
   HaapiStepperHistoryEntry,
   HaapiStepperLink,
   HaapiStepperNextStep,
@@ -332,7 +328,11 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
         return;
       }
 
-      setCurrentStepAndUpdateHistory(nextStepData, action, payload);
+      setCurrentStepAndUpdateHistory(
+        nextStepData.step,
+        nextStepData.triggeredByAction,
+        nextStepData.triggeredByActionPayload
+      );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nextStep is a stable ref via useRefCallback, defined below
     [configResult, sendHaapiFetchRequest, currentStep, history, setCurrentStepAndUpdateHistory]
@@ -369,13 +369,7 @@ interface ProcessHaapiNextStepParams {
   currentStep: HaapiStep | null;
   nextStep: HaapiStepperNextStep;
   history: HaapiStepperHistoryEntry[];
-  action:
-    | HaapiFormAction
-    | HaapiClientOperationAction
-    | HaapiLink
-    | HaapiStepperFormAction
-    | HaapiStepperClientOperationAction
-    | HaapiStepperLink;
+  action: HaapiStepperNextStepAction;
   payload: HaapiStepperNextStepPayload | undefined;
   pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>;
   config: HaapiStepperConfig;
@@ -383,7 +377,11 @@ interface ProcessHaapiNextStepParams {
 }
 
 async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise<{
-  nextStepData?: HaapiStepperStep | null;
+  nextStepData?: {
+    step: HaapiStepperStep;
+    triggeredByAction: HaapiStepperNextStepAction;
+    triggeredByActionPayload: HaapiStepperNextStepPayload | undefined;
+  } | null;
   nextStepError?: HaapiStepperError;
 }> {
   const { currentStep, nextStep, history, action, payload, pendingOperation, config, sendHaapiFetchRequest } = params;
@@ -405,7 +403,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
 
     return processHaapiNextStep({
       ...params,
-      action: clientOperationData.action,
+      action: getElementWithDataHelpers(clientOperationData.action),
       payload: clientOperationData.payload,
     });
   }
@@ -419,30 +417,66 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return processHaapiNextStep({
         ...params,
         currentStep: nextStepResponse,
-        action: nextStepResponse.actions[0],
+        action: getElementWithDataHelpers(nextStepResponse.actions[0]),
         payload: undefined,
       });
 
-    case HAAPI_STEPS.POLLING:
-      return handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
+    case HAAPI_STEPS.POLLING: {
+      const result = handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
+      return {
+        nextStepData: result.nextStepData && {
+          step: result.nextStepData,
+          triggeredByAction: action,
+          triggeredByActionPayload: payload,
+        },
+      };
+    }
 
     case HAAPI_STEPS.AUTHENTICATION:
-    case HAAPI_STEPS.REGISTRATION:
-      return handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config);
+    case HAAPI_STEPS.REGISTRATION: {
+      const result = handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config);
+      return {
+        nextStepData: result.nextStepData && {
+          step: result.nextStepData,
+          triggeredByAction: action,
+          triggeredByActionPayload: payload,
+        },
+      };
+    }
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-      return { nextStepData: formatNextStepData(nextStepResponse) };
+      return {
+        nextStepData: {
+          step: formatNextStepData(nextStepResponse),
+          triggeredByAction: action,
+          triggeredByActionPayload: payload,
+        },
+      };
 
     case HAAPI_STEPS.CONTINUE_SAME:
       if ('href' in action) {
         throw new Error('Continue Same Step received after link navigation, but links cannot have continueActions');
       }
-      return { nextStepData: formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep) };
+      return {
+        nextStepData: {
+          step: formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep),
+          triggeredByAction: action,
+          triggeredByActionPayload: payload,
+        },
+      };
 
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
-    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      return handleCompletedStep(nextStepResponse, config);
+    case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR: {
+      const result = handleCompletedStep(nextStepResponse, config);
+      return {
+        nextStepData: result.nextStepData && {
+          step: result.nextStepData,
+          triggeredByAction: action,
+          triggeredByActionPayload: payload,
+        },
+      };
+    }
 
     case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:

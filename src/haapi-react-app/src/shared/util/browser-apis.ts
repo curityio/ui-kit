@@ -18,15 +18,13 @@ export interface HistoryNavigation {
   addEntryChangeListener(listener: (state: unknown) => void): () => void;
 
   /** Updates the current history entry's state, keeping the current URL (reuses the entry). */
-  replaceEntry(state: unknown): void;
+  replaceEntry(state: unknown, url?: string): void;
 
   /** Appends a new history entry (keeping the current URL), discarding any forward entries. */
-  pushEntry(state: unknown, url: string): void;
+  pushEntry(state: unknown, url?: string): void;
 
   /** The state attached to the current history entry (null when none was set). */
   getState(): unknown;
-
-  getLength(): number;
 
   go(delta: number): void;
 }
@@ -44,20 +42,16 @@ class BrowserHistoryNavigation implements HistoryNavigation {
     return () => window.removeEventListener('popstate', handler);
   }
 
-  replaceEntry(state: unknown): void {
-    window.history.replaceState(state, '');
+  replaceEntry(state: unknown, url?: string): void {
+    window.history.replaceState(state, '', url);
   }
 
-  pushEntry(state: unknown, url: string): void {
+  pushEntry(state: unknown, url?: string): void {
     window.history.pushState(state, '', url);
   }
 
   getState(): unknown {
     return window.history.state;
-  }
-
-  getLength(): number {
-      return window.history.length;
   }
 
   go(delta: number): void {

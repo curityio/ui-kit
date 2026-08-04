@@ -10,7 +10,7 @@
  */
 
 import { type RefObject, useEffect, useRef } from 'react';
-import {HaapiStepperFormAction, useHaapiStepper} from '@curity/haapi-react-sdk/haapi-stepper/feature';
+import {useHaapiStepper} from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import type {
   HaapiStepperAPI,
   HaapiStepperNextStepAction,
@@ -19,12 +19,13 @@ import type {
 import { browserHistoryNavigation, type HistoryNavigation } from '../../util/browser-apis';
 import { isReproducibleHistoryEntry } from './reproducible-action';
 
-interface BrowserHistoryEntryIndex {
-  action?: HaapiStepperNextStepAction;
+type BrowserHistoryEntryIndex = {
+  reproducible: true;
+  action: HaapiStepperNextStepAction;
   payload?: HaapiStepperNextStepPayload;
-  index: number;
-  reproducible: boolean;
-}
+} | {
+    reproducible: false;
+};
 
 /**
  * Wires the browser's navigation buttons (back/forward) with the HAAPI stepper: each step the stepper reaches is
@@ -54,22 +55,20 @@ export function useHaapiStepperHistoryNavigation(
   const haapiStepper = useHaapiStepper();
   const haapiStepperRef = useRef(haapiStepper);
   haapiStepperRef.current = haapiStepper;
-  const indexRef = useRef(0);
 
   useEffect(() => {
-    syncBrowserHistoryOnStepperHistoryChange(haapiStepperRef, indexRef, browserNavigation);
+    syncBrowserHistoryOnStepperHistoryChange(haapiStepperRef, browserNavigation);
   }, [haapiStepper.history, browserNavigation]);
 
   useEffect(() => {
     return browserNavigation.addEntryChangeListener(state =>
-      syncStepperHistoryOnBrowserHistoryChange(state as BrowserHistoryEntryIndex | null, indexRef, haapiStepperRef, browserNavigation)
+      syncStepperHistoryOnBrowserHistoryChange(state as BrowserHistoryEntryIndex | null, haapiStepperRef, browserNavigation)
     );
   }, [browserNavigation]);
 }
 
 function syncBrowserHistoryOnStepperHistoryChange(
   haapiStepperRef: RefObject<HaapiStepperAPI>,
-  indexRef: RefObject<number>,
   browserNavigation: HistoryNavigation
 ): void {
   const stepperHistory = haapiStepperRef.current.history;
@@ -77,44 +76,47 @@ function syncBrowserHistoryOnStepperHistoryChange(
     return;
   }
 
-  const currentStepperHistoryEntry = stepperHistory[stepperHistory.length - 1];
-  const currentBrowserHistoryEntry = browserNavigation.getState() as BrowserHistoryEntryIndex | undefined | null;
-  if (currentBrowserHistoryEntry?.action?.id === currentStepperHistoryEntry.triggeredByAction.id) {
-    return;
-  }
+  const currentBrowserEntry = browserNavigation.getState() as BrowserHistoryEntryIndex | undefined | null;
+  const newStepperEntry = stepperHistory[stepperHistory.length - 1];
 
+    const newBrowserHistoryEntry: BrowserHistoryEntryIndex = isReproducibleHistoryEntry(newStepperEntry)
+        ? {
+            reproducible: true,
+            action: newStepperEntry.triggeredByAction,
+            payload: newStepperEntry.triggeredByPayload,
+        }
+        : {
+            reproducible: false
+        };
 
-      indexRef.current = indexRef.current + 1;
-    const newBrowserHistoryEntry: BrowserHistoryEntryIndex = {
-      action: currentStepperHistoryEntry.triggeredByAction,
-      payload: currentStepperHistoryEntry.triggeredByPayload,
-        index: indexRef.current,
-        reproducible: isReproducibleHistoryEntry(currentStepperHistoryEntry),
-    };
-    if (!currentBrowserHistoryEntry) {
-      browserNavigation.replaceEntry(newBrowserHistoryEntry);
+    const url = 'href' in newStepperEntry.triggeredByAction
+        ? newStepperEntry.triggeredByAction.href
+        : newStepperEntry.triggeredByAction.subtype === 'form'
+            ? newStepperEntry.triggeredByAction.model.href
+            : undefined;
+
+    if (currentBrowserEntry?.reproducible) {
+        if (currentBrowserEntry?.action.id === newStepperEntry.triggeredByAction.id) {
+            return;
+        }
+        browserNavigation.pushEntry(newBrowserHistoryEntry, url);
     } else {
-      browserNavigation.pushEntry(newBrowserHistoryEntry, 'href' in currentStepperHistoryEntry.triggeredByAction ? currentStepperHistoryEntry.triggeredByAction.href : (currentStepperHistoryEntry.triggeredByAction as HaapiStepperFormAction).model.href);
+        browserNavigation.replaceEntry(newBrowserHistoryEntry, url);
     }
-
 }
 
 function syncStepperHistoryOnBrowserHistoryChange(
     currentBrowserHistoryEntry: BrowserHistoryEntryIndex | null,
-    indexRef: React.RefObject<number>,
     haapiStepperRef: React.RefObject<HaapiStepperAPI>    ,
     browserNavigation: HistoryNavigation): void {
   if (!currentBrowserHistoryEntry) {
     return;
   }
 
-  if(currentBrowserHistoryEntry.reproducible) {
-    haapiStepperRef.current.nextStep(currentBrowserHistoryEntry.action!, currentBrowserHistoryEntry.payload);
-
-  }else {
-    const delta = currentBrowserHistoryEntry.index > indexRef.current ? 1 : -1;
-    indexRef.current = indexRef.current + delta;
-    browserNavigation.go(delta);
-  }
-
+    if (currentBrowserHistoryEntry.reproducible) {
+        haapiStepperRef.current.nextStep(currentBrowserHistoryEntry.action, currentBrowserHistoryEntry.payload);
+    } else {
+        // Non-reproducible step is always the last. If we bumped into one, take the user to where they came from.
+        browserNavigation.go(-1);
+    }
 }
