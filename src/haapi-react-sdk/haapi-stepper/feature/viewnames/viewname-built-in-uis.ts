@@ -14,6 +14,7 @@ import type { HaapiStepperAPIWithRequiredCurrentStep } from '../stepper/haapi-st
 import { BankIdViewNameBuiltInUI } from './BankIdViewNameBuiltInUI';
 import type { ViewNameBuiltInUIProps } from './typings';
 import { HaapiStepperViewNameBuiltInUI } from './viewname.types';
+import { UserConsentViewNameBuiltInUI } from './UserConsentViewNameBuiltInUI';
 
 /**
  * Registry of built-in viewName UIs keyed by `HaapiStepperViewNameBuiltInUI`.
@@ -23,6 +24,7 @@ import { HaapiStepperViewNameBuiltInUI } from './viewname.types';
  */
 export const VIEW_NAME_BUILT_IN_UI_MAP: Record<HaapiStepperViewNameBuiltInUI, FC<ViewNameBuiltInUIProps>> = {
   [HaapiStepperViewNameBuiltInUI.BANKID]: BankIdViewNameBuiltInUI,
+  [HaapiStepperViewNameBuiltInUI.USER_CONSENT]: UserConsentViewNameBuiltInUI,
 };
 
 const isBuiltInViewName = (viewName?: string): viewName is HaapiStepperViewNameBuiltInUI =>

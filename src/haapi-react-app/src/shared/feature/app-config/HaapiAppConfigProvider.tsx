@@ -11,10 +11,9 @@
 
 import { ReactNode } from 'react';
 import { HaapiAppConfigContext } from './HaapiAppConfigContext';
-import { HaapiAppConfig } from './types';
 
 export const HaapiAppConfigProvider = ({ children }: { children: ReactNode }) => {
-  const configuration = window.__CONFIG__ as HaapiAppConfig | undefined;
+  const configuration = window.__CONFIG__;
   if (!configuration) {
     throw new Error('HaapiAppConfigProvider: window.__CONFIG__ is not set');
   }

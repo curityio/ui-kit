@@ -9,7 +9,8 @@
  * For further information, please contact Curity AB.
  */
 
-import type { PageSymbols } from '../feature/app-config/types';
+import type { HaapiStepperStepSymbolsConfig } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import { HAAPI_STEPS, HaapiActionStep, HaapiCompletedStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 
 /**
  * Resolves the page symbol image path for a given HAAPI step `viewName` against the
@@ -25,7 +26,7 @@ import type { PageSymbols } from '../feature/app-config/types';
  */
 export const resolvePageSymbol = (
   viewName: string | undefined,
-  pageSymbols: PageSymbols | undefined
+  pageSymbols: HaapiStepperStepSymbolsConfig | undefined
 ): string | undefined => {
   /**
    * Extracts the plugin implementation type from a HAAPI `viewName` of the form
@@ -51,3 +52,7 @@ export const resolvePageSymbol = (
 
   return pageSymbols.default;
 };
+
+export function showPageSymbol(step: HaapiActionStep | HaapiCompletedStep | null): boolean {
+  return step?.type !== HAAPI_STEPS.USER_CONSENT;
+}

@@ -248,6 +248,82 @@ svg {
   margin-block: 0 var(--space-2);
 }
 
+.haapi-stepper-consent-logos {
+  @extend .flex, .flex-center, .justify-center, .p2;
+
+  --consent-logo-circle-size: 80px;
+  --consent-logo-max-width: 70px;
+  --consent-logo-client-max-width: 50px;
+  --consent-checkmark-size: 2.5rem;
+
+  --consent-checkmark-gap: calc(var(--consent-checkmark-size) / 2 + var(--space-1));
+}
+
+@media (min-width: 576px) {
+  .haapi-stepper-consent-logos {
+    --consent-logo-circle-size: 120px;
+    --consent-logo-max-width: 100px;
+    --consent-logo-client-max-width: 70px;
+  }
+}
+
+.haapi-stepper-consent-logo {
+  flex: 0 0 40%;
+}
+
+.haapi-stepper-consent-logo-circle {
+  @extend .flex, .flex-center, .justify-center, .relative, .mx-auto;
+
+  width: var(--consent-logo-circle-size);
+  height: var(--consent-logo-circle-size);
+  border-radius: 100%;
+  background-color: var(--color-grey-subtle);
+  z-index: 2;
+}
+
+.haapi-stepper-consent-logo-image {
+  max-width: var(--consent-logo-max-width);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.haapi-stepper-consent-logo-image-client {
+  max-width: var(--consent-logo-client-max-width);
+}
+
+.haapi-stepper-consent-logos-checkmark {
+  @extend .flex, .flex-center, .justify-center, .relative;
+
+  flex: 0 0 20%;
+  z-index: 1;
+  color: var(--color-success);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    border-block-start: 1px dashed var(--color-grey-light);
+  }
+
+  &::before {
+    left: -40%;
+    right: calc(50% + var(--consent-checkmark-gap));
+  }
+
+  &::after {
+    left: calc(50% + var(--consent-checkmark-gap));
+    right: -40%;
+  }
+
+  svg {
+    width: var(--consent-checkmark-size);
+    height: var(--consent-checkmark-size);
+  }
+}
+
 .haapi-stepper-page-symbol {
   text-align: center;
   width: var(--login-symbol-size);

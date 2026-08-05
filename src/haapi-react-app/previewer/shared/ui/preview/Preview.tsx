@@ -20,6 +20,7 @@ import { PageSymbol } from '../../../../src/shared/ui/PageSymbol/PageSymbol';
 import { Well } from '../../../../src/shared/ui/Well';
 import { useHaapiAppConfig } from '../../../../src/shared/feature/app-config/HaapiAppConfigHook';
 import { Logo } from '../../../../src/shared/ui/Logo/Logo';
+import { showPageSymbol } from '../../../../src/shared/util/page-symbol-utils';
 import styles from './preview.module.css';
 
 interface PreviewProps {
@@ -46,7 +47,7 @@ export function Preview({ title, step, onErrorToggle }: PreviewProps) {
           {!isInsideWell && <Logo />}
           <Well>
             {isInsideWell && <Logo />}
-            <PageSymbol viewName={currentPage} />
+            {showPageSymbol(step) && <PageSymbol viewName={currentPage} />}
             <HaapiStepperStepUI />
           </Well>
         </div>
