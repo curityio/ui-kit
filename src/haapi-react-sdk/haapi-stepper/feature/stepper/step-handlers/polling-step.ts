@@ -10,18 +10,18 @@
  */
 
 import { RefObject } from 'react';
-import { HaapiPollingStep, HAAPI_POLLING_STATUS, HAAPI_STEPS } from '../../../data-access/types/haapi-step.types';
+import { HAAPI_POLLING_STATUS, HAAPI_STEPS, HaapiPollingStep } from '../../../data-access/types/haapi-step.types';
 import type {
   HaapiStepperConfig,
-  HaapiStepperNextStep,
   HaapiStepperError,
-  HaapiStepperStep,
   HaapiStepperHistoryEntry,
+  HaapiStepperNextStep,
+  HaapiStepperStep,
 } from '../haapi-stepper.types';
+import { HaapiStepperPollingStep } from '../haapi-stepper.types';
 import { formatNextStepData } from '../data-formatters/format-next-step-data';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { isBankIdClientOperation, openBankIdApp } from '../../actions/client-operation/operations/bankid';
-import { HaapiStepperPollingStep } from '../haapi-stepper.types';
 
 export function handlePollingStep(
   pollingStep: HaapiPollingStep,
@@ -49,9 +49,21 @@ export function handlePollingStep(
 
       return { nextStepData: formattedPollingStep };
     }
+
     case HAAPI_POLLING_STATUS.FAILED: {
+      const nextAction = formattedPollingStep.actions.length === 1 && formattedPollingStep.dataHelpers.actions?.form[0];
+
+      const goToNextStep =
+        nextAction &&
+        (nextAction.kind === HAAPI_FORM_ACTION_KINDS.REDIRECT || nextAction.kind === HAAPI_FORM_ACTION_KINDS.CONTINUE);
+
+      if (goToNextStep) {
+        nextStep(nextAction);
+      }
+
       return { nextStepData: formattedPollingStep };
     }
+
     case HAAPI_POLLING_STATUS.PENDING: {
       const pollingAction = formattedPollingStep.dataHelpers.actions?.formByKind.poll?.[0];
 
