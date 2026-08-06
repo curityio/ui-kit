@@ -10,7 +10,7 @@
  */
 
 import { MEDIA_TYPES } from '../data-access/types/media.types';
-import type { HaapiStepperLink } from '../feature/stepper/haapi-stepper.types';
+import type { HaapiStepperLink, HaapiStepperNextStepAction } from '../feature/stepper/haapi-stepper.types';
 
 /**
  * Returns `true` when the link's `subtype` indicates an inline image (e.g. `image/svg+xml`,
@@ -42,3 +42,7 @@ export const isHaapiLink = (link: HaapiStepperLink): boolean => {
 
   return link.subtype === undefined || link.subtype === (MEDIA_TYPES.AUTH as string);
 };
+
+export function isLink(action: HaapiStepperNextStepAction): action is HaapiStepperLink {
+  return 'href' in action;
+}

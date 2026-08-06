@@ -18,12 +18,12 @@ export function handleAuthenticationOrRegistrationStep(
   step: HaapiAuthenticationStep | HaapiRegistrationStep,
   nextStep: HaapiStepperNextStep,
   config: HaapiStepperConfig
-): { nextStepData: HaapiStepperStep } {
+): HaapiStepperStep {
   const nextStepData = formatNextStepData(step);
 
   if (config.webAuthnAutostart && isWebAuthnStep(nextStepData)) {
     void manageWebAuthnAutoStart(nextStepData, nextStep);
   }
 
-  return { nextStepData };
+  return nextStepData;
 }

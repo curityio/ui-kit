@@ -19,11 +19,13 @@ import {
   HaapiAction,
   HaapiActionStep,
   HaapiCompletedStep,
+  HaapiFormAction,
 } from '../../../data-access/types';
 import {
   HaapiStepperAction,
   HaapiStepperDataHelpers,
   HaapiStepperDataHelpersActionsMap,
+  HaapiStepperFormAction,
   HaapiStepperLink,
   HaapiStepperStep,
   HaapiStepperUserMessage,
@@ -140,6 +142,7 @@ function buildActionsMap(actions: HaapiStepperAction[]): HaapiStepperDataHelpers
   );
 }
 
+export function getElementWithDataHelpers(element: HaapiFormAction): HaapiStepperFormAction;
 export function getElementWithDataHelpers(element: HaapiAction): HaapiStepperAction;
 export function getElementWithDataHelpers(element: HaapiLink): HaapiStepperLink;
 export function getElementWithDataHelpers(element: HaapiUserMessage): HaapiStepperUserMessage;

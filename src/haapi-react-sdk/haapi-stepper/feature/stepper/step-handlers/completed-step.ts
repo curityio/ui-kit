@@ -22,11 +22,11 @@ import { formatNextStepData } from '../data-formatters/format-next-step-data';
  */
 export function handleCompletedStep(step: HaapiCompletedStep, config: HaapiStepperConfig) {
   if (!config.autoRedirectOnAuthenticationComplete) {
-    return { nextStepData: formatNextStepData(step) };
+    return formatNextStepData(step);
   }
 
   if (tryHandleRedirectResponse(step) || tryHandleFormPostResponse(step)) {
-    return { nextStepData: undefined };
+    return undefined;
   }
 
   throw new Error(

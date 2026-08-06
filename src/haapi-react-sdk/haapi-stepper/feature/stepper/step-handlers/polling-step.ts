@@ -13,7 +13,6 @@ import { RefObject } from 'react';
 import { HAAPI_POLLING_STATUS, HAAPI_STEPS, HaapiPollingStep } from '../../../data-access/types/haapi-step.types';
 import type {
   HaapiStepperConfig,
-  HaapiStepperError,
   HaapiStepperHistoryEntry,
   HaapiStepperNextStep,
   HaapiStepperStep,
@@ -29,10 +28,7 @@ export function handlePollingStep(
   nextStep: HaapiStepperNextStep,
   config: HaapiStepperConfig,
   history: HaapiStepperHistoryEntry[] = []
-): {
-  nextStepData?: HaapiStepperStep;
-  nextStepError?: HaapiStepperError;
-} {
+): HaapiStepperStep {
   const formattedPollingStep = formatNextStepData(pollingStep);
   const pollingStatus = pollingStep.properties.status;
   const pollingInterval = pollingStep.properties.interval
@@ -47,7 +43,7 @@ export function handlePollingStep(
         nextStep(doneAction);
       }
 
-      return { nextStepData: formattedPollingStep };
+      return formattedPollingStep;
     }
 
     case HAAPI_POLLING_STATUS.FAILED: {
@@ -61,7 +57,7 @@ export function handlePollingStep(
         nextStep(nextAction);
       }
 
-      return { nextStepData: formattedPollingStep };
+      return formattedPollingStep;
     }
 
     case HAAPI_POLLING_STATUS.PENDING: {
@@ -88,7 +84,7 @@ export function handlePollingStep(
         nextStep(pollingAction);
       }, pollingInterval);
 
-      return { nextStepData: formattedNextStepData };
+      return formattedNextStepData;
     }
   }
 }

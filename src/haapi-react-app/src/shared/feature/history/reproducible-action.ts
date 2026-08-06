@@ -17,6 +17,7 @@ import type {
   HaapiStepperNextStepAction,
   HaapiStepperNextStepPayload,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import { isLink } from '@curity/haapi-react-sdk/haapi-stepper/util/link-predicates';
 
 /** A reproducible step: the action (and payload) that re-opens it when navigating back/forward. */
 export interface ReproducibleStep {
@@ -36,7 +37,7 @@ export interface ReproducibleStep {
  * Steps produced by non-reproducible actions are still recorded, but are skipped when navigating back/forward.
  */
 export function isReproducibleAction(action: HaapiStepperNextStepAction): boolean {
-  if ('href' in action) {
+  if (isLink(action)) {
     return true;
   }
 

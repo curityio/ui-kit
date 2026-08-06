@@ -219,13 +219,19 @@ export type HaapiStepperNextStepAsync = (
 export type HaapiStepperNextStepAction = HaapiStepperFormAction | HaapiStepperClientOperationAction | HaapiStepperLink;
 export type HaapiStepperNextStepPayload = HaapiFetchPayload;
 
+export interface HaapiStepperNextStepData {
+  step: HaapiStepperStep;
+  triggeredByAction: HaapiStepperNextStepAction;
+  triggeredByPayload?: HaapiStepperNextStepPayload;
+}
+
 /*
  * HISTORY TYPINGS
  */
-export interface HaapiStepperHistoryEntry<T extends HaapiStepperStep = HaapiStepperStep> {
+export interface HaapiStepperHistoryEntry<
+  T extends HaapiStepperStep = HaapiStepperStep,
+> extends HaapiStepperNextStepData {
   step: T;
-  triggeredByAction: HaapiStepperNextStepAction;
-  triggeredByPayload?: HaapiStepperNextStepPayload;
   timestamp: Date;
 }
 
