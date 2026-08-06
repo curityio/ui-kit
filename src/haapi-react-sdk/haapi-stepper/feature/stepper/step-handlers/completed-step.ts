@@ -12,7 +12,7 @@
 import { type HaapiCompletedStep } from '../../../data-access/types/haapi-step.types';
 import { HAAPI_FORM_ACTION_KINDS, type HaapiFormAction } from '../../../data-access/types/haapi-action.types';
 import type { HaapiStepperConfig } from '../haapi-stepper.types';
-import { formatNextStepData } from '../data-formatters/format-next-step-data';
+import { formatStepData } from '../data-formatters/format-step-data';
 
 /**
  * Handles a terminal step by redirecting back to the client application that initiated the flow (when configured to
@@ -22,7 +22,7 @@ import { formatNextStepData } from '../data-formatters/format-next-step-data';
  */
 export function handleCompletedStep(step: HaapiCompletedStep, config: HaapiStepperConfig) {
   if (!config.autoRedirectOnAuthenticationComplete) {
-    return formatNextStepData(step);
+    return formatStepData(step);
   }
 
   if (tryHandleRedirectResponse(step) || tryHandleFormPostResponse(step)) {

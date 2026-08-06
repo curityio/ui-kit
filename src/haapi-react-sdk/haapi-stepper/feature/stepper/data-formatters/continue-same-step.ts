@@ -16,7 +16,7 @@ import {
   HAAPI_ACTION_TYPES,
 } from '../../../data-access/types/haapi-action.types';
 import { HaapiStepperStep } from '../haapi-stepper.types';
-import { formatNextStepData } from './format-next-step-data';
+import { formatStepData } from './format-step-data';
 
 export function formatContinueSameStepData(
   continueSameNextStepTriggerAction: HaapiFormAction | HaapiClientOperationAction,
@@ -29,13 +29,13 @@ export function formatContinueSameStepData(
   const continueFormActions = getContinueFormActions(continueSameNextStepTriggerAction);
 
   if (continueFormActions) {
-    return formatNextStepData({
+    return formatStepData({
       ...currentStep,
       ...{ actions: continueFormActions },
       messages: [...(continueSameNextStep.messages ?? []), ...(currentStep.messages ?? [])],
     });
   } else {
-    return formatNextStepData({
+    return formatStepData({
       ...currentStep,
       ...{ actions: [] },
       messages: continueSameNextStep.messages ?? [],

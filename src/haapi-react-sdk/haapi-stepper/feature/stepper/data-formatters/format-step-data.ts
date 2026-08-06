@@ -35,7 +35,7 @@ import {
   splitWebAuthnRegistrationAction,
 } from '../../actions/client-operation/operations/webauthn';
 
-export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
+export function formatStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
 ): T & HaapiStepperDataHelpers {
   const isStepWithoutActions =
@@ -54,7 +54,7 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
     };
   }
 
-  const actions = getNextStepActions(step.actions);
+  const actions = getStepActions(step.actions);
   const actionsWithDataHelpers = actions.map(action => addActionDataHelpers(action, step));
   const actionsWithDataHelpersMap = buildActionsMap(actionsWithDataHelpers);
 
@@ -67,7 +67,7 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
   };
 }
 
-function getNextStepActions(actions: HaapiAction[]): HaapiAction[] {
+function getStepActions(actions: HaapiAction[]): HaapiAction[] {
   return actions.flatMap(action =>
     isWebAuthnRegistrationClientOperation(action) ? splitWebAuthnRegistrationAction(action) : [action]
   );

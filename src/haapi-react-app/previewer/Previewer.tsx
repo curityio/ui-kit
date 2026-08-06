@@ -15,7 +15,7 @@ import { examplesById } from './examples.ts';
 import { Layout } from './shared/ui/layout/Layout';
 import { Preview } from './shared/ui/preview/Preview';
 import { formatErrorStepData } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/data-formatters/problem-step';
-import { formatNextStepData } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/data-formatters/format-next-step-data';
+import { formatStepData } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/data-formatters/format-step-data';
 import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepperContext';
 import { type HaapiStepperAPI } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { HaapiErrorStep } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
@@ -67,7 +67,7 @@ export function Previewer() {
   const error = (showError && example ? example.error : null) as HaapiErrorStep | null;
 
   const mockHaapiStepperValue: HaapiStepperAPI = Object.assign({}, baseContextValue, {
-    currentStep: example?.step ? formatNextStepData(example.step) : null,
+    currentStep: example?.step ? formatStepData(example.step) : null,
     error: error ? formatErrorStepData(error) : null,
   });
 

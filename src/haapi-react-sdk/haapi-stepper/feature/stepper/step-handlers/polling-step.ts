@@ -18,7 +18,7 @@ import type {
   HaapiStepperStep,
 } from '../haapi-stepper.types';
 import { HaapiStepperPollingStep } from '../haapi-stepper.types';
-import { formatNextStepData } from '../data-formatters/format-next-step-data';
+import { formatStepData } from '../data-formatters/format-step-data';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { isBankIdClientOperation, openBankIdApp } from '../../actions/client-operation/operations/bankid';
 
@@ -29,7 +29,7 @@ export function handlePollingStep(
   config: HaapiStepperConfig,
   history: HaapiStepperHistoryEntry[] = []
 ): HaapiStepperStep {
-  const formattedPollingStep = formatNextStepData(pollingStep);
+  const formattedPollingStep = formatStepData(pollingStep);
   const pollingStatus = pollingStep.properties.status;
   const pollingInterval = pollingStep.properties.interval
     ? Number(pollingStep.properties.interval)
@@ -72,7 +72,7 @@ export function handlePollingStep(
         actions: pollingStep.actions.filter(action => action.kind !== HAAPI_FORM_ACTION_KINDS.POLL),
       };
 
-      const formattedNextStepData = formatNextStepData(stepWithoutPollingAction);
+      const formattedNextStepData = formatStepData(stepWithoutPollingAction);
 
       if (isBankIdPollingSession(formattedPollingStep)) {
         if (config.bankIdAutostart) {

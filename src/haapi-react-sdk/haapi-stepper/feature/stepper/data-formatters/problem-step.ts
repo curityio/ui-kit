@@ -12,7 +12,7 @@
 import { HAAPI_PROBLEM_STEPS, HaapiErrorStep } from '../../../data-access/types/haapi-step.types';
 import { HaapiStepperAppError, HaapiStepperInputError } from '../haapi-stepper.types';
 import type { HaapiStepperError } from '../haapi-stepper.types';
-import { getElementWithDataHelpers } from './format-next-step-data';
+import { getElementWithDataHelpers } from './format-step-data';
 
 export function formatErrorStepData(step: HaapiErrorStep): HaapiStepperError {
   let appError: HaapiStepperAppError | null = null;

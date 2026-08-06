@@ -10,7 +10,7 @@
  */
 
 import type { HaapiAuthenticationStep, HaapiRegistrationStep } from '../../../data-access/types/haapi-step.types';
-import { formatNextStepData } from '../data-formatters/format-next-step-data';
+import { formatStepData } from '../data-formatters/format-step-data';
 import type { HaapiStepperConfig, HaapiStepperNextStep, HaapiStepperStep } from '../haapi-stepper.types';
 import { isWebAuthnStep, manageWebAuthnAutoStart } from '../../actions/client-operation/operations/webauthn';
 
@@ -19,7 +19,7 @@ export function handleAuthenticationOrRegistrationStep(
   nextStep: HaapiStepperNextStep,
   config: HaapiStepperConfig
 ): HaapiStepperStep {
-  const nextStepData = formatNextStepData(step);
+  const nextStepData = formatStepData(step);
 
   if (config.webAuthnAutostart && isWebAuthnStep(nextStepData)) {
     void manageWebAuthnAutoStart(nextStepData, nextStep);

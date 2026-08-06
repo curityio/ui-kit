@@ -24,7 +24,7 @@ import { isClientOperation, performClientOperation } from '../actions/client-ope
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './step-handlers/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
-import { formatNextStepData, getElementWithDataHelpers } from './data-formatters/format-next-step-data';
+import { formatStepData, getElementWithDataHelpers } from './data-formatters/format-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
 import {
   HaapiStepperConfig,
@@ -422,7 +422,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-      return nextStepSuccess(formatNextStepData(nextStepResponse), action, payload);
+      return nextStepSuccess(formatStepData(nextStepResponse), action, payload);
 
     case HAAPI_STEPS.CONTINUE_SAME:
       if (isLink(action)) {
