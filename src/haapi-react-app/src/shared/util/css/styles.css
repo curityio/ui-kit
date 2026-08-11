@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-@import '@curity/ui-kit-css/lib/dist/index.css';
+@import '@curity/ui-kit-css';
 
 /* Base styles */
 :root {

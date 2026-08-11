@@ -9,16 +9,15 @@
     "npm": ">=10.9.4"
   },
   "scripts": {
-    "prestart": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
+    "prestart": "test \"$SKIP_PRESTART\" = \"1\" || npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
     "start": "vite --config vite-previewer.config.ts --mode previewer",
     "dev": "vite --open",
-    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
     "tsBuild:watch": "tsc -b -w",
     "lint": "eslint .",
     "lint:watch": "npx onchange '**/*.ts?(x)' -- npm run lint",
-    "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
