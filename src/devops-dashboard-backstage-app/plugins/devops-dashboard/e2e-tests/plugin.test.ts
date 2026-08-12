@@ -18,6 +18,9 @@ test('renders the DevOps Dashboard page with the Database Clients section', asyn
     page.getByRole('tab', { name: 'Database Clients' }),
   ).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: 'Database Clients' }),
+    page.getByRole('searchbox', { name: 'Search database clients' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('rowheader', { name: 'spa-client' }),
   ).toBeVisible();
 });
