@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { Well } from '@curity/haapi-react-sdk/haapi-stepper/ui/well/Well';
+import { Well } from '../../ui/Well';
 
 export interface ErrorFallbackProps {
   error?: Error;

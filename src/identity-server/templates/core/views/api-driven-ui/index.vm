@@ -20,9 +20,21 @@
     #end
     #parse("fragments/csp")
 
-    <title></title>
-    <script type="module" crossorigin src="$!_staticResourceRootPath/assets/js/api-driven-ui.js?v=${_cacheBustingHash}"></script>
-    <link rel="stylesheet" crossorigin href="$!_staticResourceRootPath/assets/css/api-driven-ui.css?v=${_cacheBustingHash}">
+    <title>
+        #if ($!_apiDrivenApplicationName && $_apiDrivenApplicationName != "")
+            #message("meta.signin-to") $_tr.encodeHtml($_apiDrivenApplicationName)
+        #else
+            #message("meta.signin")
+        #end
+    </title>
+
+    #if ($_cacheBustingHash)
+        #set ($_cacheBustingQuery = "?v=" + $_cacheBustingHash)
+    #end
+    #parse("fragments/api-driven-ui/assets")
+    #if ($theme_css_path)
+        <link rel="stylesheet" type="text/css" href="${theme_css_path}$!_cacheBustingQuery" />
+    #end
     #if ($_configured_ui_theme_css_path)
         <link rel="stylesheet" href="${_configured_ui_theme_css_path}"/>
     #end

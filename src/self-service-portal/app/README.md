@@ -56,6 +56,11 @@ application created in the Identity Server Admin UI under "Profiles -> {Applicat
 
 ## Build
 
+If you plan to deploy the SSP as a [standalone application](#ssp-served-as-a-standalone-application), first copy
+the `.env-example` to `.env` and update the [environment variables](#environment-file) to point to your Identity
+Server instance and configure other settings as needed — the variables are baked into the bundle at build time.
+When the SSP is [served under the Identity Server](#ssp-served-under-the-identity-server), no `.env` file is needed.
+
 To build the Self-Service Portal application for production, run the following command:
 
 ```shell
@@ -70,12 +75,16 @@ There are two options how to take the SSP application into use:
 
 ### SSP served under the Identity Server
 
+In this scenario, no `.env` file is needed — the Identity Server injects the configuration into the HTML template at runtime.
+
 1. Copy the contents of the `dist/assets` directory to the Identity Server under the following path:
    `${IDSVR_HOME}/usr/share/webroot/assets/apps/self-service-portal/`
-2. In case the html template needs to be customized, check the parent README.md for instructions.
-3. Create a Self-Service Portal Application in the Identity Server.
+2. Rename the copied entrypoint assets to match what the Identity Server html template references:
+   `index-*.js` → `index.js`, `index-*.css` → `index.css`, `favicon-*.png` → `favicon.png`.
+   Do not rename other hashed assets (eg chunks, fonts, images), since they are referenced by their hashed names.
+3. In case the html template needs to be customized, check the parent README.md for instructions.
+4. Create a Self-Service Portal Application in the Identity Server.
    Follow the instructions in the [Identity Server documentation](https://curity.io/docs/idsvr/latest/application-service-admin-guide/applications/self-service-portal.html) to set up the SSP.
-4. Copy the `.env-example` to e.g. `.env` and update the [environment variables](#environment-file) to point to your Identity Server instance and configure other settings as needed.
 5. The Identity Server will serve the SSP application under the path which can be found from the Admin UI.
 
 ### SSP served as a standalone application
@@ -86,9 +95,9 @@ It's important to ensure that the Self-Service Portal and the Identity Server ar
 to allow proper cookie sharing for authentication and session management.
 [Definition of same site](https://developer.mozilla.org/en-US/docs/Glossary/Site)
 
-1. Deploy the contents of the `dist` directory to your web server or hosting environment.
-2. Create a Self-Service Portal Application in the Identity Server.
-3. Set the web server URL to the Self-Service Portal Application.
-4. Copy the `.env-example` to e.g. `.env` and update the [environment variables](#environment-file) to point to your Identity Server instance and configure other settings as needed.
+1. Build the application with the [environment variables](#environment-file) configured, as described in the [Build](#build) section.
+2. Deploy the contents of the `dist` directory to your web server or hosting environment.
+3. Create a Self-Service Portal Application in the Identity Server.
+4. Set the web server URL to the Self-Service Portal Application.
 5. Ensure that the Self-Service Portal and the Identity Server are configured to be under the same site domain to allow proper cookie sharing for authentication and session management.
    It's convenient to use a reverse proxy in front of both applications to achieve this.

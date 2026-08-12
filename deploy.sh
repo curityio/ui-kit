@@ -7,7 +7,7 @@
 #
 # Prerequisites:
 # - Set IDSVR_HOME environment variable to your Identity Server installation directory
-# - Run the build process before deploying: npm run build
+# - Run the build process before deploying
 #
 # Usage:
 #   ./deploy.sh [template-area-name]
@@ -63,6 +63,16 @@ copy_with_feedback() {
     fi
 }
 
+# Exit with an error if the given template area does not exist
+assert_template_area_exists() {
+    local area=$1
+
+    if [ ! -d "$IDSVR_HOME/usr/share/templates/template-areas/$area" ]; then
+        echo -e "${RED}Error: Template area '$area' does not exist in $IDSVR_HOME/usr/share/templates/template-areas/${NC}"
+        exit 1
+    fi
+}
+
 echo "================================================"
 echo "Identity Server Deployment"
 echo "================================================"
@@ -98,15 +108,10 @@ else
     if [ -n "$TEMPLATE_AREA" ]; then
         # Deploy to specific template area only
         echo -e "${YELLOW}Deploying Self Service Portal to template area: $TEMPLATE_AREA${NC}"
+        assert_template_area_exists "$TEMPLATE_AREA"
 
         USSP_TEMPLATE_PATH="$IDSVR_HOME/usr/share/templates/template-areas/$TEMPLATE_AREA/apps/self-service-portal"
         USSP_MESSAGES_BASE="$IDSVR_HOME/usr/share/messages/template-areas/$TEMPLATE_AREA"
-
-        # Check if template area exists
-        if [ ! -d "$IDSVR_HOME/usr/share/templates/template-areas/$TEMPLATE_AREA" ]; then
-            echo -e "${RED}Error: Template area '$TEMPLATE_AREA' does not exist in $IDSVR_HOME/usr/share/templates/template-areas/${NC}"
-            exit 1
-        fi
 
         mkdir -p "$USSP_TEMPLATE_PATH"
         cp src/self-service-portal/app/dist/index.html "$USSP_TEMPLATE_PATH/index.vm"
@@ -148,6 +153,56 @@ else
                 fi
             done
         fi
+    fi
+fi
+
+echo ""
+echo "================================================"
+echo "HAAPI React App Deployment"
+echo "================================================"
+
+# HAAPI React App - Check if dist exists
+if [ ! -d "src/haapi-react-app/dist/assets" ]; then
+    echo -e "${YELLOW}⚠ HAAPI React App build not found. Skipping HAAPI React App deployment.${NC}"
+    echo -e "${YELLOW}  Run 'npm run build:haapi-react-app' first if you want to deploy the HAAPI React App.${NC}"
+else
+    # Locate the content-hashed entry bundles produced by Vite
+    HAAPI_REACT_APP_JS_FILE=$(ls src/haapi-react-app/dist/assets/index-*.js 2>/dev/null | head -n1)
+    HAAPI_REACT_APP_CSS_FILE=$(ls src/haapi-react-app/dist/assets/index-*.css 2>/dev/null | head -n1)
+
+    if [ -z "$HAAPI_REACT_APP_JS_FILE" ] || [ -z "$HAAPI_REACT_APP_CSS_FILE" ]; then
+        echo -e "${YELLOW}⚠ HAAPI React App build output is incomplete (missing JS or CSS bundle). Skipping HAAPI React App deployment.${NC}"
+    else
+
+        # Assets always go to the global webroot.
+        # Rename the "index-" prefix to "api-driven-ui-" while keeping Vite's content hash,
+        # so the deployed assets are recognisable and different builds still coexist.
+        HAAPI_REACT_APP_JS_NAME="api-driven-ui-$(basename "$HAAPI_REACT_APP_JS_FILE" | sed 's/^index-//')"
+        HAAPI_REACT_APP_CSS_NAME="api-driven-ui-$(basename "$HAAPI_REACT_APP_CSS_FILE" | sed 's/^index-//')"
+
+        HAAPI_WEBROOT_ASSETS="$IDSVR_HOME/usr/share/webroot/assets"
+        mkdir -p "$HAAPI_WEBROOT_ASSETS/js" "$HAAPI_WEBROOT_ASSETS/css"
+        cp "$HAAPI_REACT_APP_JS_FILE" "$HAAPI_WEBROOT_ASSETS/js/$HAAPI_REACT_APP_JS_NAME"
+        cp "$HAAPI_REACT_APP_CSS_FILE" "$HAAPI_WEBROOT_ASSETS/css/$HAAPI_REACT_APP_CSS_NAME"
+        echo -e "${GREEN}✓ HAAPI React App assets deployed to webroot/assets ($HAAPI_REACT_APP_JS_NAME, $HAAPI_REACT_APP_CSS_NAME)${NC}"
+
+        # The asset-include fragment is overridable per template location. Always (re)write it to
+        # point at the hashed filenames just deployed (overrides by default, template area when given).
+        if [ -n "$TEMPLATE_AREA" ]; then
+            echo -e "${YELLOW}Deploying HAAPI React App asset fragment to template area: $TEMPLATE_AREA${NC}"
+            assert_template_area_exists "$TEMPLATE_AREA"
+            HAAPI_FRAGMENT_DIR="$IDSVR_HOME/usr/share/templates/template-areas/$TEMPLATE_AREA/fragments/api-driven-ui"
+        else
+            echo -e "${YELLOW}Deploying HAAPI React App asset fragment to overrides...${NC}"
+            HAAPI_FRAGMENT_DIR="$IDSVR_HOME/usr/share/templates/overrides/fragments/api-driven-ui"
+        fi
+
+        mkdir -p "$HAAPI_FRAGMENT_DIR"
+        cat > "$HAAPI_FRAGMENT_DIR/assets.vm" <<EOF
+<script type="module" crossorigin src="\$!_staticResourceRootPath/assets/js/$HAAPI_REACT_APP_JS_NAME\$!_cacheBustingQuery"></script>
+<link rel="stylesheet" crossorigin href="\$!_staticResourceRootPath/assets/css/$HAAPI_REACT_APP_CSS_NAME\$!_cacheBustingQuery">
+EOF
+        echo -e "${GREEN}✓ HAAPI React App asset fragment written to $HAAPI_FRAGMENT_DIR/assets.vm${NC}"
     fi
 fi
 

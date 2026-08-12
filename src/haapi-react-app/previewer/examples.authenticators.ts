@@ -23,7 +23,7 @@ import {
   HAAPI_FORM_FIELDS,
   HTTP_METHODS,
 } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
-import { MEDIA_TYPES } from '../src/shared/util/types/media.types';
+import { MEDIA_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/media.types';
 import { PreviewItemData } from './examples';
 
 const authenticatorHtmlFormLogin: HaapiActionStep = {

@@ -248,6 +248,82 @@ svg {
   margin-block: 0 var(--space-2);
 }
 
+.haapi-stepper-consent-logos {
+  @extend .flex, .flex-center, .justify-center, .p2;
+
+  --consent-logo-circle-size: 80px;
+  --consent-logo-max-width: 70px;
+  --consent-logo-client-max-width: 50px;
+  --consent-checkmark-size: 2.5rem;
+
+  --consent-checkmark-gap: calc(var(--consent-checkmark-size) / 2 + var(--space-1));
+}
+
+@media (min-width: 576px) {
+  .haapi-stepper-consent-logos {
+    --consent-logo-circle-size: 120px;
+    --consent-logo-max-width: 100px;
+    --consent-logo-client-max-width: 70px;
+  }
+}
+
+.haapi-stepper-consent-logo {
+  flex: 0 0 40%;
+}
+
+.haapi-stepper-consent-logo-circle {
+  @extend .flex, .flex-center, .justify-center, .relative, .mx-auto;
+
+  width: var(--consent-logo-circle-size);
+  height: var(--consent-logo-circle-size);
+  border-radius: 100%;
+  background-color: var(--color-grey-subtle);
+  z-index: 2;
+}
+
+.haapi-stepper-consent-logo-image {
+  max-width: var(--consent-logo-max-width);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.haapi-stepper-consent-logo-image-client {
+  max-width: var(--consent-logo-client-max-width);
+}
+
+.haapi-stepper-consent-logos-checkmark {
+  @extend .flex, .flex-center, .justify-center, .relative;
+
+  flex: 0 0 20%;
+  z-index: 1;
+  color: var(--color-success);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    border-block-start: 1px dashed var(--color-grey-light);
+  }
+
+  &::before {
+    left: -40%;
+    right: calc(50% + var(--consent-checkmark-gap));
+  }
+
+  &::after {
+    left: calc(50% + var(--consent-checkmark-gap));
+    right: -40%;
+  }
+
+  svg {
+    width: var(--consent-checkmark-size);
+    height: var(--consent-checkmark-size);
+  }
+}
+
 .haapi-stepper-page-symbol {
   text-align: center;
   width: var(--login-symbol-size);
@@ -279,6 +355,57 @@ svg {
   @extend .center, .flex, .flex-column;
 }
 
+.haapi-stepper-bankid-qr-code-accessibility {
+  details + details {
+    @extend .mt2;
+  }
+
+  details[open] summary {
+    margin-bottom: var(--space-1);
+  }
+
+  details[open]::details-content {
+    padding-block-start: 0;
+  }
+
+  summary + * {
+    margin-block-start: 0;
+  }
+}
+
+.haapi-stepper-webauthn-registration-attachment {
+  @extend .button, .w100, .mb2, .p3, .left-align;
+
+  justify-content: unset;
+  background-color: transparent;
+  color: var(--color-text);
+  border: var(--form-field-border-width) var(--form-field-border-style) var(--form-field-border-color);
+  border-radius: var(--form-field-border-radius);
+  cursor: pointer;
+  transition:
+    color 200ms,
+    background-color 200ms,
+    border-color 200ms;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    color: white;
+  }
+}
+
+.haapi-stepper-webauthn-registration-attachment-icon {
+  @extend .flex-noshrink;
+  width: 60px;
+  height: 60px;
+}
+
+.haapi-stepper-webauthn-registration-attachment-title {
+  font-family: var(--type-bold);
+  margin-inline-end: var(--space-2);
+}
+
 .haapi-stepper-heading {
   &:is(h1) {
     font-size: calc(var(--type-base-size) * 1.75);
@@ -297,13 +424,18 @@ svg {
   width: min(100%, 100px);
 }
 
-.haapi-stepper-polling-progress {
+.haapi-stepper-polling-progress-bar {
+  @extend .mt2, .mb2;
+  display: block;
+  width: 100%;
+  max-width: 250px;
+  margin-inline: auto;
+  border: none;
   border-radius: var(--form-field-border-radius);
   background-color: var(--color-grey-subtle);
-  outline: 1px solid var(--color-grey-light);
-  outline-offset: 2px;
-  border: none;
 
+  /* Set the track/fill at class specificity — the base `progress` element rules lose the cascade
+     here, which left the fill as the browser default (blue) instead of the brand colour. */
   &::-webkit-progress-bar {
     background-color: var(--color-grey-subtle);
     border-radius: var(--form-field-border-radius);
@@ -318,6 +450,11 @@ svg {
     background-color: var(--color-spot);
     border-radius: var(--form-field-border-radius);
   }
+}
+
+.haapi-stepper-polling-progress-duration {
+  @extend .center;
+  margin-block-start: var(--space-1);
 }
 
 .haapi-stepper-link-qr-code-button {

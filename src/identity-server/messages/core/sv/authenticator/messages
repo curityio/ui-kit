@@ -16,3 +16,4 @@ continue-to-login-template=Fortsätt för att logga in som %s
 external-browser.launch.use-browser=Extern webbläsare måste användas
 external-browser.launch.continue=Om du inte omdirigeras automatiskt, klicka här för att fortsätta
 external-browser.launch.cancel=Avbryt
+external-browser.launch.error.browser-window=Det gick inte att öppna en ny webbläsarflik, vilket krävs för att fortsätta autentiseringsprocessen. Detta kan bero på att popup-fönster blockeras av webbläsaren.

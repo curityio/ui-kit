@@ -19,6 +19,10 @@ page.redirect.please-wait=Aguarde...
 error.identifier=Identificador de erro
 authentication.success=Você autenticou com sucesso
 view.title.cancel=Cancelar esta operação
+
+meta.signin=Iniciar sessão
+meta.signin-to=Iniciar sessão em
+
 validation.error.username.required=Nome de usuário obrigatório
 error.password.update.failed=Não foi possível atualizar a senha
 

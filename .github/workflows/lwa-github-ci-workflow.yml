@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - 'src/haapi-react-app/**'
+      - 'src/haapi-react-sdk/**'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - 'src/haapi-react-app/**'
+      - 'src/haapi-react-sdk/**'
   workflow_dispatch:
 
 jobs:
@@ -30,16 +32,28 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Check Formatting
+      - name: SDK — Check Formatting
+        run: npm run prettier-check -w src/haapi-react-sdk
+
+      - name: SDK — Lint
+        run: npm run lint -w src/haapi-react-sdk
+
+      - name: SDK — Typecheck
+        run: npm run typecheck -w src/haapi-react-sdk
+
+      - name: SDK — Run Tests
+        run: npm run test -w src/haapi-react-sdk -- run
+
+      - name: App — Check Formatting
         run: npm run prettier-check -w src/haapi-react-app
 
-      - name: Lint Code
+      - name: App — Lint
         run: npm run lint -w src/haapi-react-app
 
-      - name: Build Project
+      - name: App — Build Project
         run: npm run build:haapi-react-app
 
-      - name: Run Tests
+      - name: App — Run Tests
         run: npm run test -w src/haapi-react-app -- run
 
   notify-slack:

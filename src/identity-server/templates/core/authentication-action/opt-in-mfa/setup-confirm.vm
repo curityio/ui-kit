@@ -33,7 +33,7 @@
                 #end
             </ul>
         </div>
-        <div class="flex mt1" style="justify-content: flex-end">
+        <div class="flex justify-end mt1">
             <button class="button button-tiny button-link button-print-recovery-codes">
                 <i class="icon ion-ios-printer-outline inlineicon"></i>#message("${_templatePrefix}.setup-confirm.view.codes.print")
             </button>
