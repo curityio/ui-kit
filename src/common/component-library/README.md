@@ -91,8 +91,7 @@ function App() {
 
 ### Prerequisites
 
-- Node.js >= 22.22.0
-- npm >= 10.9.4
+- Node.js and npm — the versions in [`.nvmrc`](../../../.nvmrc) (run `nvm use`)
 
 ### Scripts
 
