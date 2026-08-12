@@ -25,6 +25,7 @@
     "clean-libs": "find ../../lib -mindepth 1  -maxdepth 1 ! -name '.gitignore' ! -name 'ui-kit-runtime.zip' -exec rm -rf {} +"
   },
   "dependencies": {
+    "@curity/ui-kit-css": "^1.0.0",
     "jquery": "3.5.1"
   },
   "devDependencies": {
