@@ -38,6 +38,7 @@
     "@backstage/plugin-techdocs-module-addons-contrib": "^1.1.38",
     "@backstage/plugin-user-settings": "^0.9.5",
     "@backstage/ui": "^0.17.0",
+    "@internal/backstage-plugin-devops-dashboard": "workspace:^",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
     "common": "workspace:^",
