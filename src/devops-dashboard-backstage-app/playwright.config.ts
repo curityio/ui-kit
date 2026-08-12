@@ -33,7 +33,9 @@ export default defineConfig({
     : [
         {
           command: 'yarn start app',
-          url: 'http://localhost:3000',
+          // Reuses an already-running dev server (honor a port override
+          // in app-config.local.yaml by setting PLAYWRIGHT_URL).
+          url: process.env.PLAYWRIGHT_URL ?? 'http://localhost:3000',
           reuseExistingServer: true,
           timeout: 120_000,
         },
@@ -56,6 +58,8 @@ export default defineConfig({
     baseURL:
       process.env.PLAYWRIGHT_URL ??
       (process.env.CI ? 'http://localhost:7007' : 'http://localhost:3000'),
+    // The sign-in popup goes through the dev Curity server's self-signed TLS.
+    ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
