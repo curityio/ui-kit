@@ -36,28 +36,28 @@ Installation follows the standard Backstage steps:
 
 1. Add the package to your app:
 
-    ```sh
-    yarn --cwd packages/app add @internal/backstage-plugin-devops-dashboard
-    ```
+   ```sh
+   yarn --cwd packages/app add @internal/backstage-plugin-devops-dashboard
+   ```
 
 2. Let your app discover it. If your `app-config.yaml` enables package
    discovery, you are done:
 
-    ```yaml
-    app:
-        packages: all
-    ```
+   ```yaml
+   app:
+     packages: all
+   ```
 
-    Without discovery, register the plugin explicitly in your app's
-    `createApp` call:
+   Without discovery, register the plugin explicitly in your app's
+   `createApp` call:
 
-    ```tsx
-    import devopsDashboardPlugin from '@internal/backstage-plugin-devops-dashboard';
+   ```tsx
+   import devopsDashboardPlugin from '@internal/backstage-plugin-devops-dashboard';
 
-    const app = createApp({
-        features: [devopsDashboardPlugin],
-    });
-    ```
+   const app = createApp({
+     features: [devopsDashboardPlugin],
+   });
+   ```
 
 3. Configure sign-in through Curity as described under
    [Requirements](#requirements).

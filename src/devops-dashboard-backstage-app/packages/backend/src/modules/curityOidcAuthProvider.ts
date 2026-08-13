@@ -1,5 +1,8 @@
 import { createBackendModule } from '@backstage/backend-plugin-api';
-import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
+import {
+  DEFAULT_NAMESPACE,
+  stringifyEntityRef,
+} from '@backstage/catalog-model';
 import {
   authProvidersExtensionPoint,
   createOAuthProviderFactory,

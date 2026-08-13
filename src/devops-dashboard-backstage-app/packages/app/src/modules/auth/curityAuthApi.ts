@@ -22,7 +22,11 @@ import { CURITY_AUTH_PROVIDER_ID } from 'common';
  * `curityAuthApiRef.getAccessToken(['urn:se:curity:scopes:admin:api'])`
  */
 export const curityAuthApiRef = createApiRef<
-  OAuthApi & OpenIdConnectApi & ProfileInfoApi & BackstageIdentityApi & SessionApi
+  OAuthApi &
+    OpenIdConnectApi &
+    ProfileInfoApi &
+    BackstageIdentityApi &
+    SessionApi
 >({
   id: 'auth.curity',
 });
@@ -55,7 +59,11 @@ export const curityAuthApi = ApiBlueprint.make({
               icon: () => null,
             },
             environment: configApi.getOptionalString('auth.environment'),
-            defaultScopes: ['openid', 'profile', 'urn:se:curity:scopes:admin:api'],
+            defaultScopes: [
+              'openid',
+              'profile',
+              'urn:se:curity:scopes:admin:api',
+            ],
           }),
       }),
     ),
