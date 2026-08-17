@@ -13,3 +13,4 @@ meta.title=400 - Operação inválida
 page.title=Operação inválida
 system.status.bad.request=A solicitação não pôde ser processada.
 error.parameters.missing-or-invalid=Parâmetros de entrada ausentes ou inválidos
+binding.message.too.long=A mensagem de vinculação excede o comprimento máximo permitido.

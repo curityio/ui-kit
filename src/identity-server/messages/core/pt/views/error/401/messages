@@ -12,3 +12,4 @@
 meta.title=401 - Não autorizado
 page.title=Não autorizado
 system.status.authentication.error=Você não está autorizado a executar esta solicitação.
+token-unknown=O token de acesso fornecido é inválido ou expirou.
