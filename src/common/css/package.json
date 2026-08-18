@@ -7,7 +7,6 @@
   "private": true,
   "exports": {
     ".": "./lib/src/main.css",
-    "./src/*": "./lib/src/*",
     "./lib/dist/index.css": "./lib/dist/index.css"
   },
   "scripts": {
