@@ -1,3 +1,4 @@
 meta.title=401 - Ej tillåten
 page.title=Ej tillåten
 system.status.authentication.error=Du har inte rättigheter att utföra denna begäran
+token-unknown=Den angivna åtkomsttoken är ogiltig eller har upphört att gälla.
