@@ -2,15 +2,33 @@
 layout: "../../layouts/Page.astro"
 title: "Install and usage"
 description: "Usage on how to install and use the library"
-updatedAt: "August 08 2022"
+updatedAt: "August 18 2026"
 ---
 
 # Install and Usage
 
-## How to use the CSS library
+`@curity/ui-kit-css` is not published to the npm registry. It is consumed from this repository — either as a workspace package inside the Curity UI Kit monorepo, or from a clone of the repository.
 
-In most modern JS tooling and frameworks or when using a separate bundler, you can import the CSS directly from `node_modules` like this:
+## With a module bundler
+
+In workspace packages of this repository, or in any project with modern JS tooling that can resolve the package (for example via a `file:` dependency on a clone), import the CSS source directly:
 
 ```js
 import "@curity/ui-kit-css";
+```
+
+The bundler inlines the `@import`ed partials and minifies the output as part of your normal build — no separate CSS build step is needed.
+
+## Without a module bundler
+
+Projects that link stylesheets directly (plain HTML pages, server-rendered templates) need a single flat CSS file. Build it from the repository root:
+
+```shell
+npm run build:css
+```
+
+Then copy `src/common/css/lib/dist/index.css` into your project and link it:
+
+```html
+<link rel="stylesheet" href="index.css" />
 ```
