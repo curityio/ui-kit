@@ -12,7 +12,6 @@
   },
   "scripts": {
     "start:docs": "npm start -w docs",
-    "start:lib": "npm start -w lib",
     "start": "npm run start:docs",
     "build:docs": "npm run build -w docs",
     "build:lib": "npm run build -w lib",

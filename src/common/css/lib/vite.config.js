@@ -1,10 +1,6 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  server: {
-    open: false,
-    port: 5176,
-  },
   build: {
     minify: true,
     target: 'esnext',
