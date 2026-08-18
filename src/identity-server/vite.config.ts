@@ -54,7 +54,6 @@ export default defineConfig(({ mode }) => {
   if (mode === "styles") {
     return {
       ...shared,
-      plugins: shared.plugins,
       build: {
         ...shared.build,
         emptyOutDir: false,
