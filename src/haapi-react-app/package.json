@@ -7,29 +7,29 @@
   "private": true,
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=22.22.0",
-    "npm": ">=10.9.4"
+    "node": ">=24.19.0",
+    "npm": ">=11.17.0"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "prestart": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
-    "predev": "test \"$SKIP_PRESTART\" = \"1\" || (npm run watch:css-lib & sleep 2 && npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library) || true",
+    "prestart": "test \"$SKIP_PRESTART\" = \"1\" || npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
+    "predev": "test \"$SKIP_PRESTART\" = \"1\" || npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
     "start": "npm run previewer",
     "dev": "vite --open /start.html",
-    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css --workspace @curity/ui-kit-component-library || true",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint .",
     "prettier-check": "prettier --check .",
-    "previewer": "vite serve previewer --open",
-    "watch:css-lib": "npm run watch --workspace @curity/ui-kit-css-lib"
+    "previewer": "vite serve previewer --open"
   },
   "dependencies": {
     "@curity/haapi-react-sdk": "*",
     "@curity/identityserver-haapi-web-driver": "^1.3.0",
+    "@curity/ui-kit-css": "^1.0.0",
     "@curity/ui-kit-icons": "^1.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.2.7"

@@ -111,6 +111,32 @@ h4 {
   }
 }
 
+.h5,
+h5 {
+  font-size: calc(var(--type-base-size) * 1);
+}
+
+@media (width >=64em) {
+
+  .h5,
+  h5 {
+    font-size: calc(var(--type-base-size) * 1.075);
+  }
+}
+
+.h6,
+h6 {
+  font-size: var(--type-base-size);
+}
+
+@media (width >=64em) {
+
+  .h6,
+  h6 {
+    font-size: calc(var(--type-base-size) * 1.05);
+  }
+}
+
 p {
   color: var(--color-text);
   font-weight: var(--type-weight);
