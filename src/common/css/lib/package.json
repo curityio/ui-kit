@@ -11,10 +11,8 @@
     "name": "Curity AB"
   },
   "scripts": {
-    "start": "vite",
     "build": "vite build",
     "watch": "vite build --watch",
-    "postwatch": "mkdir -p ../../identity-server/build/curity/webroot/assets/css && cp src/!(main|curity-application).css ../../identity-server/build/curity/webroot/assets/css/",
     "format": "npx prettier --write ./src/**/*.css",
     "preview": "vite preview",
     "lint": "stylelint ./src/**/**/*.css",
@@ -24,8 +22,5 @@
   "devDependencies": {
     "prettier": "^3.4.2",
     "vite": "^7.3.1"
-  },
-  "dependencies": {
-    "concurrently": "^8.2.0"
   }
 }

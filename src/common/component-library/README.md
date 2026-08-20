@@ -150,11 +150,15 @@ src/
 - `react-dom` ^18.0.0
 
 ### Internal Dependencies
-- `@curity/ui-kit-css` - Base CSS styles
 - `@curity/ui-kit-icons` - Icon library
 - `react`
 - `react-router` - Routing support
 - `@radix-ui/react-dialog` - Dialog support
+
+### Runtime Requirements
+- `@curity/ui-kit-css` - not an npm dependency, but the component styles consume its theme variables
+  (`--color-primary`, `--button-border-radius`, `--form-field-*`, ...), so the consuming app must load the
+  Curity CSS (e.g. `import "@curity/ui-kit-css"`) for components to render correctly.
 
 ## Browser Support
 

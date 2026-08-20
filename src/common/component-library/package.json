@@ -28,7 +28,7 @@
     "dev": "vite",
     "start": "vite",
     "watch": "vite build --watch",
-    "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-css || true",
+    "prebuild": "npm run build --workspace @curity/ui-kit-icons || true",
     "build": "npm run tsBuild && vite build",
     "tsBuild": "tsc -b",
     "tsBuild:watch": "tsc -b -w",
@@ -42,7 +42,6 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@curity/ui-kit-css": "^1.0.0",
     "@curity/ui-kit-icons": "^1.0.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "react": "^19.2.0",
