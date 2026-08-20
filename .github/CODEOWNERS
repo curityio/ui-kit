@@ -1,0 +1,41 @@
+# Code owners for the Curity UI Kit.
+#
+# Only the dependency manifests and the lockfile have owners. Those are the files
+# Dependabot and Sonatype IQ change, so every update pull request reaches the people
+# who maintain that part of the tree — which is what this file exists for.
+#
+# Everything else is deliberately left unowned. Ordinary code pull requests stay
+# free for anyone to pick up, and the repository's own rule (one approving review
+# from a user with write access) still applies to them.
+#
+# Owners follow actual contribution per workspace. Matching happens per file and the
+# last matching rule wins — CODEOWNERS is not additive — so a pull request requests
+# review from the owners of every file it touches.
+#
+# A code owner must have write access, otherwise GitHub ignores the entry.
+
+# Default for any manifest, so a newly added workspace is never left unowned.
+**/package.json                             @urre @aleixsuau
+
+# Root manifest (build tooling only) and the single npm lockfile, which every
+# dependency update touches. Stated explicitly rather than relying on the glob.
+/package.json                               @urre @aleixsuau
+/package-lock.json                          @urre @aleixsuau
+
+# Shared CSS, icons, assets and component library.
+/src/common/assets/package.json             @urre @vahag-curity
+/src/common/component-library/package.json  @urre @vahag-curity
+/src/common/css/package.json                @urre @vahag-curity
+/src/common/css/lib/package.json            @urre @vahag-curity
+/src/common/css/docs/package.json           @urre @vahag-curity
+/src/common/icons/package.json              @urre @vahag-curity
+
+# HAAPI React.
+/src/haapi-react-app/package.json           @aleixsuau @urre
+/src/haapi-react-sdk/package.json           @aleixsuau @luisgoncalves
+
+# Identity Server templates.
+/src/identity-server/package.json           @urre @luisgoncalves @markoweb
+
+# Self-service portal.
+/src/self-service-portal/app/package.json   @urre @vahag-curity @markoweb
