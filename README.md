@@ -28,9 +28,7 @@ To work against a specific Identity Server release, check out its tag:
 git checkout ui-kit-11.4.0
 ```
 
-Maintenance work for a released version happens on the matching version branch, for example `version/11.4`.
-
-Tags and version branches are the only references that track a released state, so pin one of them rather than following `main`.
+Release tags are the only references that mark a released state, so pin a tag rather than following any branch. The `version/*` branches carry maintenance work for a released line and can contain changes that are not yet part of a release, so their tips are not release snapshots either.
 
 ## Prerequisites
 - Node.js (version as specified in the `.nvmrc` file)
