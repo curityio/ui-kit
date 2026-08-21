@@ -18,6 +18,18 @@ This monorepo contains:
 - UI Icons React Library
 - React Component Library
 
+## Branches and releases
+
+`main` is the development branch. It holds the work for the next release and does **not** correspond to any released version. It previously mirrored the latest release; that is no longer the case.
+
+To work against a specific Identity Server release, check out its tag:
+
+```shell
+git checkout ui-kit-11.4.0
+```
+
+Release tags are the only references that mark a released state, so pin a tag rather than following any branch. The `version/*` branches carry maintenance work for a released line and can contain changes that are not yet part of a release, so their tips are not release snapshots either.
+
 ## Prerequisites
 - Node.js (version as specified in the `.nvmrc` file)
 

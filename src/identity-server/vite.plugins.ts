@@ -45,6 +45,8 @@ export function createSharedPlugins(): PluginOption[] {
           dest: "templates/template-areas",
         },
         {
+          // Watch mode only tracks files reachable from the module graph, so a CSS file
+          // added here while watching (e.g. a new theme) needs a watcher restart to be copied.
           src: normalizePath(
             path.resolve(__dirname, "../common/css/lib/src/!(main|curity-application).css")
           ),
