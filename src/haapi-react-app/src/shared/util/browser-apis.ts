@@ -14,30 +14,49 @@
 export interface HistoryNavigation {
   readonly initialUrl: string;
 
-  addEntryChangeListener(listener: (state: unknown) => void): void;
+  /** Registers a listener for browser back/forward navigation. Returns a function that removes it. */
+  addEntryChangeListener(listener: (state: unknown) => void): () => void;
 
-  addEntry(state: unknown, url: string): void;
+  /** Updates the current history entry's state, keeping the current URL (reuses the entry). */
+  replaceEntry(state: unknown): void;
+
+  /** Appends a new history entry (keeping the current URL), discarding any forward entries. */
+  pushEntry(state: unknown): void;
+
+  /** Moves the browser through its history by `delta` entries (negative = back, positive = forward). */
+  go(delta: number): void;
+
+  /** The state attached to the current history entry (null when none was set). */
+  getState(): unknown;
 }
 
+// Stateless wrapper over `window.history`. It holds no per-flow state (e.g. "is this the first entry?"):
+// that decision belongs to the consumer, so the adapter can be a shared singleton with no lifecycle coupling.
 class BrowserHistoryNavigation implements HistoryNavigation {
   public readonly initialUrl = window.location.href;
-  private firstEntry = true;
 
-  addEntryChangeListener(listener: (state: unknown) => void): void {
-    window.addEventListener('popstate', event => {
+  addEntryChangeListener(listener: (state: unknown) => void): () => void {
+    const handler = (event: PopStateEvent) => {
       listener(event.state);
-    });
+    };
+    window.addEventListener('popstate', handler);
+    return () => window.removeEventListener('popstate', handler);
   }
 
-  addEntry(state: unknown, url: string): void {
-    if (this.firstEntry) {
-      // Account for the initial API request, in which case the current history entry should be reused and
-      // updated with the resulting state.
-      this.firstEntry = false;
-      window.history.replaceState(state, '');
-    } else {
-      window.history.pushState(state, '', url);
-    }
+  replaceEntry(state: unknown): void {
+    window.history.replaceState(state, '');
+  }
+
+  pushEntry(state: unknown): void {
+    window.history.pushState(state, '');
+  }
+
+  go(delta: number): void {
+    window.history.go(delta);
+  }
+
+  getState(): unknown {
+    return window.history.state;
   }
 }
 
