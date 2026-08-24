@@ -24,7 +24,7 @@ import { isClientOperation, performClientOperation } from '../actions/client-ope
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './step-handlers/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
-import { formatStepData, getElementWithDataHelpers } from './data-formatters/format-step-data';
+import { formatStepData, getEntityWithDataHelpers } from './data-formatters/format-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
 import {
   HaapiStepperConfig,
@@ -388,7 +388,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
 
     return processHaapiNextStep({
       ...params,
-      action: getElementWithDataHelpers(clientOperationData.action),
+      action: getEntityWithDataHelpers(clientOperationData.action),
       payload: clientOperationData.payload,
     });
   }
@@ -401,7 +401,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return processHaapiNextStep({
         ...params,
         currentStep: nextStepResponse,
-        action: getElementWithDataHelpers(nextStepResponse.actions[0]),
+        action: getEntityWithDataHelpers(nextStepResponse.actions[0]),
         payload: undefined,
       });
 

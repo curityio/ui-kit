@@ -12,14 +12,14 @@
 import { HAAPI_PROBLEM_STEPS, HaapiErrorStep } from '../../../data-access/types/haapi-step.types';
 import { HaapiStepperAppError, HaapiStepperInputError } from '../haapi-stepper.types';
 import type { HaapiStepperError } from '../haapi-stepper.types';
-import { getElementWithDataHelpers } from './format-step-data';
+import { getEntityWithDataHelpers } from './format-step-data';
 
 export function formatErrorStepData(step: HaapiErrorStep): HaapiStepperError {
   let appError: HaapiStepperAppError | null = null;
   let inputError: HaapiStepperInputError | null = null;
   const dataHelpers = {
-    messages: step.messages?.map(message => getElementWithDataHelpers(message)) ?? [],
-    links: step.links?.map(link => getElementWithDataHelpers(link)) ?? [],
+    messages: step.messages?.map(message => getEntityWithDataHelpers(message)) ?? [],
+    links: step.links?.map(link => getEntityWithDataHelpers(link)) ?? [],
   };
 
   switch (step.type) {
