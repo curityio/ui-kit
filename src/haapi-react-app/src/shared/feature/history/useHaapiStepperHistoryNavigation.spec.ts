@@ -22,6 +22,7 @@ import type {
   HaapiStepperHistoryEntry,
   HaapiStepperLink,
   HaapiStepperNextStepAction,
+  HaapiStepperNextStepPayload,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { useHaapiStepperHistoryNavigation } from './useHaapiStepperHistoryNavigation';
 import type { HistoryNavigation } from '../../util/browser-apis';
@@ -45,10 +46,26 @@ const postForm = {
   model: { method: HTTP_METHODS.POST },
 } as HaapiStepperFormAction;
 
-const entry = (action: HaapiStepperNextStepAction): HaapiStepperHistoryEntry =>
-  ({ step: {}, triggeredByAction: action, timestamp: new Date() }) as HaapiStepperHistoryEntry;
+const stepperEntry = (
+  action: HaapiStepperNextStepAction,
+  payload?: HaapiStepperNextStepPayload
+): HaapiStepperHistoryEntry =>
+  ({
+    step: {},
+    triggeredByAction: action,
+    triggeredByPayload: payload,
+    timestamp: new Date(),
+  }) as HaapiStepperHistoryEntry;
 
-// A minimal in-memory model of the browser history stack (state = { index }).
+// The browser state written by the hook: the step itself, not an index into a parallel structure.
+const reproducibleBrowserEntry = (action: HaapiStepperNextStepAction, payload?: HaapiStepperNextStepPayload) => ({
+  reproducible: true,
+  action,
+  payload,
+});
+const nonReproducibleBrowserEntry = { reproducible: false };
+
+// A minimal in-memory model of the browser history stack; each position holds the state the hook stored.
 function createFakeBrowser() {
   let entries: unknown[] = [];
   let pos = -1;
@@ -84,10 +101,10 @@ function createFakeBrowser() {
         listener = undefined;
       };
     },
-  };
+  } satisfies HistoryNavigation;
 
   return {
-    nav: nav as unknown as HistoryNavigation,
+    nav: nav as HistoryNavigation,
     raw: nav,
     position: () => pos,
     navigate: (delta: number) => {
@@ -101,14 +118,14 @@ function setup() {
   let history: HaapiStepperHistoryEntry[] = [];
   mockUseHaapiStepper.mockImplementation(() => ({ history, nextStep }));
 
-  const fake = createFakeBrowser();
+  const browser = createFakeBrowser();
   const { rerender } = renderHook(({ h }: { h: HistoryNavigation }) => useHaapiStepperHistoryNavigation(h), {
-    initialProps: { h: fake.nav },
+    initialProps: { h: browser.nav },
   });
 
-  const reachStep = (action: HaapiStepperNextStepAction) => {
-    history = [...history, entry(action)];
-    rerender({ h: fake.nav });
+  const reachStep = (action: HaapiStepperNextStepAction, payload?: HaapiStepperNextStepPayload) => {
+    history = [...history, stepperEntry(action, payload)];
+    rerender({ h: browser.nav });
   };
 
   // Simulates a polling tick: a POLLING step whose GET poll action carries a fresh id each time (as the SDK
@@ -127,10 +144,10 @@ function setup() {
         timestamp: new Date(),
       } as HaapiStepperHistoryEntry,
     ];
-    rerender({ h: fake.nav });
+    rerender({ h: browser.nav });
   };
 
-  return { nextStep, fake, reachStep, reachPollingStep };
+  return { nextStep, browser, reachStep, reachPollingStep };
 }
 
 describe('useHaapiStepperHistoryNavigation', () => {
@@ -138,136 +155,114 @@ describe('useHaapiStepperHistoryNavigation', () => {
     vi.clearAllMocks();
   });
 
-  it('records a browser entry for every step — reproducible and non-reproducible', () => {
-    const { fake, reachStep } = setup();
+  it('reuses the entry the app was loaded with for the first step, then pushes one entry per reproducible step', () => {
+    const { browser, reachStep } = setup();
+    const payload: HaapiStepperNextStepPayload = { username: 'alice' };
 
-    reachStep(link); // index 0 (first step reuses the loaded entry)
-    reachStep(postForm); // index 1 (non-reproducible, still recorded)
-    reachStep(getForm); // index 2
+    reachStep(link);
+    reachStep(getForm, payload);
 
-    expect(fake.raw.replaceEntry).toHaveBeenCalledTimes(1);
-    expect(fake.raw.replaceEntry).toHaveBeenCalledWith({ index: 0 });
-    expect(fake.raw.pushEntry).toHaveBeenCalledTimes(2);
-    expect(fake.raw.pushEntry).toHaveBeenNthCalledWith(1, { index: 1 });
-    expect(fake.raw.pushEntry).toHaveBeenNthCalledWith(2, { index: 2 });
+    expect(browser.raw.replaceEntry).toHaveBeenCalledTimes(1);
+    expect(browser.raw.replaceEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(link));
+    expect(browser.raw.pushEntry).toHaveBeenCalledTimes(1);
+    expect(browser.raw.pushEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(getForm, payload));
+    expect(browser.raw.pushEntry).toHaveBeenCalledAfter(browser.raw.replaceEntry);
   });
 
-  it('re-opens the previous reproducible step when going back', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0
-    reachStep(getForm); // 1
+  it('keeps a non-reproducible step only while it is the last one, replacing it with the step that follows', () => {
+    const { browser, reachStep } = setup();
 
-    fake.navigate(-1); // back to index 0
+    reachStep(postForm); // non-reproducible
+    reachStep(postForm); // non-reproducible
+    expect(browser.raw.replaceEntry).toHaveBeenCalledTimes(2);
+    expect(browser.raw.replaceEntry).toHaveBeenNthCalledWith(1, nonReproducibleBrowserEntry);
+    expect(browser.raw.replaceEntry).toHaveBeenNthCalledWith(2, nonReproducibleBrowserEntry);
+    expect(browser.raw.pushEntry).not.toHaveBeenCalled();
+
+    browser.raw.replaceEntry.mockClear();
+
+    reachStep(getForm); // reproducible
+
+    expect(browser.raw.replaceEntry).toHaveBeenCalledTimes(1);
+    expect(browser.raw.replaceEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(getForm));
+    expect(browser.raw.pushEntry).not.toHaveBeenCalled();
+  });
+
+  it('re-opens the previous step when going back', () => {
+    const { nextStep, browser, reachStep } = setup();
+    reachStep(link);
+    reachStep(getForm);
+
+    browser.navigate(-1);
 
     expect(nextStep).toHaveBeenCalledWith(link, undefined);
-    expect(fake.position()).toBe(0);
+    expect(browser.position()).toBe(0);
   });
 
-  it('skips a non-reproducible step when going back (lands on the nearest reproducible before it)', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0 (reproducible)
-    reachStep(postForm); // 1 (non-reproducible)
-    reachStep(getForm); // 2 (reproducible)
+  it('never re-opens a non-reproducible step: it is already gone from the history once a step follows it', () => {
+    const { nextStep, browser, reachStep } = setup();
+    reachStep(link);
+    reachStep(postForm);
+    reachStep(getForm);
 
-    fake.navigate(-1); // browser → index 1 (postForm)
+    browser.navigate(-1);
 
-    // postForm@1 is skipped; we land on link@0 and realign the browser there.
+    // postForm's entry was overwritten by getForm, so back lands straight on link.
     expect(nextStep).toHaveBeenCalledWith(link, undefined);
-    expect(fake.position()).toBe(0);
+    expect(browser.position()).toBe(0);
   });
 
-  it('skips a non-reproducible step when going forward', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0
-    reachStep(postForm); // 1
-    reachStep(getForm); // 2
+  it('bounces the user back when navigating forward onto the non-reproducible frontier', () => {
+    const { nextStep, browser, reachStep } = setup();
+    reachStep(link); // reproducible
+    reachStep(postForm); // non-reproducible, the frontier
 
-    fake.navigate(-2); // jump back to index 0 (link)
+    browser.navigate(-1); // back to link
     nextStep.mockClear();
 
-    fake.navigate(1); // forward → index 1 (postForm)
+    browser.navigate(1); // forward onto the non-reproducible entry
 
-    // postForm@1 skipped; land on getForm@2 and realign there.
-    expect(nextStep).toHaveBeenCalledWith(getForm, undefined);
-    expect(fake.position()).toBe(2);
+    expect(browser.raw.go).toHaveBeenCalledWith(-1);
+    expect(browser.position()).toBe(0); // bounced back onto link
+    expect(nextStep).toHaveBeenCalledWith(link, undefined);
   });
 
-  it('snaps back and stays put when there is no reproducible step ahead', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0 (reproducible)
-    reachStep(postForm); // 1 (non-reproducible, the frontier)
-
-    fake.navigate(-1); // back to link@0
+  it('ignores a navigation with no state, i.e. an entry this app did not record', () => {
+    const { nextStep, browser, reachStep } = setup();
+    reachStep(link);
     nextStep.mockClear();
 
-    fake.navigate(1); // forward → index 1 (postForm), nothing reproducible ahead
+    browser.navigate(-1); // past the first entry — no state
 
     expect(nextStep).not.toHaveBeenCalled();
-    expect(fake.position()).toBe(0); // snapped back onto link@0
-  });
-
-  // R1 ("Back on the first step must stay in the app, no reload") is deferred — see the PR description.
-  // Without a sentinel history entry seeded behind the first step, Back leaves the document and the browser
-  // reloads (a cross-document navigation that never fires `popstate`). The fake browser can't model that
-  // reload, so a test here would assert false confidence — R1 gets its test when the sentinel lands.
-
-  it('lands on the nearest reproducible step when the browser jumps multiple entries', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0
-    reachStep(getForm); // 1
-    reachStep(postForm); // 2
-
-    fake.navigate(-2); // jump from index 2 straight to index 0
-
-    expect(nextStep).toHaveBeenCalledWith(link, undefined);
-    expect(fake.position()).toBe(0);
-  });
-
-  it('discards the abandoned forward branch when a new action is taken after going back', () => {
-    const { fake, reachStep } = setup();
-    reachStep(link); // 0
-    reachStep(getForm); // 1 (will be abandoned)
-
-    fake.navigate(-1); // back to link@0 (re-opens link)
-    reachStep(postForm); // new action from @0 → overwrites index 1, dropping getForm
-
-    // The new step took index 1 (branch rewritten), not appended at index 2.
-    expect(fake.raw.pushEntry).toHaveBeenCalledTimes(2);
-    expect(fake.raw.pushEntry).toHaveBeenNthCalledWith(1, { index: 1 }); // getForm
-    expect(fake.raw.pushEntry).toHaveBeenNthCalledWith(2, { index: 1 }); // postForm replaced it
-  });
-
-  it('does not record browser entries for polling steps, so they never flood the history', () => {
-    const { fake, reachStep, reachPollingStep } = setup();
-    reachStep(link); // 0 — reproducible, recorded once
-    reachPollingStep(); // tick 1 — skipped
-    reachPollingStep(); // tick 2 — skipped
-    reachPollingStep(); // tick 3 — skipped
-
-    // Polling added nothing: only link@0 was recorded.
-    expect(fake.raw.replaceEntry).toHaveBeenCalledTimes(1);
-    expect(fake.raw.pushEntry).not.toHaveBeenCalled();
-
-    // The next real step after polling takes index 1 — polling consumed no indices.
-    reachStep(getForm);
-    expect(fake.raw.pushEntry).toHaveBeenCalledTimes(1);
-    expect(fake.raw.pushEntry).toHaveBeenCalledWith({ index: 1 });
+    expect(browser.raw.go).not.toHaveBeenCalled();
   });
 
   it('does not record a new entry when a step is re-opened via back navigation', () => {
-    const { nextStep, fake, reachStep } = setup();
-    reachStep(link); // 0
-    reachStep(getForm); // 1
-    fake.raw.replaceEntry.mockClear();
-    fake.raw.pushEntry.mockClear();
+    const { nextStep, browser, reachStep } = setup();
+    reachStep(link);
+    reachStep(getForm);
+    browser.raw.replaceEntry.mockClear();
+    browser.raw.pushEntry.mockClear();
 
-    fake.navigate(-1); // back to link@0 → re-opens link
+    browser.navigate(-1); // back to link → re-opens it
     reachStep(link); // stepper reaches the re-opened step (same action id)
 
-    // The re-open must not create another browser entry.
     expect(nextStep).toHaveBeenCalledWith(link, undefined);
-    expect(fake.raw.replaceEntry).not.toHaveBeenCalled();
-    expect(fake.raw.pushEntry).not.toHaveBeenCalled();
-    expect(fake.position()).toBe(0);
+    expect(browser.position()).toBe(0);
+    expect(browser.raw.replaceEntry).not.toHaveBeenCalled();
+    expect(browser.raw.pushEntry).not.toHaveBeenCalled();
+  });
+
+  it('lets polling steps occupy at most one entry, so they never flood the history', () => {
+    const { browser, reachStep, reachPollingStep } = setup();
+    reachStep(link);
+    reachPollingStep();
+    reachPollingStep();
+    reachPollingStep();
+
+    // Polling is non-reproducible: the first tick takes the frontier entry, the rest replace it.
+    expect(browser.raw.pushEntry).toHaveBeenCalledTimes(1);
+    expect(browser.raw.pushEntry).toHaveBeenCalledWith(nonReproducibleBrowserEntry);
   });
 });
