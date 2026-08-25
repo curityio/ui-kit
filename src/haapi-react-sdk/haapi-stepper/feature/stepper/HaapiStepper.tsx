@@ -10,14 +10,12 @@
  */
 
 import { ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { HaapiClientOperationAction, HaapiFormAction } from '../../data-access/types/haapi-action.types';
 import type { HaapiFetchAction } from '../../data-access/types/haapi-fetch.types';
 import { useHaapiFetch } from '../../data-access/useHaapiFetch';
 import {
   HAAPI_PROBLEM_STEPS,
   HAAPI_STEPPER_ELEMENT_TYPES,
   HAAPI_STEPS,
-  HaapiLink,
   HaapiStep,
 } from '../../data-access/types/haapi-step.types';
 
@@ -26,35 +24,31 @@ import { isClientOperation, performClientOperation } from '../actions/client-ope
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './step-handlers/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
-import { formatNextStepData } from './data-formatters/format-next-step-data';
+import { formatStepData, getEntityWithDataHelpers } from './data-formatters/format-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
-import type {
-  HaapiStepperClientOperationAction,
+import {
   HaapiStepperConfig,
   HaapiStepperError,
-  HaapiStepperFormAction,
   HaapiStepperHistoryEntry,
   HaapiStepperLink,
   HaapiStepperNextStep,
   HaapiStepperNextStepAction,
   HaapiStepperNextStepAsync,
+  HaapiStepperNextStepData,
   HaapiStepperNextStepPayload,
   HaapiStepperStep,
 } from './haapi-stepper.types';
 import { useThrowErrorToAppErrorBoundary } from '../../util/useThrowErrorToAppErrorBoundary';
 import { useRefCallback } from '../../util/useRefCallBack';
 import { handleAuthenticationOrRegistrationStep } from './step-handlers/authentication-or-registration-step';
+import { isLink } from '../../util/link-predicates';
 
 interface HaapiStepperProps {
   children: ReactNode;
   config?: Partial<HaapiStepperConfig>;
 }
 
-type SetCurrentStepAndUpdateHistoryFn = (
-  newStep: HaapiStepperStep,
-  triggeredByAction: HaapiStepperNextStepAction,
-  triggeredByPayload?: HaapiStepperNextStepPayload
-) => void;
+type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData) => void;
 
 /**
  * @description
@@ -290,21 +284,16 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   const configResult = useMemo(() => resolveStepperConfig(config), [config]);
   const { sendHaapiFetchRequest } = useHaapiFetch(configResult.bootstrap.haapi);
 
-  const setCurrentStepAndUpdateHistory = useCallback<SetCurrentStepAndUpdateHistoryFn>(
-    (newStep, triggeredByAction, triggeredByPayload) => {
-      setHistory(prev => [
-        ...prev,
-        {
-          step: newStep,
-          triggeredByAction,
-          triggeredByPayload,
-          timestamp: new Date(),
-        },
-      ]);
-      setCurrentStep(newStep);
-    },
-    []
-  );
+  const setCurrentStepAndUpdateHistory = useCallback<SetCurrentStepAndUpdateHistoryFn>(nextStepData => {
+    setHistory(prev => [
+      ...prev,
+      {
+        ...nextStepData,
+        timestamp: new Date(),
+      },
+    ]);
+    setCurrentStep(nextStepData.step);
+  }, []);
 
   const nextStepAsync = useCallback<HaapiStepperNextStepAsync>(
     async (action, payload) => {
@@ -332,7 +321,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
         return;
       }
 
-      setCurrentStepAndUpdateHistory(nextStepData, action, payload);
+      setCurrentStepAndUpdateHistory(nextStepData);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nextStep is a stable ref via useRefCallback, defined below
     [configResult, sendHaapiFetchRequest, currentStep, history, setCurrentStepAndUpdateHistory]
@@ -369,13 +358,7 @@ interface ProcessHaapiNextStepParams {
   currentStep: HaapiStep | null;
   nextStep: HaapiStepperNextStep;
   history: HaapiStepperHistoryEntry[];
-  action:
-    | HaapiFormAction
-    | HaapiClientOperationAction
-    | HaapiLink
-    | HaapiStepperFormAction
-    | HaapiStepperClientOperationAction
-    | HaapiStepperLink;
+  action: HaapiStepperNextStepAction;
   payload: HaapiStepperNextStepPayload | undefined;
   pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>;
   config: HaapiStepperConfig;
@@ -383,7 +366,7 @@ interface ProcessHaapiNextStepParams {
 }
 
 async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise<{
-  nextStepData?: HaapiStepperStep | null;
+  nextStepData?: HaapiStepperNextStepData | null;
   nextStepError?: HaapiStepperError;
 }> {
   const { currentStep, nextStep, history, action, payload, pendingOperation, config, sendHaapiFetchRequest } = params;
@@ -405,13 +388,12 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
 
     return processHaapiNextStep({
       ...params,
-      action: clientOperationData.action,
+      action: getEntityWithDataHelpers(clientOperationData.action),
       payload: clientOperationData.payload,
     });
   }
 
-  const isLinkAction = 'href' in action;
-  const nextStepRequestAction = isLinkAction ? action : { action, payload };
+  const nextStepRequestAction = isLink(action) ? action : { action, payload };
   const nextStepResponse = await sendHaapiFetchRequest(nextStepRequestAction);
 
   switch (nextStepResponse.type) {
@@ -419,30 +401,42 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return processHaapiNextStep({
         ...params,
         currentStep: nextStepResponse,
-        action: nextStepResponse.actions[0],
+        action: getEntityWithDataHelpers(nextStepResponse.actions[0]),
         payload: undefined,
       });
 
     case HAAPI_STEPS.POLLING:
-      return handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
+      return nextStepSuccess(
+        handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history),
+        action,
+        payload
+      );
 
     case HAAPI_STEPS.AUTHENTICATION:
     case HAAPI_STEPS.REGISTRATION:
-      return handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config);
+      return nextStepSuccess(
+        handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config),
+        action,
+        payload
+      );
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-      return { nextStepData: formatNextStepData(nextStepResponse) };
+      return nextStepSuccess(formatStepData(nextStepResponse), action, payload);
 
     case HAAPI_STEPS.CONTINUE_SAME:
-      if ('href' in action) {
+      if (isLink(action)) {
         throw new Error('Continue Same Step received after link navigation, but links cannot have continueActions');
       }
-      return { nextStepData: formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep) };
+      return nextStepSuccess(
+        formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep),
+        action,
+        payload
+      );
 
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      return handleCompletedStep(nextStepResponse, config);
+      return nextStepSuccess(handleCompletedStep(nextStepResponse, config), action, payload);
 
     case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
@@ -451,7 +445,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     case HAAPI_PROBLEM_STEPS.GENERIC_USER_ERROR:
     case HAAPI_PROBLEM_STEPS.UNEXPECTED:
     case HAAPI_PROBLEM_STEPS.SESSION_TOKEN_MISMATCH:
-      return { nextStepError: formatErrorStepData(nextStepResponse) };
+      return nextStepError(formatErrorStepData(nextStepResponse));
   }
 }
 
@@ -493,4 +487,22 @@ function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): 
     );
   }
   return { ...configResult, bootstrap };
+}
+
+function nextStepSuccess(
+  step: HaapiStepperStep | undefined,
+  action: HaapiStepperNextStepAction,
+  payload: HaapiStepperNextStepPayload | undefined
+): { nextStepData?: HaapiStepperNextStepData } {
+  return {
+    nextStepData: step && {
+      step: step,
+      triggeredByAction: action,
+      triggeredByPayload: payload,
+    },
+  };
+}
+
+function nextStepError(step: HaapiStepperError): { nextStepError: HaapiStepperError } {
+  return { nextStepError: step };
 }

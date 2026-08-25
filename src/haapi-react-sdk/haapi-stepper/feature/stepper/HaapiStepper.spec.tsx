@@ -10,7 +10,12 @@
  */
 import { render, screen, waitFor } from '@testing-library/react';
 import { HaapiStepper } from './HaapiStepper';
-import { HAAPI_POLLING_STATUS, HAAPI_PROBLEM_STEPS, HAAPI_STEPS } from '../../data-access/types/haapi-step.types';
+import {
+  HAAPI_POLLING_STATUS,
+  HAAPI_PROBLEM_STEPS,
+  HAAPI_STEPPER_ELEMENT_TYPES,
+  HAAPI_STEPS,
+} from '../../data-access/types/haapi-step.types';
 import {
   HAAPI_ACTION_CLIENT_OPERATIONS,
   HAAPI_ACTION_TYPES,
@@ -1301,12 +1306,21 @@ describe('HaapiStepper', () => {
       // Redirection steps are mocked in test to return HAAPI_STEPS.REGISTRATION
       await waitFor(() => expect(screen.getByTestId('step-type')).toHaveTextContent(HAAPI_STEPS.REGISTRATION));
 
-      const history = screen.getByTestId('history');
-      const historyData = getHistoryData(history);
+      const historyElement = screen.getByTestId('history');
+      const history = getHistoryData(historyElement);
 
-      expect(historyData).toHaveLength(2);
-      expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
-      expect(historyData[1].step.type).toBe(HAAPI_STEPS.REGISTRATION);
+      expect(history).toHaveLength(2);
+
+      expect(history[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
+      // Triggered by the initial link
+      assert(history[0].triggeredByAction.type === HAAPI_STEPPER_ELEMENT_TYPES.LINK);
+      expect(history[0].triggeredByAction.href).toBe(bootstrapLinkAction.href);
+
+      expect(history[1].step.type).toBe(HAAPI_STEPS.REGISTRATION);
+      // Triggered by the action in the redirection step
+      assert(history[1].triggeredByAction.type === HAAPI_STEPPER_ELEMENT_TYPES.ACTION);
+      assert(history[1].triggeredByAction.subtype === HAAPI_ACTION_TYPES.FORM);
+      expect(history[1].triggeredByAction.model.href).toBe('/auth/redirected');
     });
 
     it('should not include input error problem steps in history', async () => {
@@ -1527,7 +1541,7 @@ function getStepMock(stepType: HAAPI_STEPS | HAAPI_PROBLEM_STEPS, config?: Recor
       stepMock = continueSameStep(config?.withContinueActions as boolean);
       break;
     case HAAPI_STEPS.REDIRECTION:
-      stepMock = redirectionStep('/auth/user');
+      stepMock = redirectionStep('/auth/redirected');
       break;
     case HAAPI_STEPS.POLLING:
       if (config?.bankId) {

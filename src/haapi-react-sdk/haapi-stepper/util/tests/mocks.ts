@@ -25,7 +25,7 @@ import type {
   HaapiStepperWebAuthnAuthenticationClientOperationAction,
   HaapiStepperWebAuthnPasskeysRegistrationAction,
 } from '../../feature/stepper/haapi-stepper.types';
-import { formatNextStepData } from '../../feature/stepper/data-formatters/format-next-step-data';
+import { formatStepData } from '../../feature/stepper/data-formatters/format-step-data';
 import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
 import { MEDIA_TYPES } from '../../data-access/types/media.types';
 import {
@@ -66,7 +66,7 @@ export const createMockStep = (type: HAAPI_STEPS, overrides = {}): HaapiStepperS
     ...overrides,
   } as HaapiStepperStep;
 
-  return formatNextStepData(step);
+  return formatStepData(step);
 };
 
 export const createMockFormAction = (overrides: Partial<HaapiStepperFormAction> = {}): HaapiStepperFormAction => ({

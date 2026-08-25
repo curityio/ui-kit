@@ -19,11 +19,13 @@ import {
   HaapiAction,
   HaapiActionStep,
   HaapiCompletedStep,
+  HaapiFormAction,
 } from '../../../data-access/types';
 import {
   HaapiStepperAction,
   HaapiStepperDataHelpers,
   HaapiStepperDataHelpersActionsMap,
+  HaapiStepperFormAction,
   HaapiStepperLink,
   HaapiStepperStep,
   HaapiStepperUserMessage,
@@ -33,13 +35,13 @@ import {
   splitWebAuthnRegistrationAction,
 } from '../../actions/client-operation/operations/webauthn';
 
-export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
+export function formatStepData<T extends HaapiActionStep | HaapiCompletedStep | HaapiStepperStep>(
   step: T
 ): T & HaapiStepperDataHelpers {
   const isStepWithoutActions =
     step.type === HAAPI_STEPS.COMPLETED_WITH_SUCCESS || step.type === HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR;
-  const linksWithDataHelpers = step.links?.map(link => getElementWithDataHelpers(link)) ?? [];
-  const messagesWithDataHelpers = step.messages?.map(message => getElementWithDataHelpers(message)) ?? [];
+  const linksWithDataHelpers = step.links?.map(link => getEntityWithDataHelpers(link)) ?? [];
+  const messagesWithDataHelpers = step.messages?.map(message => getEntityWithDataHelpers(message)) ?? [];
   const dataHelpers = {
     messages: messagesWithDataHelpers,
     links: linksWithDataHelpers,
@@ -52,7 +54,7 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
     };
   }
 
-  const actions = getNextStepActions(step.actions);
+  const actions = getStepActions(step.actions);
   const actionsWithDataHelpers = actions.map(action => addActionDataHelpers(action, step));
   const actionsWithDataHelpersMap = buildActionsMap(actionsWithDataHelpers);
 
@@ -65,7 +67,7 @@ export function formatNextStepData<T extends HaapiActionStep | HaapiCompletedSte
   };
 }
 
-function getNextStepActions(actions: HaapiAction[]): HaapiAction[] {
+function getStepActions(actions: HaapiAction[]): HaapiAction[] {
   return actions.flatMap(action =>
     isWebAuthnRegistrationClientOperation(action) ? splitWebAuthnRegistrationAction(action) : [action]
   );
@@ -75,7 +77,7 @@ function addActionDataHelpers(
   action: HaapiAction,
   step: HaapiActionStep | HaapiCompletedStep | HaapiStepperStep
 ): HaapiStepperAction {
-  const actionWithDataHelpers = getElementWithDataHelpers(action);
+  const actionWithDataHelpers = getEntityWithDataHelpers(action);
 
   if (actionWithDataHelpers.subtype === HAAPI_ACTION_TYPES.FORM && actionWithDataHelpers.model.fields) {
     return {
@@ -140,34 +142,35 @@ function buildActionsMap(actions: HaapiStepperAction[]): HaapiStepperDataHelpers
   );
 }
 
-export function getElementWithDataHelpers(element: HaapiAction): HaapiStepperAction;
-export function getElementWithDataHelpers(element: HaapiLink): HaapiStepperLink;
-export function getElementWithDataHelpers(element: HaapiUserMessage): HaapiStepperUserMessage;
-export function getElementWithDataHelpers(
-  element: HaapiAction | HaapiUserMessage | HaapiLink
+export function getEntityWithDataHelpers(entity: HaapiFormAction): HaapiStepperFormAction;
+export function getEntityWithDataHelpers(entity: HaapiAction): HaapiStepperAction;
+export function getEntityWithDataHelpers(entity: HaapiLink): HaapiStepperLink;
+export function getEntityWithDataHelpers(entity: HaapiUserMessage): HaapiStepperUserMessage;
+export function getEntityWithDataHelpers(
+  entity: HaapiAction | HaapiUserMessage | HaapiLink
 ): HaapiStepperAction | HaapiStepperUserMessage | HaapiStepperLink {
   const id = crypto.randomUUID();
 
-  if ('template' in element) {
+  if ('template' in entity) {
     return {
-      ...element,
+      ...entity,
       id,
       type: HAAPI_STEPPER_ELEMENT_TYPES.ACTION,
-      subtype: element.template,
+      subtype: entity.template,
     } as HaapiStepperAction;
   }
 
-  if ('rel' in element) {
+  if ('rel' in entity) {
     return {
-      ...element,
+      ...entity,
       id,
       type: HAAPI_STEPPER_ELEMENT_TYPES.LINK,
-      subtype: element.type,
+      subtype: entity.type,
     };
   }
 
   return {
-    ...element,
+    ...entity,
     id,
     type: HAAPI_STEPPER_ELEMENT_TYPES.MESSAGE,
   };

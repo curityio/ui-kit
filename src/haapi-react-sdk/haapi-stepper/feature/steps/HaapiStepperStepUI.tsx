@@ -10,7 +10,7 @@
  */
 
 import { isValidElement, ReactElement } from 'react';
-import { formatNextStepData } from '../stepper/data-formatters/format-next-step-data';
+import { formatStepData } from '../stepper/data-formatters/format-step-data';
 import { getViewNameBuiltInUI } from '../viewnames';
 import type { HaapiStepperAPIWithRequiredCurrentStep } from '../stepper/haapi-stepper.types';
 import { useHaapiStepper } from '../stepper/HaapiStepperHook';
@@ -252,7 +252,7 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
 
     haapiStepperUiAPI = {
       ...stepRenderInterceptorResult,
-      currentStep: formatNextStepData(stepRenderInterceptorResult.currentStep),
+      currentStep: formatStepData(stepRenderInterceptorResult.currentStep),
     };
   }
 
