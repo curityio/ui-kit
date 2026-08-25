@@ -9,16 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 import { Layout } from '../Layout/Layout';
-import { HaapiStepperContext } from '@curity/haapi-react-sdk/haapi-stepper/feature';
-import type {
-  HaapiStepperAPI,
-  HaapiStepperStep,
-  HaapiStepperStepSymbolsConfig,
-} from '@curity/haapi-react-sdk/haapi-stepper/feature';
-import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 import type { HaapiAppConfig } from '../../feature/app-config/types';
 import { HaapiAppConfigContext } from '../../feature/app-config/HaapiAppConfigContext';
 
@@ -59,86 +52,25 @@ describe('Layout', () => {
       expect(container.querySelector('img.haapi-stepper-logo')).toBeNull();
     });
   });
-
-  describe('Page symbol', () => {
-    it('renders the resolved page symbol above the children for the current step', () => {
-      const { container } = renderLayout({
-        pageSymbols: { plugins: { 'html-form': '/symbols/html-form.svg' } },
-        currentStep: stepWithViewName('authenticator/html-form/index'),
-      });
-
-      const pageSymbol = container.querySelector<HTMLImageElement>('img.haapi-stepper-page-symbol-image');
-      const content = container.querySelector('[data-testid="content"]');
-
-      expect(pageSymbol).not.toBeNull();
-      expect(pageSymbol).toHaveAttribute('src', '/symbols/html-form.svg');
-      // Page symbol appears before the children in document order.
-      expect(pageSymbol!.compareDocumentPosition(content!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    });
-
-    it('renders nothing for the page symbol when theme.pageSymbols is absent', () => {
-      const { container } = renderLayout({
-        currentStep: stepWithViewName('authenticator/html-form/index'),
-      });
-
-      expect(container.querySelector('img.haapi-stepper-page-symbol-image')).toBeNull();
-    });
-
-    it('page symbol is not rendered for a user consent step, even when one is configured for its viewName', () => {
-      const { container, getByTestId } = renderLayout({
-        pageSymbols: { views: { 'views/oauth/consent': '/symbols/consent.svg' } },
-        currentStep: stepWithViewName('views/oauth/consent', HAAPI_STEPS.USER_CONSENT),
-      });
-
-      expect(container.querySelector('img.haapi-stepper-page-symbol-image')).toBeNull();
-      expect(getByTestId('content')).toBeInTheDocument();
-    });
-  });
 });
-
-const stepWithViewName = (viewName: string, type?: HAAPI_STEPS): HaapiStepperStep =>
-  ({ type, metadata: { viewName } }) as unknown as HaapiStepperStep;
 
 interface LayoutHarnessOptions {
   isInsideWell?: boolean;
-  pageSymbols?: HaapiStepperStepSymbolsConfig;
-  currentStep?: HaapiStepperStep | null;
   withoutLogo?: boolean;
 }
 
-const renderLayout = ({
-  isInsideWell = false,
-  pageSymbols,
-  currentStep = null,
-  withoutLogo = false,
-}: LayoutHarnessOptions = {}) => {
+const renderLayout = ({ isInsideWell = false, withoutLogo = false }: LayoutHarnessOptions = {}) => {
   const config: HaapiAppConfig = {
     initialUrl: 'https://example/start',
     haapi: {} as HaapiAppConfig['haapi'],
-    theme: { logo: withoutLogo ? undefined : { path: '/assets/logo.svg', isInsideWell }, pageSymbols },
-  };
-  const stepperAPI: HaapiStepperAPI = {
-    loading: false,
-    history: [],
-    nextStep: vi.fn(),
-    currentStep,
-    error: null,
-    config: {
-      bootstrap: config,
-      pollingInterval: 0,
-      bankIdAutostart: false,
-      webAuthnAutostart: false,
-      autoRedirectOnAuthenticationComplete: false,
-    },
+    theme: { logo: withoutLogo ? undefined : { path: '/assets/logo.svg', isInsideWell } },
   };
 
   return render(
     <HaapiAppConfigContext value={config}>
-      <HaapiStepperContext value={stepperAPI}>
-        <Layout>
-          <div data-testid="content" />
-        </Layout>
-      </HaapiStepperContext>
+      <Layout>
+        <div data-testid="content" />
+      </Layout>
     </HaapiAppConfigContext>
   );
 };

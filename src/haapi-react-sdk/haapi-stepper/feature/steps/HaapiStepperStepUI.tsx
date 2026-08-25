@@ -21,6 +21,7 @@ import {
   getLinksToDisplay,
   getLoadingElement,
   getMessagesElement,
+  getSymbolElement,
 } from './step-element-factories';
 import type { HaapiStepperStepUIProps } from './typings';
 
@@ -261,6 +262,7 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
   const messagesToDisplay = error?.input ? error.input.dataHelpers.messages : currentStep.dataHelpers.messages;
 
   const stepElements = {
+    symbolElement: getSymbolElement(haapiStepperUiAPI),
     loadingElement,
     errorElement: getErrorElement(haapiStepperUiAPI, errorRenderInterceptor),
     messagesElement: getMessagesElement(haapiStepperUiAPI, messagesToDisplay, messageRenderInterceptor),
@@ -283,6 +285,7 @@ export const HaapiStepperStepUI = (props: HaapiStepperStepUIProps) => {
 
   return (
     <>
+      {stepElements.symbolElement}
       {stepElements.loadingElement}
       {stepElements.errorElement}
       {stepElements.messagesElement}

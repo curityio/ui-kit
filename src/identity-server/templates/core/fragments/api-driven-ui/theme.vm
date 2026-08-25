@@ -19,9 +19,9 @@
         #if($pathVariable)'$jsonKey': '$!_tr.encodeJson($pathVariable)',#end
     #end
 
-    pageSymbols: {
+    stepSymbols: {
         ## Map of plugin implementation type to symbol path.
-        ## Used as a fallback if an exact match for the page symbol is not found in 'views'.
+        ## Used as a fallback if an exact match for the step symbol is not found in 'views'.
         plugins: {
             #* Authenticators *#
             #symbolPath("bankid" $page_symbol_authenticate_bankid)

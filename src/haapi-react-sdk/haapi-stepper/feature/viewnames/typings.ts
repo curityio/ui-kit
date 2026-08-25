@@ -21,6 +21,7 @@ import type { HaapiStepperStepUIProps } from '../steps/typings';
  */
 export type ViewNameBuiltInUIProps = HaapiStepperAPIWithRequiredCurrentStep &
   HaapiStepperStepUIProps & {
+    symbolElement: ReactElement | null;
     loadingElement: ReactElement | null;
     errorElement: ReactElement | null;
     messagesElement: ReactElement;

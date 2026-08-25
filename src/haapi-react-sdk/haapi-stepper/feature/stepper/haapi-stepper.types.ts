@@ -91,7 +91,7 @@ export interface HaapiStepperBootstrapConfig {
       path: string;
       isInsideWell: boolean;
     };
-    pageSymbols?: HaapiStepperStepSymbolsConfig;
+    stepSymbols?: HaapiStepperStepSymbolsConfig;
   };
 }
 

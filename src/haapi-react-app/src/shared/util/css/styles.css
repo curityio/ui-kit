@@ -324,7 +324,7 @@ svg {
   }
 }
 
-.haapi-stepper-page-symbol {
+.haapi-stepper-step-symbol {
   text-align: center;
   width: var(--login-symbol-size);
   height: var(--login-symbol-size);
@@ -337,7 +337,7 @@ svg {
   border-radius: var(--login-symbol-border-radius);
 }
 
-.haapi-stepper-page-symbol-image {
+.haapi-stepper-step-symbol-image {
   width: var(--login-symbol-size);
   height: var(--login-symbol-size);
   object-fit: contain;

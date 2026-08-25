@@ -244,6 +244,8 @@ The Curity utility composition shown above is just how *this* project chose to i
 | `.haapi-stepper-webauthn-registration-attachment-icon` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card icon |
 | `.haapi-stepper-webauthn-registration-attachment-title` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card option label |
 | `.haapi-stepper-webauthn-registration-attachment-description` | `HaapiStepperWebAuthnRegistrationAttachmentCard` | Attachment card option description |
+| `.haapi-stepper-step-symbol` | `StepSymbol` | Step symbol container (the illustrative icon above the step content) |
+| `.haapi-stepper-step-symbol-image` | `StepSymbol` | Step symbol image |
 | `.haapi-stepper-consent-logos` | `UserConsentViewNameBuiltInUI` | Container for user consent logos |
 | `.haapi-stepper-error-boundary-fallback` | `DefaultErrorFallback` | Error boundary fallback container |
 | `.haapi-validation-errors-container` | `HaapiStepperFormValidationErrorInputWrapper` | Wrapper around a form field that has validation errors. Receives the `.has-errors` modifier class while errors are visible |

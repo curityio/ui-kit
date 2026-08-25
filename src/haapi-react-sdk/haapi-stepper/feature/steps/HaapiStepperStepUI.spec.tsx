@@ -65,6 +65,7 @@ import {
   MockMessageClassList,
   MockMessageText,
   mockNextStep,
+  MockStepSymbolPath,
 } from '../../util/tests/mocks';
 import { HaapiStepperFormFieldUI } from '../actions/form/fields/HaapiStepperFormFieldUI';
 
@@ -76,6 +77,9 @@ const renderWithContext = (ui: React.ReactElement, contextValue: Partial<HaapiSt
 
   return render(<HaapiStepperContext value={value}>{ui}</HaapiStepperContext>);
 };
+
+const STEP_SYMBOL_SELECTOR = '.haapi-stepper-step-symbol';
+const STEP_SYMBOL_IMAGE_SELECTOR = '.haapi-stepper-step-symbol-image';
 
 describe('HaapiStepperStepUI', () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -1792,6 +1796,37 @@ describe('HaapiStepperStepUI', () => {
     });
   });
 
+  describe('Step Symbol Rendering', () => {
+    it('should render the step symbol by default, and before the messages', () => {
+      const { container } = renderWithContext(<HaapiStepperStepUI />, {
+        currentStep: createMockStep(HAAPI_STEPS.AUTHENTICATION),
+      });
+
+      const symbol = container.querySelector(STEP_SYMBOL_SELECTOR);
+      expect(symbol).toBeInTheDocument();
+      assert(symbol);
+
+      const image = symbol.querySelector(STEP_SYMBOL_IMAGE_SELECTOR);
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', MockStepSymbolPath);
+
+      const messages = screen.getByTestId('messages');
+      expect(follows(messages, symbol)).toBe(true);
+    });
+
+    it('should render no step symbol when theme.stepSymbols is absent', () => {
+      const { container } = renderWithContext(<HaapiStepperStepUI />, {
+        currentStep: createMockStep(HAAPI_STEPS.AUTHENTICATION),
+        config: {
+          ...defaultStepperAPI.config,
+          bootstrap: { ...defaultStepperAPI.config.bootstrap, theme: {} },
+        },
+      });
+
+      expect(container.querySelector(STEP_SYMBOL_SELECTOR)).toBeNull();
+    });
+  });
+
   describe('ViewName built-in UIs Rendering', () => {
     describe('Default Rendering', () => {
       it('should render the matching built-in UI by default for a registered viewName', () => {
@@ -2090,6 +2125,12 @@ describe('HaapiStepperStepUI', () => {
             expect(screen.queryByRole('progressbar', { hidden: true })).not.toBeInTheDocument();
           }
         );
+
+        it('should render the step symbol', () => {
+          const { container } = renderWithContext(<HaapiStepperStepUI />, { currentStep: createPollingStep() });
+
+          expect(container.querySelector(STEP_SYMBOL_SELECTOR)).toBeInTheDocument();
+        });
       });
 
       describe('User Consent viewName built-in UI', () => {
@@ -2097,7 +2138,7 @@ describe('HaapiStepperStepUI', () => {
         const clientLogoPath = '/assets/images/client-logo.svg';
 
         // Context override adding (or omitting) the company logo in the theme configuration
-        const withCompanyLogo = (path?: string): Partial<HaapiStepperAPI> => ({
+        const withCompanyLogo = (path: string | null): Partial<HaapiStepperAPI> => ({
           config: {
             ...defaultStepperAPI.config,
             bootstrap: {
@@ -2157,12 +2198,20 @@ describe('HaapiStepperStepUI', () => {
 
           renderWithContext(<HaapiStepperStepUI />, {
             currentStep: step,
-            ...withCompanyLogo(),
+            ...withCompanyLogo(null),
           });
 
           expect(screen.queryByTestId('consent-logos')).not.toBeInTheDocument();
           expect(screen.queryAllByRole('img')).toHaveLength(0);
           expect(screen.queryByTestId('messages')).toBeInTheDocument();
+        });
+
+        it('should omit the step symbol', () => {
+          const { container } = renderWithContext(<HaapiStepperStepUI />, {
+            currentStep: createUserConsentStep({ clientLogo: clientLogoPath }),
+          });
+
+          expect(container.querySelector(STEP_SYMBOL_SELECTOR)).toBeNull();
         });
       });
     });
