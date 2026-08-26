@@ -22,6 +22,7 @@ export const Spinner: FC<SVGProps<SVGSVGElement>> = props => (
       role="img"
       aria-labelledby="svgTitle"
       focusable="false"
+      viewBox={`0 0 ${SIZE} ${SIZE}`}
       width={SIZE}
       height={SIZE}
       data-testid="spinner"

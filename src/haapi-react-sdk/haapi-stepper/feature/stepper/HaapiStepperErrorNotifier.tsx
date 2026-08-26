@@ -15,7 +15,7 @@ import { createPortal } from 'react-dom';
 import { useHaapiStepper } from './HaapiStepperHook';
 import { HaapiStepperAppError, HaapiStepperInputError } from './haapi-stepper.types';
 
-interface HaapiErrorNotifierProps {
+interface HaapiStepperErrorNotifierProps {
   children: ReactNode;
   showInputErrorNotifications?: boolean;
   notificationDuration?: number;
@@ -27,7 +27,7 @@ export function HaapiStepperErrorNotifier({
   showInputErrorNotifications = true,
   notificationDuration = 10000,
   errorFormatter = defaultErrorFormatter,
-}: HaapiErrorNotifierProps) {
+}: HaapiStepperErrorNotifierProps) {
   const { error } = useHaapiStepper();
   const currentError = error?.app ?? (showInputErrorNotifications ? error?.input : null);
   const [dismissedError, setDismissedError] = useState<HaapiStepperAppError | HaapiStepperInputError | null>(null);

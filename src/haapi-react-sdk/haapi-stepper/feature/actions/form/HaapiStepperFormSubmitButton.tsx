@@ -13,6 +13,7 @@ import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { resolveAuthenticatorIcon } from '../../../ui/icons/authenticator-icons';
+import { Spinner } from '../../../ui/spinner/Spinner';
 import { useHaapiStepperForm } from './HaapiStepperFormContext';
 
 interface HaapiStepperFormSubmitButtonProps extends ComponentPropsWithRef<'button'> {
@@ -28,7 +29,7 @@ export function HaapiStepperFormSubmitButton({
   ref,
   ...buttonProps
 }: HaapiStepperFormSubmitButtonProps): ReactElement {
-  const { action } = useHaapiStepperForm();
+  const { action, isSubmitting } = useHaapiStepperForm();
   const isCancel = action.kind === HAAPI_FORM_ACTION_KINDS.CANCEL;
   const authenticatorType = action.properties?.authenticatorType;
   const submitButtonLabel = label ?? action.model.actionTitle ?? action.title ?? authenticatorType ?? '';
@@ -36,13 +37,27 @@ export function HaapiStepperFormSubmitButton({
   const submitButtonClassName = getSubmitButtonClassName(authenticatorType, isCancel, className);
 
   return (
-    <button ref={ref} data-testid="form-submit-button" {...buttonProps} type="submit" className={submitButtonClassName}>
+    <button
+      ref={ref}
+      data-testid="form-submit-button"
+      {...buttonProps}
+      type="submit"
+      className={submitButtonClassName}
+      disabled={buttonProps.disabled ?? isSubmitting}
+      aria-busy={isSubmitting}
+    >
       {children ?? (
         <>
-          {submitButtonIcon && (
-            <span className="icon" aria-hidden="true">
-              {submitButtonIcon}
+          {isSubmitting ? (
+            <span className="icon" data-testid="form-submit-button-spinner">
+              <Spinner width={16} height={16} />
             </span>
+          ) : (
+            submitButtonIcon && (
+              <span className="icon" aria-hidden="true">
+                {submitButtonIcon}
+              </span>
+            )
           )}
           {submitButtonLabel}
         </>

@@ -17,6 +17,8 @@ export interface HaapiStepperFormContextValue {
   formState: HaapiStepperFormState;
   action: HaapiStepperFormAction;
   submit: () => void;
+  /** True while the request started by this form's own submit is in flight. */
+  isSubmitting: boolean;
 }
 
 export const HaapiStepperFormContext = createContext<HaapiStepperFormContextValue | null>(null);

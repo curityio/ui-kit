@@ -12,6 +12,7 @@
 import { useEffect, useRef } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { HTTP_METHODS } from '../../../data-access/types/haapi-form.types';
@@ -19,6 +20,7 @@ import { HaapiStepperFormSubmitButton } from './HaapiStepperFormSubmitButton';
 import { useHaapiStepper } from '../../stepper/HaapiStepperHook';
 import { createHaapiStepperApiMock, createMockFormAction } from '../../../util/tests/mocks';
 import { HaapiStepperFormUI } from './HaapiStepperFormUI';
+import { HaapiStepperContext } from '../../stepper/HaapiStepperContext';
 
 describe('HaapiStepperFormSubmitButton', () => {
   beforeEach(() => {
@@ -239,6 +241,49 @@ describe('HaapiStepperFormSubmitButton', () => {
       });
     });
   });
+
+  describe('Submit pending state', () => {
+    const renderFormInStepper = (loading: boolean) => {
+      const action = createNonAuthenticatorFormAction();
+      const ui = (
+        <HaapiStepperContext value={createHaapiStepperApiMock({ loading })}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()} />
+        </HaapiStepperContext>
+      );
+      return { ui, action };
+    };
+
+    it('shows no spinner and stays enabled before the form is submitted', () => {
+      render(renderFormInStepper(false).ui);
+
+      expect(screen.queryByTestId(spinnerTestId)).toBeNull();
+      expect(screen.getByTestId(submitButtonTestId)).toBeEnabled();
+    });
+
+    it('shows the spinner and disables the button while the submitted request is in flight', async () => {
+      const { ui, action } = renderFormInStepper(false);
+      const { rerender } = render(ui);
+
+      await userEvent.click(screen.getByTestId(submitButtonTestId));
+      rerender(
+        <HaapiStepperContext value={createHaapiStepperApiMock({ loading: true })}>
+          <HaapiStepperFormUI action={action} onSubmit={vi.fn()} />
+        </HaapiStepperContext>
+      );
+
+      expect(screen.getByTestId(spinnerTestId)).toBeInTheDocument();
+      const submitButton = screen.getByTestId(submitButtonTestId);
+      expect(submitButton).toBeDisabled();
+      expect(submitButton).toHaveAttribute('aria-busy', 'true');
+    });
+
+    it('leaves a form that was never submitted untouched while the stepper is loading', () => {
+      render(renderFormInStepper(true).ui);
+
+      expect(screen.queryByTestId(spinnerTestId)).toBeNull();
+      expect(screen.getByTestId(submitButtonTestId)).toBeEnabled();
+    });
+  });
 });
 
 vi.mock('../../stepper/HaapiStepperHook', () => ({
@@ -248,6 +293,7 @@ vi.mock('../../stepper/HaapiStepperHook', () => ({
 const mockUseHaapiStepper = vi.mocked(useHaapiStepper);
 
 const submitButtonTestId = 'form-submit-button';
+const spinnerTestId = 'form-submit-button-spinner';
 const customIconTestId = 'custom-authenticator-icon';
 const customChildrenTestId = 'custom-submit-button-children';
 const customLabel = 'Custom Submit Label';

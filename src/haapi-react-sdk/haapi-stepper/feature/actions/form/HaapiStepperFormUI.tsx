@@ -9,7 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
-import { useCallback, useMemo } from 'react';
+import { use, useCallback, useEffect, useMemo, useRef } from 'react';
 import { HAAPI_FORM_FIELDS } from '../../../data-access/types/haapi-form.types';
 import { applyRenderInterceptor } from '../../../util/generic-render-interceptor';
 import type {
@@ -20,6 +20,7 @@ import type {
   HaapiStepperNextStep,
   HaapiStepperVisibleFormField,
 } from '../../stepper/haapi-stepper.types';
+import { HaapiStepperContext } from '../../stepper/HaapiStepperContext';
 import { HaapiStepperFormAction } from '../../stepper/haapi-stepper.types';
 import { HaapiStepperFormContext } from './HaapiStepperFormContext';
 import { useHaapiStepperFormState } from './HaapiStepperFormHook';
@@ -188,10 +189,31 @@ export function HaapiStepperFormUI({
     field => field.type !== HAAPI_FORM_FIELDS.HIDDEN && field.type !== HAAPI_FORM_FIELDS.CONTEXT
   );
   const haapiStepperFormAPI: HaapiStepperFormAPI = { fields: visibleFields, formState };
+  // Read the context directly rather than through useHaapiStepper(), which throws: this component
+  // is also usable on its own, outside a <HaapiStepper>, and then there is no request to wait on.
+  const loading = use(HaapiStepperContext)?.loading ?? false;
+
+  // A step can render several forms, and `loading` is shared by the whole stepper. Gating on a ref
+  // set by this form's own submit keeps the pending state on the form the user actually submitted.
+  // Reading the ref during render is safe here because only a `loading` change re-renders us, and
+  // the ref is always set before the request that flips it starts.
+  const submitInitiatedHere = useRef(false);
+  const isSubmitting = submitInitiatedHere.current && loading;
+
+  useEffect(() => {
+    if (!loading) {
+      submitInitiatedHere.current = false;
+    }
+  }, [loading]);
+
   const submit = useCallback(() => {
+    submitInitiatedHere.current = true;
     onSubmit(action, formState.values);
   }, [onSubmit, action, formState]);
-  const formContextValue = useMemo(() => ({ formState, action, submit }), [formState, action, submit]);
+  const formContextValue = useMemo(
+    () => ({ formState, action, submit, isSubmitting }),
+    [formState, action, submit, isSubmitting]
+  );
 
   const formContentElements = applyRenderInterceptor(
     [haapiStepperFormAPI],
