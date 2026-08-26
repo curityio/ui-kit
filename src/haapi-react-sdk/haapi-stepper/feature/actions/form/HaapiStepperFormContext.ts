@@ -17,7 +17,7 @@ export interface HaapiStepperFormContextValue {
   formState: HaapiStepperFormState;
   action: HaapiStepperFormAction;
   submit: () => void;
-  /** True while the request started by this form's own submit is in flight. */
+  /** Narrower than the stepper's `loading`: false while a different form on the step submits. */
   isSubmitting: boolean;
 }
 

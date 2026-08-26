@@ -9,8 +9,9 @@
  * For further information, please contact Curity AB.
  */
 
-import { render, screen, within } from '@testing-library/react';
+import { render as renderComponent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { ReactElement, ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MEDIA_TYPES } from '../../data-access/types/media.types';
@@ -28,6 +29,16 @@ import {
   HaapiStepperSelectorAction,
 } from '../../feature/stepper/haapi-stepper.types';
 import { HaapiStepperActionsUI } from './HaapiStepperActionsUI';
+import { HaapiStepperContext } from '../../feature/stepper/HaapiStepperContext';
+import { createHaapiStepperApiMock } from '../../util/tests/mocks';
+
+// The action components are stepper-level: they read the HAAPI state through useHaapiStepper,
+// which throws without a provider. Every case here renders them inside one.
+const StepperWrapper = ({ children }: { children: ReactNode }) => (
+  <HaapiStepperContext value={createHaapiStepperApiMock()}>{children}</HaapiStepperContext>
+);
+
+const render = (ui: ReactElement) => renderComponent(ui, { wrapper: StepperWrapper });
 
 describe('HaapiStepperActionsUI', () => {
   let onAction: HaapiStepperNextStep<HaapiStepperFormAction | HaapiStepperClientOperationAction>;
