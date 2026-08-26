@@ -17,6 +17,7 @@ This monorepo contains:
 - CSS Library
 - UI Icons React Library
 - React Component Library
+- DevOps Dashboard — a [Backstage](https://backstage.io) app and plugin (new to Backstage? start with the [intro](src/devops-dashboard-backstage-app/docs/backstage-intro.md))
 
 ## Prerequisites
 - Node.js (version as specified in the `.nvmrc` file)
