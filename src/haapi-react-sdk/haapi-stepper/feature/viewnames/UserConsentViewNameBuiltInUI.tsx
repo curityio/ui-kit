@@ -18,6 +18,7 @@ import type { ViewNameBuiltInUIProps } from './typings';
  * Built-in UI for the User Consent view (`HaapiStepperViewNameBuiltInUI.USER_CONSENT`).
  *
  *  - Adds top section with company <-> client logo association.
+ *  - Omits the step symbol.
  *  - Renders everything else as-is.
  */
 export const UserConsentViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {

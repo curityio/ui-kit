@@ -44,6 +44,7 @@ export const MockMessageText = 'Step Message';
 export const MockLinkText = 'Step Link';
 export const MockActionTitle = 'Step Action';
 export const MockMessageClassList = 'message-classlist';
+export const MockStepSymbolPath = '/symbols/default.svg';
 
 export const createMockStep = (type: HAAPI_STEPS, overrides = {}): HaapiStepperStep => {
   const mockMessage = createMockMessage({ text: MockMessageText });
@@ -171,7 +172,7 @@ export const defaultStepperAPI: HaapiStepperAPI = {
         clientId: 'client',
         tokenEndpoint: '/token',
       },
-      theme: {},
+      theme: { stepSymbols: { default: MockStepSymbolPath } },
     },
     pollingInterval: 0,
     bankIdAutostart: false,

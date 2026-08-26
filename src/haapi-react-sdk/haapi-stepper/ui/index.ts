@@ -18,3 +18,4 @@ export * from './links/HaapiStepperQrCodeLinkDialog';
 export * from './messages/HaapiStepperMessageUI';
 export * from './messages/HaapiStepperMessagesUI';
 export * from './messages/defaultHaapiStepperMessageElementFactory';
+export * from './symbols/StepSymbol';

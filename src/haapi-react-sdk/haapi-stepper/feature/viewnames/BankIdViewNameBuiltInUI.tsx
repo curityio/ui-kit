@@ -26,13 +26,22 @@ import type { ViewNameBuiltInUIProps } from './typings';
  *    sections below the QR code.
  */
 export const BankIdViewNameBuiltInUI = (props: ViewNameBuiltInUIProps) => {
-  const { currentStep, linkRenderInterceptor, loadingElement, errorElement, messagesElement, actionsElement } = props;
+  const {
+    currentStep,
+    linkRenderInterceptor,
+    symbolElement,
+    loadingElement,
+    errorElement,
+    messagesElement,
+    actionsElement,
+  } = props;
   const { links } = currentStep.dataHelpers;
   const qrCodeLink = links.find(isQrCodeLink);
   const nonQrCodeLinks = links.filter(link => !isQrCodeLink(link));
 
   return (
     <>
+      {symbolElement}
       {loadingElement}
       {errorElement}
       {messagesElement}
