@@ -87,6 +87,21 @@ describe('external-browser-flow', () => {
         });
       });
 
+      it('ignores messages from an unexpected origin and keeps waiting for the Curity one', async () => {
+        const action = createMockExternalBrowserFlowAction();
+        const externalBrowserFlowResult = runExternalBrowserFlow(action, closeDelay, abortController.signal, step);
+
+        sendBrowserMessage({ source: fakeExternalWindow, origin: 'http://third-party.example', data: 'nonce-x' });
+        sendBrowserMessage({ source: fakeExternalWindow, origin: launchOrigin, data: 'nonce-ok' });
+
+        await expect(externalBrowserFlowResult).resolves.toEqual({
+          clientOperationData: {
+            action: action.model.continueActions[0],
+            payload: new Map([['_resume_nonce', 'nonce-ok']]),
+          },
+        });
+      });
+
       it('return no-action when abort signal fires (cancellation)', async () => {
         const externalBrowserFlowResult = runExternalBrowserFlow(
           createMockExternalBrowserFlowAction(),
@@ -124,20 +139,6 @@ describe('external-browser-flow', () => {
           },
         });
         expect(externalWindowClose).not.toHaveBeenCalled();
-      });
-
-      it('message from unexpected origin → rejection', async () => {
-        const externalBrowserFlowResult = runExternalBrowserFlow(
-          createMockExternalBrowserFlowAction(),
-          closeDelay,
-          abortController.signal,
-          step
-        );
-
-        sendBrowserMessage({ source: fakeExternalWindow, origin: 'http://attacker.example', data: 'nonce-x' });
-
-        await expect(externalBrowserFlowResult).rejects.toThrow(new Error(EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume));
-        expect(externalWindowClose).toHaveBeenCalledTimes(1);
       });
 
       it('message with non-string data → rejection', async () => {
