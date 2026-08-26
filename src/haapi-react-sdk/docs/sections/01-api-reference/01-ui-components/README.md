@@ -52,7 +52,7 @@ function LoginForm() {
   );
 }
 ```
-{@see_example ./docs/sections/01-api-reference/01-ui-components/UiComponentsCompositionUsageHaapiReactSDKPlaygroundExample.tsx}
+[Try the composition in a live example](./UiComponentsCompositionUsageHaapiReactSDKPlaygroundExample.tsx)
 
 For styling, see the CSS Customization section in the Overview.
 
