@@ -299,28 +299,28 @@ const { app, input } = error || {};
 
 ##### HAAPI Error Utils
 
-###### HaapiErrorNotifier
+###### HaapiStepperErrorNotifier
 **Purpose**: Toast-based notification system for HAAPI `AppError`s, and optionally, `InputErrors`s:
 
 **Example Usage**:
 ```tsx
-<HaapiErrorNotifier>
+<HaapiStepperErrorNotifier>
   <YourApplication />
-</HaapiErrorNotifier>
+</HaapiStepperErrorNotifier>
 ```
 
 **Features:**
 - Automatically shows notifications for `AppError` and, optionally, `InputError`.
 - Auto-dismisses and manually dismisses with a close button.
 
-###### HaapiValidationErrorInputWrapper (Input-Level Errors)
+###### HaapiStepperFormValidationErrorInputWrapper (Input-Level Errors)
 **Purpose**: A field-specific error display for HAAPI validation `InputError`s:
 
 **Example Usage**:
 ```tsx
-<HaapiValidationErrorInputWrapper fieldName="username">
+<HaapiStepperFormValidationErrorInputWrapper fieldName="username">
   <input name="username" type="text" />
-</HaapiValidationErrorInputWrapper>
+</HaapiStepperFormValidationErrorInputWrapper>
 ```
 
 **Features:**
