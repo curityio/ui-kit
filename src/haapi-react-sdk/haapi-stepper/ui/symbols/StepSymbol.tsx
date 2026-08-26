@@ -31,7 +31,7 @@ export const StepSymbol = ({ viewName, stepSymbols }: StepSymbolProps) => {
 
   return (
     <figure className="haapi-stepper-step-symbol" aria-hidden="true">
-      <img className="haapi-stepper-step-symbol-image" src={src} alt="HAAPI Step Symbol" role="presentation" />
+      <img className="haapi-stepper-step-symbol-image" src={src} alt="HAAPI Step Symbol" />
     </figure>
   );
 };
