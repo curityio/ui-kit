@@ -110,7 +110,7 @@ A headless provider that manages multi-step HAAPI authentication workflows. Wrap
 </HaapiStepper>
 ```
 
-[Read the HaapiStepper reference](/api-reference/stepper)
+[Read the HaapiStepper reference](https://curity.io/docs/identity-server/developer-guide/haapi-sdks/web-sdk/api-reference/stepper/)
 
 ### `useHaapiStepper()` — read & advance the flow
 
@@ -122,7 +122,7 @@ function to advance it.
 const { currentStep, loading, error, history, nextStep } = useHaapiStepper();
 ```
 
-[Read the useHaapiStepper reference](/api-reference/use-haapi-stepper)
+[Read the useHaapiStepper reference](https://curity.io/docs/identity-server/developer-guide/haapi-sdks/web-sdk/api-reference/use-haapi-stepper/)
 
 ### `HaapiStepperStepUI` — the default UI
 
@@ -136,7 +136,7 @@ Renders any HAAPI flow step out of the box, providing a complete default **opini
 
 [See example](./docs/sections/00-overview/DefaultRenderingHaapiReactSDKPlaygroundExample.tsx)
 
-[Read the HaapiStepperStepUI reference](/api-reference/step-ui)
+[Read the HaapiStepperStepUI reference](https://curity.io/docs/identity-server/developer-guide/haapi-sdks/web-sdk/api-reference/step-ui/)
 
 ### HAAPI stepper UI components — the building blocks
 
@@ -165,7 +165,7 @@ function Step() {
 
 [See example](./docs/sections/00-overview/StepBuildingBlocksHaapiReactSDKPlaygroundExample.tsx)
 
-[Read the UI components reference](/api-reference/ui-components)
+[Read the UI components reference](https://curity.io/docs/identity-server/developer-guide/haapi-sdks/web-sdk/api-reference/ui-components/)
 
 ## Customization
 
