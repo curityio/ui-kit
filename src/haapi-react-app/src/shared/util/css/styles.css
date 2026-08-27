@@ -128,7 +128,7 @@ svg {
 }
 
 .app-layout {
-  place-content: center;
+  align-content: start;
   min-height: 100dvh;
   padding-block-start: var(--space-3);
   padding-block-end: var(--space-3);
