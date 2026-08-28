@@ -10,7 +10,7 @@
  */
 
 import { type RefObject, useEffect, useRef } from 'react';
-import { useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
+import { type HaapiStepperHistoryEntry, useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature';
 import type {
   HaapiStepperAPI,
   HaapiStepperNextStepAction,
@@ -18,6 +18,8 @@ import type {
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { browserHistoryNavigation, type HistoryNavigation } from '../../util/browser-apis';
 import { isReproducibleHistoryEntry } from './reproducible-action';
+import { isLink } from '@curity/haapi-react-sdk/haapi-stepper/util/link-predicates';
+import { createRequestForForm, HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
 
 type BrowserHistoryEntry =
   | {
@@ -86,16 +88,27 @@ function syncBrowserHistoryOnStepperHistoryChange(
         reproducible: false,
       };
 
-  // If the current entry is reproducible (i.e. safe to navigate back to), push a new history entry.
-  // If it's non-reproducible, replace it with the new one regardless of the new one being reproducible, i.e.
-  // skip/hide non-reproducible steps, except for the last one (at most).
+  const triggerUrl = getTriggerUrl(newStepperEntry);
+
   if (currentBrowserEntry?.reproducible) {
-    if (currentBrowserEntry.action.id === newStepperEntry.triggeredByAction.id) {
-      return;
+    // The current entry is reproducible (i.e. safe to navigate back to), so we want to keep it and push a new entry.
+    // However, don't push when:
+    // - The stepper history change was triggered by browser navigation (which invoked "next step")
+    // - The URL for the new entry is the same as the current URL (includes page refresh). The previous case could
+    //    be covered by this one, but be explicit about what's happening
+    const skipPush =
+      currentBrowserEntry.action.id === newStepperEntry.triggeredByAction.id ||
+      isEquivalentToCurrentUrl(triggerUrl, browserNavigation);
+
+    if (!skipPush) {
+      browserNavigation.pushEntry(newBrowserHistoryEntry, triggerUrl);
     }
-    browserNavigation.pushEntry(newBrowserHistoryEntry);
   } else {
-    browserNavigation.replaceEntry(newBrowserHistoryEntry);
+    // The current entry is non-reproducible, so replace it with the new one regardless of the new one being
+    // reproducible, i.e. skip/hide non-reproducible steps, except for the last one (at most).
+    // The URL is updated so that there's some user feedback. A refresh on the new URL most likely will fail, but
+    // the same would happen in the previous URL after the non-reproducible action/step (server state change).
+    browserNavigation.replaceEntry(newBrowserHistoryEntry, triggerUrl);
   }
 }
 
@@ -114,4 +127,37 @@ function syncStepperHistoryOnBrowserHistoryChange(
     // Non-reproducible step is always the last. If we bumped into one, take the user to where they came from.
     browserNavigation.go(-1);
   }
+}
+
+/**
+ * Get the URL that was used by a certain trigger action. This builds URLs using SDK utils to account for query
+ * parameters, when applicable.
+ */
+function getTriggerUrl(entry: HaapiStepperHistoryEntry): string | undefined {
+  const { triggeredByAction: action, triggeredByPayload: payload } = entry;
+  if (isLink(action)) {
+    return action.href;
+  }
+
+  if (action.template === HAAPI_ACTION_TYPES.FORM) {
+    const request = createRequestForForm({ action, payload });
+    return request.url;
+  }
+
+  return undefined;
+}
+
+/**
+ * Checks if a URL is the same as the current browser URL, accounting for relative URLs.
+ */
+function isEquivalentToCurrentUrl(url: string | undefined, browserNavigation: HistoryNavigation): boolean {
+  try {
+    if (url) {
+      const absoluteUrl = new URL(url, browserNavigation.currentUrl);
+      return absoluteUrl.href === browserNavigation.currentUrl;
+    }
+  } catch {
+    // Fall-through
+  }
+  return false;
 }

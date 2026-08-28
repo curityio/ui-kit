@@ -12,7 +12,10 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HAAPI_ACTION_TYPES } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
-import { HTTP_METHODS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
+import {
+  HAAPI_FORM_FIELDS,
+  HTTP_METHODS,
+} from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-form.types';
 import {
   HAAPI_STEPPER_ELEMENT_TYPES,
   HAAPI_STEPS,
@@ -38,12 +41,26 @@ const link = { id: 'link-1', href: '/next', type: HAAPI_STEPPER_ELEMENT_TYPES.LI
 const getForm = {
   id: 'get-form-1',
   template: HAAPI_ACTION_TYPES.FORM,
-  model: { method: HTTP_METHODS.GET },
+  model: { method: HTTP_METHODS.GET, href: '/form-get-next' },
+} as HaapiStepperFormAction;
+const getFormWithUsername = {
+  id: 'get-form-2',
+  template: HAAPI_ACTION_TYPES.FORM,
+  model: {
+    method: HTTP_METHODS.GET,
+    href: '/form-get-next',
+    fields: [
+      {
+        type: HAAPI_FORM_FIELDS.USERNAME,
+        name: 'username',
+      },
+    ],
+  },
 } as HaapiStepperFormAction;
 const postForm = {
   id: 'post-form-1',
   template: HAAPI_ACTION_TYPES.FORM,
-  model: { method: HTTP_METHODS.POST },
+  model: { method: HTTP_METHODS.POST, href: '/form-post-next' },
 } as HaapiStepperFormAction;
 
 const stepperEntry = (
@@ -70,6 +87,7 @@ function createFakeBrowser() {
   let entries: unknown[] = [];
   let pos = -1;
   let listener: ((state: unknown) => void) | undefined;
+  let currentUrl = 'https://localhost/';
 
   const currentState = () => (pos >= 0 ? entries[pos] : null);
   const move = (delta: number) => {
@@ -78,19 +96,27 @@ function createFakeBrowser() {
   };
 
   const nav = {
-    initialUrl: 'https://localhost/',
+    get currentUrl() {
+      return currentUrl;
+    },
     getState: () => currentState(),
-    replaceEntry: vi.fn((state: unknown) => {
+    replaceEntry: vi.fn((state: unknown, url: string | undefined | null) => {
       if (pos < 0) {
         entries = [state];
         pos = 0;
       } else {
         entries = [...entries.slice(0, pos), state, ...entries.slice(pos + 1)];
       }
+      if (url) {
+        currentUrl = new URL(url, currentUrl).href;
+      }
     }),
-    pushEntry: vi.fn((state: unknown) => {
+    pushEntry: vi.fn((state: unknown, url: string | undefined | null) => {
       entries = [...entries.slice(0, pos + 1), state];
       pos = entries.length - 1;
+      if (url) {
+        currentUrl = new URL(url, currentUrl).href;
+      }
     }),
     go: vi.fn((delta: number) => {
       move(delta);
@@ -134,7 +160,7 @@ function setup() {
     const pollAction = {
       id: `poll-${String(history.length)}`,
       template: HAAPI_ACTION_TYPES.FORM,
-      model: { method: HTTP_METHODS.GET },
+      model: { method: HTTP_METHODS.GET, href: '/poll' },
     } as HaapiStepperNextStepAction;
     history = [
       ...history,
@@ -160,12 +186,18 @@ describe('useHaapiStepperHistoryNavigation', () => {
     const payload: HaapiStepperNextStepPayload = { username: 'alice' };
 
     reachStep(link);
-    reachStep(getForm, payload);
+    reachStep(getForm);
+    reachStep(getFormWithUsername, payload);
 
     expect(browser.raw.replaceEntry).toHaveBeenCalledTimes(1);
-    expect(browser.raw.replaceEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(link));
-    expect(browser.raw.pushEntry).toHaveBeenCalledTimes(1);
-    expect(browser.raw.pushEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(getForm, payload));
+    expect(browser.raw.replaceEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(link), link.href);
+    expect(browser.raw.pushEntry).toHaveBeenCalledTimes(2);
+    expect(browser.raw.pushEntry).toHaveBeenNthCalledWith(1, reproducibleBrowserEntry(getForm), getForm.model.href);
+    expect(browser.raw.pushEntry).toHaveBeenNthCalledWith(
+      2,
+      reproducibleBrowserEntry(getFormWithUsername, payload),
+      `${getFormWithUsername.model.href}?username=alice`
+    );
     expect(browser.raw.pushEntry).toHaveBeenCalledAfter(browser.raw.replaceEntry);
   });
 
@@ -175,8 +207,8 @@ describe('useHaapiStepperHistoryNavigation', () => {
     reachStep(postForm); // non-reproducible
     reachStep(postForm); // non-reproducible
     expect(browser.raw.replaceEntry).toHaveBeenCalledTimes(2);
-    expect(browser.raw.replaceEntry).toHaveBeenNthCalledWith(1, nonReproducibleBrowserEntry);
-    expect(browser.raw.replaceEntry).toHaveBeenNthCalledWith(2, nonReproducibleBrowserEntry);
+    expect(browser.raw.replaceEntry).toHaveBeenNthCalledWith(1, nonReproducibleBrowserEntry, postForm.model.href);
+    expect(browser.raw.replaceEntry).toHaveBeenNthCalledWith(2, nonReproducibleBrowserEntry, postForm.model.href);
     expect(browser.raw.pushEntry).not.toHaveBeenCalled();
 
     browser.raw.replaceEntry.mockClear();
@@ -184,7 +216,7 @@ describe('useHaapiStepperHistoryNavigation', () => {
     reachStep(getForm); // reproducible
 
     expect(browser.raw.replaceEntry).toHaveBeenCalledTimes(1);
-    expect(browser.raw.replaceEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(getForm));
+    expect(browser.raw.replaceEntry).toHaveBeenCalledWith(reproducibleBrowserEntry(getForm), getForm.model.href);
     expect(browser.raw.pushEntry).not.toHaveBeenCalled();
   });
 
@@ -254,6 +286,21 @@ describe('useHaapiStepperHistoryNavigation', () => {
     expect(browser.raw.pushEntry).not.toHaveBeenCalled();
   });
 
+  it('does not record a new entry if the trigger URL is the same as the current one', () => {
+    const { browser, reachStep } = setup();
+    const form1 = getForm;
+    const form2 = { ...getForm, id: 'different-id' };
+
+    reachStep(link);
+    browser.raw.replaceEntry.mockClear();
+
+    reachStep(form1);
+    reachStep(form2); // same URL, different action ID
+
+    expect(browser.raw.pushEntry).toHaveBeenCalledOnce();
+    expect(browser.raw.replaceEntry).not.toHaveBeenCalled();
+  });
+
   it('lets polling steps occupy at most one entry, so they never flood the history', () => {
     const { browser, reachStep, reachPollingStep } = setup();
     reachStep(link);
@@ -263,6 +310,6 @@ describe('useHaapiStepperHistoryNavigation', () => {
 
     // Polling is non-reproducible: the first tick takes the frontier entry, the rest replace it.
     expect(browser.raw.pushEntry).toHaveBeenCalledTimes(1);
-    expect(browser.raw.pushEntry).toHaveBeenCalledWith(nonReproducibleBrowserEntry);
+    expect(browser.raw.pushEntry).toHaveBeenCalledWith(nonReproducibleBrowserEntry, '/poll');
   });
 });
