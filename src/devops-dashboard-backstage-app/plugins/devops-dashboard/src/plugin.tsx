@@ -6,6 +6,8 @@ import {
 import StorageIcon from '@material-ui/icons/Storage';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
+import { configApi } from './shared/data-access/configApi';
+import { curityAuthApi } from './shared/data-access/curityAuthApi';
 import { dbClientsRouteRef, rootRouteRef } from './routes';
 
 export const PLUGIN_ID = 'devops-dashboard';
@@ -48,6 +50,11 @@ const devopsDashboardPluginRoutingAPI = {
 
 export const devopsDashboardPlugin = createFrontendPlugin({
   pluginId: PLUGIN_ID,
-  extensions: [devopsDashboardHomePage, dbClientsSubPage],
+  extensions: [
+    devopsDashboardHomePage,
+    dbClientsSubPage,
+    configApi,
+    curityAuthApi,
+  ],
   routes: devopsDashboardPluginRoutingAPI,
 });
