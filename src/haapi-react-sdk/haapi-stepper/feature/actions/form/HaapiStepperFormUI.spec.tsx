@@ -145,18 +145,12 @@ describe('HaapiStepperFormUI', () => {
       expect(screen.getByRole('button', { name: 'Show password' })).toHaveAttribute('aria-pressed', 'false');
     });
 
-    it('should expose HTML autocomplete hints for registration fields', () => {
-      const action = createMockFormAction({
-        kind: HAAPI_FORM_ACTION_KINDS.USER_REGISTER,
-        model: {
-          href: '/register',
-          method: HTTP_METHODS.POST,
-          fields: [
-            { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.USERNAME, name: usernameFieldName, label: 'Username' },
-            { id: crypto.randomUUID(), type: HAAPI_FORM_FIELDS.PASSWORD, name: passwordFieldName, label: 'Password' },
-          ],
-        },
-      });
+    it.each([
+      HAAPI_FORM_ACTION_KINDS.USER_REGISTER,
+      HAAPI_FORM_ACTION_KINDS.PASSWORD_RESET,
+      HAAPI_FORM_ACTION_KINDS.LOGIN,
+    ])('should expose the username autocomplete hint', kind => {
+      const action = createMockFormAction({ kind });
       const onSubmit = vi.fn();
 
       render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
@@ -164,26 +158,22 @@ describe('HaapiStepperFormUI', () => {
       expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
         'autocomplete',
         'username'
-      );
-      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toHaveAttribute(
-        'autocomplete',
-        'new-password'
       );
     });
 
-    it('should expose HTML autocomplete hints for login fields', () => {
-      const action = createLoginFormAction();
+    it.each([
+      [HAAPI_FORM_ACTION_KINDS.USER_REGISTER, 'new-password'],
+      [HAAPI_FORM_ACTION_KINDS.PASSWORD_RESET, 'new-password'],
+      [HAAPI_FORM_ACTION_KINDS.LOGIN, 'current-password'],
+    ])('should expose the %s password autocomplete hint', (kind, expected) => {
+      const action = createMockFormAction({ kind });
       const onSubmit = vi.fn();
 
       render(<HaapiStepperFormUI action={action} onSubmit={onSubmit} />);
 
-      expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.TEXT, usernameFieldName))).toHaveAttribute(
-        'autocomplete',
-        'username'
-      );
       expect(screen.getByTestId(formFieldTestId(HAAPI_FORM_FIELDS.PASSWORD, passwordFieldName))).toHaveAttribute(
         'autocomplete',
-        'current-password'
+        expected
       );
     });
 
