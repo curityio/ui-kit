@@ -27,6 +27,8 @@ import type {
   HaapiStepperNextStepAction,
   HaapiStepperNextStepPayload,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
+import { createApiRequest, type HaapiFetchAction } from '@curity/haapi-react-sdk/haapi-stepper/data-access';
+import { isLink } from '@curity/haapi-react-sdk/haapi-stepper/util/link-predicates';
 import { useHaapiStepperHistoryNavigation } from './useHaapiStepperHistoryNavigation';
 import type { HistoryNavigation } from '../../util/browser-apis';
 
@@ -63,14 +65,16 @@ const postForm = {
   model: { method: HTTP_METHODS.POST, href: '/form-post-next' },
 } as HaapiStepperFormAction;
 
+const requestFor = (action: HaapiStepperNextStepAction, payload?: HaapiStepperNextStepPayload) =>
+  createApiRequest((isLink(action) ? action : { action, payload }) as HaapiFetchAction);
+
 const stepperEntry = (
   action: HaapiStepperNextStepAction,
   payload?: HaapiStepperNextStepPayload
 ): HaapiStepperHistoryEntry =>
   ({
     step: {},
-    triggeredByAction: action,
-    triggeredByPayload: payload,
+    triggeredBy: { action, payload, request: requestFor(action, payload) },
     timestamp: new Date(),
   }) as HaapiStepperHistoryEntry;
 
@@ -166,7 +170,7 @@ function setup() {
       ...history,
       {
         step: { type: HAAPI_STEPS.POLLING },
-        triggeredByAction: pollAction,
+        triggeredBy: { action: pollAction, request: requestFor(pollAction) },
         timestamp: new Date(),
       } as HaapiStepperHistoryEntry,
     ];

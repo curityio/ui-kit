@@ -17,11 +17,11 @@ export interface HistoryNavigation {
   /** Registers a listener for browser back/forward navigation. Returns a function that removes it. */
   addEntryChangeListener(listener: (state: unknown) => void): () => void;
 
-  /** Updates the current history entry's state, optionally updating the current URL (reuses the entry). */
-  replaceEntry(state: unknown, url: string | undefined | null): void;
+  /** Updates the current history entry's state and URL (reuses the entry). */
+  replaceEntry(state: unknown, url: string): void;
 
-  /** Appends a new history entry, optionally updating the current URL, and discarding any forward entries. */
-  pushEntry(state: unknown, url: string | undefined | null): void;
+  /** Appends a new history entry with the given URL, discarding any forward entries. */
+  pushEntry(state: unknown, url: string): void;
 
   /** Moves the browser through its history by `delta` entries (negative = back, positive = forward). */
   go(delta: number): void;
@@ -45,11 +45,11 @@ class BrowserHistoryNavigation implements HistoryNavigation {
     return () => window.removeEventListener('popstate', handler);
   }
 
-  replaceEntry(state: unknown, url: string | undefined | null): void {
+  replaceEntry(state: unknown, url: string): void {
     window.history.replaceState(state, '', url);
   }
 
-  pushEntry(state: unknown, url: string | undefined | null): void {
+  pushEntry(state: unknown, url: string): void {
     window.history.pushState(state, '', url);
   }
 

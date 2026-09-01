@@ -1214,18 +1214,19 @@ describe('HaapiStepper', () => {
       const thirdStep = HAAPI_STEPS.POLLING;
       let history = await screen.findByTestId('history');
       let historyData = getHistoryData(history);
-      let previousStepTriggerActionKind = bootstrapLinkAction;
 
       expect(historyData).toHaveLength(1);
       expect(historyData[0].step.type).toBe(initialStep);
-      expect(historyData[0].triggeredByAction).toEqual({
-        ...previousStepTriggerActionKind,
+      expect(historyData[0].triggeredBy.action).toEqual({
+        ...bootstrapLinkAction,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         id: expect.anything(),
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         href: expect.anything(),
       });
-      expect(historyData[0].triggeredByPayload).toBeUndefined();
+      expect(historyData[0].triggeredBy.payload).toBeUndefined();
+      expect(historyData[0].triggeredBy.request.url).toBe(bootstrapLinkAction.href);
+      expect(historyData[0].triggeredBy.request.init.method).toBe('GET');
 
       await goToNextStep(secondStep);
 
@@ -1235,13 +1236,15 @@ describe('HaapiStepper', () => {
       historyData = getHistoryData(history);
       // @ts-expect-error - accessing mock step actions for test validation - getStepMock returns mock data with actions array
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      previousStepTriggerActionKind = getStepMock(initialStep).actions[0].kind;
+      let previousStepTriggerActionKind = getStepMock(initialStep).actions[0].kind;
 
       expect(historyData).toHaveLength(2);
       expect(historyData[1].step.type).toBe(secondStep);
-      expect(historyData[1].triggeredByAction).toBeDefined();
+      expect(historyData[1].triggeredBy.action).toBeDefined();
       // @ts-expect-error - skipping for testing purposes
-      expect(historyData[1].triggeredByAction.kind).toBe(previousStepTriggerActionKind);
+      expect(historyData[1].triggeredBy.action.kind).toBe(previousStepTriggerActionKind);
+      expect(historyData[1].triggeredBy.request.url).toBe('/auth/login');
+      expect(historyData[1].triggeredBy.request.init.method).toBe('POST');
 
       await goToNextStep(thirdStep);
 
@@ -1255,9 +1258,9 @@ describe('HaapiStepper', () => {
 
       expect(historyData).toHaveLength(3);
       expect(historyData[2].step.type).toBe(thirdStep);
-      expect(historyData[2].triggeredByAction).toBeDefined();
+      expect(historyData[2].triggeredBy.action).toBeDefined();
       // @ts-expect-error - skipping for testing purposes
-      expect(historyData[2].triggeredByAction.kind).toBe(previousStepTriggerActionKind);
+      expect(historyData[2].triggeredBy.action.kind).toBe(previousStepTriggerActionKind);
 
       const timestamp1 = new Date(historyData[0].timestamp);
       const timestamp2 = new Date(historyData[1].timestamp);
@@ -1291,7 +1294,7 @@ describe('HaapiStepper', () => {
       expect(historyData[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
       expect(historyData[1].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
       // @ts-expect-error - skipping for testing purposes
-      expect(historyData[1].triggeredByAction.kind).toBe(HAAPI_FORM_ACTION_KINDS.LOGIN);
+      expect(historyData[1].triggeredBy.action.kind).toBe(HAAPI_FORM_ACTION_KINDS.LOGIN);
     });
 
     it('should not include redirection steps in history', async () => {
@@ -1313,14 +1316,17 @@ describe('HaapiStepper', () => {
 
       expect(history[0].step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
       // Triggered by the initial link
-      assert(history[0].triggeredByAction.type === HAAPI_STEPPER_ELEMENT_TYPES.LINK);
-      expect(history[0].triggeredByAction.href).toBe(bootstrapLinkAction.href);
+      assert(history[0].triggeredBy.action.type === HAAPI_STEPPER_ELEMENT_TYPES.LINK);
+      expect(history[0].triggeredBy.action.href).toBe(bootstrapLinkAction.href);
+      expect(history[0].triggeredBy.request.url).toBe(bootstrapLinkAction.href);
 
       expect(history[1].step.type).toBe(HAAPI_STEPS.REGISTRATION);
       // Triggered by the action in the redirection step
-      assert(history[1].triggeredByAction.type === HAAPI_STEPPER_ELEMENT_TYPES.ACTION);
-      assert(history[1].triggeredByAction.subtype === HAAPI_ACTION_TYPES.FORM);
-      expect(history[1].triggeredByAction.model.href).toBe('/auth/redirected');
+      assert(history[1].triggeredBy.action.type === HAAPI_STEPPER_ELEMENT_TYPES.ACTION);
+      assert(history[1].triggeredBy.action.subtype === HAAPI_ACTION_TYPES.FORM);
+      expect(history[1].triggeredBy.action.model.href).toBe('/auth/redirected');
+      // The recorded request is the one that was actually sent, i.e. the redirected-to one
+      expect(history[1].triggeredBy.request.url).toBe('/auth/redirected');
     });
 
     it('should not include input error problem steps in history', async () => {

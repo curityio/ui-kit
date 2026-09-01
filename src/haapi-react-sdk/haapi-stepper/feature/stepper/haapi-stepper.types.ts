@@ -44,6 +44,7 @@ import {
 } from '../../data-access/types/haapi-step.types';
 import { HaapiFetchPayload } from '../../data-access/types/haapi-fetch.types';
 import {
+  ApiRequest,
   HaapiCheckboxFormField,
   HaapiContextFormField,
   HaapiFormField,
@@ -221,8 +222,15 @@ export type HaapiStepperNextStepPayload = HaapiFetchPayload;
 
 export interface HaapiStepperNextStepData {
   step: HaapiStepperStep;
-  triggeredByAction: HaapiStepperNextStepAction;
-  triggeredByPayload?: HaapiStepperNextStepPayload;
+  /**
+   * What produced the step: the action, the payload it was given, and the request that actually went over the
+   * wire.
+   */
+  triggeredBy: {
+    action: HaapiStepperNextStepAction;
+    payload?: HaapiStepperNextStepPayload;
+    request: ApiRequest;
+  };
 }
 
 /*

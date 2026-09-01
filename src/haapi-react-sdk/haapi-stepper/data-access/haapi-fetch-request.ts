@@ -11,21 +11,17 @@
 
 import { FetchLike } from '@curity/identityserver-haapi-web-driver';
 import { MEDIA_TYPES } from './types/media.types';
-import { createApiRequest } from './haapi-fetch-utils';
-import { HaapiFetchAction } from './types/haapi-fetch.types';
+import { ApiRequest } from './haapi-fetch-utils';
 import { HaapiStep } from './types/haapi-step.types';
 
-export async function sendHaapiFetchRequest(action: HaapiFetchAction, haapiFetch: FetchLike): Promise<HaapiStep> {
-  const request = createApiRequest(action);
+export async function sendHaapiFetchRequest(request: ApiRequest, haapiFetch: FetchLike): Promise<HaapiStep> {
   const response = await haapiFetch(request.url, request.init);
   const mediaType = response.headers.get('Content-Type');
 
   switch (mediaType) {
     case MEDIA_TYPES.AUTH:
     case MEDIA_TYPES.PROBLEM: {
-      const JSONResponse = (await response.json()) as HaapiStep;
-
-      return JSONResponse;
+      return (await response.json()) as HaapiStep;
     }
 
     default:
