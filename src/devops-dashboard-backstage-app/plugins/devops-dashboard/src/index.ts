@@ -9,3 +9,5 @@ export type {
   DevOpsDashboardConfigApi,
   DevOpsDashboardProfile,
 } from './shared/data-access/configApi';
+export { devopsDashboardGraphQLApiRef } from './shared/data-access/graphql/graphQLApi';
+export type { DevOpsDashboardGraphQLApi } from './shared/data-access/graphql/graphQLApi';

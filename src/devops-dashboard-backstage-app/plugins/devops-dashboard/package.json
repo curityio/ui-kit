@@ -26,13 +26,17 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.0",
     "@backstage/core-app-api": "^1.19.1",
     "@backstage/core-components": "^0.18.12",
     "@backstage/core-plugin-api": "^1.11.1",
     "@backstage/frontend-plugin-api": "^0.17.3",
     "@backstage/theme": "^0.7.3",
     "@backstage/ui": "^0.17.0",
-    "@material-ui/icons": "^4.9.1"
+    "@material-ui/icons": "^4.9.1",
+    "graphql": "^16.11.0",
+    "react-use": "^17.2.4",
+    "rxjs": "^7.8.2"
   },
   "peerDependencies": {
     "react": "^16.13.1 || ^17.0.0 || ^18.0.0"
