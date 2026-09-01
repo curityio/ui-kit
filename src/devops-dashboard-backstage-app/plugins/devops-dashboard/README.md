@@ -36,6 +36,32 @@ section.
   `packages/backend/src/modules/curityOidcAuthProvider.ts`); a published
   auth backend module will replace that manual step later.
 
+## Configuration
+
+The dashboard reads the Curity profiles it can show from `app-config.yaml`:
+
+```yaml
+devopsDashboard:
+  profiles:
+    # One entry per Curity profile the dashboard should show.
+    - id: oauth-dev
+      # Where the profile serves its database-clients GraphQL API,
+      # reachable from the user's browser. Omit it while the profile
+      # has none — the dashboard then shows the profile as
+      # "not configured" instead of failing.
+      dbClientsGraphqlUrl: https://curity.example.com/oauth/clients-graphql-api
+```
+
+The full schema lives in this package's `config.d.ts`. Backstage validates
+config against it when you run:
+
+```sh
+yarn backstage-cli config:check --strict
+```
+
+Missing configuration never crashes the app: without `profiles`, the
+dashboard renders and marks its sections as not configured.
+
 ## Auth configuration
 
 The provider id `curity` is the plugin's contract — its auth
@@ -112,7 +138,10 @@ Installation follows the standard Backstage steps:
    });
    ```
 
-3. Register the companion auth provider and configure it as described under
+3. Add the dashboard's configuration as described under
+   [Configuration](#configuration).
+
+4. Register the companion auth provider and configure it as described under
    [Requirements](#requirements) and [Auth configuration](#auth-configuration).
 
 The **DevOps Dashboard** entry then appears in the sidebar, and the page is

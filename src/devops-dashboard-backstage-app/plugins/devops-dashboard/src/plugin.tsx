@@ -8,7 +8,9 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import { configApi } from './shared/data-access/configApi';
 import { curityAuthApi } from './shared/data-access/curityAuthApi';
+import { graphQLApi } from './shared/data-access/graphql/graphQLApi';
 import { dbClientsRouteRef, rootRouteRef } from './routes';
+import { devopsDashboardWrapper } from './wrapper';
 
 export const PLUGIN_ID = 'devops-dashboard';
 
@@ -55,6 +57,8 @@ export const devopsDashboardPlugin = createFrontendPlugin({
     dbClientsSubPage,
     configApi,
     curityAuthApi,
+    graphQLApi,
+    devopsDashboardWrapper,
   ],
   routes: devopsDashboardPluginRoutingAPI,
 });
