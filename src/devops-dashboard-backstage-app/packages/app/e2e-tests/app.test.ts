@@ -15,13 +15,11 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { signInToCurity } from '../../../e2e-test-utils';
 
-test('App should render the welcome page', async ({ page }) => {
+test('App should render after signing in through Curity', async ({ page }) => {
   await page.goto('/');
-
-  const enterButton = page.getByRole('button', { name: 'Enter' });
-  await expect(enterButton).toBeVisible();
-  await enterButton.click();
+  await signInToCurity(page);
 
   const nav = page.getByRole('navigation', { name: 'sidebar nav' });
   await expect(

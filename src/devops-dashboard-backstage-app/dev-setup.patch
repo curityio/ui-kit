@@ -1,0 +1,46 @@
+diff --git a/app-config.local.yaml b/app-config.local.yaml
+new file mode 100644
+index 00000000000..3df8be22d84
+--- /dev/null
++++ b/app-config.local.yaml
+@@ -0,0 +1,40 @@
++# Local dev config (gitignored) — the Curity setup a consumer app performs
++# in its own app-config. Created by:  git apply dev-setup.patch  (see README.md)
++auth:
++  environment: development
++  session:
++    # Required by the OIDC-based Curity provider
++    secret: backstage-dev-session-secret
++  providers:
++    # Curity Identity Server (local dev server) via the generic OIDC provider,
++    # registered under `curity` — the devops-dashboard plugin's contractual
++    # provider id. The client must be registered on the oauth-dev profile —
++    # see README.md.
++    curity:
++      development:
++        metadataUrl: https://localhost:8443/dev/oauth/anonymous/.well-known/openid-configuration
++        clientId: devops_dashboard_backstage
++        clientSecret: Password1 # must match the client registered on the dev server
++        # openid/profile/email are requested by default; add the admin API scope
++        additionalScopes: 'urn:se:curity:scopes:admin:api'
++        prompt: auto
++        signIn:
++          resolvers:
++            # Dev-only resolver (defined in curityOidcAuthProvider.ts):
++            # test users carry no email claim and no catalog entity
++            - resolver: subClaimNoCatalogUser
++
++# DevOps Dashboard plugin: the Curity profiles the dashboard can show and
++# where each one serves its database-clients GraphQL API. Frontend-visible;
++# schema in plugins/devops-dashboard/config.d.ts.
++devopsDashboard:
++  profiles:
++    - id: oauth-dev
++      dbClientsGraphqlUrl: https://localhost:9443/oauth-dev/clients-graphql-api
++
++# If port 3000 is taken (e.g. the CRA DevOps Dashboard dev server), uncomment:
++# app:
++#   baseUrl: http://localhost:3001
++# backend:
++#   cors:
++#     origin: http://localhost:3001

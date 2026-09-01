@@ -41,6 +41,7 @@
     "@internal/backstage-plugin-devops-dashboard": "workspace:^",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
+    "common": "workspace:^",
     "react": "^18.0.2",
     "react-dom": "^18.0.2",
     "react-router": "^6.30.2",
