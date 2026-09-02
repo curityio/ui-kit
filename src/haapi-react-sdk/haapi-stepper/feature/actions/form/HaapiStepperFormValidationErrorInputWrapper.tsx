@@ -43,7 +43,7 @@ export function HaapiStepperFormValidationErrorInputWrapper({
         <div data-testid="haapi-validation-errors" className="haapi-validation-errors">
           {validationErrors.map(fieldError => (
             <div
-              key={`${inputError.type}-${fieldName}`}
+              key={`${fieldName}-${fieldError.reason}-${fieldError.detail ?? ''}`}
               className="haapi-validation-error red py1"
               data-testid="haapi-validation-error"
             >
