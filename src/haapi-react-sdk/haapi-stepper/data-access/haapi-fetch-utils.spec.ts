@@ -13,7 +13,23 @@ import { describe, test, expect } from 'vitest';
 import { HAAPI_FORM_FIELDS, HTTP_METHODS } from './types/haapi-form.types';
 import { MEDIA_TYPES } from './types/media.types';
 import { HaapiFormAction, HAAPI_ACTION_TYPES, HAAPI_FORM_ACTION_KINDS } from './types/haapi-action.types';
-import { createRequestForUrl, createRequestForForm } from './haapi-fetch-utils';
+import { createApiRequest, createRequestForUrl, createRequestForForm } from './haapi-fetch-utils';
+import type { HaapiLink } from './types/haapi-step.types';
+
+describe(createApiRequest.name, () => {
+  test('builds a GET request to the href for a link action', () => {
+    const link: HaapiLink = { href: '/example/link', rel: 'self' };
+
+    expect(createApiRequest(link)).toEqual(createRequestForUrl(link.href));
+  });
+
+  test('builds a form request for a form action, with the payload applied', () => {
+    const action = formAction(HTTP_METHODS.GET, '/example/path', { username: undefined });
+    const payload = { username: 'alice' };
+
+    expect(createApiRequest({ action, payload })).toEqual(createRequestForForm({ action, payload }));
+  });
+});
 
 test(createRequestForUrl.name, () => {
   const { url, init } = createRequestForUrl('/example/path');

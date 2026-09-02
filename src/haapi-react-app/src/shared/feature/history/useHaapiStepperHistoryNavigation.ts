@@ -17,7 +17,7 @@ import type {
   HaapiStepperNextStepPayload,
 } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/haapi-stepper.types';
 import { browserHistoryNavigation, type HistoryNavigation } from '../../util/browser-apis';
-import { isReproducibleHistoryEntry } from './reproducible-action';
+import { isReproducibleHistoryEntry } from './reproducible-entry';
 
 type BrowserHistoryEntry =
   | {
@@ -79,24 +79,31 @@ function syncBrowserHistoryOnStepperHistoryChange(
   const newBrowserHistoryEntry: BrowserHistoryEntry = isReproducibleHistoryEntry(newStepperEntry)
     ? {
         reproducible: true,
-        action: newStepperEntry.triggeredByAction,
-        payload: newStepperEntry.triggeredByPayload,
+        action: newStepperEntry.triggeredBy.action,
+        payload: newStepperEntry.triggeredBy.payload,
       }
     : {
         reproducible: false,
       };
 
-  // If the current entry is reproducible (i.e. safe to navigate back to), push a new history entry.
-  // If it's non-reproducible, replace it with the new one regardless of the new one being reproducible, i.e.
-  // skip/hide non-reproducible steps, except for the last one (at most).
-  if (currentBrowserEntry?.reproducible) {
-    if (currentBrowserEntry.action.id === newStepperEntry.triggeredByAction.id) {
-      return;
-    }
-    browserNavigation.pushEntry(newBrowserHistoryEntry);
-  } else {
-    browserNavigation.replaceEntry(newBrowserHistoryEntry);
+  const triggerUrl = newStepperEntry.triggeredBy.request.url;
+
+  if (!currentBrowserEntry?.reproducible) {
+    // Skip/hide non-reproducible steps, except for the last one (at most).
+    // The URL is updated so that there's some user feedback. A refresh on the new URL most likely will fail, but
+    // the same would happen in the previous URL after the non-reproducible action/step (server state change).
+    browserNavigation.replaceEntry(newBrowserHistoryEntry, triggerUrl);
+    return;
   }
+
+  const changeIsDueToBrowserNavigation = currentBrowserEntry.action.id === newStepperEntry.triggeredBy.action.id;
+  const targetsCurrentUrl = isEquivalentToCurrentUrl(triggerUrl, browserNavigation);
+
+  if (changeIsDueToBrowserNavigation || targetsCurrentUrl) {
+    return;
+  }
+
+  browserNavigation.pushEntry(newBrowserHistoryEntry, triggerUrl);
 }
 
 function syncStepperHistoryOnBrowserHistoryChange(
@@ -114,4 +121,12 @@ function syncStepperHistoryOnBrowserHistoryChange(
     // Non-reproducible step is always the last. If we bumped into one, take the user to where they came from.
     browserNavigation.go(-1);
   }
+}
+
+/**
+ * Checks if a URL is the same as the current browser URL, accounting for relative URLs.
+ */
+function isEquivalentToCurrentUrl(url: string, browserNavigation: HistoryNavigation): boolean {
+  const currentUrl = browserNavigation.currentUrl;
+  return new URL(url, currentUrl).href === currentUrl;
 }

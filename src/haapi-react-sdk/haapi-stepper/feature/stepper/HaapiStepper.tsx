@@ -10,7 +10,7 @@
  */
 
 import { ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { HaapiFetchAction } from '../../data-access/types/haapi-fetch.types';
+import { type ApiRequest, createApiRequest } from '../../data-access/haapi-fetch-utils';
 import { useHaapiFetch } from '../../data-access/useHaapiFetch';
 import {
   HAAPI_PROBLEM_STEPS,
@@ -209,7 +209,7 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *         {history.map((historyEntry, index) => (
  *           <li key={index}>
  *             {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
- *             {historyEntry.triggeredByAction && ` (via ${historyEntry.triggeredByAction.title})`}
+ *             {historyEntry.triggeredBy.action && ` (via ${historyEntry.triggeredBy.action.title})`}
  *           </li>
  *         ))}
  *       </ul>
@@ -362,7 +362,7 @@ interface ProcessHaapiNextStepParams {
   payload: HaapiStepperNextStepPayload | undefined;
   pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>;
   config: HaapiStepperConfig;
-  sendHaapiFetchRequest: (action: HaapiFetchAction) => Promise<HaapiStep>;
+  sendHaapiFetchRequest: (request: ApiRequest) => Promise<HaapiStep>;
 }
 
 async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise<{
@@ -393,8 +393,8 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     });
   }
 
-  const nextStepRequestAction = isLink(action) ? action : { action, payload };
-  const nextStepResponse = await sendHaapiFetchRequest(nextStepRequestAction);
+  const request = createApiRequest(isLink(action) ? action : { action, payload });
+  const nextStepResponse = await sendHaapiFetchRequest(request);
 
   switch (nextStepResponse.type) {
     case HAAPI_STEPS.REDIRECTION:
@@ -409,7 +409,8 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return nextStepSuccess(
         handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history),
         action,
-        payload
+        payload,
+        request
       );
 
     case HAAPI_STEPS.AUTHENTICATION:
@@ -417,12 +418,13 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return nextStepSuccess(
         handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config),
         action,
-        payload
+        payload,
+        request
       );
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-      return nextStepSuccess(formatStepData(nextStepResponse), action, payload);
+      return nextStepSuccess(formatStepData(nextStepResponse), action, payload, request);
 
     case HAAPI_STEPS.CONTINUE_SAME:
       if (isLink(action)) {
@@ -431,12 +433,13 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       return nextStepSuccess(
         formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep),
         action,
-        payload
+        payload,
+        request
       );
 
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      return nextStepSuccess(handleCompletedStep(nextStepResponse, config), action, payload);
+      return nextStepSuccess(handleCompletedStep(nextStepResponse, config), action, payload, request);
 
     case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
@@ -492,13 +495,13 @@ function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): 
 function nextStepSuccess(
   step: HaapiStepperStep | undefined,
   action: HaapiStepperNextStepAction,
-  payload: HaapiStepperNextStepPayload | undefined
+  payload: HaapiStepperNextStepPayload | undefined,
+  request: ApiRequest
 ): { nextStepData?: HaapiStepperNextStepData } {
   return {
     nextStepData: step && {
       step: step,
-      triggeredByAction: action,
-      triggeredByPayload: payload,
+      triggeredBy: { action, payload, request },
     },
   };
 }

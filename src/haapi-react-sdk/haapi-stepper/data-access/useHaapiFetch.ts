@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import { createHaapiFetch } from '@curity/identityserver-haapi-web-driver';
 import type { FetchLike, HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 import { sendHaapiFetchRequest } from './haapi-fetch-request';
-import type { HaapiFetchAction } from './types/haapi-fetch.types';
+import type { ApiRequest } from './haapi-fetch-utils';
 
 // `@curity/identityserver-haapi-web-driver` is a *process-global singleton*:
 // the docs state "at most one active fetch-like function", and in practice
@@ -31,7 +31,7 @@ export function useHaapiFetch(haapi: HaapiConfiguration) {
   const haapiFetch = useMemo(() => getHaapiFetch(haapi), [haapi]);
   return useMemo(
     () => ({
-      sendHaapiFetchRequest: (action: HaapiFetchAction) => sendHaapiFetchRequest(action, haapiFetch),
+      sendHaapiFetchRequest: (request: ApiRequest) => sendHaapiFetchRequest(request, haapiFetch),
     }),
     [haapiFetch]
   );
