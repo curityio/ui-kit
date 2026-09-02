@@ -9,6 +9,31 @@
         <style>
             :root {
                 --header-height: 50px;
+                --surface-dark: #201a32;
+            }
+
+            @font-face {
+                font-family: "GoogleSans-Regular";
+                src: url("./src/common/assets/fonts/GoogleSans-Regular.woff2") format("woff2");
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            @font-face {
+                font-family: "GoogleSans-Medium";
+                src: url("./src/common/assets/fonts/GoogleSans-Medium.woff2") format("woff2");
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            @font-face {
+                font-family: "GoogleSans-Bold";
+                src: url("./src/common/assets/fonts/GoogleSans-Bold.woff2") format("woff2");
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
             }
 
             @font-face {
@@ -47,9 +72,8 @@
                 height: 50px;
                 backdrop-filter: blur(8px);
                 z-index: 2;
-                background-color: var(--color-primary-dark);
-                display: flex;
-                gap: 1rem;
+                background-color: var(--surface-dark);
+                border-bottom: 1px solid var(--surface-dark);
                 display: flex;
                 gap: 1rem;
                 align-items: center;
@@ -61,14 +85,7 @@
                     color: white;
                     display: inline-flex;
                     align-items: center;
-                    gap: 0.5rem;
-                }
-
-                > div:first-child {
-                    color: var(--color-yellow);
-                    display: inline-flex;
                     gap: 1rem;
-                    align-items: center;
                 }
 
                 > div:last-child {
@@ -100,15 +117,36 @@
                 }
             }
 
+            .header-presentation {
+                align-items: center;
+                border: 1px solid color-mix(in srgb, white 18%, transparent);
+                border-radius: 2rem;
+                color: rgb(255 255 255 / 75%);
+                display: none;
+                font-family: var(--type-sans-medium);
+                font-size: 0.7rem;
+                -webkit-font-smoothing: antialiased;
+                letter-spacing: 0.04em;
+                padding: 0.2rem 0.6rem;
+                text-transform: uppercase;
+                white-space: nowrap;
+            }
+
+            @media (min-width: 52em) {
+                .header-presentation {
+                    display: inline-flex;
+                }
+            }
+
             h1,
             h2,
             h3,
             h4,
             h5 {
                 text-wrap: balance;
-                font-family: var(--type-bold);
+                font-family: var(--type-sans-bold);
                 line-height: 1.2;
-                font-weight: 700;
+                font-weight: var(--type-weight-bold);
             }
 
             h1 {
@@ -142,7 +180,8 @@
             }
 
             body {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                font-family: var(--type-sans);
+                line-height: var(--type-line-height);
                 padding-bottom: var(--space-4);
             }
 
@@ -172,7 +211,7 @@
 
             main {
                 a {
-                    color: #d859a1;
+                    color: var(--color-link);
                 }
             }
 
@@ -269,6 +308,14 @@
 
             a:is(.button) {
                 text-decoration: none;
+            }
+
+            .w100 {
+                width: 100%;
+            }
+
+            .mt2 {
+                margin-top: var(--space-2);
             }
 
             .button-primary-outline {
@@ -422,8 +469,8 @@
         </div>
         <header>
             <div>
-                <img src=" src/identity-server/images/curity-logo-white.svg" alt="Curity Logo" />
-                <span>Curity UI Kit</span>
+                <img src="./src/identity-server/images/curity-logo-white.svg" alt="Curity Logo" />
+                <span class="header-presentation">UI Kit</span>
             </div>
             <div>
                 <a href="https://github.com/curityio/ui-kit" target="_blank">
