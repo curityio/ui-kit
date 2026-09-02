@@ -395,7 +395,6 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
 
   const request = createApiRequest(isLink(action) ? action : { action, payload });
   const nextStepResponse = await sendHaapiFetchRequest(request);
-  const triggeredBy = { action, payload, request };
 
   switch (nextStepResponse.type) {
     case HAAPI_STEPS.REDIRECTION:
@@ -409,16 +408,23 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     case HAAPI_STEPS.POLLING:
       return nextStepSuccess(
         handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history),
-        triggeredBy
+        action,
+        payload,
+        request
       );
 
     case HAAPI_STEPS.AUTHENTICATION:
     case HAAPI_STEPS.REGISTRATION:
-      return nextStepSuccess(handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config), triggeredBy);
+      return nextStepSuccess(
+        handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config),
+        action,
+        payload,
+        request
+      );
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-      return nextStepSuccess(formatStepData(nextStepResponse), triggeredBy);
+      return nextStepSuccess(formatStepData(nextStepResponse), action, payload, request);
 
     case HAAPI_STEPS.CONTINUE_SAME:
       if (isLink(action)) {
@@ -426,12 +432,14 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
       }
       return nextStepSuccess(
         formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep),
-        triggeredBy
+        action,
+        payload,
+        request
       );
 
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      return nextStepSuccess(handleCompletedStep(nextStepResponse, config), triggeredBy);
+      return nextStepSuccess(handleCompletedStep(nextStepResponse, config), action, payload, request);
 
     case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
@@ -486,12 +494,14 @@ function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): 
 
 function nextStepSuccess(
   step: HaapiStepperStep | undefined,
-  triggeredBy: HaapiStepperNextStepData['triggeredBy']
+  action: HaapiStepperNextStepAction,
+  payload: HaapiStepperNextStepPayload | undefined,
+  request: ApiRequest
 ): { nextStepData?: HaapiStepperNextStepData } {
   return {
     nextStepData: step && {
       step: step,
-      triggeredBy,
+      triggeredBy: { action, payload, request },
     },
   };
 }

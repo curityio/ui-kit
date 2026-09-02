@@ -222,10 +222,6 @@ export type HaapiStepperNextStepPayload = HaapiFetchPayload;
 
 export interface HaapiStepperNextStepData {
   step: HaapiStepperStep;
-  /**
-   * What produced the step: the action, the payload it was given, and the request that actually went over the
-   * wire.
-   */
   triggeredBy: {
     action: HaapiStepperNextStepAction;
     payload?: HaapiStepperNextStepPayload;
