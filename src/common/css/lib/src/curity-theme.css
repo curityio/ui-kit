@@ -16,7 +16,7 @@
   --page-background-repeat: no-repeat;
   --page-background-size: cover;
   --page-background-color: #f3f5f7;
-  --page-background-color-dark: var(--color-primary-dark);
+  --page-background-color-dark: #2a2340;
   --page-powered-by-display: flex;
 
   --well-border-color: transparent;
@@ -63,7 +63,7 @@
   --form-field-color: black;
   --form-field-color-dark: black;
   --form-field-background-color: white;
-  --form-field-background-color-dark: white;
+  --form-field-background-color-dark: transparent;
   --form-field-placeholder-color: rgb(141 141 141);
   --form-field-border-color: rgb(207 217 224);
   --form-field-box-shadow: none;
