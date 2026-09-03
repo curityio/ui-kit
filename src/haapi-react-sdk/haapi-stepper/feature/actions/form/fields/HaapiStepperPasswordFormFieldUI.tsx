@@ -60,9 +60,10 @@ export function HaapiStepperPasswordFormFieldUI({ field }: { field: HaapiStepper
 }
 
 const getPasswordAutoComplete = (actionKind: HAAPI_FORM_ACTION_KINDS_TYPE): 'current-password' | 'new-password' => {
-  const isRegistrationFlow = actionKind === HAAPI_FORM_ACTION_KINDS.USER_REGISTER;
+  const requiresNewPassword =
+    actionKind === HAAPI_FORM_ACTION_KINDS.USER_REGISTER || actionKind === HAAPI_FORM_ACTION_KINDS.PASSWORD_RESET;
 
-  if (isRegistrationFlow) {
+  if (requiresNewPassword) {
     return 'new-password';
   }
 

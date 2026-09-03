@@ -93,6 +93,7 @@ export enum HAAPI_FORM_ACTION_KINDS {
   CONTINUE = 'continue',
   USER_REGISTER = 'user-register',
   AUTHORIZATION_RESPONSE = 'authorization-response',
+  PASSWORD_RESET = 'password-reset',
 }
 
 export enum HAAPI_ACTION_CLIENT_OPERATIONS {
