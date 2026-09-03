@@ -11,7 +11,7 @@
 
 import type { ReactElement } from 'react';
 
-import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_FIELDS, HAAPI_TEXT_FIELD_KINDS } from '../../../../data-access/types/haapi-form.types';
 import type { HaapiStepperTextFormField, HaapiStepperUsernameFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
@@ -22,6 +22,7 @@ export function HaapiStepperTextFormFieldUI({
 }): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const autoComplete = getTextAutoComplete(field);
+  const inputType = getTextInputType(field);
   const inputId = `${action.id}-${field.name}-input`;
 
   return (
@@ -30,7 +31,7 @@ export function HaapiStepperTextFormFieldUI({
       <input
         id={inputId}
         data-testid={`haapi-form-field-${HAAPI_FORM_FIELDS.TEXT}-${field.name}`}
-        type="text"
+        type={inputType}
         className="haapi-stepper-form-field-text-input"
         name={field.name}
         value={formState.get(field)}
@@ -42,6 +43,18 @@ export function HaapiStepperTextFormFieldUI({
     </label>
   );
 }
+
+// Kinds are free-form, so only those well-known are used, to avoid setting input type to something with specific
+// behavior (e.g. password or checkbox).
+const KNOWN_TEXT_FIELD_KINDS = new Set<string>(Object.values(HAAPI_TEXT_FIELD_KINDS));
+
+const getTextInputType = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
+  if (field.type === HAAPI_FORM_FIELDS.TEXT && field.kind && KNOWN_TEXT_FIELD_KINDS.has(field.kind)) {
+    return field.kind;
+  }
+
+  return 'text';
+};
 
 const getTextAutoComplete = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
   if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
