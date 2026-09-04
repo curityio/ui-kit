@@ -44,7 +44,7 @@
   font-display: swap;
   font-family: Roboto-Mono;
   font-weight: normal;
-  src: url('@curity/ui-kit-assets/fonts/Roboto-Mono.woff2') format('woff2');
+  src: url('@curity/ui-kit-assets/fonts/roboto-mono-v12-latin-regular.woff2') format('woff2');
 }
 
 body {

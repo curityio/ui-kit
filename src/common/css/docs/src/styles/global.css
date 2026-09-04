@@ -268,8 +268,6 @@ pre code {
   color: white;
 }
 
-/* Translucent pill badge next to the logo, matching .header-presentation in
-   curity-web-ui's modules/navigation/_module-navigation-logo.scss. */
 .header-presentation {
   align-items: center;
   border: 1px solid color-mix(in srgb, white 18%, transparent);
