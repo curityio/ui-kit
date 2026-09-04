@@ -81,7 +81,7 @@ a.login-chooser-item:focus {
 
   background-color: var(--color-primary);
 
-  background-image: url("/assets/images/bankid-logo-white.svg");
+  background-image: url("../images/bankid-logo-white.svg");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: 40%;
