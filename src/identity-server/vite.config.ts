@@ -5,9 +5,14 @@ import { createSharedPlugins } from "./vite.plugins";
 
 const OUTPUT_DIR = path.resolve(__dirname, "build/");
 
+// Fonts and images are copied verbatim by viteStaticCopy rather than going through Vite's
+// asset pipeline, so Vite cannot resolve their url()s at build time and warns about every
+// one. Match on the asset extension rather than on the path, so the filter keeps working
+// whichever way those url()s are written.
+const ASSET_EXTENSION = /\.(?:woff2?|ttf|eot|svg|png|gif|jpe?g)\b/;
+
 const shouldSilence = (msg: string) =>
-  msg.includes("didn't resolve at build time") &&
-  (msg.includes("assets/"));
+  msg.includes("didn't resolve at build time") && ASSET_EXTENSION.test(msg);
 
 export default defineConfig(({ mode }) => {
   const shared = {
@@ -38,11 +43,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         onwarn(warning: any, warn: (warning: any) => void) {
           const text = typeof warning.message === "string" ? warning.message : "";
-          if (
-            text.includes("assets/fonts") ||
-            text.includes("assets/images") ||
-            (text.includes("referenced in") && text.includes("didn't resolve at build time"))
-          ) {
+          if (shouldSilence(text) || ASSET_EXTENSION.test(text)) {
             return;
           }
           warn(warning);

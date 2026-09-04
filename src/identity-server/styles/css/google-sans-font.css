@@ -4,7 +4,7 @@
   font-style: normal;
   font-weight: 400;
   src: local("Google Sans Regular"),
-    url("/assets/fonts/GoogleSans-Regular.woff2") format("woff2");
+    url("../fonts/GoogleSans-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -13,7 +13,7 @@
   font-style: normal;
   font-weight: 500;
   src: local("Google Sans Medium"),
-    url("/assets/fonts/GoogleSans-Medium.woff2") format("woff2");
+    url("../fonts/GoogleSans-Medium.woff2") format("woff2");
 }
 
 @font-face {
@@ -22,5 +22,5 @@
   font-style: normal;
   font-weight: 700;
   src: local("Google Sans Bold"),
-    url("/assets/fonts/GoogleSans-Bold.woff2") format("woff2");
+    url("../fonts/GoogleSans-Bold.woff2") format("woff2");
 }
