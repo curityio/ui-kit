@@ -204,7 +204,7 @@
                 padding: 2rem;
 
                 img {
-                    max-width: 600px;
+                    max-width: min(100%, 600px);
                 }
             }
 
@@ -239,7 +239,7 @@
             @media (max-width: 768px) {
                 .card-container {
                     flex-direction: column;
-                    align-items: center;
+                    align-items: stretch;
                 }
 
                 .card {
