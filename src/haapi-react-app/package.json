@@ -16,7 +16,7 @@
   "scripts": {
     "prestart": "test \"$SKIP_PRESTART\" = \"1\" || npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
     "predev": "test \"$SKIP_PRESTART\" = \"1\" || npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
-    "start": "npm run previewer",
+    "start": "npm run previewer -- --open",
     "dev": "vite --open /start.html",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-component-library || true",
     "build": "tsc -b && vite build",
@@ -24,7 +24,7 @@
     "test": "vitest",
     "lint": "eslint .",
     "prettier-check": "prettier --check .",
-    "previewer": "vite serve previewer --open"
+    "previewer": "vite serve previewer"
   },
   "dependencies": {
     "@curity/haapi-react-sdk": "*",
