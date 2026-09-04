@@ -9,7 +9,12 @@
  * For further information, please contact Curity AB.
  */
 
-import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
+import {
+  HAAPI_FORM_FIELDS,
+  type HaapiTextFormField,
+  type HaapiUsernameFormField,
+  HTTP_METHODS,
+} from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
   HaapiStepperPollingStep,
@@ -24,6 +29,8 @@ import type {
   HaapiStepperWebAuthnAnyDeviceRegistrationAction,
   HaapiStepperWebAuthnAuthenticationClientOperationAction,
   HaapiStepperWebAuthnPasskeysRegistrationAction,
+  HaapiStepperTextFormField,
+  HaapiStepperUsernameFormField,
 } from '../../feature/stepper/haapi-stepper.types';
 import { formatStepData } from '../../feature/stepper/data-formatters/format-step-data';
 import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
@@ -98,6 +105,22 @@ export const createMockFormAction = (overrides: Partial<HaapiStepperFormAction> 
     ...overrides.model,
   },
   ...overrides,
+});
+
+export const createMockTextField = (field: Partial<HaapiTextFormField> = {}): HaapiStepperTextFormField => ({
+  id: crypto.randomUUID(),
+  type: HAAPI_FORM_FIELDS.TEXT,
+  name: crypto.randomUUID(),
+  ...field,
+});
+
+export const createMockUsernameField = (
+  field: Partial<HaapiUsernameFormField> = {}
+): HaapiStepperUsernameFormField => ({
+  id: crypto.randomUUID(),
+  type: HAAPI_FORM_FIELDS.USERNAME,
+  name: crypto.randomUUID(),
+  ...field,
 });
 
 export const createMockSelectorAction = (
