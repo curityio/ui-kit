@@ -1,43 +1,47 @@
 :root {
   --sidebarWidth: 380px;
   --shiki-dark-bg: #24292e;
+
+  /* The Admin UI's dark chrome surface, shared with the UI Kit welcome page and
+     the HAAPI React App previewer. Mirrors --surface-dark in curity-web-ui. */
+  --surface-dark: #201a32;
   --type-medium:
-    'Roboto-Medium', roboto, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial,
+    'GoogleSans-Medium', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande',
     sans-serif;
   --type-bold:
-    'Roboto-Bold', roboto, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial,
+    'GoogleSans-Bold', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande',
     sans-serif;
   --type-sans-regular:
-    'Roboto-Regular', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, helvetica, arial,
+    'GoogleSans-Regular', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande',
     sans-serif;
   --type-sans-medium:
-    'Roboto-Medium', roboto, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial,
+    'GoogleSans-Medium', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande',
     sans-serif;
   --type-sans-bold:
-    'Roboto-Bold', roboto, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial,
+    'GoogleSans-Bold', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande',
     sans-serif;
   --type-mono: 'Roboto-Mono', monospace;
 }
 
 @font-face {
-  font-family: Roboto-Regular;
+  font-display: swap;
+  font-family: GoogleSans-Regular;
   font-style: normal;
-  font-weight: 400;
-  src: url('/fonts/Roboto-Regular.woff2') format('woff2');
+  src: url('/fonts/GoogleSans-Regular.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: Roboto-Medium;
+  font-display: swap;
+  font-family: GoogleSans-Medium;
   font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/Roboto-Medium.woff2') format('woff2');
+  src: url('/fonts/GoogleSans-Medium.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: Roboto-Bold;
+  font-display: swap;
+  font-family: GoogleSans-Bold;
   font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/Roboto-Bold.woff2') format('woff2');
+  src: url('/fonts/GoogleSans-Bold.woff2') format('woff2');
 }
 
 @font-face {
@@ -200,6 +204,11 @@ code {
   background-color: var(--primary);
   margin-top: var(--space-1);
 
+  .astro-code {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+  }
+
   button {
     color: var(--text);
   }
@@ -233,8 +242,7 @@ pre code {
 
 .astro-code {
   --code-border: var(--grey-light);
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-radius: 12px;
   padding: 1rem;
   margin: 0 0 var(--flow-space) 0;
 
@@ -251,4 +259,34 @@ pre code {
 
 .copy-wrapper > div {
   background-color: var(--shiki-dark-bg);
+}
+
+/* Header, matching the HAAPI React App previewer and the UI Kit welcome page. */
+.docs-header {
+  background-color: var(--surface-dark);
+  border-bottom: 1px solid var(--surface-dark);
+  color: white;
+}
+
+/* Translucent pill badge next to the logo, matching .header-presentation in
+   curity-web-ui's modules/navigation/_module-navigation-logo.scss. */
+.header-presentation {
+  align-items: center;
+  border: 1px solid color-mix(in srgb, white 18%, transparent);
+  border-radius: 2rem;
+  color: rgb(255 255 255 / 75%);
+  display: none;
+  font-family: var(--type-sans-medium);
+  font-size: 0.7rem;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.6rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (width >=52em) {
+  .header-presentation {
+    display: inline-flex;
+  }
 }

@@ -11,7 +11,7 @@
 
 import { SignInButton } from '@/auth/feature/SignInButton';
 import classes from './login.module.css';
-import selfServicePortalIntroImg from '/src/images/self-service-portal-intro.svg';
+import selfServicePortalIntroImg from '/src/images/curity-access-intelligence.svg';
 import curityLogoLandscapeImg from '/src/images/curity-logo-landscape.svg';
 import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
 
@@ -29,7 +29,7 @@ export const Login = ({ title, description }: LoginProps) => {
           src={uiConfig.theme.loginImage || selfServicePortalIntroImg}
           alt={title}
           width={600}
-          height={400}
+          height={385}
           role="img"
         />
       </aside>
