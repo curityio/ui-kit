@@ -17,6 +17,7 @@ interface HaapiStepperQrCodeLinkDialogProps {
   children: (displayQrCodeInDialog: (link: HaapiStepperLink) => void) => ReactNode;
 }
 
+/** Not published in the Curity docs. @docsIgnore */
 export function HaapiStepperQrCodeLinkDialog({ children, links }: HaapiStepperQrCodeLinkDialogProps) {
   const [displayedQrCodeKey, setDisplayedQrCodeKey] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);

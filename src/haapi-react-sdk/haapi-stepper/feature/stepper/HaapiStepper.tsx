@@ -53,11 +53,9 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
 /**
  * @description
  *
- * # HAAPI STEPPER FEATURES
+ * `HaapiStepper` is a React UI-less component designed to handle complex, multi-step authentication HAAPI workflows. It provides a declarative way to manage HAAPI (HTTP Authentication API) flows, abstracting away the complexity of step-by-step user interactions, HTTP requests, and state transitions.
  *
- * The HAAPI Stepper is a React UI-less component designed to handle complex, multi-step authentication HAAPI workflows. It provides a declarative way to manage HAAPI (HTTP Authentication API) flows, abstracting away the complexity of step-by-step user interactions, HTTP requests, and state transitions.
- *
- * ## Key Features
+ * ## Key features
  *
  * - **Step Management**: Automatically handles navigation between authentication steps
  *   - **Automatic Redirections**: Seamlessly handles server-driven redirections without exposing them to consumers
@@ -70,37 +68,52 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *
  * ## Configuration modes
  *
- * The HaapiStepper supports two ways of receiving its bootstrap configuration
- * (`initialUrl`, HAAPI driver config, theme):
+ * The HaapiStepper needs a bootstrap configuration — an `initialUrl` (where the
+ * flow starts), a `haapi` driver config, and a `theme` (branding: the company
+ * logo and per-view page symbols; pass `{}` for none) — supplied in one of two ways:
  *
- * 1. **Served mode (default)** — the stepper runs inside a server-rendered
- *    shell (e.g. the Curity HAAPI React App) that injects the config onto
+ * 1. **Served mode (default)** — the stepper runs inside a server-rendered shell
+ *    (e.g. the Curity HAAPI React App) that injects the config onto
  *    `window.__CONFIG__` before the SPA boots. No prop is required:
  *
  *    ```tsx
  *    <HaapiStepper>...</HaapiStepper>
  *    ```
  *
- * 2. **Standalone (library) mode** — when consumed as a library or in any
+ * 2. **Standalone (library) mode** — when consumed as a library, or in any
  *    context without `window.__CONFIG__`, the consumer supplies the bootstrap
- *    explicitly via `config.bootstrap`.
+ *    explicitly via `config.bootstrap`:
  *
  *    ```tsx
+ *    import type { HaapiStepperBootstrapConfig } from './haapi-stepper.types';
+ *
+ *    const bootstrap: HaapiStepperBootstrapConfig = {
+ *      initialUrl: 'https://idsvr.example.com/oauth/v2/oauth-authorize/...',
+ *      haapi: { ... }, // HAAPI web-driver config
+ *      theme: {}, // optionally a company logo and page symbols
+ *    };
+ *
  *    <HaapiStepper config={{ bootstrap }}>...</HaapiStepper>
  *    ```
  *
- * See the [HAAPI Stepper README](../../README.md#basic-setup) for the full
- * configuration reference.
+ * > Only one HAAPI configuration is supported per page load — the underlying
+ * > driver is a process-global singleton; switching `bootstrap.haapi` mid-page
+ * > throws (see {@link useHaapiFetch}).
  *
- * ## HAAPI Stepper API
+ * Both modes can be combined with `config` overrides for other tunables
+ * (e.g. `pollingInterval`, `bankIdAutostart`); see {@link HaapiStepperConfig}
+ * for the full set.
+ *
+ * ## HAAPI stepper API
  *
  * Child components can access the following API via the `useHaapiStepper()` hook:
  *
- * - `currentStep: HaapiProviderStep | null` - The current authentication step (null during initial load)
+ * - `currentStep: HaapiStepperStep | null` - The current authentication step (null during initial load)
  * - `history: HaapiStepperHistoryEntry[]` - Complete history of all steps and actions taken, accessible via `history[index]`
  * - `loading: boolean` - Whether the stepper is currently loading (initial load or transitioning between steps)
  * - `error: HaapiStepperError | null` - Current error state (app errors or input validation errors)
  * - `nextStep: HaapiStepperAPINextStep` - Function to navigate to the next step by submitting an action or link
+ * - `config: HaapiStepperConfig` - The resolved stepper configuration (its `bootstrap` holds the initial URL, HAAPI driver config, and theme)
  *
  * ## Usage
  *
@@ -108,7 +121,6 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *
  * Built-in HAAPI flow example using HaapiStepperStepUI:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { HaapiStepperStepUI } from '../steps/HaapiStepperStepUI';
@@ -117,10 +129,10 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *   <HaapiStepperStepUI />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/00-overview/DefaultRenderingHaapiReactSDKPlaygroundExample.tsx}
  *
- * Partial customization example with custom links and default [HAAPI UI components](../../README.MD#haapi-ui-components) for the rest:
+ * Partial customization example with custom links and default [HAAPI UI components](../../../README.md#haapi-stepper-ui-components--the-building-blocks) for the rest:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -159,10 +171,10 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/01-api-reference/BuildingBlocksUICompositionHaapiReactSDKPlaygroundExample.tsx}
  *
  * Full customization example:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -181,39 +193,41 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *   const { actions, links } = currentStep.dataHelpers;
  *
  *   return (
- *     <div>
- *       <h2>Step: {currentStep.type}</h2>
- *       {actions?.form.map(action => (
- *         <div className="mb2" key={action.id}>
- *           <h5>{action.title}</h5>
- *           <button onClick={() => nextStep(action)}>
- *             Select
- *           </button>
- *         </div>
- *       ))}
- *       {actions?.clientOperation.map(action => (
- *         <button key={action.id} onClick={() => nextStep(action)}>
- *           {action.title}
- *         </button>
- *       ))}
- *       {links.map(link => (
- *         <button key={link.id} onClick={() => nextStep(link)}>
- *           {link.title}
- *         </button>
- *       ))}
- *     </div>
- *     <div>
- *       <h3>Authentication Journey</h3>
- *       <p>Steps taken: {history.length}</p>
- *       <ul>
- *         {history.map((historyEntry, index) => (
- *           <li key={index}>
- *             {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
- *             {historyEntry.triggeredBy.action && ` (via ${historyEntry.triggeredBy.action.title})`}
- *           </li>
+ *     <>
+ *       <div>
+ *         <h2>Step: {currentStep.type}</h2>
+ *         {actions?.form.map(action => (
+ *           <div className="mb2" key={action.id}>
+ *             <h5>{action.title}</h5>
+ *             <button onClick={() => nextStep(action)}>
+ *               Select
+ *             </button>
+ *           </div>
  *         ))}
- *       </ul>
- *     </div>
+ *         {actions?.clientOperation.map(action => (
+ *           <button key={action.id} onClick={() => nextStep(action)}>
+ *             {action.title}
+ *           </button>
+ *         ))}
+ *         {links.map(link => (
+ *           <button key={link.id} onClick={() => nextStep(link)}>
+ *             {link.title}
+ *           </button>
+ *         ))}
+ *       </div>
+ *       <div>
+ *         <h3>Authentication Journey</h3>
+ *         <p>Steps taken: {history.length}</p>
+ *         <ul>
+ *           {history.map((historyEntry, index) => (
+ *             <li key={index}>
+ *               {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
+ *               {historyEntry.triggeredBy.action && ` (via ${historyEntry.triggeredBy.action.title})`}
+ *             </li>
+ *           ))}
+ *         </ul>
+ *       </div>
+ *     </>
  *   );
  * }
  *
@@ -221,10 +235,10 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/01-api-reference/FullCustomizationUICompositionHaapiReactSDKPlaygroundExample.tsx}
  *
  * Conditional customization example:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -242,8 +256,8 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *   }
  *
  *   if (
- *     currentStep.view?.templateArea === 'lwa-dev' &&
- *     currentStep.view?.viewName === 'views/select-authenticator/index'
+ *     currentStep.metadata?.templateArea === 'lwa-dev' &&
+ *     currentStep.metadata?.viewName === 'views/select-authenticator/index'
  *   ) {
  *     return (
  *       <div>
@@ -264,14 +278,80 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  *   <ConditionalCustomizationExample />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/01-api-reference/ConditionalCustomizationHaapiReactSDKPlaygroundExample.tsx}
  *
- * ## Error Handling
+ * ## Error handling
  *
- * The HaapiStepper distinguishes between:
- * - **App errors** (`error.app`): Unexpected problems or system errors that prevent flow continuation
- * - **Input errors** (`error.input`): Validation errors on user input that allow the user to retry
+ * The `HaapiStepper` implements a comprehensive error-handling strategy with multiple layers to ensure
+ * robust error management and an optimal user experience.
  *
- * Critical errors are thrown to the app's error boundary for proper error UI rendering.
+ * ### Error state management
+ *
+ * The HAAPI stepper manages errors according to two categories: HAAPI errors and non-HAAPI errors.
+ *
+ * #### HAAPI errors
+ *
+ * HAAPI errors are HAAPI `ProblemStep`s (HAAPI flow steps of type `HAAPI_PROBLEM_STEPS`).
+ *
+ * HAAPI errors are classified into two groups:
+ *
+ * ```text
+ * HaapiStepperError
+ * ├── app    (Unrecoverable)
+ * │   ├── UnrecoverableProblemStep
+ * │   ├── UnexpectedProblemStep
+ * │   └── CompletedWithErrorStep
+ * └── input  (Recoverable)
+ *     ├── ValidationProblemStep
+ *     └── IncorrectCredentialsProblemStep
+ * ```
+ *
+ * **`AppError` (Unrecoverable)**
+ *   - **Description**: Errors that cannot be resolved in the step (action form) where they originated,
+ *     so they need to be handled at the application level (e.g., show a dedicated error page) and/or
+ *     require restarting the stepper flow.
+ *     - Like any other problem, they might include `UserMessages` and `Links` that need to be displayed
+ *       to the user.
+ *   - **Types**: `UnrecoverableProblemStep`, `UnexpectedProblemStep`, `CompletedWithErrorStep`.
+ *   - **Examples**: Authentication failed, too many attempts, session mismatches.
+ *   - **Handling**: Displayed as toast notifications and/or a problem step UI.
+ *
+ * **`InputError` (Recoverable)**
+ *   - **Description**: Errors that can be resolved in the step (form) where they originated.
+ *     - They should be handled while keeping the step's UI, providing the problem's `UserMessages` and
+ *       `Links`, and allowing the user to correct the input and resubmit.
+ *   - **Types**: `ValidationProblemStep`, `IncorrectCredentialsProblemStep`.
+ *   - **Examples**: Invalid form fields, incorrect credentials.
+ *   - **Handling**: Displayed below relevant input fields for immediate correction.
+ *
+ * **`HaapiStepperError` interface**:
+ *
+ * ```tsx
+ * interface HaapiStepperError {
+ *   app?: AppError | null;
+ *   input?: InputError | null;
+ * }
+ * ```
+ *
+ * HAAPI errors are provided by the `useHaapiStepper` hook:
+ *
+ * ```tsx
+ * const { error } = useHaapiStepper();
+ * const { app, input } = error || {};
+ * ```
+ *
+ * ##### HAAPI error utils
+ *
+ * Two UI components render these errors — documented under **API Reference → UI Components**:
+ * `HaapiStepperErrorNotifier` (toast notifications for `AppError`s, and optionally `InputError`s) and
+ * `HaapiStepperFormValidationErrorInputWrapper` (field-level display of validation `InputError`s).
+ *
+ * #### Non-HAAPI errors
+ *
+ * Non-HAAPI errors are network, backend, and frontend errors that are not handled at lower levels.
+ *
+ * The `HaapiStepper` throws them as JavaScript errors so they can be caught by the nearest React error
+ * boundary.
  *
  */
 export function HaapiStepper({ children, config }: HaapiStepperProps) {

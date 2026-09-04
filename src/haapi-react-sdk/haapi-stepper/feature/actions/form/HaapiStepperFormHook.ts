@@ -17,6 +17,14 @@ import { HaapiStepperFormField, HaapiStepperFormState } from '../../stepper/haap
  * Hook to manage form state. Returns an array with two values:
  * 1. a convenience {@link HaapiStepperFormState} object that can be used to get and set field values
  * 2. a map of the current form values that can be used to submit the form
+ *
+ * ```tsx
+ * const formState = useHaapiStepperFormState(action.model.fields ?? []);
+ *
+ * <input value={formState.get(field)} onChange={event => formState.set(field, event.target.value)} />;
+ * // Submit the action with the current values: nextStep(action, formState.values)
+ * ```
+ * {@see_example ./docs/sections/01-api-reference/01-ui-components/01-form-ui/FormStateHookUsageHaapiReactSDKPlaygroundExample.tsx}
  */
 export function useHaapiStepperFormState(fields: HaapiStepperFormField[]): HaapiStepperFormState {
   // State to hold values of form fields. Initial value is calculated once, lazily.

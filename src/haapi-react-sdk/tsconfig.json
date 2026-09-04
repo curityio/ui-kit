@@ -23,6 +23,12 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUncheckedSideEffectImports": true,
+
+    /* The docs examples import the SDK by its package name (as consumers do); resolve those imports to
+       this workspace's own source so the examples are type-checked against the current SDK. */
+    "paths": {
+      "@curity/haapi-react-sdk/*": ["./*"]
+    },
   },
-  "include": ["haapi-stepper", "setupTests.ts", "vitest.config.ts", "vite-env.d.ts"]
+  "include": ["haapi-stepper", "docs", "setupTests.ts", "vitest.config.ts", "vite-env.d.ts"]
 }

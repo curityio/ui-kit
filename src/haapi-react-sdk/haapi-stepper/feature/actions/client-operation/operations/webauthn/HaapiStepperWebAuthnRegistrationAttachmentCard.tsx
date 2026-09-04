@@ -27,6 +27,8 @@ export interface HaapiStepperWebAuthnRegistrationAttachmentCardProps {
  * (icon + bold title + description).
  *
  * Must be rendered within `HaapiStepper`, for the current active step's action.
+ *
+ * @docsIgnore Not published in the Curity docs.
  */
 export const HaapiStepperWebAuthnRegistrationAttachmentCard = ({
   action,
