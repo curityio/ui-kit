@@ -15,6 +15,7 @@ import { HaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature/step
 import { HaapiStepperStepUI } from '@curity/haapi-react-sdk/haapi-stepper/feature/steps/HaapiStepperStepUI';
 import { useHaapiStepper } from '@curity/haapi-react-sdk/haapi-stepper/feature/stepper/HaapiStepperHook';
 import { useHaapiFetch } from '@curity/haapi-react-sdk/haapi-stepper/data-access/useHaapiFetch';
+import { createApiRequest } from '@curity/haapi-react-sdk/haapi-stepper/data-access/haapi-fetch-utils';
 import { HAAPI_STEPS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-step.types';
 import { HAAPI_ACTION_CLIENT_OPERATIONS } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-action.types';
 import type { HaapiFetchAction } from '@curity/haapi-react-sdk/haapi-stepper/data-access/types/haapi-fetch.types';
@@ -57,11 +58,11 @@ function TabbedAuthenticatorSelector() {
   const selectTabOption = (index: number) => {
     setActiveIndex(index);
 
-    // Cancel the authenticator currently in progress before switching. `sendHaapiFetchRequest` takes the raw
-    // `HaapiFetchFormAction`, so the enriched stepper action is cast back to it.
+    // Cancel the authenticator currently in progress before switching. `sendHaapiFetchRequest` takes an
+    // `ApiRequest`, built from the raw driver action, so the enriched stepper action is cast back to it.
     const cancelAction = currentStep?.dataHelpers.actions?.formByKind.cancel?.[0];
     if (cancelAction) {
-      void sendHaapiFetchRequest({ action: cancelAction } as HaapiFetchAction);
+      void sendHaapiFetchRequest(createApiRequest({ action: cancelAction } as HaapiFetchAction));
     }
 
     // BankID is started explicitly from its own tab; the others fetch their step immediately.

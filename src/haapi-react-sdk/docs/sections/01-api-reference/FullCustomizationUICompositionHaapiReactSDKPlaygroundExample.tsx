@@ -67,7 +67,7 @@ function CustomFlowUI() {
             <Text>
               {entry.step.type} — {entry.timestamp.toLocaleTimeString()}
               {/* Only the bootstrap entry has no triggering action title, so guard on it. */}
-              {entry.triggeredByAction?.title ? ` (via ${entry.triggeredByAction.title})` : ''}
+              {entry.triggeredBy.action?.title ? ` (via ${entry.triggeredBy.action.title})` : ''}
             </Text>
           </List.Item>
         )}
