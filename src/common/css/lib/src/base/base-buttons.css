@@ -35,7 +35,6 @@
   font-family: var(--type-sans-bold);
   font-size: var(--button-font-size);
   -webkit-font-smoothing: antialiased;
-  font-weight: var(--type-weight-bold);
   gap: var(--space-1);
   justify-content: center;
 
@@ -211,7 +210,7 @@ button svg {
 }
 
 .button-medium {
-  font-size: calc(var(--button-font-size) * var(--y-medium));
+  font-size: var(--button-font-size);
   min-height: 44px;
   padding-block-start: calc(var(--button-padding-y) * var(--y-medium));
   padding-block-end: calc(var(--button-padding-y) * var(--y-medium));
