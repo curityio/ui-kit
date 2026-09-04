@@ -10,14 +10,15 @@
  */
 
 .header {
-  background-color: var(--color-primary-dark);
+  background-color: var(--surface-dark);
+  border-bottom: 1px solid var(--surface-dark);
   color: white;
   padding: 0 var(--space-2);
   position: sticky;
   top: 0;
   height: var(--header-height);
   backdrop-filter: blur(8px);
-  z-index: 2;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,12 +26,22 @@
 }
 
 .logoText {
-  font-variant: small-caps;
-  color: var(--color-yellow);
-  font-size: 0.75rem;
-  text-transform: uppercase;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, white 18%, transparent);
+  border-radius: 2rem;
+  color: rgb(255 255 255 / 75%);
+  display: none;
   font-family: var(--type-medium);
-  letter-spacing: 0.085em;
+  font-size: 0.7rem;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.6rem;
+  text-transform: uppercase;
   white-space: nowrap;
+}
+
+@media (min-width: 52em) {
+  .logoText {
+    display: inline-flex;
+  }
 }

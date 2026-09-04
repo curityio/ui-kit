@@ -13,7 +13,6 @@ strong,
 b {
   color: currentcolor;
   font-family: var(--type-sans-bold);
-  font-weight: var(--type-weight-bold);
 }
 
 i,
@@ -45,22 +44,11 @@ h4,
 h5,
 h6 {
   color: var(--color-heading);
-  font-weight: var(--type-weight);
   line-height: calc(var(--type-line-height) * 0.75);
   margin-bottom: var(--space-2);
   margin-top: var(--space-2);
   text-rendering: optimizelegibility;
   font-family: var(--type-sans-medium);
-}
-
-
-:is(h1, h2) {
-  font-family: var(--type-sans-bold);
-}
-
-.type-extra-bold {
-  font-family: var(--type-sans-extra-bold);
-  letter-spacing: 0.004em;
 }
 
 h1 {
@@ -139,7 +127,6 @@ h6 {
 
 p {
   color: var(--color-text);
-  font-weight: var(--type-weight);
   line-height: 1.5;
   line-height: calc(var(--type-line-height));
   margin-bottom: var(--space-2);

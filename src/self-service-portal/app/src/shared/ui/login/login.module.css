@@ -50,6 +50,7 @@ body:has(.header) .login-layout {
   display: var(--self-service-portal-login-sidebar-image-display);
   position: absolute;
   top: 45%;
+  inset-inline: 0;
+  margin-inline: auto;
   max-width: 600px;
-  right: -10em;
 }

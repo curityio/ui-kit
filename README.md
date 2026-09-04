@@ -4,10 +4,7 @@
 
 **Customize the look and feel of your applications**
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="src/common/assets/images/ui-kit-start-dark.svg">
-  <img alt="Curity UI Kit" src="src/common/assets/images/ui-kit-start.svg" width="800">
-</picture>
+<img alt="Curity UI Kit" src="src/common/assets/images/curity-access-intelligence.svg" width="600">
 
 
 This monorepo contains:
@@ -103,7 +100,7 @@ To deploy build artifacts (assets, templates, and messages) to a production envi
    ```shell
    npm run build
    ```
-   
+
    Or build specific projects with `npm run build:<project>` to deploy only those, e.g.:
    ```shell
    npm run build:ssp

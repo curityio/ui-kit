@@ -16,7 +16,7 @@
   --page-background-repeat: no-repeat;
   --page-background-size: cover;
   --page-background-color: #f3f5f7;
-  --page-background-color-dark: var(--color-primary-dark);
+  --page-background-color-dark: #2a2340;
   --page-powered-by-display: flex;
 
   --well-border-color: transparent;
@@ -38,21 +38,21 @@
   --color-text: #737373;
   --color-heading: #262c3d;
   --color-light: white;
-  --color-primary: #323c53;
-  --color-primary-dark: #262c3d;
-  --color-primary-medium: #212737;
-  --color-primary-light: #7e89a8;
+  --color-primary: #6d28d9;
+  --color-primary-dark: #552a8d;
+  --color-primary-medium: #8008f9;
+  --color-primary-light: #c084fc;
   --color-success: #57c75c;
   --color-info: #62818f;
   --color-yellow: #f2eb80;
   --color-danger: #ca2e2b;
   --color-warning: #e0c01c;
   --color-add: #0092ff;
-  --color-spot: #d859a1;
-  --color-link: #d859a1;
-  --color-link-hover: #87148b;
+  --color-spot: #c084fc;
+  --color-link: #966ff1;
+  --color-link-hover: #552a8d;
   --color-grey-light: #ccc;
-  --color-grey-subtle: #f6f6f6;
+  --color-grey-subtle: #fafafa;
 
   --form-label-color: #666;
   --form-label-line-height: 2;
@@ -63,19 +63,20 @@
   --form-field-color: black;
   --form-field-color-dark: black;
   --form-field-background-color: white;
-  --form-field-background-color-dark: white;
+  --form-field-background-color-dark: transparent;
   --form-field-placeholder-color: rgb(141 141 141);
   --form-field-border-color: rgb(207 217 224);
   --form-field-box-shadow: none;
-  --form-field-box-shadow-focus: rgb(152 203 255) 0 0 0 3px;
-  --form-field-border-color-focus: rgb(0 89 200);
+  --form-field-box-shadow-focus: color-mix(in srgb, var(--color-spot) 55%, transparent)
+    0 0 0 3px;
+  --form-field-border-color-focus: var(--color-primary);
   --form-field-height: 2.55rem;
   --form-field-padding: 0.75rem;
   --form-field-padding-left: 0.75rem;
   --form-field-icon-display: none;
   --form-field-icon-color: #ccc;
   --form-field-icon-size: 1.5rem;
-  --form-field-border-radius: 8px;
+  --form-field-border-radius: 6px;
   --form-field-border-style: solid;
   --form-field-border-width: 1px;
   --form-field-border-color: #cfd9e0;
@@ -84,14 +85,12 @@
   --form-field-caret-color: var(--color-primary);
   --form-field-font-size: var(--type-base-size);
 
-  --type-sans: "Roboto-Regular", system, -apple-system, "Roboto", "Segoe UI",
-    "Lucida Grande", sans-serif;
-  --type-weight: normal;
-  --type-sans-medium: "Roboto-Medium", system, -apple-system, "Roboto", "Segoe UI",
-    "Lucida Grande", sans-serif;
-  --type-sans-bold: "Roboto-Bold", roboto, -apple-system, blinkmacsystemfont,
-    "Segoe UI", helvetica, arial, sans-serif;
-  --type-weight-bold: normal;
+  --type-sans: "GoogleSans-Regular", "Google Sans", system, -apple-system,
+    "Segoe UI", "Lucida Grande", sans-serif;
+  --type-sans-medium: "GoogleSans-Medium", "Google Sans", system, -apple-system,
+    "Segoe UI", "Lucida Grande", sans-serif;
+  --type-sans-bold: "GoogleSans-Bold", "Google Sans", system, -apple-system,
+    blinkmacsystemfont, "Segoe UI", helvetica, arial, sans-serif;
   --type-mono: "SF Mono", consolas, monaco, "Courier New", courier, monospace;
   --type-line-height: 1.5;
   --type-base-size: 1rem;
