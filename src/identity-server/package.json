@@ -16,6 +16,7 @@
     "prestart": "test \"$SKIP_PRESTART\" = \"1\" || (npm run build --workspace @curity/ui-kit-icons --workspace @curity/ui-kit-identity-server && npm run unzip-libs) || true",
     "prebuild": "npm run build --workspace @curity/ui-kit-icons || true",
     "build:styles": "vite build --mode styles",
+    "postbuild:styles": "node check-asset-urls.mjs",
     "build:ui": "vite build --mode ui",
     "build": "npm run build:styles && npm run build:ui",
     "watch:styles": "vite build --watch --mode styles",
