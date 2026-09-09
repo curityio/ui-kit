@@ -12,11 +12,7 @@
 export function StartPage() {
   return (
     <div className="mx-auto mw-60 center py4">
-      <img
-        src="/images/self-service-portal.svg"
-        alt=""
-        className="block mx-auto start-page-image"
-      />
+      <img src="/images/self-service-portal.svg" alt="Self Service Portal" className="block mx-auto start-page-image" />
       <h1>HAAPI React App Previewer</h1>
       <p>Welcome to the previewer. Select a view from the sidebar to see examples.</p>
     </div>
