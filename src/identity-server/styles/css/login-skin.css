@@ -53,3 +53,7 @@ body {
 .body-dark .form-transparent .login-powered-by-logo {
   background-image: url("../images/curity-logo-white.svg");
 }
+
+.body-dark .login-symbol-circle {
+  background-color: white;
+}

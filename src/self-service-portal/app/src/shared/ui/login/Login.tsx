@@ -11,7 +11,7 @@
 
 import { SignInButton } from '@/auth/feature/SignInButton';
 import classes from './login.module.css';
-import selfServicePortalIntroImg from '/src/images/curity-access-intelligence.svg';
+import selfServicePortalIntroImg from '/src/images/self-service-portal.svg';
 import curityLogoLandscapeImg from '/src/images/curity-logo-landscape.svg';
 import { useUiConfig } from '@/ui-config/data-access/UiConfigProvider';
 
