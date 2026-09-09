@@ -4,7 +4,7 @@
 
 **Customize the look and feel of your applications**
 
-<img alt="Curity UI Kit" src="src/common/assets/images/curity-access-intelligence.svg" width="600">
+<img alt="Curity UI Kit" src="src/common/assets/images/ui-kit.svg" width="600">
 
 
 This monorepo contains:

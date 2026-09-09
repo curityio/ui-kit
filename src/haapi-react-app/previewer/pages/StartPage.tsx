@@ -12,11 +12,7 @@
 export function StartPage() {
   return (
     <div className="mx-auto mw-60 center py4">
-      <img
-        src="/images/curity-access-intelligence.svg"
-        alt="Curity Access Intelligence"
-        className="block mx-auto start-page-image"
-      />
+      <img src="/images/haapi-react-app.svg" alt="HAAPI React App" className="block mx-auto start-page-image" />
       <h1>HAAPI React App Previewer</h1>
       <p>Welcome to the previewer. Select a view from the sidebar to see examples.</p>
     </div>

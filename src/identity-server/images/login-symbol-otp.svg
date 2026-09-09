@@ -1,1 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 109 109"><defs><linearGradient id="Namnlös_övertoning_3" x1="8.18" y1="54.5" x2="100.82" y2="54.5" gradientUnits="userSpaceOnUse"><stop offset=".1" stop-color="#d15b9b" stop-opacity=".1"/><stop offset=".35" stop-color="#d15b9b" stop-opacity=".68"/><stop offset="1" stop-color="#d15b9b" stop-opacity=".02"/></linearGradient></defs><circle cx="54.5" cy="54.5" r="45.71" fill="none" stroke="url(#Namnlös_övertoning_3)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.21"/><path d="M54.5,73.69c-3.1,0-6.18-.76-8.99-2.26-4.52-2.41-7.83-6.43-9.33-11.33-1.49-4.9-.99-10.09,1.42-14.61,2.41-4.52,6.43-7.83,11.33-9.33,4.87-1.48,10.03-1,14.53,1.38.65.34.9,1.15.56,1.8-.34.65-1.15.9-1.8.56-3.88-2.04-8.32-2.47-12.52-1.19-4.22,1.29-7.69,4.14-9.76,8.03-2.07,3.89-2.51,8.36-1.22,12.58,2.66,8.71,11.9,13.64,20.61,10.98,3.26-.99,6.09-2.93,8.18-5.6,2.04-2.61,3.25-5.74,3.48-9.03.05-.73.68-1.29,1.42-1.23.73.05,1.29.69,1.23,1.42-.27,3.83-1.67,7.46-4.04,10.49-2.43,3.11-5.71,5.36-9.5,6.51-1.85.56-3.74.84-5.62.84Z" fill="#626c87"/><path d="M63.58,58.36h-9.86c-.74,0-1.33-.6-1.33-1.33v-11.44c0-.74.6-1.33,1.33-1.33s1.33.6,1.33,1.33v10.11h8.52c.74,0,1.33.6,1.33,1.33s-.6,1.33-1.33,1.33Z" fill="#d35b9c"/></svg>
+<svg width="480" height="480" viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_585_2034)">
+<path d="M480 0H0V480H480V0Z" fill="white"/>
+<path d="M240 155.8C225.72 155.8 211.761 160.035 199.888 167.968C188.015 175.901 178.761 187.177 173.296 200.37C167.831 213.563 166.402 228.08 169.187 242.086C171.973 256.091 178.85 268.956 188.947 279.053C199.044 289.151 211.909 296.027 225.915 298.813C239.92 301.599 254.437 300.169 267.63 294.704C280.823 289.24 292.099 279.985 300.032 268.112C307.966 256.239 312.2 242.28 312.2 228" stroke="#2A2440" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M240 178.6V228H285.6" stroke="#7B4FD4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M240 424C348.248 424 436 336.248 436 228C436 119.752 348.248 32 240 32C131.752 32 44 119.752 44 228C44 336.248 131.752 424 240 424Z" stroke="#FBB87A" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"/>
+<path d="M240 392C330.575 392 404 318.575 404 228C404 137.425 330.575 64 240 64C149.425 64 76 137.425 76 228C76 318.575 149.425 392 240 392Z" stroke="#7B4FD4" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
+<path d="M240 360C312.902 360 372 300.902 372 228C372 155.098 312.902 96 240 96C167.098 96 108 155.098 108 228C108 300.902 167.098 360 240 360Z" stroke="#7B4FD4" stroke-opacity="0.24" stroke-width="2" stroke-linecap="round"/>
+</g>
+<defs>
+<clipPath id="clip0_585_2034">
+<rect width="480" height="480" fill="white"/>
+</clipPath>
+</defs>
+</svg>
