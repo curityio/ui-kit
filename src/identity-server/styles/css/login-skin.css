@@ -42,7 +42,8 @@ body {
 .body-dark .form-transparent h3,
 .body-dark .form-transparent h4,
 .body-dark .form-transparent label,
-.body-dark .form-transparent p {
+.body-dark .form-transparent p,
+.body-dark .form-transparent pre {
   color: var(--color-light);
 }
 
@@ -56,4 +57,18 @@ body {
 
 .body-dark .login-symbol-circle {
   background-color: white;
+}
+
+.body-dark .form-transparent .login-chooser-item:active,
+.body-dark .form-transparent .login-chooser-item:focus,
+.body-dark .form-transparent .login-chooser-item:hover,
+.body-dark .form-transparent a.login-chooser-item:active,
+.body-dark .form-transparent a.login-chooser-item:focus,
+.body-dark .form-transparent a.login-chooser-item:hover {
+  background-color: rgb(255 255 255 / 12%);
+}
+
+.body-dark .form-transparent select {
+  background-color: var(--form-field-background-color);
+  color: var(--form-field-color);
 }
