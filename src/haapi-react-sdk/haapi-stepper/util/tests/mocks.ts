@@ -197,7 +197,7 @@ export const defaultStepperAPI: HaapiStepperAPI = {
       },
       theme: { stepSymbols: { default: MockStepSymbolPath } },
     },
-    pollingInterval: 0,
+    defaultPollingInterval: 0,
     bankIdAutostart: false,
     webAuthnAutostart: false,
     autoRedirectOnAuthenticationComplete: false,

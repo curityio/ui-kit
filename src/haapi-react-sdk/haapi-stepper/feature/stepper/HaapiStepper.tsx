@@ -101,7 +101,7 @@ type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData)
  * > throws (see {@link useHaapiFetch}).
  *
  * Both modes can be combined with `config` overrides for other tunables
- * (e.g. `pollingInterval`, `bankIdAutostart`); see {@link HaapiStepperConfig}
+ * (e.g. `defaultPollingInterval`, `bankIdAutostart`); see {@link HaapiStepperConfig}
  * for the full set.
  *
  * ## HAAPI stepper API
@@ -557,7 +557,7 @@ function getInitialStepLink(initialUrl: string) {
 
 function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): Required<HaapiStepperConfig> {
   const { bootstrap, ...configResult } = {
-    pollingInterval: 3000,
+    defaultPollingInterval: 3000,
     bankIdAutostart: true,
     webAuthnAutostart: true,
     autoRedirectOnAuthenticationComplete: true,
