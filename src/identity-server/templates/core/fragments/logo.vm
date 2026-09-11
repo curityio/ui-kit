@@ -32,19 +32,8 @@
  * http://velocity.apache.org/engine/devel/user-guide.html.
  *#
 
-#*
- * The dark skin needs the negative logotype. When `logo_white_path` is not set - a settings.vm in
- * `overrides` or a template-area that sets only `logo_path`, for instance - fall back to the bundled
- * negative logotype rather than emitting the path as-is: `$!logo_white_path` renders an unset or
- * empty variable as `src=""`, which the browser reports as a missing image with no other clue.
- *#
-#if ($body_background == 'body-dark')
-    #if ($logo_white_path && $logo_white_path.length() > 0)
-        #set ($_resolved_logo_path = $logo_white_path)
-    #else
-        #set ($_resolved_logo_path = $!_staticResourceRootPath + '/assets/images/curity-logo-white.svg')
-    #end
+#if ($body_background == 'body-dark' || ($body_background == 'body-dark' && $login_form_background == 'form-transparent'))
+	<img class="login-logo" src="$!logo_white_path" alt="Logo" title="Logo" role="presentation" width="140" height="40">
 #else
-    #set ($_resolved_logo_path = $!logo_path)
+	<img class="login-logo" src="$!logo_path" alt="Logo" title="Logo" role="presentation" width="140" height="40">
 #end
-	<img class="login-logo" src="$!_resolved_logo_path" alt="Logo" title="Logo" role="presentation" width="140" height="40">
