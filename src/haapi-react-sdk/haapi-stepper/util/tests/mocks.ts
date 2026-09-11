@@ -197,7 +197,7 @@ export const defaultStepperAPI: HaapiStepperAPI = {
       },
       theme: { stepSymbols: { default: MockStepSymbolPath } },
     },
-    pollingInterval: 0,
+    defaultPollingInterval: 0,
     bankIdAutostart: false,
     webAuthnAutostart: false,
     autoRedirectOnAuthenticationComplete: false,
@@ -310,6 +310,7 @@ export const createPollingStep = (
     viewName?: string;
     maxWaitTime?: string;
     maxWaitRemainingTime?: string;
+    interval?: string;
     viewDataMessages?: Record<string, string>;
   } = {}
 ): HaapiStepperPollingStep => {
@@ -323,6 +324,7 @@ export const createPollingStep = (
       status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING,
       ...(overrides.maxWaitTime !== undefined && { maxWaitTime: overrides.maxWaitTime }),
       ...(overrides.maxWaitRemainingTime !== undefined && { maxWaitRemainingTime: overrides.maxWaitRemainingTime }),
+      ...(overrides.interval !== undefined && { interval: overrides.interval }),
     },
     ...(overrides.links !== undefined && { links: overrides.links }),
     ...(overrides.actions !== undefined && { actions: overrides.actions }),

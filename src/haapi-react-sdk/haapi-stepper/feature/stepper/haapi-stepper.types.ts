@@ -78,7 +78,14 @@ export interface HaapiStepperAPI {
  */
 export interface HaapiStepperConfig {
   bootstrap: HaapiStepperBootstrapConfig;
-  pollingInterval: number;
+  /**
+   * Polling interval in ms, used when the polling step does not carry one in
+   * `properties.interval` (see {@link HaapiPollingStep}). A server-provided value
+   * always wins, because the authenticator knows its backend's rate limits.
+   *
+   * Defaults to 3000.
+   */
+  defaultPollingInterval: number;
   bankIdAutostart: boolean;
   webAuthnAutostart: boolean;
   autoRedirectOnAuthenticationComplete: boolean;
