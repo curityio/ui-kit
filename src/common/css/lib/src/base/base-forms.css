@@ -184,7 +184,7 @@ input[type='number'] {
 
 /* Accent color */
 input {
-  accent-color: var(--color-spot);
+  accent-color: var(--color-primary);
 }
 
 /* Agree checkbox */

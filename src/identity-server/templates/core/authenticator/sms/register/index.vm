@@ -43,13 +43,13 @@
             <p>#message("authenticator.sms.register.view.description")</p>
         </div>
 
-        <div class="clearfix mxn1">
+        <div class="flex flex-wrap flex-gap-2">
 
-            <div class="sm-col md-col-4 px1">
+            <div class="flex flex-40">
                 #parse("authenticator/sms/register/country-code-selector")
             </div>
 
-            <div class="sm-col md-col-8 px1">
+            <div class="flex flex-auto">
                 <input name="primaryPhoneNumber" id="primaryPhoneNumber" type="text"
                         class="block full-width field-light"
                         placeholder="#message("authenticator.sms.register.view.placeholder")" autofocus>
