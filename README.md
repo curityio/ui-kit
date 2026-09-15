@@ -11,6 +11,7 @@ This monorepo contains:
 
 - Identity Server Templates
 - Self Service Portal
+- HAAPI React App
 - CSS Library
 - UI Icons React Library
 - React Component Library
@@ -63,11 +64,13 @@ Then you can access the projects at:
 
 - Curity Identity Server Templates: [http://localhost:3000](http://localhost:3000)
 - Self Service Portal: [http://localhost:5173/previewer](http://localhost:5173/previewer)
+- HAAPI React App: [http://localhost:5174](http://localhost:5174)
 
 To start projects individually, run:
 
-- `npm start:identity-server` - to start the Curity Identity Server Templates
-- `npm start:ssp` to start the Self Service Portal
+- `npm run start:identity-server` to start the Curity Identity Server Templates
+- `npm run start:ssp` to start the Self Service Portal
+- `npm run start:haapi-react-app` to start the HAAPI React App
 
 ## Build
 
@@ -81,6 +84,7 @@ To build projects individually, run:
 
 - `npm run build:identity-server` to build the Identity Server Templates
 - `npm run build:ssp` to build the Self Service Portal
+- `npm run build:haapi-react-app` to build the HAAPI React App
 - `npm run build:css` to build Curity CSS library
 - `npm run build:icons` to build Curity UI Icons React library
 
