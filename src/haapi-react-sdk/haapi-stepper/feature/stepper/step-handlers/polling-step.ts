@@ -31,9 +31,7 @@ export function handlePollingStep(
 ): HaapiStepperStep {
   const formattedPollingStep = formatStepData(pollingStep);
   const pollingStatus = pollingStep.properties.status;
-  const pollingInterval = pollingStep.properties.interval
-    ? Number(pollingStep.properties.interval)
-    : config.pollingInterval;
+  const pollingInterval = resolvePollingInterval(pollingStep.properties.interval, config.defaultPollingInterval);
 
   switch (pollingStatus) {
     case HAAPI_POLLING_STATUS.DONE: {
@@ -87,6 +85,11 @@ export function handlePollingStep(
       return formattedNextStepData;
     }
   }
+}
+
+function resolvePollingInterval(serverInterval: string | undefined, defaultInterval: number): number {
+  const parsed = Number(serverInterval);
+  return parsed > 0 ? parsed : defaultInterval;
 }
 
 function isBankIdPollingSession(pollingStep: HaapiStepperPollingStep): boolean {
