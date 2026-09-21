@@ -5,13 +5,92 @@ description: 'Usage on how to use Curity SVG Icons'
 updatedAt: 'August 08 2022'
 ---
 
-import { IconGeneralClose } from '@curity/ui-kit-icons';
-
+import {
+  IconActionAutoLinkAccount,
+  IconActionMultiFactor,
+  IconAuthenticatorAccessToken,
+  IconAuthenticatorAnonymousAuthenticator,
+  IconAuthenticatorApple,
+  IconAuthenticatorAws,
+  IconAuthenticatorBankid,
+  IconAuthenticatorBankidPhone,
+  IconAuthenticatorBitbucket,
+  IconAuthenticatorBox,
+  IconAuthenticatorCriipto,
+  IconAuthenticatorDefault,
+  IconAuthenticatorDropbox,
+  IconAuthenticatorDuo,
+  IconAuthenticatorDynamic,
+  IconAuthenticatorEmail,
+  IconAuthenticatorEncap,
+  IconAuthenticatorEntrust,
+  IconAuthenticatorFacebook,
+  IconAuthenticatorFreja,
+  IconAuthenticatorGithub,
+  IconAuthenticatorGoogle,
+  IconAuthenticatorGroup,
+  IconAuthenticatorHtml,
+  IconAuthenticatorIdToken,
+  IconAuthenticatorInstagram,
+  IconAuthenticatorLinkedin,
+  IconAuthenticatorNetid,
+  IconAuthenticatorOidc,
+  IconAuthenticatorOpenidWallet,
+  IconAuthenticatorOtpHcaptcha,
+  IconAuthenticatorPasskeys,
+  IconAuthenticatorPing,
+  IconAuthenticatorSalesforce,
+  IconAuthenticatorSaml,
+  IconAuthenticatorSaml2,
+  IconAuthenticatorSignicat,
+  IconAuthenticatorSiths,
+  IconAuthenticatorSlack,
+  IconAuthenticatorSms,
+  IconAuthenticatorStackexchange,
+  IconAuthenticatorTotp,
+  IconAuthenticatorUser,
+  IconAuthenticatorWebauthn,
+  IconAuthenticatorWebauthnCrossPlatform,
+  IconAuthenticatorWebauthnPlatform,
+  IconAuthenticatorWindows,
+  IconAuthenticatorX,
+  IconCapabilityResourceOwnerPasswordCredentials,
+  IconFacilitiesEmail,
+  IconFacilitiesSms,
+  IconGeneralArrowBack,
+  IconGeneralArrowForward,
+  IconGeneralCheckmarkCircled,
+  IconGeneralChevron,
+  IconGeneralClose,
+  IconGeneralDownload,
+  IconGeneralEdit,
+  IconGeneralEmptyStateIcon,
+  IconGeneralEye,
+  IconGeneralEyeHide,
+  IconGeneralKebabMenu,
+  IconGeneralLocation,
+  IconGeneralLock,
+  IconGeneralLockUnlocked,
+  IconGeneralPlane,
+  IconGeneralPlus,
+  IconGeneralTrash,
+  IconGeneralWarning,
+  IconKey,
+  IconToken,
+  IconUser,
+  IconUserDataSources,
+  IconUserManagement,
+  IconVciCredentialHome,
+} from '@curity/ui-kit-icons';
 
 # Curity UI Icons React
 
-Library to use selected Curity UI icons in public React based projects.
+This is the **`@curity/ui-kit-icons`** workspace package, in
+[`src/common/icons`](https://github.com/curityio/ui-kit/tree/dev/src/common/icons) of this
+repository. The components are generated from the SVG sources there, so a new icon is added
+by adding it to that package and rebuilding, not by editing this page.
 
+Library to use selected Curity UI icons in public React based projects.
 
 ## Use icons
 
@@ -26,9 +105,12 @@ Use an icon like this
 ```js
 <IconGeneralClose />
 ```
-<IconGeneralClose />
 
-You can also pass props like this
+<IconGeneralClose width="24" height="24" />
+
+An icon has no intrinsic size: it fills its container unless you give it `width` and
+`height`. It is drawn with `currentColor`, so it takes the text colour around it until
+you pass `color`.
 
 ```js
 <IconGeneralClose color="blue" width="48" height="48"/>
@@ -38,56 +120,352 @@ You can also pass props like this
 
 ## Available Icons
 
-[Also read UI Icons React README.md for full list of icons](src/common/icons/readme.md)
+All 75 icons the package exports, with the name to import.
 
-### Action
-- `IconActionAutoLinkAccount`
-- `IconActionMultiFactor`
+### Action (2)
 
-### Authenticator
-- `IconAuthenticatorDefault`
-- `IconAuthenticatorGoogle`
-- `IconAuthenticatorPasskeys`
-- `IconAuthenticatorTotp`
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconActionAutoLinkAccount width="48" height="48" />
+    <figcaption>IconActionAutoLinkAccount</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconActionMultiFactor width="48" height="48" />
+    <figcaption>IconActionMultiFactor</figcaption>
+  </figure>
+</div>
 
-### Capability
-- `IconCapabilityResourceOwnerPasswordCredentials`
+### Authenticator (46)
 
-### Facilities
-- `IconFacilitiesEmail`
-- `IconFacilitiesSms`
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorAccessToken width="48" height="48" />
+    <figcaption>IconAuthenticatorAccessToken</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorAnonymousAuthenticator width="48" height="48" />
+    <figcaption>IconAuthenticatorAnonymousAuthenticator</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorApple width="48" height="48" />
+    <figcaption>IconAuthenticatorApple</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorAws width="48" height="48" />
+    <figcaption>IconAuthenticatorAws</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorBankid width="48" height="48" />
+    <figcaption>IconAuthenticatorBankid</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorBankidPhone width="48" height="48" />
+    <figcaption>IconAuthenticatorBankidPhone</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorBitbucket width="48" height="48" />
+    <figcaption>IconAuthenticatorBitbucket</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorBox width="48" height="48" />
+    <figcaption>IconAuthenticatorBox</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorCriipto width="48" height="48" />
+    <figcaption>IconAuthenticatorCriipto</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorDefault width="48" height="48" />
+    <figcaption>IconAuthenticatorDefault</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorDropbox width="48" height="48" />
+    <figcaption>IconAuthenticatorDropbox</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorDuo width="48" height="48" />
+    <figcaption>IconAuthenticatorDuo</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorDynamic width="48" height="48" />
+    <figcaption>IconAuthenticatorDynamic</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorEmail width="48" height="48" />
+    <figcaption>IconAuthenticatorEmail</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorEncap width="48" height="48" />
+    <figcaption>IconAuthenticatorEncap</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorEntrust width="48" height="48" />
+    <figcaption>IconAuthenticatorEntrust</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorFacebook width="48" height="48" />
+    <figcaption>IconAuthenticatorFacebook</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorFreja width="48" height="48" />
+    <figcaption>IconAuthenticatorFreja</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorGithub width="48" height="48" />
+    <figcaption>IconAuthenticatorGithub</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorGoogle width="48" height="48" />
+    <figcaption>IconAuthenticatorGoogle</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorGroup width="48" height="48" />
+    <figcaption>IconAuthenticatorGroup</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorHtml width="48" height="48" />
+    <figcaption>IconAuthenticatorHtml</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorIdToken width="48" height="48" />
+    <figcaption>IconAuthenticatorIdToken</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorInstagram width="48" height="48" />
+    <figcaption>IconAuthenticatorInstagram</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorLinkedin width="48" height="48" />
+    <figcaption>IconAuthenticatorLinkedin</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorNetid width="48" height="48" />
+    <figcaption>IconAuthenticatorNetid</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorOidc width="48" height="48" />
+    <figcaption>IconAuthenticatorOidc</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorOpenidWallet width="48" height="48" />
+    <figcaption>IconAuthenticatorOpenidWallet</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorOtpHcaptcha width="48" height="48" />
+    <figcaption>IconAuthenticatorOtpHcaptcha</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorPasskeys width="48" height="48" />
+    <figcaption>IconAuthenticatorPasskeys</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorPing width="48" height="48" />
+    <figcaption>IconAuthenticatorPing</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSalesforce width="48" height="48" />
+    <figcaption>IconAuthenticatorSalesforce</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSaml width="48" height="48" />
+    <figcaption>IconAuthenticatorSaml</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSaml2 width="48" height="48" />
+    <figcaption>IconAuthenticatorSaml2</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSignicat width="48" height="48" />
+    <figcaption>IconAuthenticatorSignicat</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSiths width="48" height="48" />
+    <figcaption>IconAuthenticatorSiths</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSlack width="48" height="48" />
+    <figcaption>IconAuthenticatorSlack</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorSms width="48" height="48" />
+    <figcaption>IconAuthenticatorSms</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorStackexchange width="48" height="48" />
+    <figcaption>IconAuthenticatorStackexchange</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorTotp width="48" height="48" />
+    <figcaption>IconAuthenticatorTotp</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorUser width="48" height="48" />
+    <figcaption>IconAuthenticatorUser</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorWebauthn width="48" height="48" />
+    <figcaption>IconAuthenticatorWebauthn</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorWebauthnCrossPlatform width="48" height="48" />
+    <figcaption>IconAuthenticatorWebauthnCrossPlatform</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorWebauthnPlatform width="48" height="48" />
+    <figcaption>IconAuthenticatorWebauthnPlatform</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorWindows width="48" height="48" />
+    <figcaption>IconAuthenticatorWindows</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconAuthenticatorX width="48" height="48" />
+    <figcaption>IconAuthenticatorX</figcaption>
+  </figure>
+</div>
 
-### General
-- `IconGeneralArrowBack`
-- `IconGeneralArrowForward`
-- `IconGeneralCheckmarkCircled`
-- `IconGeneralChevron`
-- `IconGeneralClose`
-- `IconGeneralDownload`
-- `IconGeneralEdit`
-- `IconGeneralEyeHide`
-- `IconGeneralKebabMenu`
-- `IconGeneralLocation`
-- `IconGeneralLock`
-- `IconGeneralLockUnlocked`
-- `IconGeneralPlane`
-- `IconGeneralPlus`
-- `IconGeneralTrash`
-- `IconGeneralWarning`
+### Capability (1)
 
-### Key
-- `IconKey`
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconCapabilityResourceOwnerPasswordCredentials width="48" height="48" />
+    <figcaption>IconCapabilityResourceOwnerPasswordCredentials</figcaption>
+  </figure>
+</div>
 
-### Token
-- `IconToken`
+### Facilities (2)
 
-### User
-- `IconUser`
-- `IconUserDataSources`
-- `IconUserManagement`
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconFacilitiesEmail width="48" height="48" />
+    <figcaption>IconFacilitiesEmail</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconFacilitiesSms width="48" height="48" />
+    <figcaption>IconFacilitiesSms</figcaption>
+  </figure>
+</div>
 
-### VCI
-- `IconVciCredentialHome`
+### General (18)
+
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralArrowBack width="48" height="48" />
+    <figcaption>IconGeneralArrowBack</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralArrowForward width="48" height="48" />
+    <figcaption>IconGeneralArrowForward</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralCheckmarkCircled width="48" height="48" />
+    <figcaption>IconGeneralCheckmarkCircled</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralChevron width="48" height="48" />
+    <figcaption>IconGeneralChevron</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralClose width="48" height="48" />
+    <figcaption>IconGeneralClose</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralDownload width="48" height="48" />
+    <figcaption>IconGeneralDownload</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralEdit width="48" height="48" />
+    <figcaption>IconGeneralEdit</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralEmptyStateIcon width="48" height="48" />
+    <figcaption>IconGeneralEmptyStateIcon</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralEye width="48" height="48" />
+    <figcaption>IconGeneralEye</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralEyeHide width="48" height="48" />
+    <figcaption>IconGeneralEyeHide</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralKebabMenu width="48" height="48" />
+    <figcaption>IconGeneralKebabMenu</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralLocation width="48" height="48" />
+    <figcaption>IconGeneralLocation</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralLock width="48" height="48" />
+    <figcaption>IconGeneralLock</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralLockUnlocked width="48" height="48" />
+    <figcaption>IconGeneralLockUnlocked</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralPlane width="48" height="48" />
+    <figcaption>IconGeneralPlane</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralPlus width="48" height="48" />
+    <figcaption>IconGeneralPlus</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralTrash width="48" height="48" />
+    <figcaption>IconGeneralTrash</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconGeneralWarning width="48" height="48" />
+    <figcaption>IconGeneralWarning</figcaption>
+  </figure>
+</div>
+
+### Key (1)
+
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconKey width="48" height="48" />
+    <figcaption>IconKey</figcaption>
+  </figure>
+</div>
+
+### Token (1)
+
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconToken width="48" height="48" />
+    <figcaption>IconToken</figcaption>
+  </figure>
+</div>
+
+### User (3)
+
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconUser width="48" height="48" />
+    <figcaption>IconUser</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconUserDataSources width="48" height="48" />
+    <figcaption>IconUserDataSources</figcaption>
+  </figure>
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconUserManagement width="48" height="48" />
+    <figcaption>IconUserManagement</figcaption>
+  </figure>
+</div>
+
+### VCI (1)
+
+<div class="grid-container" columns="1" md-columns="2" gap="1">
+  <figure class="flex flex-center flex-gap-2 p2 m0">
+    <IconVciCredentialHome width="48" height="48" />
+    <figcaption>IconVciCredentialHome</figcaption>
+  </figure>
+</div>
 
 ## Development
 

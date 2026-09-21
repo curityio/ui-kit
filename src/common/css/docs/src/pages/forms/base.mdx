@@ -14,13 +14,13 @@ import { IconAuthenticatorGoogle } from '@curity/ui-kit-icons';
 ### Text input
 
 <div className="form-field mw-40 mt2 mb4">
-  <label className="label block" for="text-example">Label</label>
+  <label className="block" for="text-example">Label</label>
   <input className="field w100" type="text" name="text-example" placeholder="Enter text" />
 </div>
 
 ```html
 <div className="form-field">
-  <label className="label block" for="text-example">Label</label>
+  <label className="block" for="text-example">Label</label>
   <input className="field w100" type="text" name="text-example" placeholder="Enter text" />
 </div>
 ```
@@ -98,7 +98,9 @@ import { IconAuthenticatorGoogle } from '@curity/ui-kit-icons';
 
 ## Form example
 
-The `.form-field` class can wrap form elements to provide a consistent look and feel. The `.label` class is used to style the label element, and the `.field` class is used to style the input element. The `.w100` class is used to make the input element take up the full width of its parent container.
+The `.form-field` class wraps a label and its control to give them consistent spacing. The
+`.field` class styles the input, and `.w100` makes it fill the width of its parent. Labels
+need no class — the `label` element is styled directly.
 
 <form className="mx-auto mw-40 border-light p4 br-8 mt4 mb4">
   <h2>Sign In</h2>
@@ -113,28 +115,28 @@ The `.form-field` class can wrap form elements to provide a consistent look and 
 </div>
 
   <div className="form-field py2">
-  <label for="pet-select">Choose a pet:</label>
+  <label for="department-select">Choose a department:</label>
 
-    <select name="pets" id="pet-select">
-    <option value="">Select pet</option>
-    <option value="dog">Dog</option>
-    <option value="cat">Cat</option>
-    <option value="hamster">Hamster</option>
-    <option value="parrot">Parrot</option>
-    <option value="spider">Spider</option>
-    <option value="goldfish">Goldfish</option>
+    <select name="department" id="department-select">
+    <option value="">Select department</option>
+    <option value="engineering">Engineering</option>
+    <option value="finance">Finance</option>
+    <option value="human-resources">Human Resources</option>
+    <option value="legal">Legal</option>
+    <option value="sales">Sales</option>
+    <option value="support">Support</option>
     </select>
 
     </div>
 
-<div classname="form-field py2">
+<div className="form-field py2">
   <input className="button button-primary button-medium w100" type="submit" value="Login" />
 </div>
 
 <div className="form-field py2">
   <div className="flex flex-gap-2 flex-center">
-    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-    <label for="vehicle1">
+    <input type="checkbox" id="privacy-policy" name="privacy-policy" value="accepted" />
+    <label for="privacy-policy">
       I agree to Curity's
       <a href="#">&nbsp;Privacy Policy </a>
     </label>
@@ -182,16 +184,16 @@ The `.form-field` class can wrap form elements to provide a consistent look and 
   </div>
 
   <div className="form-field py2">
-    <label for="pet-select">Choose a pet:</label>
+    <label for="department-select">Choose a department</label>
 
-    <select name="pets" id="pet-select">
-      <option value="">Select pet</option>
-      <option value="dog">Dog</option>
-      <option value="cat">Cat</option>
-      <option value="hamster">Hamster</option>
-      <option value="parrot">Parrot</option>
-      <option value="spider">Spider</option>
-      <option value="goldfish">Goldfish</option>
+    <select name="department" id="department-select">
+      <option value="">Select department</option>
+      <option value="engineering">Engineering</option>
+      <option value="finance">Finance</option>
+      <option value="human-resources">Human Resources</option>
+      <option value="legal">Legal</option>
+      <option value="sales">Sales</option>
+      <option value="support">Support</option>
     </select>
   </div>
   <div className="form-field py2">
@@ -206,7 +208,7 @@ The `.form-field` class can wrap form elements to provide a consistent look and 
         class="button button-primary button-fullwidth button-social button-google"
       >
         <div className="icon">
-          <IconAuthenticatorGoogle color="white" />
+          <IconAuthenticatorGoogle color="white" width="24" height="24" />
         </div>
         Sign in with Google
       </button>
@@ -215,8 +217,8 @@ The `.form-field` class can wrap form elements to provide a consistent look and 
 
   <div className="form-field py2">
     <div className="flex flex-gap-2 flex-center">
-      <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-      <label for="vehicle1">I agree to Curity's <a href="#">&nbsp;Privacy Policy </a></label>
+      <input type="checkbox" id="privacy-policy" name="privacy-policy" value="accepted" />
+      <label for="privacy-policy">I agree to Curity's <a href="#">&nbsp;Privacy Policy </a></label>
     </div>
   </div>
   <input className="button button-primary button-medium w100" type="submit" value="Login!" />
