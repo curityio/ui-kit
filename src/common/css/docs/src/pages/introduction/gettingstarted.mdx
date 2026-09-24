@@ -7,23 +7,36 @@ updatedAt: "September 4 2026"
 
 # Install and Usage
 
-`@curity/ui-kit-css` is not published to the npm registry. It is consumed from this repository — either as a workspace package inside the Curity UI Kit monorepo, or from a clone of the repository.
-
-## With a module bundler
-
-In workspace packages of this repository, or in any project with modern JS tooling that can resolve the package (for example via a `file:` dependency on a clone), import the CSS source directly:
+## Use in the Curity UI Kit monorepo
 
 ```js
 import "@curity/ui-kit-css";
 ```
 
-The bundler inlines the `@import`ed partials and minifies the output as part of your normal build — no separate CSS build step is needed.
+## Use in an external website or app
+
+The UI Kit is not published to npm, so install it straight from GitHub.
+```bash
+npm i github:curityio/ui-kit#dev
+```
+
+Then import the stylesheet in your app's entry point:
+
+```js
+import "curity-ui-kit/src/common/css/lib/src/main.css";
+```
+
 
 ## Without a module bundler
 
 Projects that link stylesheets directly (plain HTML pages, server-rendered templates) need a single flat CSS file. Build it from the repository root:
 
+
+
 ```shell
+git clone https://github.com/curityio/ui-kit.git
+cd ui-kit
+git checkout dev
 npm run -w src/common/css/lib build
 ```
 

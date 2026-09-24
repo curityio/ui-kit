@@ -11,9 +11,26 @@ import { Intro } from '@components/Intro';
 
 <div class="mw-40 mx-auto">
 
-## Use in Curity UI Kit repository
+## Use in the Curity UI Kit monorepo
 
 ```js
 import "@curity/ui-kit-css";
 ```
+
+## Use in an external website or app
+
+The UI Kit is not published to npm, so install it straight from GitHub.
+```bash
+npm i github:curityio/ui-kit#dev
+```
+
+Then import the stylesheet in your app's entry point:
+
+```js
+import "curity-ui-kit/src/common/css/lib/src/main.css";
+```
+
+The `#dev` suffix tracks the `dev` branch. Replace it with a tag or commit SHA to
+pin a specific version.
+
 </div>
