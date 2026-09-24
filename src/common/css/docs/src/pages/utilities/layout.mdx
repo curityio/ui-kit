@@ -13,65 +13,45 @@ Layout utilities provide classes for controlling common layout properties includ
 
 Control the display property of elements.
 
-- `.d-none` - Sets display to none
-- `.d-block` - Sets display to block
-- `.d-inline` - Sets display to inline
-- `.d-inline-block` - Sets display to inline-block
-- `.d-flex` - Sets display to flex
-- `.d-inline-flex` - Sets display to inline-flex
-- `.d-grid` - Sets display to grid
+- `.display-none` - `display: none`, removing the element from the layout
+- `.block` - `display: block`
+- `.inline` - `display: inline`
+- `.inline-block` - `display: inline-block`
+- `.flex` - `display: flex`
+- `.inline-flex` - `display: inline-flex`
+- `.table` / `.table-cell` - `display: table` / `table-cell`
 
 ## Position
 
-Control the position property of elements.
+Control the position property of elements. There is no class for `position: static` —
+that is the browser default, so remove the positioning class instead.
 
-- `.position-static` - Sets position to static
-- `.position-relative` - Sets position to relative
-- `.position-absolute` - Sets position to absolute
-- `.position-fixed` - Sets position to fixed
-- `.position-sticky` - Sets position to sticky
+- `.relative` - `position: relative`, and the containing block for absolute children
+- `.absolute` - `position: absolute`
+- `.fixed` - `position: fixed`, pinned to the viewport
+- `.sticky` - `position: sticky`
 
 ## Overflow
 
-Control how content overflow is handled.
+Control how content overflow is handled. There is no class for `overflow: visible` —
+that is the default.
 
-- `.overflow-auto` - Sets overflow to auto
-- `.overflow-hidden` - Sets overflow to hidden
-- `.overflow-visible` - Sets overflow to visible
-- `.overflow-scroll` - Sets overflow to scroll
+- `.overflow-auto` - scrollbars only when the content needs them
+- `.overflow-hidden` - clip the overflow, no scrolling
+- `.overflow-scroll` - always show the scroll area
+- `.overflow-x-hidden` / `.overflow-y-hidden` - clip one axis only
 
 ## Z-Index
 
-Control the stacking order of positioned elements.
-
-- `.z-0` - Sets z-index to 0
-- `.z-10` - Sets z-index to 10
-- `.z-20` - Sets z-index to 20
-- `.z-30` - Sets z-index to 30
-- `.z-40` - Sets z-index to 40
-- `.z-50` - Sets z-index to 50
+Control the stacking order of positioned elements. `.z-1` through `.z-10` set
+`z-index: 1` to `10`; they only take effect on a positioned element, so pair them with
+`.relative`, `.absolute`, `.fixed` or `.sticky`. There is no `.z-0` — the default
+`z-index: auto` is what an unstyled element already has.
 
 ## Visibility
 
-Control element visibility.
+Control element visibility. The three differ in what they do to layout and to screen readers:
 
-- `.visible` - Sets visibility to visible
-- `.invisible` - Sets visibility to hidden (element still takes up space)
-
-## Float
-
-Control element float behavior.
-
-- `.float-start` - Float element to the start (left in LTR)
-- `.float-end` - Float element to the end (right in LTR)
-- `.float-none` - Remove float
-
-## Clear
-
-Clear floated elements.
-
-- `.clearfix` - Clear floats using pseudo-element
-- `.clear-both` - Clear both left and right floats
-Hi from Layout
-
-<div className="alert alert-info">This is yet to be written</div>
+- `.hidden` - `visibility: hidden`; invisible, still takes up its space, not read out
+- `.hide` - `display: none`; removed from the layout and not read out
+- `.visuallyhidden` - off-screen but still announced, for text that only screen readers need
