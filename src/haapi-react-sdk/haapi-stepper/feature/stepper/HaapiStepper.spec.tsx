@@ -303,10 +303,10 @@ describe('HaapiStepper', () => {
       });
 
       it('should handle polling steps with PENDING status and automatically poll until DONE', async () => {
-        const pollingInterval = 2000;
+        const defaultPollingInterval = 2000;
 
         render(
-          <HaapiStepper config={{ pollingInterval }}>
+          <HaapiStepper config={{ defaultPollingInterval }}>
             <TestComponent />
           </HaapiStepper>
         );
@@ -333,7 +333,7 @@ describe('HaapiStepper', () => {
         // Mock the next poll request to still return PENDING and advance timers
         // This is an automatic poll request (setTimeout, no user action)
         mockHaapiFetchStep(HAAPI_STEPS.POLLING);
-        await vi.advanceTimersByTimeAsync(pollingInterval);
+        await vi.advanceTimersByTimeAsync(defaultPollingInterval);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         vi.runAllTimersAsync();
 
@@ -348,7 +348,7 @@ describe('HaapiStepper', () => {
         // This is an automatic poll request (setTimeout, no user action)
         mockHaapiFetchStep(HAAPI_STEPS.POLLING, { status: HAAPI_POLLING_STATUS.DONE });
         mockHaapiFetchStep(HAAPI_STEPS.AUTHENTICATION);
-        await vi.advanceTimersByTimeAsync(pollingInterval);
+        await vi.advanceTimersByTimeAsync(defaultPollingInterval);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         vi.runAllTimersAsync();
 
@@ -366,10 +366,10 @@ describe('HaapiStepper', () => {
 
       describe('BankID Polling Step', () => {
         it('should display message, start bankid button, cancel button and QR code', async () => {
-          const pollingInterval = 2000;
+          const defaultPollingInterval = 2000;
 
           render(
-            <HaapiStepper config={{ pollingInterval, bankIdAutostart: false }}>
+            <HaapiStepper config={{ defaultPollingInterval, bankIdAutostart: false }}>
               <TestComponent />
             </HaapiStepper>
           );
@@ -399,7 +399,7 @@ describe('HaapiStepper', () => {
         describe('config.bankIdAutostart = true', () => {
           it('should call openBankIdApp automatically only once', async () => {
             render(
-              <HaapiStepper config={{ pollingInterval: 2000, bankIdAutostart: true }}>
+              <HaapiStepper config={{ defaultPollingInterval: 2000, bankIdAutostart: true }}>
                 <TestComponent />
               </HaapiStepper>
             );
@@ -432,10 +432,10 @@ describe('HaapiStepper', () => {
 
         describe('config.bankIdAutostart = false', () => {
           it('should not call openBankIdApp automatically', async () => {
-            const pollingInterval = 2000;
+            const defaultPollingInterval = 2000;
 
             render(
-              <HaapiStepper config={{ pollingInterval, bankIdAutostart: false }}>
+              <HaapiStepper config={{ defaultPollingInterval, bankIdAutostart: false }}>
                 <TestComponent />
               </HaapiStepper>
             );
@@ -464,10 +464,10 @@ describe('HaapiStepper', () => {
           });
 
           it('should call openBankIdApp when "Start BankID" button is clicked', async () => {
-            const pollingInterval = 2000;
+            const defaultPollingInterval = 2000;
 
             render(
-              <HaapiStepper config={{ pollingInterval, bankIdAutostart: false }}>
+              <HaapiStepper config={{ defaultPollingInterval, bankIdAutostart: false }}>
                 <TestComponent />
               </HaapiStepper>
             );
