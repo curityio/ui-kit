@@ -69,6 +69,40 @@ describe('HaapiStepperTextFormFieldUI', () => {
 
     expect(textFieldInput(field.name)).toHaveAttribute('type', 'text');
   });
+
+  describe('Length constraints', () => {
+    it('presents the length constraints of a text field on its input', () => {
+      const field = createMockTextField({ minLength: 6, maxLength: 8 });
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).toHaveAttribute('minlength', '6');
+      expect(textFieldInput(field.name)).toHaveAttribute('maxlength', '8');
+    });
+
+    it('presents only the length constraint a text field defines', () => {
+      const field = createMockTextField({ maxLength: 8 });
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
+      expect(textFieldInput(field.name)).toHaveAttribute('maxlength', '8');
+    });
+
+    it('presents a text field without length constraints as an input without length limits', () => {
+      const field = createMockTextField();
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
+      expect(textFieldInput(field.name)).not.toHaveAttribute('maxlength');
+    });
+
+    it('presents a username field as an input without length limits', () => {
+      const field = createMockUsernameField();
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
+      expect(textFieldInput(field.name)).not.toHaveAttribute('maxlength');
+    });
+  });
 });
 
 const renderTextField = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) =>

@@ -51,6 +51,7 @@ export function HaapiStepperTextFormFieldUI({
   const { formState, action } = useHaapiStepperForm();
   const autoComplete = getTextAutoComplete(field);
   const inputType = getTextInputType(field);
+  const lengthConstraints = getTextLengthConstraints(field);
   const inputId = `${action.id}-${field.name}-input`;
 
   return (
@@ -66,6 +67,7 @@ export function HaapiStepperTextFormFieldUI({
         placeholder={field.placeholder}
         autoComplete={autoComplete}
         required={field.required ?? true}
+        {...lengthConstraints}
         onChange={e => formState.set(field, e.target.value)}
       />
     </label>
@@ -82,6 +84,14 @@ const getTextInputType = (field: HaapiStepperTextFormField | HaapiStepperUsernam
   }
 
   return 'text';
+};
+
+const getTextLengthConstraints = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
+  if (field.type === HAAPI_FORM_FIELDS.TEXT) {
+    return { minLength: field.minLength, maxLength: field.maxLength };
+  }
+
+  return {};
 };
 
 const getTextAutoComplete = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
