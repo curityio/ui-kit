@@ -47,6 +47,12 @@ body {
   color: var(--color-light);
 }
 
+.body-dark .form-transparent {
+  --code-color: var(--color-light);
+  --code-background-color: rgb(255 255 255 / 10%);
+  --code-border-color: rgb(255 255 255 / 15%);
+}
+
 .body-dark .form-transparent .login-powered-by small {
   color: white;
 }

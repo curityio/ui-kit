@@ -84,6 +84,12 @@
   --form-field-border-color-dark: var(--color-primary-dark);
   --form-field-caret-color: var(--color-primary);
   --form-field-font-size: var(--type-base-size);
+  --form-password-reveal-icon-color: var(--form-field-color);
+
+  --code-color: var(--color-text);
+  --code-background-color: #f7fafc;
+  --code-border-color: rgb(0 0 0 / 5%);
+  --pre-color: var(--color-text);
 
   --type-sans: "GoogleSans-Regular", "Google Sans", system, -apple-system,
     "Segoe UI", "Lucida Grande", sans-serif;
