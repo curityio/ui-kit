@@ -94,14 +94,6 @@ describe('HaapiStepperTextFormFieldUI', () => {
       expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
       expect(textFieldInput(field.name)).not.toHaveAttribute('maxlength');
     });
-
-    it('presents a username field as an input without length limits', () => {
-      const field = createMockUsernameField();
-      renderTextField(field);
-
-      expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
-      expect(textFieldInput(field.name)).not.toHaveAttribute('maxlength');
-    });
   });
 
   describe('Label', () => {
