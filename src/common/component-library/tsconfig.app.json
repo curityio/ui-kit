@@ -27,8 +27,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
-      "@curity/ui-kit-icons/*": ["./src/packages/icons/*"],
-      "@curity/ui-kit-css/*": ["./src/packages/css/*"]
+      "@curity/ui-kit-icons/*": ["./src/packages/icons/*"]
     },
 
     "declaration": true,

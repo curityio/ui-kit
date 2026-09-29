@@ -4,3 +4,4 @@ system.status.bad.request=Begäran kunde inte utföras
 system.status.authentication.no-authenticator=Ingen autentiseringsmetod hittades
 
 error.parameters.missing-or-invalid=Felaktiga eller otillräckliga parametrar
+binding.message.too.long=Bindningsmeddelandet överskrider den maximalt tillåtna längden.

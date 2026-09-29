@@ -50,6 +50,8 @@ const toSeconds = (value?: number | string): number | undefined => {
  * remaining-time text for assistive tech, and only renders when the localized unit label is present in
  * the step's `metadata.viewData.messages` (`minutes-left` for a minute or more left, `seconds-left`
  * otherwise).
+ *
+ * @docsIgnore Not published in the Curity docs.
  */
 export function HaapiStepperBankIdPollingProgressUI({ currentStep }: HaapiStepperBankIdPollingProgressUIProps) {
   const { maxWaitTime, maxWaitRemainingTime, status } = currentStep.properties;

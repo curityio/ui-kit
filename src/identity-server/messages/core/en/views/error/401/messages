@@ -1,3 +1,4 @@
 meta.title=401 - Unauthorized
 page.title=Unauthorized
 system.status.authentication.error=You are not authorized to execute this request.
+token-unknown=The provided access token is invalid or has expired.

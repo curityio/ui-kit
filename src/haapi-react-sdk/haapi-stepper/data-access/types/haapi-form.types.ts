@@ -9,6 +9,7 @@
  * For further information, please contact Curity AB.
  */
 
+import type { StringWithAutocomplete } from '../../util';
 import { MEDIA_TYPES } from './media.types';
 import { HaapiAction } from './haapi-action.types';
 
@@ -28,6 +29,21 @@ export enum HAAPI_FORM_FIELDS {
   CONTEXT = 'context',
   CHECKBOX = 'checkbox',
 }
+
+/**
+ * Kinds of a text form field known by the Curity Identity Server. A kind specializes the meaning of a text field, and
+ * matches the HTML input type used to present it. Plugins may provide other kinds, which are presented as plain text.
+ */
+export enum HAAPI_TEXT_FIELD_KINDS {
+  NUMBER = 'number',
+  EMAIL = 'email',
+  URL = 'url',
+  TEL = 'tel',
+  COLOR = 'color',
+  DATE = 'date',
+}
+
+export type HAAPI_TEXT_FIELD_KINDS_TYPE = StringWithAutocomplete<HAAPI_TEXT_FIELD_KINDS>;
 
 /**
  * HTTP method constants
@@ -90,7 +106,7 @@ export interface HaapiHiddenFormField extends HaapiBaseFormField {
 export interface HaapiTextFormField extends HaapiBaseFormField {
   type: HAAPI_FORM_FIELDS.TEXT;
   /** Kind of the field. The kind of a field specializes its meaning, allowing clients that support a certain "kind" to provide an improved user experience. */
-  kind?: string;
+  kind?: HAAPI_TEXT_FIELD_KINDS_TYPE;
   /** Minimum number of characters the field value must contain. */
   minLength?: number;
   /** Maximum number of characters the field value must contain. */

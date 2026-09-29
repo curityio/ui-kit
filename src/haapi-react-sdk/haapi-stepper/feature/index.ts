@@ -14,7 +14,7 @@ export * from './stepper/HaapiStepperContext';
 export * from './stepper/HaapiStepperErrorNotifier';
 export * from './stepper/HaapiStepperHook';
 export * from './stepper/haapi-stepper.types';
-export * from './stepper/data-formatters/format-next-step-data';
+export * from './stepper/data-formatters/format-step-data';
 export * from './stepper/data-formatters/continue-same-step';
 export * from './stepper/step-handlers/polling-step';
 export * from './stepper/data-formatters/problem-step';

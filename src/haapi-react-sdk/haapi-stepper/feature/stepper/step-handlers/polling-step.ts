@@ -13,13 +13,12 @@ import { RefObject } from 'react';
 import { HAAPI_POLLING_STATUS, HAAPI_STEPS, HaapiPollingStep } from '../../../data-access/types/haapi-step.types';
 import type {
   HaapiStepperConfig,
-  HaapiStepperError,
   HaapiStepperHistoryEntry,
   HaapiStepperNextStep,
   HaapiStepperStep,
 } from '../haapi-stepper.types';
 import { HaapiStepperPollingStep } from '../haapi-stepper.types';
-import { formatNextStepData } from '../data-formatters/format-next-step-data';
+import { formatStepData } from '../data-formatters/format-step-data';
 import { HAAPI_FORM_ACTION_KINDS } from '../../../data-access/types/haapi-action.types';
 import { isBankIdClientOperation, openBankIdApp } from '../../actions/client-operation/operations/bankid';
 
@@ -29,11 +28,8 @@ export function handlePollingStep(
   nextStep: HaapiStepperNextStep,
   config: HaapiStepperConfig,
   history: HaapiStepperHistoryEntry[] = []
-): {
-  nextStepData?: HaapiStepperStep;
-  nextStepError?: HaapiStepperError;
-} {
-  const formattedPollingStep = formatNextStepData(pollingStep);
+): HaapiStepperStep {
+  const formattedPollingStep = formatStepData(pollingStep);
   const pollingStatus = pollingStep.properties.status;
   const pollingInterval = pollingStep.properties.interval
     ? Number(pollingStep.properties.interval)
@@ -47,7 +43,7 @@ export function handlePollingStep(
         nextStep(doneAction);
       }
 
-      return { nextStepData: formattedPollingStep };
+      return formattedPollingStep;
     }
 
     case HAAPI_POLLING_STATUS.FAILED: {
@@ -61,7 +57,7 @@ export function handlePollingStep(
         nextStep(nextAction);
       }
 
-      return { nextStepData: formattedPollingStep };
+      return formattedPollingStep;
     }
 
     case HAAPI_POLLING_STATUS.PENDING: {
@@ -76,7 +72,7 @@ export function handlePollingStep(
         actions: pollingStep.actions.filter(action => action.kind !== HAAPI_FORM_ACTION_KINDS.POLL),
       };
 
-      const formattedNextStepData = formatNextStepData(stepWithoutPollingAction);
+      const formattedNextStepData = formatStepData(stepWithoutPollingAction);
 
       if (isBankIdPollingSession(formattedPollingStep)) {
         if (config.bankIdAutostart) {
@@ -88,7 +84,7 @@ export function handlePollingStep(
         nextStep(pollingAction);
       }, pollingInterval);
 
-      return { nextStepData: formattedNextStepData };
+      return formattedNextStepData;
     }
   }
 }

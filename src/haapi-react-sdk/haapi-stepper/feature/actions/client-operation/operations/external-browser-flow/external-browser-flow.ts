@@ -42,10 +42,12 @@ export function runExternalBrowserFlow(
     }
 
     const onMessage = (event: MessageEvent) => {
-      if (event.source !== externalWindow) {
+      const ignoreUnexpectedMessage = event.source !== externalWindow || event.origin !== launchUrl.origin;
+      if (ignoreUnexpectedMessage) {
         return;
       }
-      if (event.origin !== launchUrl.origin || typeof event.data !== 'string') {
+
+      if (typeof event.data !== 'string') {
         cleanup(true);
         reject(new Error(EXTERNAL_BROWSER_FLOW_ERROR_MESSAGES.resume));
         return;

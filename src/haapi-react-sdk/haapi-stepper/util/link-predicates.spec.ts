@@ -10,9 +10,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-
-import { createMockLink } from './tests/mocks';
-import { isHaapiLink, isQrCodeLink } from './link-predicates';
+import { createMockLink, createMockFormAction } from './tests/mocks';
+import { isHaapiLink, isLink, isQrCodeLink } from './link-predicates';
 
 describe('isQrCodeLink', () => {
   it('returns true for an image media type', () => {
@@ -56,5 +55,14 @@ describe('isHaapiLink', () => {
   it('returns false for a malformed href', () => {
     expect(isHaapiLink(createMockLink({ href: 'http://[malformed', subtype: 'text/html' }))).toBe(false);
     expect(isHaapiLink(createMockLink({ href: 'http://[malformed', subtype: undefined }))).toBe(false);
+  });
+});
+
+describe('isLink', () => {
+  it('returns true for a link', () => {
+    expect(isLink(createMockLink({ href: '/continue', subtype: undefined }))).toBe(true);
+  });
+  it('returns false for a form action', () => {
+    expect(isLink(createMockFormAction())).toBe(false);
   });
 });

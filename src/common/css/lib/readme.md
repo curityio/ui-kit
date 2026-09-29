@@ -9,7 +9,7 @@ Curity CSS is a small base toolkit of base styles and utility classes. It is the
 Import
 
 ```js
-import "@curity/ui-kit-css-lib/dist/index.css";
+import "@curity/ui-kit-css";
 ```
 
 [Read the Docs](../docs/README.md)

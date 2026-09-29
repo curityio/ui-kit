@@ -14,9 +14,9 @@ import { renderHook } from '@testing-library/react';
 import type { HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 import { MEDIA_TYPES } from './types/media.types';
 import { useHaapiFetch } from './useHaapiFetch';
-import { HAAPI_STEPS, type HaapiLink } from './types/haapi-step.types';
-import { HAAPI_ACTION_TYPES, type HaapiFormAction } from './types/haapi-action.types';
-import { HAAPI_FORM_FIELDS, HTTP_METHODS } from './types/haapi-form.types';
+import { HAAPI_STEPS } from './types/haapi-step.types';
+import { HTTP_METHODS } from './types/haapi-form.types';
+import type { ApiRequest } from './haapi-fetch-utils';
 
 // Hoist the spies so the vi.mock factory (which runs at module-load time, before
 // the test file body executes) can reference them without hitting the TDZ.
@@ -42,7 +42,7 @@ describe('useHaapiFetch', () => {
     expect(createHaapiFetchSpy).toHaveBeenCalledWith(haapiConfig);
   });
 
-  it('sendHaapiFetchRequest forwards link actions to the underlying haapiFetch as a GET to the link href', async () => {
+  it('sendHaapiFetchRequest forwards the given request to the underlying haapiFetch, verbatim', async () => {
     mockHaapiFetch.mockResolvedValueOnce(
       new Response(JSON.stringify({ type: HAAPI_STEPS.AUTHENTICATION }), {
         headers: { 'Content-Type': MEDIA_TYPES.AUTH },
@@ -51,13 +51,17 @@ describe('useHaapiFetch', () => {
 
     const { result } = renderHook(() => useHaapiFetch(haapiConfig));
 
-    const link: HaapiLink = { href: '/test/href', rel: 'self' };
-    await result.current.sendHaapiFetchRequest(link);
+    const body = new URLSearchParams({ username: 'alice' });
+    const request: ApiRequest = {
+      url: '/api/test',
+      init: { method: HTTP_METHODS.POST, headers: { 'Content-Type': MEDIA_TYPES.FORM_URLENCODED }, body },
+    };
+    await result.current.sendHaapiFetchRequest(request);
 
-    expect(mockHaapiFetch).toHaveBeenCalledWith(link.href, { method: 'GET' });
+    expect(mockHaapiFetch).toHaveBeenCalledWith(request.url, request.init);
   });
 
-  it('sendHaapiFetchRequest forwards form actions to the underlying haapiFetch with the payload encoded into the request body', async () => {
+  it('sendHaapiFetchRequest returns the step parsed out of the response', async () => {
     mockHaapiFetch.mockResolvedValueOnce(
       new Response(JSON.stringify({ type: HAAPI_STEPS.AUTHENTICATION }), {
         headers: { 'Content-Type': MEDIA_TYPES.AUTH },
@@ -66,29 +70,9 @@ describe('useHaapiFetch', () => {
 
     const { result } = renderHook(() => useHaapiFetch(haapiConfig));
 
-    const formAction: HaapiFormAction = {
-      template: HAAPI_ACTION_TYPES.FORM,
-      kind: 'login',
-      model: {
-        method: HTTP_METHODS.POST,
-        href: '/api/login',
-        type: MEDIA_TYPES.FORM_URLENCODED,
-        fields: [{ name: 'username', type: HAAPI_FORM_FIELDS.USERNAME }],
-      },
-    };
+    const step = await result.current.sendHaapiFetchRequest({ url: '/test/href', init: { method: HTTP_METHODS.GET } });
 
-    await result.current.sendHaapiFetchRequest({
-      action: formAction,
-      payload: { username: 'alice' },
-    });
-
-    expect(mockHaapiFetch).toHaveBeenCalledTimes(1);
-    const [url, init] = mockHaapiFetch.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe(formAction.model.href);
-    expect(init.method).toBe(formAction.model.method);
-    expect(init.headers).toEqual({ 'Content-Type': formAction.model.type });
-    expect(init.body).toBeInstanceOf(URLSearchParams);
-    expect((init.body as URLSearchParams).get('username')).toBe('alice');
+    expect(step.type).toBe(HAAPI_STEPS.AUTHENTICATION);
   });
 
   describe('Single-config contract', () => {

@@ -54,6 +54,7 @@
     #if (!$_errors)
     <input type="hidden"  id="moveOn" name="moveOn" value="true"/>
 
+    #if ($_recipientOfCommunication)
     <div class="center">
         <h1 id="recipient" class="recipient recipient-phone">
             #message("authenticator.sms.link-wait.view.authenticate")
@@ -63,6 +64,14 @@
             </span>
         </h1>
     </div>
+    #else
+    ## No recipient is published when the authenticator is configured to prevent account enumeration.
+    <div class="center">
+        <h1 class="recipient recipient-phone">
+            #message("authenticator.sms.link-wait.view.authenticate.no-recipient")
+        </h1>
+    </div>
+    #end
 
     <div class="center p2">
         #parse("fragments/spinner")

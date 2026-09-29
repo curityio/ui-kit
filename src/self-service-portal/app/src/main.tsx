@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 
 import '@curity/ui-kit-component-library/dist/component-library.css';
-import '@curity/ui-kit-css/lib/dist/index.css';
+import '@curity/ui-kit-css';
 import '@styles/index.css';
 
 createRoot(document.getElementById('root')!).render(

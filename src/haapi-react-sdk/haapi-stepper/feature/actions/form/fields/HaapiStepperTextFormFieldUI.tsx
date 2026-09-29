@@ -11,10 +11,38 @@
 
 import type { ReactElement } from 'react';
 
-import { HAAPI_FORM_FIELDS } from '../../../../data-access/types/haapi-form.types';
+import { HAAPI_FORM_FIELDS, HAAPI_TEXT_FIELD_KINDS } from '../../../../data-access/types/haapi-form.types';
 import type { HaapiStepperTextFormField, HaapiStepperUsernameFormField } from '../../../stepper/haapi-stepper.types';
 import { useHaapiStepperForm } from '../HaapiStepperFormContext';
 
+/**
+ * Renders the built-in text input for a HAAPI text/username `field`, wired to the form's state.
+ *
+ * Must be rendered inside a `HaapiStepperFormUI` (it reads `formState` from the form context, so it throws
+ * outside one). Normally you let {@link HaapiStepperFormFieldUI} pick the field component automatically — reach
+ * for this one only to place a specific field yourself in a custom layout:
+ *
+ * ```tsx
+ * // Give the username field its own titled section, keep the default rendering for every other field.
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
+ *   {({ fields }) => (
+ *     <>
+ *       {fields.map(field =>
+ *         field.type === HAAPI_FORM_FIELDS.USERNAME ? (
+ *           <section key={field.name}>
+ *             <h2>Your account</h2>
+ *             <HaapiStepperTextFormFieldUI field={field} />
+ *           </section>
+ *         ) : (
+ *           <HaapiStepperFormFieldUI key={field.name} field={field} />
+ *         )
+ *       )}
+ *     </>
+ *   )}
+ * </HaapiStepperFormUI>
+ * ```
+ * {@see_example ./docs/sections/01-api-reference/01-ui-components/01-form-ui/TextFieldRenderingHaapiReactSDKPlaygroundExample.tsx}
+ */
 export function HaapiStepperTextFormFieldUI({
   field,
 }: {
@@ -22,6 +50,7 @@ export function HaapiStepperTextFormFieldUI({
 }): ReactElement {
   const { formState, action } = useHaapiStepperForm();
   const autoComplete = getTextAutoComplete(field);
+  const inputType = getTextInputType(field);
   const inputId = `${action.id}-${field.name}-input`;
 
   return (
@@ -30,7 +59,7 @@ export function HaapiStepperTextFormFieldUI({
       <input
         id={inputId}
         data-testid={`haapi-form-field-${HAAPI_FORM_FIELDS.TEXT}-${field.name}`}
-        type="text"
+        type={inputType}
         className="haapi-stepper-form-field-text-input"
         name={field.name}
         value={formState.get(field)}
@@ -42,6 +71,18 @@ export function HaapiStepperTextFormFieldUI({
     </label>
   );
 }
+
+// Kinds are free-form, so only those well-known are used, to avoid setting input type to something with specific
+// behavior (e.g. password or checkbox).
+const KNOWN_TEXT_FIELD_KINDS = new Set<string>(Object.values(HAAPI_TEXT_FIELD_KINDS));
+
+const getTextInputType = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
+  if (field.type === HAAPI_FORM_FIELDS.TEXT && field.kind && KNOWN_TEXT_FIELD_KINDS.has(field.kind)) {
+    return field.kind;
+  }
+
+  return 'text';
+};
 
 const getTextAutoComplete = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
   if (field.type === HAAPI_FORM_FIELDS.USERNAME) {

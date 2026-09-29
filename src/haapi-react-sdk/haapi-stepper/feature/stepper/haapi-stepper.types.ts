@@ -44,6 +44,7 @@ import {
 } from '../../data-access/types/haapi-step.types';
 import { HaapiFetchPayload } from '../../data-access/types/haapi-fetch.types';
 import {
+  ApiRequest,
   HaapiCheckboxFormField,
   HaapiContextFormField,
   HaapiFormField,
@@ -91,7 +92,7 @@ export interface HaapiStepperBootstrapConfig {
       path: string;
       isInsideWell: boolean;
     };
-    pageSymbols?: HaapiStepperStepSymbolsConfig;
+    stepSymbols?: HaapiStepperStepSymbolsConfig;
   };
 }
 
@@ -219,13 +220,22 @@ export type HaapiStepperNextStepAsync = (
 export type HaapiStepperNextStepAction = HaapiStepperFormAction | HaapiStepperClientOperationAction | HaapiStepperLink;
 export type HaapiStepperNextStepPayload = HaapiFetchPayload;
 
+export interface HaapiStepperNextStepData {
+  step: HaapiStepperStep;
+  triggeredBy: {
+    action: HaapiStepperNextStepAction;
+    payload?: HaapiStepperNextStepPayload;
+    request: ApiRequest;
+  };
+}
+
 /*
  * HISTORY TYPINGS
  */
-export interface HaapiStepperHistoryEntry<T extends HaapiStepperStep = HaapiStepperStep> {
+export interface HaapiStepperHistoryEntry<
+  T extends HaapiStepperStep = HaapiStepperStep,
+> extends HaapiStepperNextStepData {
   step: T;
-  triggeredByAction: HaapiStepperNextStepAction;
-  triggeredByPayload?: HaapiStepperNextStepPayload;
   timestamp: Date;
 }
 

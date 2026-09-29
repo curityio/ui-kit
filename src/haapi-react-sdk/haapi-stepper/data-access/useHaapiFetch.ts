@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import { createHaapiFetch } from '@curity/identityserver-haapi-web-driver';
 import type { FetchLike, HaapiConfiguration } from '@curity/identityserver-haapi-web-driver';
 import { sendHaapiFetchRequest } from './haapi-fetch-request';
-import type { HaapiFetchAction } from './types/haapi-fetch.types';
+import type { ApiRequest } from './haapi-fetch-utils';
 
 // `@curity/identityserver-haapi-web-driver` is a *process-global singleton*:
 // the docs state "at most one active fetch-like function", and in practice
@@ -27,11 +27,27 @@ import type { HaapiFetchAction } from './types/haapi-fetch.types';
 let cachedHaapiFetch: FetchLike | undefined;
 let cachedConfig: HaapiConfiguration | undefined;
 
+/**
+ * Low-level access to the attested HAAPI transport, for driving a flow without `HaapiStepper`.
+ *
+ * Wraps the HAAPI web driver's fetch in a `sendHaapiFetchRequest(action)` function that submits a HAAPI
+ * action and returns the raw response. Most applications never need this — `HaapiStepper` (and
+ * `useHaapiStepper`) manage the flow for you; reach for this hook only to build your own flow handling
+ * on top of the same attested transport.
+ *
+ * ```tsx
+ * const { sendHaapiFetchRequest } = useHaapiFetch(haapiConfiguration);
+ * const response = await sendHaapiFetchRequest(action);
+ * ```
+ *
+ * The underlying driver supports a single configuration per page load: every caller shares one driver
+ * instance, and passing a different `HaapiConfiguration` later throws — reload the page to switch.
+ */
 export function useHaapiFetch(haapi: HaapiConfiguration) {
   const haapiFetch = useMemo(() => getHaapiFetch(haapi), [haapi]);
   return useMemo(
     () => ({
-      sendHaapiFetchRequest: (action: HaapiFetchAction) => sendHaapiFetchRequest(action, haapiFetch),
+      sendHaapiFetchRequest: (request: ApiRequest) => sendHaapiFetchRequest(request, haapiFetch),
     }),
     [haapiFetch]
   );
