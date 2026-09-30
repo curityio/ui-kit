@@ -4,4 +4,4 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: "dev"  # PRs will target this branch instead of the default
+    target-branch: "main"  # PRs will target this branch instead of the default
