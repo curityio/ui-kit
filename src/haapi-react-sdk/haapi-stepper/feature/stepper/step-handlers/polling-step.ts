@@ -89,7 +89,7 @@ export function handlePollingStep(
 
 function resolvePollingInterval(serverInterval: string | undefined, defaultInterval: number): number {
   const parsed = Number(serverInterval);
-  return parsed > 0 ? parsed : defaultInterval;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : defaultInterval;
 }
 
 function isBankIdPollingSession(pollingStep: HaapiStepperPollingStep): boolean {

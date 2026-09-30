@@ -94,7 +94,7 @@ describe('handlePollingStep', () => {
           expectNextPollScheduledAfter(DEFAULT_POLLING_INTERVAL, testPollingStep);
         });
 
-        it.each(['abc', '0', '-1', ''])(
+        it.each(['abc', '0', '-1', '', 'Infinity'])(
           'falls back to defaultPollingInterval for a malformed server interval (%j)',
           stepPollingInterval => {
             const testPollingStep = getTestPollingStep(stepPollingInterval);
