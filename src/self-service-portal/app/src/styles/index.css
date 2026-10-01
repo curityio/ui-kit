@@ -1,8 +1,8 @@
 /* Example colors */
 :root {
-  --type-regular: 'Roboto-Regular', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, helvetica, arial, sans-serif;
-  --type-bold: 'Roboto-Bold', roboto, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial, sans-serif;
-  --type-medium: 'Roboto-Medium', roboto, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial, sans-serif;
+  --type-regular: 'GoogleSans-Regular', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande', sans-serif;
+  --type-bold: 'GoogleSans-Bold', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande', sans-serif;
+  --type-medium: 'GoogleSans-Medium', 'Google Sans', system, -apple-system, 'Segoe UI', 'Lucida Grande', sans-serif;
   --type-mono: 'Roboto-Mono', monospace;
   --header-height: 48px;
   --form-label-font-size: 1rem;
@@ -11,8 +11,8 @@
   --color-link-hover: black;
 
   --self-service-portal-login-sidebar-image-display: flex;
-  --self-service-portal-login-sidebar-background-image-url: url('../images/bg-lines-magenta.svg');
-  --self-service-portal-login-sidebar-background-color: var(--color-primary-dark);
+  --self-service-portal-login-sidebar-background-image-url: none;
+  --self-service-portal-login-sidebar-background-color: #201a32;
   --self-service-portal-sidebar-background-color: white;
   --self-service-portal-main-background-color: white;
   --login-logo-max-width: 200px;
@@ -20,31 +20,31 @@
 }
 
 @font-face {
-  font-family: Roboto-Regular;
+  font-family: GoogleSans-Regular;
   font-style: normal;
   font-weight: normal;
-  src: url('@curity/ui-kit-assets/fonts/Roboto-Regular.woff2') format('woff2');
+  src: url('@curity/ui-kit-assets/fonts/GoogleSans-Regular.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: Roboto-Medium;
+  font-family: GoogleSans-Medium;
   font-style: normal;
   font-weight: normal;
-  src: url('@curity/ui-kit-assets/fonts/Roboto-Medium.woff2') format('woff2');
+  src: url('@curity/ui-kit-assets/fonts/GoogleSans-Medium.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: Roboto-Bold;
+  font-family: GoogleSans-Bold;
   font-style: normal;
   font-weight: normal;
-  src: url('@curity/ui-kit-assets/fonts/Roboto-Bold.woff2') format('woff2');
+  src: url('@curity/ui-kit-assets/fonts/GoogleSans-Bold.woff2') format('woff2');
 }
 
 @font-face {
   font-display: swap;
   font-family: Roboto-Mono;
   font-weight: normal;
-  src: url('@curity/ui-kit-assets/fonts/Roboto-Mono.woff2') format('woff2');
+  src: url('@curity/ui-kit-assets/fonts/roboto-mono-v12-latin-regular.woff2') format('woff2');
 }
 
 body {

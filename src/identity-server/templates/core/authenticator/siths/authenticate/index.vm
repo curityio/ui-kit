@@ -44,7 +44,7 @@
 <form>
     <div id="info-message" class="hidden alert px4"></div>
     <div class="center">
-        <img src="/assets/images/insert-card.gif" alt="insert-card" />
+        <img src="$!_staticResourceRootPath/assets/images/insert-card.gif" alt="insert-card" />
     </div>
 
     <a href="$!_action" id="next-link" class="button button-fullwidth button-primary center mt2">#message(

@@ -3,3 +3,4 @@ page.title=Bad request
 system.status.bad.request=The request could not be processed.
 
 error.parameters.missing-or-invalid=Missing or invalid input parameters
+binding.message.too.long=The binding message exceeds the maximum allowed length.

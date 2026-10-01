@@ -14,6 +14,7 @@ import { HAAPI_POLLING_STATUS, HAAPI_STEPS } from '../../data-access/types/haapi
 import { HaapiStepperActionsUI } from '../../ui/actions/HaapiStepperActionsUI';
 import { HaapiStepperLinksUI } from '../../ui/links/HaapiStepperLinksUI';
 import { HaapiStepperMessagesUI } from '../../ui/messages/HaapiStepperMessagesUI';
+import { StepSymbol } from '../../ui/symbols/StepSymbol';
 import { applyRenderInterceptor } from '../../util/generic-render-interceptor';
 import type {
   HaapiStepperAPI,
@@ -35,6 +36,12 @@ import type {
   HaapiStepperUserMessage,
 } from '../stepper/haapi-stepper.types';
 import { Spinner } from '../../ui/spinner/Spinner';
+
+export const getSymbolElement = (haapiStepperAPI: HaapiStepperAPI): ReactElement | null => {
+  const { currentStep, config } = haapiStepperAPI;
+
+  return <StepSymbol viewName={currentStep?.metadata?.viewName} stepSymbols={config.bootstrap.theme.stepSymbols} />;
+};
 
 export const getLoadingElement = (
   haapiStepperAPI: HaapiStepperAPI,

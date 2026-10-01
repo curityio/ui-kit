@@ -49,5 +49,16 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',
     },
+  },
+  {
+    // `docs` is the source for the Curity docs section: keep the safety rules, but relax the rules that
+    // fight deliberate teaching patterns (defensive guards the types make redundant, compact handlers,
+    // non-null assertions on data the example controls).
+    files: ['docs/**'],
+    rules: {
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
   }
 );

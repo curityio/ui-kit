@@ -10,14 +10,12 @@
  */
 
 import { ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { HaapiClientOperationAction, HaapiFormAction } from '../../data-access/types/haapi-action.types';
-import type { HaapiFetchAction } from '../../data-access/types/haapi-fetch.types';
+import { type ApiRequest, createApiRequest } from '../../data-access/haapi-fetch-utils';
 import { useHaapiFetch } from '../../data-access/useHaapiFetch';
 import {
   HAAPI_PROBLEM_STEPS,
   HAAPI_STEPPER_ELEMENT_TYPES,
   HAAPI_STEPS,
-  HaapiLink,
   HaapiStep,
 } from '../../data-access/types/haapi-step.types';
 
@@ -26,44 +24,38 @@ import { isClientOperation, performClientOperation } from '../actions/client-ope
 import { formatContinueSameStepData } from './data-formatters/continue-same-step';
 import { handlePollingStep } from './step-handlers/polling-step';
 import { formatErrorStepData } from './data-formatters/problem-step';
-import { formatNextStepData } from './data-formatters/format-next-step-data';
+import { formatStepData, getEntityWithDataHelpers } from './data-formatters/format-step-data';
 import { handleCompletedStep } from './step-handlers/completed-step';
-import type {
-  HaapiStepperClientOperationAction,
+import {
   HaapiStepperConfig,
   HaapiStepperError,
-  HaapiStepperFormAction,
   HaapiStepperHistoryEntry,
   HaapiStepperLink,
   HaapiStepperNextStep,
   HaapiStepperNextStepAction,
   HaapiStepperNextStepAsync,
+  HaapiStepperNextStepData,
   HaapiStepperNextStepPayload,
   HaapiStepperStep,
 } from './haapi-stepper.types';
 import { useThrowErrorToAppErrorBoundary } from '../../util/useThrowErrorToAppErrorBoundary';
 import { useRefCallback } from '../../util/useRefCallBack';
 import { handleAuthenticationOrRegistrationStep } from './step-handlers/authentication-or-registration-step';
+import { isLink } from '../../util/link-predicates';
 
 interface HaapiStepperProps {
   children: ReactNode;
   config?: Partial<HaapiStepperConfig>;
 }
 
-type SetCurrentStepAndUpdateHistoryFn = (
-  newStep: HaapiStepperStep,
-  triggeredByAction: HaapiStepperNextStepAction,
-  triggeredByPayload?: HaapiStepperNextStepPayload
-) => void;
+type SetCurrentStepAndUpdateHistoryFn = (nextStepData: HaapiStepperNextStepData) => void;
 
 /**
  * @description
  *
- * # HAAPI STEPPER FEATURES
+ * `HaapiStepper` is a React UI-less component designed to handle complex, multi-step authentication HAAPI workflows. It provides a declarative way to manage HAAPI (HTTP Authentication API) flows, abstracting away the complexity of step-by-step user interactions, HTTP requests, and state transitions.
  *
- * The HAAPI Stepper is a React UI-less component designed to handle complex, multi-step authentication HAAPI workflows. It provides a declarative way to manage HAAPI (HTTP Authentication API) flows, abstracting away the complexity of step-by-step user interactions, HTTP requests, and state transitions.
- *
- * ## Key Features
+ * ## Key features
  *
  * - **Step Management**: Automatically handles navigation between authentication steps
  *   - **Automatic Redirections**: Seamlessly handles server-driven redirections without exposing them to consumers
@@ -76,37 +68,52 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * ## Configuration modes
  *
- * The HaapiStepper supports two ways of receiving its bootstrap configuration
- * (`initialUrl`, HAAPI driver config, theme):
+ * The HaapiStepper needs a bootstrap configuration — an `initialUrl` (where the
+ * flow starts), a `haapi` driver config, and a `theme` (branding: the company
+ * logo and per-view page symbols; pass `{}` for none) — supplied in one of two ways:
  *
- * 1. **Served mode (default)** — the stepper runs inside a server-rendered
- *    shell (e.g. the Curity HAAPI React App) that injects the config onto
+ * 1. **Served mode (default)** — the stepper runs inside a server-rendered shell
+ *    (e.g. the Curity HAAPI React App) that injects the config onto
  *    `window.__CONFIG__` before the SPA boots. No prop is required:
  *
  *    ```tsx
  *    <HaapiStepper>...</HaapiStepper>
  *    ```
  *
- * 2. **Standalone (library) mode** — when consumed as a library or in any
+ * 2. **Standalone (library) mode** — when consumed as a library, or in any
  *    context without `window.__CONFIG__`, the consumer supplies the bootstrap
- *    explicitly via `config.bootstrap`.
+ *    explicitly via `config.bootstrap`:
  *
  *    ```tsx
+ *    import type { HaapiStepperBootstrapConfig } from './haapi-stepper.types';
+ *
+ *    const bootstrap: HaapiStepperBootstrapConfig = {
+ *      initialUrl: 'https://idsvr.example.com/oauth/v2/oauth-authorize/...',
+ *      haapi: { ... }, // HAAPI web-driver config
+ *      theme: {}, // optionally a company logo and page symbols
+ *    };
+ *
  *    <HaapiStepper config={{ bootstrap }}>...</HaapiStepper>
  *    ```
  *
- * See the [HAAPI Stepper README](../../README.md#basic-setup) for the full
- * configuration reference.
+ * > Only one HAAPI configuration is supported per page load — the underlying
+ * > driver is a process-global singleton; switching `bootstrap.haapi` mid-page
+ * > throws (see {@link useHaapiFetch}).
  *
- * ## HAAPI Stepper API
+ * Both modes can be combined with `config` overrides for other tunables
+ * (e.g. `defaultPollingInterval`, `bankIdAutostart`); see {@link HaapiStepperConfig}
+ * for the full set.
+ *
+ * ## HAAPI stepper API
  *
  * Child components can access the following API via the `useHaapiStepper()` hook:
  *
- * - `currentStep: HaapiProviderStep | null` - The current authentication step (null during initial load)
+ * - `currentStep: HaapiStepperStep | null` - The current authentication step (null during initial load)
  * - `history: HaapiStepperHistoryEntry[]` - Complete history of all steps and actions taken, accessible via `history[index]`
  * - `loading: boolean` - Whether the stepper is currently loading (initial load or transitioning between steps)
  * - `error: HaapiStepperError | null` - Current error state (app errors or input validation errors)
  * - `nextStep: HaapiStepperAPINextStep` - Function to navigate to the next step by submitting an action or link
+ * - `config: HaapiStepperConfig` - The resolved stepper configuration (its `bootstrap` holds the initial URL, HAAPI driver config, and theme)
  *
  * ## Usage
  *
@@ -114,7 +121,6 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *
  * Built-in HAAPI flow example using HaapiStepperStepUI:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { HaapiStepperStepUI } from '../steps/HaapiStepperStepUI';
@@ -123,10 +129,10 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   <HaapiStepperStepUI />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/00-overview/DefaultRenderingHaapiReactSDKPlaygroundExample.tsx}
  *
- * Partial customization example with custom links and default [HAAPI UI components](../../README.MD#haapi-ui-components) for the rest:
+ * Partial customization example with custom links and default [HAAPI UI components](../../../README.md#haapi-stepper-ui-components--the-building-blocks) for the rest:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -165,10 +171,10 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/01-api-reference/BuildingBlocksUICompositionHaapiReactSDKPlaygroundExample.tsx}
  *
  * Full customization example:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -187,39 +193,41 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   const { actions, links } = currentStep.dataHelpers;
  *
  *   return (
- *     <div>
- *       <h2>Step: {currentStep.type}</h2>
- *       {actions?.form.map(action => (
- *         <div className="mb2" key={action.id}>
- *           <h5>{action.title}</h5>
- *           <button onClick={() => nextStep(action)}>
- *             Select
- *           </button>
- *         </div>
- *       ))}
- *       {actions?.clientOperation.map(action => (
- *         <button key={action.id} onClick={() => nextStep(action)}>
- *           {action.title}
- *         </button>
- *       ))}
- *       {links.map(link => (
- *         <button key={link.id} onClick={() => nextStep(link)}>
- *           {link.title}
- *         </button>
- *       ))}
- *     </div>
- *     <div>
- *       <h3>Authentication Journey</h3>
- *       <p>Steps taken: {history.length}</p>
- *       <ul>
- *         {history.map((historyEntry, index) => (
- *           <li key={index}>
- *             {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
- *             {historyEntry.triggeredByAction && ` (via ${historyEntry.triggeredByAction.title})`}
- *           </li>
+ *     <>
+ *       <div>
+ *         <h2>Step: {currentStep.type}</h2>
+ *         {actions?.form.map(action => (
+ *           <div className="mb2" key={action.id}>
+ *             <h5>{action.title}</h5>
+ *             <button onClick={() => nextStep(action)}>
+ *               Select
+ *             </button>
+ *           </div>
  *         ))}
- *       </ul>
- *     </div>
+ *         {actions?.clientOperation.map(action => (
+ *           <button key={action.id} onClick={() => nextStep(action)}>
+ *             {action.title}
+ *           </button>
+ *         ))}
+ *         {links.map(link => (
+ *           <button key={link.id} onClick={() => nextStep(link)}>
+ *             {link.title}
+ *           </button>
+ *         ))}
+ *       </div>
+ *       <div>
+ *         <h3>Authentication Journey</h3>
+ *         <p>Steps taken: {history.length}</p>
+ *         <ul>
+ *           {history.map((historyEntry, index) => (
+ *             <li key={index}>
+ *               {historyEntry.step.type} - {historyEntry.timestamp.toLocaleTimeString()}
+ *               {historyEntry.triggeredBy.action && ` (via ${historyEntry.triggeredBy.action.title})`}
+ *             </li>
+ *           ))}
+ *         </ul>
+ *       </div>
+ *     </>
  *   );
  * }
  *
@@ -227,10 +235,10 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   <HaapiComponentExample />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/01-api-reference/FullCustomizationUICompositionHaapiReactSDKPlaygroundExample.tsx}
  *
  * Conditional customization example:
  *
- * @example
  * ```tsx
  * import { HaapiStepper } from './HaapiStepper';
  * import { useHaapiStepper } from './useHaapiStepper';
@@ -248,8 +256,8 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   }
  *
  *   if (
- *     currentStep.view?.templateArea === 'lwa-dev' &&
- *     currentStep.view?.viewName === 'views/select-authenticator/index'
+ *     currentStep.metadata?.templateArea === 'lwa-dev' &&
+ *     currentStep.metadata?.viewName === 'views/select-authenticator/index'
  *   ) {
  *     return (
  *       <div>
@@ -270,14 +278,80 @@ type SetCurrentStepAndUpdateHistoryFn = (
  *   <ConditionalCustomizationExample />
  * </HaapiStepper>
  * ```
+ * {@see_example ./docs/sections/01-api-reference/ConditionalCustomizationHaapiReactSDKPlaygroundExample.tsx}
  *
- * ## Error Handling
+ * ## Error handling
  *
- * The HaapiStepper distinguishes between:
- * - **App errors** (`error.app`): Unexpected problems or system errors that prevent flow continuation
- * - **Input errors** (`error.input`): Validation errors on user input that allow the user to retry
+ * The `HaapiStepper` implements a comprehensive error-handling strategy with multiple layers to ensure
+ * robust error management and an optimal user experience.
  *
- * Critical errors are thrown to the app's error boundary for proper error UI rendering.
+ * ### Error state management
+ *
+ * The HAAPI stepper manages errors according to two categories: HAAPI errors and non-HAAPI errors.
+ *
+ * #### HAAPI errors
+ *
+ * HAAPI errors are HAAPI `ProblemStep`s (HAAPI flow steps of type `HAAPI_PROBLEM_STEPS`).
+ *
+ * HAAPI errors are classified into two groups:
+ *
+ * ```text
+ * HaapiStepperError
+ * ├── app    (Unrecoverable)
+ * │   ├── UnrecoverableProblemStep
+ * │   ├── UnexpectedProblemStep
+ * │   └── CompletedWithErrorStep
+ * └── input  (Recoverable)
+ *     ├── ValidationProblemStep
+ *     └── IncorrectCredentialsProblemStep
+ * ```
+ *
+ * **`AppError` (Unrecoverable)**
+ *   - **Description**: Errors that cannot be resolved in the step (action form) where they originated,
+ *     so they need to be handled at the application level (e.g., show a dedicated error page) and/or
+ *     require restarting the stepper flow.
+ *     - Like any other problem, they might include `UserMessages` and `Links` that need to be displayed
+ *       to the user.
+ *   - **Types**: `UnrecoverableProblemStep`, `UnexpectedProblemStep`, `CompletedWithErrorStep`.
+ *   - **Examples**: Authentication failed, too many attempts, session mismatches.
+ *   - **Handling**: Displayed as toast notifications and/or a problem step UI.
+ *
+ * **`InputError` (Recoverable)**
+ *   - **Description**: Errors that can be resolved in the step (form) where they originated.
+ *     - They should be handled while keeping the step's UI, providing the problem's `UserMessages` and
+ *       `Links`, and allowing the user to correct the input and resubmit.
+ *   - **Types**: `ValidationProblemStep`, `IncorrectCredentialsProblemStep`.
+ *   - **Examples**: Invalid form fields, incorrect credentials.
+ *   - **Handling**: Displayed below relevant input fields for immediate correction.
+ *
+ * **`HaapiStepperError` interface**:
+ *
+ * ```tsx
+ * interface HaapiStepperError {
+ *   app?: AppError | null;
+ *   input?: InputError | null;
+ * }
+ * ```
+ *
+ * HAAPI errors are provided by the `useHaapiStepper` hook:
+ *
+ * ```tsx
+ * const { error } = useHaapiStepper();
+ * const { app, input } = error || {};
+ * ```
+ *
+ * ##### HAAPI error utils
+ *
+ * Two UI components render these errors — documented under **API Reference → UI Components**:
+ * `HaapiStepperErrorNotifier` (toast notifications for `AppError`s, and optionally `InputError`s) and
+ * `HaapiStepperFormValidationErrorInputWrapper` (field-level display of validation `InputError`s).
+ *
+ * #### Non-HAAPI errors
+ *
+ * Non-HAAPI errors are network, backend, and frontend errors that are not handled at lower levels.
+ *
+ * The `HaapiStepper` throws them as JavaScript errors so they can be caught by the nearest React error
+ * boundary.
  *
  */
 export function HaapiStepper({ children, config }: HaapiStepperProps) {
@@ -290,21 +364,16 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
   const configResult = useMemo(() => resolveStepperConfig(config), [config]);
   const { sendHaapiFetchRequest } = useHaapiFetch(configResult.bootstrap.haapi);
 
-  const setCurrentStepAndUpdateHistory = useCallback<SetCurrentStepAndUpdateHistoryFn>(
-    (newStep, triggeredByAction, triggeredByPayload) => {
-      setHistory(prev => [
-        ...prev,
-        {
-          step: newStep,
-          triggeredByAction,
-          triggeredByPayload,
-          timestamp: new Date(),
-        },
-      ]);
-      setCurrentStep(newStep);
-    },
-    []
-  );
+  const setCurrentStepAndUpdateHistory = useCallback<SetCurrentStepAndUpdateHistoryFn>(nextStepData => {
+    setHistory(prev => [
+      ...prev,
+      {
+        ...nextStepData,
+        timestamp: new Date(),
+      },
+    ]);
+    setCurrentStep(nextStepData.step);
+  }, []);
 
   const nextStepAsync = useCallback<HaapiStepperNextStepAsync>(
     async (action, payload) => {
@@ -332,7 +401,7 @@ export function HaapiStepper({ children, config }: HaapiStepperProps) {
         return;
       }
 
-      setCurrentStepAndUpdateHistory(nextStepData, action, payload);
+      setCurrentStepAndUpdateHistory(nextStepData);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nextStep is a stable ref via useRefCallback, defined below
     [configResult, sendHaapiFetchRequest, currentStep, history, setCurrentStepAndUpdateHistory]
@@ -369,21 +438,15 @@ interface ProcessHaapiNextStepParams {
   currentStep: HaapiStep | null;
   nextStep: HaapiStepperNextStep;
   history: HaapiStepperHistoryEntry[];
-  action:
-    | HaapiFormAction
-    | HaapiClientOperationAction
-    | HaapiLink
-    | HaapiStepperFormAction
-    | HaapiStepperClientOperationAction
-    | HaapiStepperLink;
+  action: HaapiStepperNextStepAction;
   payload: HaapiStepperNextStepPayload | undefined;
   pendingOperation: RefObject<AbortController | NodeJS.Timeout | null>;
   config: HaapiStepperConfig;
-  sendHaapiFetchRequest: (action: HaapiFetchAction) => Promise<HaapiStep>;
+  sendHaapiFetchRequest: (request: ApiRequest) => Promise<HaapiStep>;
 }
 
 async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise<{
-  nextStepData?: HaapiStepperStep | null;
+  nextStepData?: HaapiStepperNextStepData | null;
   nextStepError?: HaapiStepperError;
 }> {
   const { currentStep, nextStep, history, action, payload, pendingOperation, config, sendHaapiFetchRequest } = params;
@@ -405,44 +468,58 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
 
     return processHaapiNextStep({
       ...params,
-      action: clientOperationData.action,
+      action: getEntityWithDataHelpers(clientOperationData.action),
       payload: clientOperationData.payload,
     });
   }
 
-  const isLinkAction = 'href' in action;
-  const nextStepRequestAction = isLinkAction ? action : { action, payload };
-  const nextStepResponse = await sendHaapiFetchRequest(nextStepRequestAction);
+  const request = createApiRequest(isLink(action) ? action : { action, payload });
+  const nextStepResponse = await sendHaapiFetchRequest(request);
 
   switch (nextStepResponse.type) {
     case HAAPI_STEPS.REDIRECTION:
       return processHaapiNextStep({
         ...params,
         currentStep: nextStepResponse,
-        action: nextStepResponse.actions[0],
+        action: getEntityWithDataHelpers(nextStepResponse.actions[0]),
         payload: undefined,
       });
 
     case HAAPI_STEPS.POLLING:
-      return handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history);
+      return nextStepSuccess(
+        handlePollingStep(nextStepResponse, pendingOperation, nextStep, config, history),
+        action,
+        payload,
+        request
+      );
 
     case HAAPI_STEPS.AUTHENTICATION:
     case HAAPI_STEPS.REGISTRATION:
-      return handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config);
+      return nextStepSuccess(
+        handleAuthenticationOrRegistrationStep(nextStepResponse, nextStep, config),
+        action,
+        payload,
+        request
+      );
 
     case HAAPI_STEPS.USER_CONSENT:
     case HAAPI_STEPS.CONSENTOR:
-      return { nextStepData: formatNextStepData(nextStepResponse) };
+      return nextStepSuccess(formatStepData(nextStepResponse), action, payload, request);
 
     case HAAPI_STEPS.CONTINUE_SAME:
-      if ('href' in action) {
+      if (isLink(action)) {
         throw new Error('Continue Same Step received after link navigation, but links cannot have continueActions');
       }
-      return { nextStepData: formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep) };
+      return nextStepSuccess(
+        formatContinueSameStepData(action, nextStepResponse, currentStep as HaapiStepperStep),
+        action,
+        payload,
+        request
+      );
 
     case HAAPI_STEPS.COMPLETED_WITH_SUCCESS:
     case HAAPI_PROBLEM_STEPS.COMPLETED_WITH_ERROR:
-      return handleCompletedStep(nextStepResponse, config);
+      return nextStepSuccess(handleCompletedStep(nextStepResponse, config), action, payload, request);
 
     case HAAPI_PROBLEM_STEPS.INVALID_INPUT:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
@@ -451,7 +528,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     case HAAPI_PROBLEM_STEPS.GENERIC_USER_ERROR:
     case HAAPI_PROBLEM_STEPS.UNEXPECTED:
     case HAAPI_PROBLEM_STEPS.SESSION_TOKEN_MISMATCH:
-      return { nextStepError: formatErrorStepData(nextStepResponse) };
+      return nextStepError(formatErrorStepData(nextStepResponse));
   }
 }
 
@@ -480,7 +557,7 @@ function getInitialStepLink(initialUrl: string) {
 
 function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): Required<HaapiStepperConfig> {
   const { bootstrap, ...configResult } = {
-    pollingInterval: 3000,
+    defaultPollingInterval: 3000,
     bankIdAutostart: true,
     webAuthnAutostart: true,
     autoRedirectOnAuthenticationComplete: true,
@@ -493,4 +570,22 @@ function resolveStepperConfig(config: Partial<HaapiStepperConfig> | undefined): 
     );
   }
   return { ...configResult, bootstrap };
+}
+
+function nextStepSuccess(
+  step: HaapiStepperStep | undefined,
+  action: HaapiStepperNextStepAction,
+  payload: HaapiStepperNextStepPayload | undefined,
+  request: ApiRequest
+): { nextStepData?: HaapiStepperNextStepData } {
+  return {
+    nextStepData: step && {
+      step: step,
+      triggeredBy: { action, payload, request },
+    },
+  };
+}
+
+function nextStepError(step: HaapiStepperError): { nextStepError: HaapiStepperError } {
+  return { nextStepError: step };
 }

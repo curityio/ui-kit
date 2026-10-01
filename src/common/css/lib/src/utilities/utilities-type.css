@@ -44,7 +44,6 @@
 .uppercasecaps {
   font-family: var(--type-sans-bold);
   -webkit-font-smoothing: antialiased;
-  font-weight: var(--type-weight);
   letter-spacing: 0.085em;
   text-transform: uppercase;
 }

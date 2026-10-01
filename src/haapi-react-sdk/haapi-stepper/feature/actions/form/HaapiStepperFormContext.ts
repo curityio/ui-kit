@@ -19,8 +19,10 @@ export interface HaapiStepperFormContextValue {
   submit: () => void;
 }
 
+/** Not published in the Curity docs. @docsIgnore */
 export const HaapiStepperFormContext = createContext<HaapiStepperFormContextValue | null>(null);
 
+/** Not published in the Curity docs. @docsIgnore */
 export function useHaapiStepperForm(): HaapiStepperFormContextValue {
   const context = use(HaapiStepperFormContext);
   if (!context) {

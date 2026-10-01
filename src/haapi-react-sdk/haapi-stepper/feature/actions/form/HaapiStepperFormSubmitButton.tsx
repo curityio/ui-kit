@@ -20,6 +20,29 @@ interface HaapiStepperFormSubmitButtonProps extends ComponentPropsWithRef<'butto
   icon?: ReactNode;
 }
 
+/**
+ * Renders the form's submit button with the SDK defaults: the label comes from the HAAPI action, the
+ * icon and styling from the action's authenticator type (cancel actions get the outline style).
+ *
+ * Must be rendered inside a `HaapiStepperFormUI` (it reads the action from the form context, so it
+ * throws outside one). Use it in a `children` render interceptor to keep the default submit button
+ * while composing your own form layout, and customize it via `label`, `icon`, `children` or any native
+ * `<button>` prop:
+ *
+ * ```tsx
+ * <HaapiStepperFormUI action={action} onSubmit={nextStep}>
+ *   {({ fields }) => (
+ *     <>
+ *       {fields.map(field => (
+ *         <HaapiStepperFormFieldUI key={field.name} field={field} />
+ *       ))}
+ *       <HaapiStepperFormSubmitButton label="Sign in" />
+ *     </>
+ *   )}
+ * </HaapiStepperFormUI>
+ * ```
+ * {@see_example ./docs/sections/01-api-reference/01-ui-components/01-form-ui/SubmitButtonCustomizationHaapiReactSDKPlaygroundExample.tsx}
+ */
 export function HaapiStepperFormSubmitButton({
   label,
   icon,

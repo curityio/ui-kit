@@ -22,6 +22,8 @@
  * authenticators).
  *
  * Exported so consumers building a custom BankID UI can reuse it.
+ *
+ * @docsIgnore Not published in the Curity docs.
  */
 export const HaapiStepperBankIdQrCodeAccessibilityMessages = ({
   viewDataMessages,

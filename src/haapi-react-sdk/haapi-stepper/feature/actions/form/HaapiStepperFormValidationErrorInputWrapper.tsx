@@ -18,6 +18,23 @@ export interface HaapiStepperFormValidationErrorInputWrapperProps {
   fieldName: string;
 }
 
+/**
+ * @description
+ *
+ * Field-level display for HAAPI validation `InputError`s. Wrap an input so its validation messages render
+ * beneath it and the field gets the error styling, letting the user correct and resubmit in place.
+ *
+ * ```tsx
+ * <HaapiStepperFormValidationErrorInputWrapper fieldName="username">
+ *   <input name="username" type="text" />
+ * </HaapiStepperFormValidationErrorInputWrapper>
+ * ```
+ * {@see_example ./docs/sections/01-api-reference/01-ui-components/FormValidationErrorWrapperHaapiReactSDKPlaygroundExample.tsx}
+ *
+ * **Features**
+ * - Shows `InputValidationProblemStep` errors below the corresponding input field.
+ * - Applies the `haapi-validation-error` CSS classes for styling.
+ */
 export function HaapiStepperFormValidationErrorInputWrapper({
   children,
   fieldName,
@@ -43,7 +60,7 @@ export function HaapiStepperFormValidationErrorInputWrapper({
         <div data-testid="haapi-validation-errors" className="haapi-validation-errors">
           {validationErrors.map(fieldError => (
             <div
-              key={`${inputError.type}-${fieldName}`}
+              key={`${fieldName}-${fieldError.reason}-${fieldError.detail ?? ''}`}
               className="haapi-validation-error red py1"
               data-testid="haapi-validation-error"
             >

@@ -44,6 +44,7 @@ import {
 } from '../../data-access/types/haapi-step.types';
 import { HaapiFetchPayload } from '../../data-access/types/haapi-fetch.types';
 import {
+  ApiRequest,
   HaapiCheckboxFormField,
   HaapiContextFormField,
   HaapiFormField,
@@ -77,7 +78,14 @@ export interface HaapiStepperAPI {
  */
 export interface HaapiStepperConfig {
   bootstrap: HaapiStepperBootstrapConfig;
-  pollingInterval: number;
+  /**
+   * Polling interval in ms, used when the polling step does not carry one in
+   * `properties.interval` (see {@link HaapiPollingStep}). A server-provided value
+   * always wins, because the authenticator knows its backend's rate limits.
+   *
+   * Defaults to 3000.
+   */
+  defaultPollingInterval: number;
   bankIdAutostart: boolean;
   webAuthnAutostart: boolean;
   autoRedirectOnAuthenticationComplete: boolean;
@@ -91,7 +99,7 @@ export interface HaapiStepperBootstrapConfig {
       path: string;
       isInsideWell: boolean;
     };
-    pageSymbols?: HaapiStepperStepSymbolsConfig;
+    stepSymbols?: HaapiStepperStepSymbolsConfig;
   };
 }
 
@@ -219,13 +227,22 @@ export type HaapiStepperNextStepAsync = (
 export type HaapiStepperNextStepAction = HaapiStepperFormAction | HaapiStepperClientOperationAction | HaapiStepperLink;
 export type HaapiStepperNextStepPayload = HaapiFetchPayload;
 
+export interface HaapiStepperNextStepData {
+  step: HaapiStepperStep;
+  triggeredBy: {
+    action: HaapiStepperNextStepAction;
+    payload?: HaapiStepperNextStepPayload;
+    request: ApiRequest;
+  };
+}
+
 /*
  * HISTORY TYPINGS
  */
-export interface HaapiStepperHistoryEntry<T extends HaapiStepperStep = HaapiStepperStep> {
+export interface HaapiStepperHistoryEntry<
+  T extends HaapiStepperStep = HaapiStepperStep,
+> extends HaapiStepperNextStepData {
   step: T;
-  triggeredByAction: HaapiStepperNextStepAction;
-  triggeredByPayload?: HaapiStepperNextStepPayload;
   timestamp: Date;
 }
 

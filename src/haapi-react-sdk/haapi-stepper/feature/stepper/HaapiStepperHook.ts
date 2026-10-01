@@ -21,10 +21,10 @@ import { HaapiStepperContext } from './HaapiStepperContext';
  * - `loading`: Loading state during transitions
  * - `error`: Current error state (app or input validation errors)
  * - `nextStep`: Function to navigate to the next step
+ * - `config`: The resolved stepper configuration
  *
  * @throws {Error} If used outside of HaapiStepper
  *
- * @example
  * ```tsx
  * function MyComponent() {
  *   const { currentStep, history, loading, error, nextStep } = useHaapiStepper();
@@ -40,6 +40,7 @@ import { HaapiStepperContext } from './HaapiStepperContext';
  *   );
  * }
  * ```
+ * {@see_example ./docs/sections/01-api-reference/UseHaapiStepperHookHaapiReactSDKPlaygroundExample.tsx}
  */
 export function useHaapiStepper() {
   const haapiStepperContext = use(HaapiStepperContext);

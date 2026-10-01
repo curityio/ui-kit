@@ -9,7 +9,12 @@
  * For further information, please contact Curity AB.
  */
 
-import { HAAPI_FORM_FIELDS, HTTP_METHODS } from '../../data-access/types/haapi-form.types';
+import {
+  HAAPI_FORM_FIELDS,
+  type HaapiTextFormField,
+  type HaapiUsernameFormField,
+  HTTP_METHODS,
+} from '../../data-access/types/haapi-form.types';
 import type {
   HaapiStepperStep,
   HaapiStepperPollingStep,
@@ -24,8 +29,10 @@ import type {
   HaapiStepperWebAuthnAnyDeviceRegistrationAction,
   HaapiStepperWebAuthnAuthenticationClientOperationAction,
   HaapiStepperWebAuthnPasskeysRegistrationAction,
+  HaapiStepperTextFormField,
+  HaapiStepperUsernameFormField,
 } from '../../feature/stepper/haapi-stepper.types';
-import { formatNextStepData } from '../../feature/stepper/data-formatters/format-next-step-data';
+import { formatStepData } from '../../feature/stepper/data-formatters/format-step-data';
 import { HaapiStepperViewNameBuiltInUI } from '../../feature/viewnames';
 import { MEDIA_TYPES } from '../../data-access/types/media.types';
 import {
@@ -44,6 +51,7 @@ export const MockMessageText = 'Step Message';
 export const MockLinkText = 'Step Link';
 export const MockActionTitle = 'Step Action';
 export const MockMessageClassList = 'message-classlist';
+export const MockStepSymbolPath = '/symbols/default.svg';
 
 export const createMockStep = (type: HAAPI_STEPS, overrides = {}): HaapiStepperStep => {
   const mockMessage = createMockMessage({ text: MockMessageText });
@@ -66,7 +74,7 @@ export const createMockStep = (type: HAAPI_STEPS, overrides = {}): HaapiStepperS
     ...overrides,
   } as HaapiStepperStep;
 
-  return formatNextStepData(step);
+  return formatStepData(step);
 };
 
 export const createMockFormAction = (overrides: Partial<HaapiStepperFormAction> = {}): HaapiStepperFormAction => ({
@@ -97,6 +105,22 @@ export const createMockFormAction = (overrides: Partial<HaapiStepperFormAction> 
     ...overrides.model,
   },
   ...overrides,
+});
+
+export const createMockTextField = (field: Partial<HaapiTextFormField> = {}): HaapiStepperTextFormField => ({
+  id: crypto.randomUUID(),
+  type: HAAPI_FORM_FIELDS.TEXT,
+  name: crypto.randomUUID(),
+  ...field,
+});
+
+export const createMockUsernameField = (
+  field: Partial<HaapiUsernameFormField> = {}
+): HaapiStepperUsernameFormField => ({
+  id: crypto.randomUUID(),
+  type: HAAPI_FORM_FIELDS.USERNAME,
+  name: crypto.randomUUID(),
+  ...field,
 });
 
 export const createMockSelectorAction = (
@@ -171,9 +195,9 @@ export const defaultStepperAPI: HaapiStepperAPI = {
         clientId: 'client',
         tokenEndpoint: '/token',
       },
-      theme: {},
+      theme: { stepSymbols: { default: MockStepSymbolPath } },
     },
-    pollingInterval: 0,
+    defaultPollingInterval: 0,
     bankIdAutostart: false,
     webAuthnAutostart: false,
     autoRedirectOnAuthenticationComplete: false,
@@ -286,6 +310,7 @@ export const createPollingStep = (
     viewName?: string;
     maxWaitTime?: string;
     maxWaitRemainingTime?: string;
+    interval?: string;
     viewDataMessages?: Record<string, string>;
   } = {}
 ): HaapiStepperPollingStep => {
@@ -299,6 +324,7 @@ export const createPollingStep = (
       status: overrides.status ?? HAAPI_POLLING_STATUS.PENDING,
       ...(overrides.maxWaitTime !== undefined && { maxWaitTime: overrides.maxWaitTime }),
       ...(overrides.maxWaitRemainingTime !== undefined && { maxWaitRemainingTime: overrides.maxWaitRemainingTime }),
+      ...(overrides.interval !== undefined && { interval: overrides.interval }),
     },
     ...(overrides.links !== undefined && { links: overrides.links }),
     ...(overrides.actions !== undefined && { actions: overrides.actions }),

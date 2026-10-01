@@ -15,7 +15,7 @@ import { App } from '../src/App';
 import { mockWorker } from './mocks/browser';
 
 import '@curity/ui-kit-component-library/dist/component-library.css';
-import '@curity/ui-kit-css/lib/dist/index.css';
+import '@curity/ui-kit-css';
 import '@styles/index.css';
 
 mockWorker.start().then(() => {

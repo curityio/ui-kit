@@ -4,11 +4,11 @@
   height: 70%;
   object-fit: contain;
   width: 70%;
-}
 
-.button-social .icon svg * {
-  fill: white !important;
-  filter: grayscale(1) saturate(1);
+  * {
+    fill: white !important;
+    filter: grayscale(1) saturate(1);
+  }
 }
 
 .button-social,
@@ -20,7 +20,7 @@ a.button-social {
   border-color: var(--form-field-border-color);
   border-style: var(--form-field-border-style);
   border-width: var(--form-field-border-width);
-  color: var(--button-color);
+  color: unset;
   position: relative;
   z-index: 2;
   margin: 0;
@@ -101,46 +101,120 @@ a.button-social-icon .icon,
 .body-dark .form-transparent a.button-social,
 .body-dark .form-transparent .button-social {
   background-color: var(--form-field-background-color-dark);
-  border-width: 0;
-  color: black;
+  border-color: color-mix(
+    in srgb,
+    var(--form-field-background-color-dark) 75%,
+    white
+  );
+  color: white;
 }
 
 .button-social {
-  &.button-google { --authenticator-color: var(--authenticator-google-color); }
-  &.button-pingfederate { --authenticator-color: var(--authenticator-pingfederate-color); }
-  &.button-email { --authenticator-color: var(--authenticator-email-color); }
-  &.button-oidc { --authenticator-color: var(--authenticator-oidc-color); }
-  &.button-group { --authenticator-color: var(--authenticator-group-color); }
-  &.button-windows { --authenticator-color: var(--authenticator-windows-color); }
-  &.button-siths { --authenticator-color: var(--authenticator-siths-color); }
-  &.button-facebook { --authenticator-color: var(--authenticator-facebook-color); }
-  &.button-github { --authenticator-color: var(--authenticator-github-color); }
-  &.button-dropbox { --authenticator-color: var(--authenticator-dropbox-color); }
-  &.button-aws { --authenticator-color: var(--authenticator-aws-color); }
-  &.button-salesforce { --authenticator-color: var(--authenticator-salesforce-color); }
-  &.button-windows-live { --authenticator-color: var(--authenticator-windows-live-color); }
-  &.button-slack { --authenticator-color: var(--authenticator-slack-color); }
-  &.button-box { --authenticator-color: var(--authenticator-box-color); }
-  &.button-bitbucket { --authenticator-color: var(--authenticator-bitbucket-color); }
-  &.button-signicat { --authenticator-color: var(--authenticator-signicat-color); }
-  &.button-criipto { --authenticator-color: var(--authenticator-criipto-color); }
-  &.button-username { --authenticator-color: var(--authenticator-username-color); }
-  &.button-stackexchange { --authenticator-color: var(--authenticator-stackexchange-color); }
-  &.button-freja-eid { --authenticator-color: var(--authenticator-freja-eid-color); }
-  &.button-cgi { --authenticator-color: var(--authenticator-cgi-color); }
-  &.button-instagram { --authenticator-color: var(--authenticator-instagram-color); }
-  &.button-twitter { --authenticator-color: var(--authenticator-x-color); }
-  &.button-linkedin { --authenticator-color: var(--authenticator-linkedin-color); }
-  &.button-sms { --authenticator-color: var(--authenticator-sms-color); }
-  &.button-html-form { --authenticator-color: var(--authenticator-html-form-color); }
-  &.button-totp { --authenticator-color: var(--authenticator-totp-color); }
-  &.button-saml { --authenticator-color: var(--authenticator-saml-color); }
-  &.button-bankid { --authenticator-color: var(--authenticator-bankid-color); }
-  &.button-duo { --authenticator-color: var(--authenticator-duo-color); }
-  &.button-sign-in-with-apple { --authenticator-color: var(--authenticator-sign-in-with-apple-color); }
-  &.button-netidaccess-os { --authenticator-color: var(--authenticator-netidaccess-os-color); }
-  &.button-social-single-color { --authenticator-color: var(--authenticator-social-single-color); }
-  &.button-openid-wallet { --authenticator-color: var(--authenticator-openid-wallet-color); }
+  &.button-google {
+    --authenticator-color: var(--authenticator-google-color);
+  }
+  &.button-pingfederate {
+    --authenticator-color: var(--authenticator-pingfederate-color);
+  }
+  &.button-email {
+    --authenticator-color: var(--authenticator-email-color);
+  }
+  &.button-oidc {
+    --authenticator-color: var(--authenticator-oidc-color);
+  }
+  &.button-group {
+    --authenticator-color: var(--authenticator-group-color);
+  }
+  &.button-windows {
+    --authenticator-color: var(--authenticator-windows-color);
+  }
+  &.button-siths {
+    --authenticator-color: var(--authenticator-siths-color);
+  }
+  &.button-facebook {
+    --authenticator-color: var(--authenticator-facebook-color);
+  }
+  &.button-github {
+    --authenticator-color: var(--authenticator-github-color);
+  }
+  &.button-dropbox {
+    --authenticator-color: var(--authenticator-dropbox-color);
+  }
+  &.button-aws {
+    --authenticator-color: var(--authenticator-aws-color);
+  }
+  &.button-salesforce {
+    --authenticator-color: var(--authenticator-salesforce-color);
+  }
+  &.button-windows-live {
+    --authenticator-color: var(--authenticator-windows-live-color);
+  }
+  &.button-slack {
+    --authenticator-color: var(--authenticator-slack-color);
+  }
+  &.button-box {
+    --authenticator-color: var(--authenticator-box-color);
+  }
+  &.button-bitbucket {
+    --authenticator-color: var(--authenticator-bitbucket-color);
+  }
+  &.button-signicat {
+    --authenticator-color: var(--authenticator-signicat-color);
+  }
+  &.button-criipto {
+    --authenticator-color: var(--authenticator-criipto-color);
+  }
+  &.button-username {
+    --authenticator-color: var(--authenticator-username-color);
+  }
+  &.button-stackexchange {
+    --authenticator-color: var(--authenticator-stackexchange-color);
+  }
+  &.button-freja-eid {
+    --authenticator-color: var(--authenticator-freja-eid-color);
+  }
+  &.button-cgi {
+    --authenticator-color: var(--authenticator-cgi-color);
+  }
+  &.button-instagram {
+    --authenticator-color: var(--authenticator-instagram-color);
+  }
+  &.button-twitter {
+    --authenticator-color: var(--authenticator-x-color);
+  }
+  &.button-linkedin {
+    --authenticator-color: var(--authenticator-linkedin-color);
+  }
+  &.button-sms {
+    --authenticator-color: var(--authenticator-sms-color);
+  }
+  &.button-html-form {
+    --authenticator-color: var(--authenticator-html-form-color);
+  }
+  &.button-totp {
+    --authenticator-color: var(--authenticator-totp-color);
+  }
+  &.button-saml {
+    --authenticator-color: var(--authenticator-saml-color);
+  }
+  &.button-bankid {
+    --authenticator-color: var(--authenticator-bankid-color);
+  }
+  &.button-duo {
+    --authenticator-color: var(--authenticator-duo-color);
+  }
+  &.button-sign-in-with-apple {
+    --authenticator-color: var(--authenticator-sign-in-with-apple-color);
+  }
+  &.button-netidaccess-os {
+    --authenticator-color: var(--authenticator-netidaccess-os-color);
+  }
+  &.button-social-single-color {
+    --authenticator-color: var(--authenticator-social-single-color);
+  }
+  &.button-openid-wallet {
+    --authenticator-color: var(--authenticator-openid-wallet-color);
+  }
 }
 
 .form-field-social-icon {

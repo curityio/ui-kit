@@ -12,4 +12,5 @@
 import { createContext } from 'react';
 import type { HaapiStepperAPI } from './haapi-stepper.types';
 
+/** Not published in the Curity docs. @docsIgnore */
 export const HaapiStepperContext = createContext<HaapiStepperAPI | null>(null);
