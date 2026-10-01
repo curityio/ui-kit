@@ -190,10 +190,10 @@ ol {
 
 /* Code */
 code {
-  background-color: #f7fafc;
-  border: 1px solid rgb(0 0 0 / 5%);
+  background-color: var(--code-background-color);
+  border: 1px solid var(--code-border-color);
   border-radius: var(--form-field-border-radius);
-  color: var(--color-text);
+  color: var(--code-color);
   font-family: var(--type-mono);
   font-size: 14px;
   overflow-wrap: anywhere;
@@ -203,6 +203,7 @@ code {
 
 pre {
   border-radius: 2px;
+  color: var(--pre-color);
   font-family: var(--type-mono);
   font-size: 1rem;
   overflow-wrap: break-word;

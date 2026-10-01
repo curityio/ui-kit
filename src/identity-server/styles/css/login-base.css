@@ -60,12 +60,11 @@ Password revealer
 }
 
 .form-password-reveal-form-icon {
-	background-image: url('../images/eye.svg');
-	background-repeat: no-repeat;
-	background-size: 20px 20px;
+	background-color: var(--form-password-reveal-icon-color);
 	cursor: pointer;
 	display: inline-block;
 	height: 20px;
+	mask: url('../images/eye.svg') no-repeat center / 20px 20px;
 	position: absolute;
 	right: 0.5rem;
 	top: calc(var(--form-field-height) * 0.95);
@@ -74,6 +73,6 @@ Password revealer
 	width: 20px;
 
 	&.active {
-		background-image: url('../images/eye-hide.svg');
+		mask-image: url('../images/eye-hide.svg');
 	}
 }

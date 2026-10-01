@@ -27,7 +27,3 @@
     justify-self: center;
   }
 }
-
-body.body-dark .form-transparent .backup-codes code {
-  color: white;
-}
