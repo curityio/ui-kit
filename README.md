@@ -18,12 +18,15 @@ This monorepo contains:
 
 ## Branches and releases
 
-`main` is the development branch. It holds the work for the next release and does **not** correspond to any released version. It previously mirrored the latest release; that is no longer the case.
+`main` is the development branch. It holds the work for the next release and does **not** correspond to any released version.
+
+> [!NOTE]
+> Before the 11.5 release, `main` reflected the latest release. That is no longer the case.
 
 To work against a released version, check out the version branch for your Identity Server version:
 
 ```shell
-git checkout version/<major>.<minor>
+git checkout version/X.Y
 ```
 
 For example, for Identity Server 11.5.x, check out `version/11.5`.
