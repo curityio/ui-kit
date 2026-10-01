@@ -52,6 +52,6 @@ Control the stacking order of positioned elements. `.z-1` through `.z-10` set
 
 Control element visibility. The three differ in what they do to layout and to screen readers:
 
-- `.hidden` - `visibility: hidden`; invisible, still takes up its space, not read out
-- `.hide` - `display: none`; removed from the layout and not read out
-- `.visuallyhidden` - off-screen but still announced, for text that only screen readers need
+- `.hidden` - `display: none`; removed from the layout and not read out
+- `.hide` - clipped to 1px and taken out of the flow; invisible, but still announced
+- `.visuallyhidden` - the standard off-screen pattern, for text that only screen readers need

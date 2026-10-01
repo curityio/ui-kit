@@ -14,16 +14,17 @@ The fill takes a colour modifier — `.progress-success`, `.progress-info`,
 `.progress-warning` or `.progress-danger`. Put the modifier on the fill, not the track.
 
 Give the fill `role="progressbar"` with `aria-valuenow`, `aria-valuemin` and
-`aria-valuemax` so the value is announced. `max` and `value` are attributes of the
+`aria-valuemax` so the value is announced, and `aria-labelledby` pointing at the visible
+text so it has a name. A `<label>` can't name a `div`. `max` and `value` are attributes of the
 `<progress>` element and do nothing on a `div`.
 
 <div>
-  <label for="upload-progress">File progress 70%</label>
+  <span id="upload-progress-label">File progress 70%</span>
   <div class="progress">
     <div
       role="progressbar"
       class="progress progress-success"
-      id="upload-progress"
+      aria-labelledby="upload-progress-label"
       aria-valuenow="70"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -33,12 +34,12 @@ Give the fill `role="progressbar"` with `aria-valuenow`, `aria-valuemin` and
 </div>
 
 <div>
-  <label for="sync-progress">File progress 40%</label>
+  <span id="sync-progress-label">File progress 40%</span>
   <div class="progress">
     <div
       role="progressbar"
       class="progress progress-warning"
-      id="sync-progress"
+      aria-labelledby="sync-progress-label"
       aria-valuenow="40"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -48,12 +49,12 @@ Give the fill `role="progressbar"` with `aria-valuenow`, `aria-valuemin` and
 </div>
 
 <div>
-  <label for="import-progress">File progress 20%</label>
+  <span id="import-progress-label">File progress 20%</span>
   <div class="progress">
     <div
       role="progressbar"
       class="progress progress-danger"
-      id="import-progress"
+      aria-labelledby="import-progress-label"
       aria-valuenow="20"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -64,12 +65,12 @@ Give the fill `role="progressbar"` with `aria-valuenow`, `aria-valuemin` and
 
 ```html
 <div>
-  <label for="upload-progress">File progress 70%</label>
+  <span id="upload-progress-label">File progress 70%</span>
   <div class="progress">
     <div
       role="progressbar"
       class="progress progress-success"
-      id="upload-progress"
+      aria-labelledby="upload-progress-label"
       aria-valuenow="70"
       aria-valuemin="0"
       aria-valuemax="100"
