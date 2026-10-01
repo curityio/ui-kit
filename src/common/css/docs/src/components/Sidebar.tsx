@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { pageOrder, sectionOrder } from './sidebar/prio';
 import type { MDXInstance } from 'astro';
-import packageJson from '../../../lib/package.json';
 
 interface SidebarProps {
   pages: MDXInstance<Record<string, any>>[];
@@ -86,10 +85,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ pages }) => {
 
   return (
     <aside className="sidebar p2">
-      <div className="flex flex-gap-1 flex-center mb2">
-        <span>Version</span>
-        <span className="pill pill-primary">{packageJson.version}</span>
-      </div>
       <input
         type="text"
         placeholder="Find in docs..."
@@ -117,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ pages }) => {
                       <li key={page.file}>
                         <a
                           href={`/${folder.name}/${getPath(page.file)}`}
-                          className={`button button-small ${
+                          className={`button button-small block left-align ${
                             isActive ? 'button-primary' : 'button-transparent'
                           }`}
                           ref={isActive ? activeLinkRef : undefined}

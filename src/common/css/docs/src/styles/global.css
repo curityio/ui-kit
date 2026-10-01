@@ -137,8 +137,7 @@ p {
 .sidebar {
   width: 100%;
   position: fixed;
-  background-color: #f0f4f7;
-  border-right: 1px solid #c8d2dc;
+  background-color: #fff;
   transition: opacity 300ms;
   transition: none;
   visibility: visible;
@@ -147,7 +146,7 @@ p {
   top: 50px;
   left: 0;
 
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--color-grey-light);
   padding-left: 1rem;
   padding-right: 1rem;
   overflow-y: auto;
@@ -170,8 +169,22 @@ p {
   }
 }
 
+/* Sidebar links follow the product docs (docs/curity-docs): a pill that is invisible at
+   rest and picks up a faint tint and a hairline border on hover, rather than a filled
+   button. The sidebar surface is white, so the tint is a translucent black. */
+.sidebar a.button {
+  border: 1px solid transparent;
+  border-radius: 2rem;
+  transition:
+    background 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease-in-out;
+}
+
 .sidebar a.button-transparent:hover {
-  background-color: var(--color-grey-light);
+  background: linear-gradient(135deg, rgb(0 0 0 / 6%), rgb(0 0 0 / 2%));
+  border-color: rgb(0 0 0 / 12%);
+  color: #000;
 }
 
 /* Demo elements */
