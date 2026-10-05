@@ -25,3 +25,4 @@ validation.error.token.required=Missing token
 validation.error.password.required=Your have to enter a new password
 validation.error.password.mismatch=Your passwords do not match
 validation.error.password.weak=Password not strong enough
+locked-out.rejected.verification.credential=Your account is currently locked, you may try again later.

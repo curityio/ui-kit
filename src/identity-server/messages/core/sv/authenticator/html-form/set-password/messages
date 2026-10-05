@@ -25,3 +25,4 @@ validation.error.token.required=Begäran saknade token
 validation.error.password.required=Du måste ange ett nytt lösenord
 validation.error.password.mismatch=Dina lösenord matchar inte
 validation.error.password.weak=Lösenordet är för svagt
+locked-out.rejected.verification.credential=Ditt konto är för närvarande låst, du måste vänta ett tag innan du får försöka igen.
