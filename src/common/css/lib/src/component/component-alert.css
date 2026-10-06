@@ -20,6 +20,9 @@
  */
 /* -------------------------------------------------------------------
  Alerts
+
+ A tinted box with a coloured icon and dark text. The text can be plain,
+ or split into an .alert-title and an .alert-description.
  ------------------------------------------------------------------- */
 .alert-wrapper {
   padding-bottom: 1rem;
@@ -36,170 +39,90 @@
 }
 
 .alert {
-  align-items: center;
-  border-color: var(--alert-border-color);
-  border-color: var(--alert-border-color);
-  border-radius: 2px;
+  --alert-color: var(--color-text);
+  --alert-icon-size: 1.25rem;
+  --alert-padding-x: 1rem;
+  --alert-padding-y: 0.875rem;
+
+  background-color: color-mix(in srgb, var(--alert-color) 7%, white);
+  border-color: color-mix(in srgb, var(--alert-color) 25%, transparent);
   border-radius: var(--alert-border-radius);
   border-style: var(--alert-border-style);
-  border-style: var(--alert-border-style);
   border-width: var(--alert-border-width);
-  border-width: var(--alert-border-width);
-  color: var(--color-text);
-  display: flex;
-  font-size: 0.8rem;
-  justify-content: space-between;
+  color: var(--color-heading);
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.5;
   max-width: 100%;
-  min-width: 30em;
-  overflow: hidden;
-  padding: 1rem 1rem 1rem 60px;
+  min-width: min(30em, 100%);
+  padding: var(--alert-padding-y) var(--alert-padding-x);
   position: relative;
+  text-align: left;
   width: max-content;
 }
 
-.alert::before {
-  align-items: center;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 1.5rem;
-  color: transparent;
-  content: '';
-  display: flex;
-  height: calc(100%);
-  justify-content: center;
-  left: 0;
-  line-height: 0;
-  padding: 1.5rem;
-  position: absolute;
-  /* text-shadow: 0 0 0 white; */
-  top: 0;
-  width: 30px;
-}
-
-.alert-warning {
-  border-color: var(--color-warning);
-  color: var(--color-warning);
-}
-
+/* Icon, drawn as a mask so it takes the variant colour */
+.alert-success,
+.alert-info,
+.alert-warning,
 .alert-danger {
-  border-color: var(--color-danger);
-  color: var(--color-danger);
+  padding-left: calc(var(--alert-padding-x) + var(--alert-icon-size) + 0.75rem);
+}
+
+.alert-success::before,
+.alert-info::before,
+.alert-warning::before,
+.alert-danger::before {
+  background-color: var(--alert-color);
+  content: '';
+  height: var(--alert-icon-size);
+  left: var(--alert-padding-x);
+  mask: var(--alert-icon) center / contain no-repeat;
+  position: absolute;
+  /* Centre the icon on the first line of text */
+  top: calc(var(--alert-padding-y) + (1.5em - var(--alert-icon-size)) / 2);
+  width: var(--alert-icon-size);
 }
 
 .alert-success {
-  border-color: var(--color-success);
-  color: var(--color-success);
+  --alert-color: var(--color-success);
+  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m9 12 2 2 4-4'/></svg>");
 }
 
 .alert-info {
-  border-color: var(--color-info);
-  color: var(--color-info);
+  --alert-color: var(--color-info);
+  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 16v-4'/><path d='M12 8h.01'/></svg>");
 }
 
-/* Icons */
-.alert-success::before {
-  background-color: var(--color-success);
+.alert-warning {
+  --alert-color: var(--color-warning);
+  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/><path d='M12 9v4'/><path d='M12 17h.01'/></svg>");
 }
 
-.alert-success::after {
-  content: '';
-  position: absolute;
-  top: 16px;
-  left: 20px;
-  display: inline-block;
-  transform: rotate(45deg);
-  height: 16px;
-  width: 8px;
-  border-bottom: 2px solid white;
-  border-right: 2px solid white;
+.alert-danger {
+  --alert-color: var(--color-danger);
+  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m15 9-6 6'/><path d='m9 9 6 6'/></svg>");
 }
 
-.alert-info::before {
-  background-color: var(--color-info);
+.alert-title {
+  color: var(--color-heading);
+  display: block;
+  font-family: var(--type-sans-medium);
 }
 
-.alert-info::after {
-  content: '!';
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background-color: transparent;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1;
-}
-
-.alert-warning::before {
-  background-color: var(--color-warning);
-}
-
-.alert-warning::after {
-  content: '!';
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background-color: transparent;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1;
-}
-
-.alert-danger::before {
-  background-color: var(--color-danger);
-}
-
-.alert-danger::after {
-  content: '✕';
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background-color: transparent;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1;
+.alert-description {
+  color: var(--color-text);
+  display: block;
 }
 
 /* Dark skin */
 .body-dark .form-transparent .alert {
+  background-color: color-mix(in srgb, var(--alert-color) 15%, transparent);
+  border-color: color-mix(in srgb, var(--alert-color) 60%, transparent);
   color: white;
 }
 
-.body-dark .form-transparent .alert.alert-info {
-  border: 1px solid var(--color-info);
-}
-
-.body-dark .form-transparent .alert.alert-success {
-  border: 1px solid var(--color-success);
-}
-
-.body-dark .form-transparent .alert.alert-danger {
-  border: 1px solid var(--color-danger);
-}
-
-.body-dark .form-transparent .alert.alert-warning {
-  border: 1px solid var(--color-warning);
+.body-dark .form-transparent .alert-title,
+.body-dark .form-transparent .alert-description {
+  color: white;
 }

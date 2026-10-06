@@ -139,7 +139,7 @@ button svg {
 
 .button-warning:hover,
 .button-warning:active {
-  background: var(--color-warning);
+  background: color-mix(in srgb, var(--color-warning) 85%, black);
   color: white;
 }
 
@@ -151,7 +151,7 @@ button svg {
 
 .button-danger:hover,
 .button-danger:active {
-  background: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 85%, black);
   color: white;
 }
 
@@ -175,7 +175,7 @@ button svg {
 
 .button-success:hover,
 .button-success:active {
-  background: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 85%, black);
   color: white;
 }
 
@@ -187,7 +187,7 @@ button svg {
 
 .button-info:hover,
 .button-info:active {
-  background: var(--color-info);
+  background: color-mix(in srgb, var(--color-info) 85%, black);
   color: white;
 }
 

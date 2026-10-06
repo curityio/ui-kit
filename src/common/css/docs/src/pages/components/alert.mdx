@@ -7,7 +7,7 @@ updatedAt: "August 08 2022"
 
 # Alert Component
 
-Alert components provide contextual feedback messages for user actions with built-in icons and semantic colors.
+Alert components provide contextual feedback messages for user actions: a lightly tinted box with a coloured icon and dark, readable text.
 
 ## Available Classes
 
@@ -17,14 +17,21 @@ Alert components provide contextual feedback messages for user actions with buil
 
 ### Base Alert
 
-- `.alert` - Base alert component with flexbox layout, borders, and icon placeholder
+- `.alert` - Base alert: tinted background, thin border and rounded corners. Without a type it is neutral and has no icon
 
 ### Alert Types
 
-- `.alert-success` - Success alert with green border and checkmark icon
-- `.alert-info` - Info alert with blue border and "!" icon
-- `.alert-warning` - Warning alert with yellow/orange border and "!" icon
-- `.alert-danger` - Danger/error alert with red border and "✕" icon
+- `.alert-success` - Green tint with a check-in-circle icon
+- `.alert-info` - Blue tint with an "i" icon
+- `.alert-warning` - Amber tint with a warning-triangle icon
+- `.alert-danger` - Red tint with a cross-in-circle icon
+
+### Content
+
+An alert can hold plain text, or a title and a description:
+
+- `.alert-title` - Medium-weight first line in the heading colour
+- `.alert-description` - Supporting text in the body colour
 
 ## Usage Examples
 
@@ -60,6 +67,41 @@ Alert components provide contextual feedback messages for user actions with buil
 <div class="alert alert-danger">Error: Unable to complete the operation.</div>
 ```
 
+### With Title and Description
+
+<div class="alert alert-danger">
+  <span class="alert-title">Unable to sign in</span>
+  <span class="alert-description">The username or password is incorrect. Check them and try again.</span>
+</div>
+
+<div class="alert alert-success mt2">
+  <span class="alert-title">Password changed</span>
+  <span class="alert-description">You can now sign in with your new password.</span>
+</div>
+
+```html
+<div class="alert alert-danger">
+  <span class="alert-title">Unable to sign in</span>
+  <span class="alert-description">The username or password is incorrect. Check them and try again.</span>
+</div>
+```
+
+### Several Messages in One Alert
+
+Messages separated by `<br />` stack, as the Identity Server's alert fragment renders them.
+
+<div class="alert alert-danger">
+  Enter a valid email address.<br />
+  The password must be at least 8 characters.
+</div>
+
+```html
+<div class="alert alert-danger">
+  Enter a valid email address.<br />
+  The password must be at least 8 characters.
+</div>
+```
+
 ### Multiple Alerts with Wrapper
 
 <div class="alert-wrapper">
@@ -80,12 +122,12 @@ Alert components provide contextual feedback messages for user actions with buil
 
 ### Built-in Icons
 
-Each alert type includes an automatically generated icon using CSS pseudo-elements:
+Each alert type draws its icon with a CSS mask on `::before`, so the icon takes the type's colour:
 
-- **Success**: Checkmark (✓)
-- **Info**: Exclamation mark (!) in a circle
-- **Warning**: Exclamation mark (!) in a circle
-- **Danger**: Cross mark (✕) in a circle
+- **Success**: Check in a circle
+- **Info**: "i" in a circle
+- **Warning**: Exclamation mark in a triangle
+- **Danger**: Cross in a circle
 
 ### Responsive Design
 
@@ -98,21 +140,23 @@ The alert wrapper automatically adjusts padding:
 Uses CSS custom properties for consistent theming:
 - `--color-success` - Green for success
 - `--color-info` - Blue for information
-- `--color-warning` - Yellow/orange for warnings
+- `--color-warning` - Amber for warnings
 - `--color-danger` - Red for errors
+
+The background and border are mixed from the type colour, so changing a colour token
+restyles the whole alert.
 
 ## Dark Mode Support
 
-Alerts automatically adapt to dark mode when used within `.body-dark .form-transparent` contexts, adjusting borders and text colors for better visibility.
+Alerts automatically adapt to dark mode when used within `.body-dark .form-transparent` contexts: the tint becomes translucent and the text white.
 
 ## Styling Details
 
-- **Min-width**: 30em
+- **Min-width**: 30em, or the full width when the container is narrower
 - **Max-width**: 100%
-- **Border radius**: 2px (configurable via `--alert-border-radius`)
-- **Font size**: 0.8rem
-- **Icon size**: 1.5rem
-- **Left padding**: 60px (to accommodate icon)
+- **Border radius**: 8px (configurable via `--alert-border-radius`)
+- **Font size**: 0.875rem
+- **Icon size**: 1.25rem (configurable via `--alert-icon-size`)
 
 ## Common Patterns
 
@@ -163,5 +207,5 @@ Alerts automatically adapt to dark mode when used within `.body-dark .form-trans
 
 - Alerts use semantic colors with sufficient contrast
 - Icons provide visual reinforcement of message type
-- Text is readable at 0.8rem font size
+- Text uses the heading colour on a light tint, so it stays readable whatever the type colour
 - Works with screen readers (consider adding `role="alert"` for dynamic alerts)
