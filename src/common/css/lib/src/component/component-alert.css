@@ -61,11 +61,17 @@
   width: max-content;
 }
 
-/* Icon, drawn as a mask so it takes the variant colour */
+/*
+ Icon: a circle outline in the variant colour (::before) with a mark inside it (::after).
+ Drawn with borders and text only - no images - so it is not blocked by an
+ img-src Content-Security-Policy.
+*/
 .alert-success,
 .alert-info,
 .alert-warning,
 .alert-danger {
+  --alert-icon-top: calc(var(--alert-padding-y) + (1.5em - var(--alert-icon-size)) / 2);
+
   padding-left: calc(var(--alert-padding-x) + var(--alert-icon-size) + 0.75rem);
 }
 
@@ -73,35 +79,86 @@
 .alert-info::before,
 .alert-warning::before,
 .alert-danger::before {
-  background-color: var(--alert-color);
+  border: 2px solid var(--alert-color);
+  border-radius: 50%;
+  box-sizing: border-box;
   content: '';
   height: var(--alert-icon-size);
   left: var(--alert-padding-x);
-  mask: var(--alert-icon) center / contain no-repeat;
   position: absolute;
   /* Centre the icon on the first line of text */
-  top: calc(var(--alert-padding-y) + (1.5em - var(--alert-icon-size)) / 2);
+  top: var(--alert-icon-top);
   width: var(--alert-icon-size);
+}
+
+/* "i" and "!" marks, centred in the circle */
+.alert-info::after,
+.alert-warning::after {
+  align-items: center;
+  color: var(--alert-color);
+  display: flex;
+  font-family: var(--type-sans-bold);
+  font-size: 0.75rem;
+  height: var(--alert-icon-size);
+  justify-content: center;
+  left: var(--alert-padding-x);
+  line-height: 1;
+  position: absolute;
+  top: var(--alert-icon-top);
+  width: var(--alert-icon-size);
+}
+
+/* Check mark, an L rotated 45 degrees */
+.alert-success::after {
+  border-bottom: 2px solid var(--alert-color);
+  border-right: 2px solid var(--alert-color);
+  content: '';
+  height: 0.5rem;
+  left: calc(var(--alert-padding-x) + var(--alert-icon-size) / 2 - 0.15rem);
+  position: absolute;
+  top: calc(var(--alert-icon-top) + var(--alert-icon-size) / 2 - 0.3rem);
+  transform: rotate(45deg);
+  width: 0.3rem;
+}
+
+.alert-info::after {
+  content: 'i';
+}
+
+.alert-warning::after {
+  content: '!';
+}
+
+/* Cross mark, a plus of two gradient bars rotated 45 degrees (gradients are not images, so CSP allows them) */
+.alert-danger::after {
+  --alert-cross-size: 0.5rem;
+
+  background:
+    linear-gradient(var(--alert-color), var(--alert-color)) center / 100% 2px no-repeat,
+    linear-gradient(var(--alert-color), var(--alert-color)) center / 2px 100% no-repeat;
+  content: '';
+  height: var(--alert-cross-size);
+  left: calc(var(--alert-padding-x) + (var(--alert-icon-size) - var(--alert-cross-size)) / 2);
+  position: absolute;
+  top: calc(var(--alert-icon-top) + (var(--alert-icon-size) - var(--alert-cross-size)) / 2);
+  transform: rotate(45deg);
+  width: var(--alert-cross-size);
 }
 
 .alert-success {
   --alert-color: var(--color-success);
-  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m9 12 2 2 4-4'/></svg>");
 }
 
 .alert-info {
   --alert-color: var(--color-info);
-  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 16v-4'/><path d='M12 8h.01'/></svg>");
 }
 
 .alert-warning {
   --alert-color: var(--color-warning);
-  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/><path d='M12 9v4'/><path d='M12 17h.01'/></svg>");
 }
 
 .alert-danger {
   --alert-color: var(--color-danger);
-  --alert-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m15 9-6 6'/><path d='m9 9 6 6'/></svg>");
 }
 
 .alert-title {

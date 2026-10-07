@@ -23,7 +23,7 @@ Alert components provide contextual feedback messages for user actions: a lightl
 
 - `.alert-success` - Green tint with a check-in-circle icon
 - `.alert-info` - Blue tint with an "i" icon
-- `.alert-warning` - Amber tint with a warning-triangle icon
+- `.alert-warning` - Amber tint with a "!" icon
 - `.alert-danger` - Red tint with a cross-in-circle icon
 
 ### Content
@@ -122,11 +122,11 @@ Messages separated by `<br />` stack, as the Identity Server's alert fragment re
 
 ### Built-in Icons
 
-Each alert type draws its icon with a CSS mask on `::before`, so the icon takes the type's colour:
+Each alert type draws its icon in CSS: a circle outline on `::before` and a mark on `::after`, both in the type's colour. No images are used, so the icons are not blocked by an `img-src` Content-Security-Policy, such as the Identity Server's:
 
 - **Success**: Check in a circle
 - **Info**: "i" in a circle
-- **Warning**: Exclamation mark in a triangle
+- **Warning**: Exclamation mark in a circle
 - **Danger**: Cross in a circle
 
 ### Responsive Design
