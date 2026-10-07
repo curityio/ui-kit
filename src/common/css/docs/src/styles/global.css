@@ -1,6 +1,14 @@
 :root {
   --sidebarWidth: 380px;
-  --shiki-dark-bg: #24292e;
+  /* Code blocks match the Curity product docs (docs/curity-docs global.css):
+     a dark purple surface shared by the block and its header bar, with github-dark
+     syntax colours on it. The header label and copy button are white. */
+  --color-spot-dark: #552a8d;
+  --code-block-background-color: light-dark(
+    color-mix(in srgb, var(--color-spot-dark), black 30%),
+    color-mix(in srgb, var(--color-spot-dark), black 55%)
+  );
+  --code-block-text-color: white;
 
   /* The Admin UI's dark chrome surface, shared with the UI Kit welcome page and
      the HAAPI React App previewer. Mirrors --surface-dark in curity-web-ui. */
@@ -223,7 +231,7 @@ code {
   }
 
   button {
-    color: var(--text);
+    color: var(--code-block-text-color);
   }
 
   > div {
@@ -236,16 +244,8 @@ code {
     align-items: center;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    border: 1px solid var(--grey-light);
+    color: var(--code-block-text-color);
     font-size: small;
-  }
-}
-
-html[data-color-scheme='light'] {
-  .copy-wrapper {
-    > div {
-      background-color: white;
-    }
   }
 }
 
@@ -264,14 +264,18 @@ pre code {
   }
 }
 
+.astro-code {
+  background-color: var(--code-block-background-color) !important;
+}
+
+/* github-dark syntax colours on the purple surface, as in the product docs */
 .astro-code,
 .astro-code span {
   color: var(--shiki-dark) !important;
-  background-color: var(--shiki-dark-bg) !important;
 }
 
 .copy-wrapper > div {
-  background-color: var(--shiki-dark-bg);
+  background-color: var(--code-block-background-color);
 }
 
 /* Header, matching the HAAPI React App previewer and the UI Kit welcome page. */

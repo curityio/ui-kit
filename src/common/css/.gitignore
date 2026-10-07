@@ -56,7 +56,9 @@ typings/
 
 # gatsby files
 .cache/
-public
+**/public/*
+# The docs site's favicon is source, not build output
+!docs/public/favicon.png
 
 # Mac files
 .DS_Store
