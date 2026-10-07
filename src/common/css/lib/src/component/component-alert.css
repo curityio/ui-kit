@@ -91,21 +91,20 @@
   width: var(--alert-icon-size);
 }
 
-/* "i" and "!" marks, centred in the circle */
+/*
+ "i" and "!" marks: a dot and a bar drawn with gradients, so they sit exactly in the
+ middle of the circle whatever the font (gradients are not images, so CSP allows them)
+*/
 .alert-info::after,
 .alert-warning::after {
-  align-items: center;
-  color: var(--alert-color);
-  display: flex;
-  font-family: var(--type-sans-bold);
-  font-size: 0.75rem;
-  height: var(--alert-icon-size);
-  justify-content: center;
-  left: var(--alert-padding-x);
-  line-height: 1;
+  --alert-mark-height: 0.5625rem;
+
+  content: '';
+  height: var(--alert-mark-height);
+  left: calc(var(--alert-padding-x) + (var(--alert-icon-size) - 2px) / 2);
   position: absolute;
-  top: var(--alert-icon-top);
-  width: var(--alert-icon-size);
+  top: calc(var(--alert-icon-top) + (var(--alert-icon-size) - var(--alert-mark-height)) / 2);
+  width: 2px;
 }
 
 /* Check mark, an L rotated 45 degrees */
@@ -121,12 +120,18 @@
   width: 0.3rem;
 }
 
+/* "i": dot on top, bar below */
 .alert-info::after {
-  content: 'i';
+  background:
+    linear-gradient(var(--alert-color), var(--alert-color)) top / 2px 2px no-repeat,
+    linear-gradient(var(--alert-color), var(--alert-color)) bottom / 2px calc(100% - 4px) no-repeat;
 }
 
+/* "!": bar on top, dot below */
 .alert-warning::after {
-  content: '!';
+  background:
+    linear-gradient(var(--alert-color), var(--alert-color)) top / 2px calc(100% - 4px) no-repeat,
+    linear-gradient(var(--alert-color), var(--alert-color)) bottom / 2px 2px no-repeat;
 }
 
 /* Cross mark, a plus of two gradient bars rotated 45 degrees (gradients are not images, so CSP allows them) */
