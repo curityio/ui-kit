@@ -60,7 +60,10 @@
         #set($otpFieldName = "otp")
         #set($otpInputLength = $_otpLength)
         #parse("fragments/otp-input")
-        <button type="submit" class="button button-fullwidth button-primary">#message("authenticator.email.enter-otp.view.verify")</button>
+        <button type="submit" disabled
+        class="button button-medium button-primary button-fullwidth">
+        #message("authenticator.email.enter-otp.view.verify")
+        </button>
     #end
 
     <div class="center py2 login-actions">
