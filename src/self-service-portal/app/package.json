@@ -41,7 +41,7 @@
     "react-hot-toast": "^2.5.2",
     "react-i18next": "^17.0.8",
     "react-qr-code": "^2.0.15",
-    "react-router": "^7.18.0",
+    "react-router": "^7.18.4",
     "react-verification-input": "^4.2.2"
   },
   "devDependencies": {
@@ -69,7 +69,7 @@
     "typescript-eslint": "^8.18.0",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.1"
+    "vitest": "^4.1.11"
   },
   "msw": {
     "workerDirectory": [
