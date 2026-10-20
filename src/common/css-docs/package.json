@@ -21,12 +21,12 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^5.0.3",
-    "@astrojs/react": "^5.0.3",
+    "@astrojs/mdx": "^8.1.0",
+    "@astrojs/react": "^7.1.0",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.2.3",
     "@typescript/twoslash": "^3.2.9",
-    "astro": "^6.4.6",
+    "astro": "^7.4.1",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.12.3"
   }

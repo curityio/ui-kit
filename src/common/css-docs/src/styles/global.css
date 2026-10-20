@@ -201,10 +201,6 @@ p {
   outline: 2pt solid turquoise;
 }
 
-.demo-element:before * {
-  outline: 2pt solid turquoise;
-}
-
 .demo-resizer {
   resize: both;
   overflow: auto;
