@@ -27,7 +27,7 @@
 /src/common/component-library/package.json  @urre @vahag-curity
 /src/common/css/package.json                @urre @vahag-curity
 /src/common/css/lib/package.json            @urre @vahag-curity
-/src/common/css/docs/package.json           @urre @vahag-curity
+/src/common/css-docs/package.json           @urre @vahag-curity
 /src/common/icons/package.json              @urre @vahag-curity
 
 # HAAPI React.
