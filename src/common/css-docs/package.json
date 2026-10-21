@@ -15,6 +15,7 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
+    "@curity/ui-kit-assets": "*",
     "@curity/ui-kit-css": "*",
     "@curity/ui-kit-icons": "*",
     "react": "^19.2.0",
