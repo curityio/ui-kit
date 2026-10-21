@@ -31,15 +31,30 @@
 ##   - Otherwise: restricted to digits only
 ##   - In OAuth device flow, inputs may be pre-filled via the `user_code` query parameter.
 ##
+## $otpLabelMessageKey (optional)
+##   - Message key for the accessible name of the input group, e.g. the view's "Enter the OTP code" prompt.
+##   - Defaults to "otp-input.view.label".
+##
 
+#if($otpLabelMessageKey)
+    #set($otpGroupLabel = "#message($otpLabelMessageKey)")
+#else
+    #set($otpGroupLabel = "#message('otp-input.view.label')")
+#end
+#if($otpInputFieldCharacterSet.equals("alphanumeric"))
+    #set($otpPositionLabel = "#message('otp-input.view.character-label')")
+#else
+    #set($otpPositionLabel = "#message('otp-input.view.digit-label')")
+#end
 
  <div class="center">
 
-    <div class="enter-usercode-wrapper mb2">
+    <div class="enter-usercode-wrapper mb2" role="group" aria-label="$otpGroupLabel.trim()">
 
         #foreach($i in [1..$otpInputLength])
             <input type="text" #if(!$otpInputFieldCharacterSet.equals("alphanumeric"))pattern="[0-9]" inputMode="numeric"#end class="field-light field-enter-usercode $!$errorClass"
                    required maxlength="1"
+                   aria-label="$otpPositionLabel.trim().replace('{0}', "$i").replace('{1}', "$otpInputLength")"
                    #if($i == 1)autofocus#end id="userCode-$i">
         #end
     </div>

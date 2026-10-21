@@ -59,6 +59,7 @@
 
         #set($otpFieldName = "otp")
         #set($otpInputLength = $_otpLength)
+        #set($otpLabelMessageKey = "authenticator.email.enter-otp.view.enter-otp")
         #parse("fragments/otp-input")
         <button type="submit" disabled
         class="button button-medium button-primary button-fullwidth">

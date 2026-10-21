@@ -66,3 +66,8 @@ invalid-action-recover.error-title=Åtgärd ej tillåten
 invalid-action-recover.error-message=Navigering till eller interaktion med den här sidan är inte möjlig eftersom den inte längre är giltig. Autentiseringen kan återupptas eller startas om.
 invalid-action-recover.resume-action=Återuppta
 invalid-action-recover.retry-authenticator=Starta om
+
+# OTP input fragment, accessible names. {0} is the position and {1} the code length.
+otp-input.view.label=Verifieringskod
+otp-input.view.digit-label=Siffra {0} av {1}
+otp-input.view.character-label=Tecken {0} av {1}
