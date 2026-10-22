@@ -69,6 +69,87 @@ describe('HaapiStepperTextFormFieldUI', () => {
 
     expect(textFieldInput(field.name)).toHaveAttribute('type', 'text');
   });
+
+  describe('Length constraints', () => {
+    it('presents the length constraints of a text field on its input', () => {
+      const field = createMockTextField({ minLength: 6, maxLength: 8 });
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).toHaveAttribute('minlength', '6');
+      expect(textFieldInput(field.name)).toHaveAttribute('maxlength', '8');
+    });
+
+    it('presents only the length constraint a text field defines', () => {
+      const field = createMockTextField({ maxLength: 8 });
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
+      expect(textFieldInput(field.name)).toHaveAttribute('maxlength', '8');
+    });
+
+    it('presents a text field without length constraints as an input without length limits', () => {
+      const field = createMockTextField();
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toHaveAttribute('minlength');
+      expect(textFieldInput(field.name)).not.toHaveAttribute('maxlength');
+    });
+  });
+
+  describe('Label', () => {
+    it('presents the field label as the accessible name of its input', () => {
+      const field = createMockTextField({ label: 'Phone number' });
+      renderTextField(field);
+
+      expect(screen.getByLabelText('Phone number')).toBe(textFieldInput(field.name));
+    });
+
+    it('presents the field name as the accessible name of its input when the field has no label', () => {
+      const field = createMockTextField();
+      renderTextField(field);
+
+      expect(screen.getByLabelText(field.name)).toBe(textFieldInput(field.name));
+    });
+  });
+
+  it('presents the field placeholder on its input', () => {
+    const field = createMockTextField({ placeholder: '+46 70 123 45 67' });
+    renderTextField(field);
+
+    expect(textFieldInput(field.name)).toHaveAttribute('placeholder', '+46 70 123 45 67');
+  });
+
+  describe('Autocomplete', () => {
+    it('presents a username field with the username autocomplete hint', () => {
+      const field = createMockUsernameField();
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).toHaveAttribute('autocomplete', 'username');
+    });
+
+    it('presents a text field without an autocomplete hint', () => {
+      const field = createMockTextField();
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toHaveAttribute('autocomplete');
+    });
+  });
+
+  describe('Required', () => {
+    it('presents a text field as required when the field does not say otherwise', () => {
+      const field = createMockTextField();
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).toBeRequired();
+    });
+
+    it('presents a text field as optional when the field is not required', () => {
+      const field = createMockTextField({ required: false });
+      renderTextField(field);
+
+      expect(textFieldInput(field.name)).not.toBeRequired();
+    });
+  });
 });
 
 const renderTextField = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) =>
