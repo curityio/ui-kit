@@ -66,3 +66,8 @@ invalid-action-recover.error-title=Operação não permitida
 invalid-action-recover.error-message=Navegação ou interação com esta página não é possível porque a página já não é válida. A autenticação pode ser continuada ou recomeçada.
 invalid-action-recover.resume-action=Continuar
 invalid-action-recover.retry-authenticator=Recomeçar
+
+# OTP input fragment, accessible names. {0} is the position and {1} the code length.
+otp-input.view.label=Código de verificação
+otp-input.view.digit-label=Dígito {0} de {1}
+otp-input.view.character-label=Caractere {0} de {1}
