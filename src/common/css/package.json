@@ -10,9 +10,9 @@
     "./lib/dist/index.css": "./lib/dist/index.css"
   },
   "scripts": {
-    "start:docs": "npm start -w docs",
+    "start:docs": "npm start -w @curity/ui-kit-css-docs",
     "start": "npm run start:docs",
-    "build:docs": "npm run build -w docs",
+    "build:docs": "npm run build -w @curity/ui-kit-css-docs",
     "build:lib": "npm run build -w lib",
     "build:all": "npm-run-all -s build:lib build:docs",
     "build": "npm run build:lib"
