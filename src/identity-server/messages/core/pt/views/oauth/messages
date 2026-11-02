@@ -34,6 +34,11 @@ consent.showAll=Mostrar tudo
 consent.hideAll=Esconder tudo
 consent.policyDocument=Documento de Política
 consent.termsOfService=Termos de Serviço
+
+consent.id-token=Token de ID
+consent.access-token=Token de acesso
+consent.resources-info=Permissões solicitadas por meio de recursos de API. Cada permissão se aplica somente ao recurso de API em que está listada.
+
 consent.claim-names.sub=ID do usuário
 consent.claim-names.name=Nome completo
 consent.claim-names.given_name=Nome

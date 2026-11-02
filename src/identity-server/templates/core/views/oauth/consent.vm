@@ -16,6 +16,13 @@
  * _client : a map with properties of the requesting client (e.g. 'id', 'name', 'description', etc.)
  * _consentEntries : a map of entries that the used should be asked to consent for. An entry points to another
  *          map with properties that relate to the consent question (e.g. [required: , value: , ...])
+ *          When the request names API resources, every scope asked at a resource is listed here once too, and
+ *          submitting it as consent.scope.<name> consents to it at every resource where it is asked.
+ * _staticConsentEntries : the entries of _consentEntries that are asked outside every API resource
+ * _consentResources : the API resources the request names (RFC 8707 resource indicators), in order; empty when
+ *          it names none. Each is a map with 'index', 'identifier', 'name', 'description' and 'entries', a map
+ *          of the scope entries asked at that resource. Each entry also holds the 'parameterName' to submit
+ *          to consent to it at that resource only.
  * _currentConsent : a list of entries that consent was (already) given for
  * _consentInfo : configuration info regarding consent entries, a map of entries that point to a map of configuration
  *          info of these entries (e.g. scope -> [description: , required: , ...])
@@ -30,6 +37,45 @@
 
 #set ($show_symbol = false)
 #set ($override_logo = "fragments/logo-consent")
+
+## One consent entry of an API resource, or of the entries asked outside every resource when the request
+## names resources. The flat list below keeps its own markup.
+#macro(consentResourceEntry $parameterName $entryValue)
+<li>
+    #if ($entryValue.scopePrefix != "")
+        #define($resourceEntryPrefixName)#message("$entryValue.scopePrefix")#end
+        #set ( $resourceEntryLabel = "$resourceEntryPrefixName$entryValue.scopeSuffix" )
+    #else
+        #define($resourceEntryLabel)#message("$entryValue.displayName")#end
+    #end
+    <label class="flex flex-gap-1 flex-center relative"
+        #if ($entryValue.required == "true")
+        ><input type="checkbox" name="$parameterName" id="$parameterName" checked disabled><label class="consent-entries-list-checkbox"></label><input type="hidden" name="$parameterName"
+        #else
+        ><input type="checkbox" name="$parameterName" id="$parameterName" checked
+        #end
+    >
+        <label class="consent-entries-list-checkbox"></label>
+        <span class="consent-entries-list-name">$resourceEntryLabel</span>
+
+        #if ($entryValue.required == "true")
+            <span class="consent-entries-list-value required">*</span>
+        #end
+
+        #define($resourceEntryDescription)##
+            #message($entryValue.description)##
+        #end##
+
+        #if ($resourceEntryDescription != "")
+            &mdash; <span class="consent-entries-list-description">$resourceEntryDescription</span>
+        #end
+
+        #if ($entryValue.value != "")
+            <span class="consent-entries-list-value">$_tr.encodeHtml($entryValue.value)</span>
+        #end
+    </label>
+</li>
+#end
 
 #define($_body)
 
@@ -57,7 +103,42 @@
         #end
     </p>
 
-    #if ($consentEntriesSetSize > 0)
+    #if ($_consentResources && $_consentResources.size() > 0)
+
+        #if ($_staticConsentEntries.entrySet().size() > 0)
+            <fieldset class="consent-entries consent-id-token">
+                <legend>#message("views.oauth.consent.id-token")</legend>
+                <ul class="consent-entries-list is-active">
+                    #foreach ($entry in $_staticConsentEntries.entrySet())
+                        #consentResourceEntry("consent.$entry.key" $entry.value)
+                    #end
+                </ul>
+            </fieldset>
+        #end
+
+        <fieldset class="consent-entries consent-access-token">
+            <legend>#message("views.oauth.consent.access-token")</legend>
+            <p><small>#message("views.oauth.consent.resources-info")</small></p>
+
+            #foreach ($resource in $_consentResources)
+                <div class="consent-resource" id="consent-resource-$resource.index">
+                    #define($resourceName)#message($resource.name)#end
+                    <h3 class="consent-resource-name">$_tr.encodeHtml("$resourceName")</h3>
+                    <code class="consent-resource-identifier">$_tr.encodeHtml($resource.identifier)</code>
+                    #if ($resource.description != "")
+                        #define($resourceDescription)#message($resource.description)#end
+                        <p class="consent-resource-description">$_tr.encodeHtml("$resourceDescription")</p>
+                    #end
+                    <ul class="consent-entries-list is-active">
+                        #foreach ($entry in $resource.entries.entrySet())
+                            #consentResourceEntry($entry.value.parameterName $entry.value)
+                        #end
+                    </ul>
+                </div>
+            #end
+        </fieldset>
+
+    #elseif ($consentEntriesSetSize > 0)
         <div class="consent-entries">
 
             <ul class="consent-entries-list
@@ -77,34 +158,34 @@
                         #else
                             #define($claimLabel)#message("$entry.value.displayName")#end
                         #end
-                    <label class="flex flex-gap-1 flex-center relative"
-                        #if ($entry.value.required == "true")
-><input type="checkbox" name="$parameterName" id="$parameterName" checked disabled><label class="consent-entries-list-checkbox"></label><input type="hidden" name="$parameterName"
-                        #else
+                        <label class="flex flex-gap-1 flex-center relative"
+                            #if ($entry.value.required == "true")
+                            ><input type="checkbox" name="$parameterName" id="$parameterName" checked disabled><label class="consent-entries-list-checkbox"></label><input type="hidden" name="$parameterName"
+                            #else
                             ><input type="checkbox" name="$parameterName" id="$parameterName" checked
-                        #end
->
-<label class="consent-entries-list-checkbox"></label>
-<span class="consent-entries-list-name">$claimLabel</span>
+                            #end
+                        >
+                            <label class="consent-entries-list-checkbox"></label>
+                            <span class="consent-entries-list-name">$claimLabel</span>
 
-                        #if ($entry.value.required == "true")
-                            <span class="consent-entries-list-value required">*</span>
-                        #end
+                            #if ($entry.value.required == "true")
+                                <span class="consent-entries-list-value required">*</span>
+                            #end
 
-                        ## Hacky but necessary way of defining a variable using a directive that can be tested later
-                        ## to see if the result is blank.
-                        #define($localizedDescription)##
-#message($entry.value.description)##
-#end##
+                            ## Hacky but necessary way of defining a variable using a directive that can be tested later
+                            ## to see if the result is blank.
+                            #define($localizedDescription)##
+                                #message($entry.value.description)##
+                            #end##
 
-                        #if ($localizedDescription != "")
-                            &mdash; <span class="consent-entries-list-description">$localizedDescription</span>
-                        #end
+                            #if ($localizedDescription != "")
+                                &mdash; <span class="consent-entries-list-description">$localizedDescription</span>
+                            #end
 
-                        #if ($entry.value.value != "")
-                            <span class="consent-entries-list-value">$_tr.encodeHtml($entry.value.value)</span>
-                        #end
-                    </label>
+                            #if ($entry.value.value != "")
+                                <span class="consent-entries-list-value">$_tr.encodeHtml($entry.value.value)</span>
+                            #end
+                        </label>
                     </li>
                 #end
 
@@ -140,7 +221,7 @@
         </div>
     #end
 
-#* If all the required consent is given, enable the submit button *#
+    #* If all the required consent is given, enable the submit button *#
 
     <input type="submit" class="button button-medium button-success button-fullwidth $!_errorClass $!successClass" value='#message("views.oauth.consent.submit")' name="submit_consent" id="cancel_button" />
 

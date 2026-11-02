@@ -43,6 +43,10 @@ consent.hideAll=Hide All
 consent.policyDocument=Policy Document
 consent.termsOfService=Terms of Service
 
+consent.id-token=ID Token
+consent.access-token=Access Token
+consent.resources-info=Scopes requested through API resources. Each scope only applies to the API resource it is listed under.
+
 consent.claim-names.sub=User ID
 consent.claim-names.name=Full Name
 consent.claim-names.given_name=First Name

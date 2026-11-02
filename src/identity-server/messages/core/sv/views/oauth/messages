@@ -43,6 +43,10 @@ consent.hideAll=Göm Allt
 consent.policyDocument=Policy Dokument
 consent.termsOfService=Service Villkor
 
+consent.id-token=ID-token
+consent.access-token=Åtkomsttoken
+consent.resources-info=Tillstånd som begärs för API-resurser. Varje tillstånd gäller bara den API-resurs det står under.
+
 consent.claim-names.sub=Användarnamn
 consent.claim-names.name=Namn
 consent.claim-names.given_name=Tilltalsnamn
