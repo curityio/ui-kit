@@ -209,11 +209,18 @@ a.button-social-icon .icon,
   &.button-netidaccess-os {
     --authenticator-color: var(--authenticator-netidaccess-os-color);
   }
-  &.button-social-single-color {
-    --authenticator-color: var(--authenticator-social-single-color);
-  }
   &.button-openid-wallet {
     --authenticator-color: var(--authenticator-openid-wallet-color);
+  }
+  &.button-saml2 {
+    --authenticator-color: var(--authenticator-saml2-color);
+  }
+  &.button-passkeys {
+    --authenticator-color: var(--authenticator-passkeys-color);
+  }
+  /* Keep last: overrides the per-type colors in single color mode */
+  &.button-social-single-color {
+    --authenticator-color: var(--authenticator-social-single-color);
   }
 }
 
