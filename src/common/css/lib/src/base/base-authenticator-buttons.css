@@ -224,6 +224,15 @@ a.button-social-icon .icon,
   }
 }
 
+/* The wallet background is light, so inline SVG icons need a dark fill instead of white */
+.button-social.button-openid-wallet:not(.button-social-single-color) .icon {
+  color: #626c87;
+
+  svg * {
+    fill: currentColor !important;
+  }
+}
+
 .form-field-social-icon {
   display: inline-block;
   height: 50px;
