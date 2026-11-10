@@ -32,12 +32,6 @@
  * http://velocity.apache.org/engine/devel/user-guide.html.
  *#
 
-#if($_postBack && $_postBack["userName"])
-    #set($userNameValue = $_postBack["userName"])
-#elseif($_username)
-    #set($userNameValue = $_username)
-#end
-
 #set ($page_symbol = $page_symbol_authenticate_totp)
 
 #define($_body)
@@ -54,7 +48,7 @@
         <label class="$!_errorClass">#message("authenticator.totp.authenticate.view.username")</label>
         <input type="text" name="userName" id="userName" class="block full-width mb1 field-light $!_errorClass"
                autofocus
-               required value="$!userNameValue" autocapitalize="none">
+               required value="$!_tr.encodeHtmlAttribute($!_username)" autocapitalize="none">
         <i class="form-field-icon icon ion-ios-person"></i>
     </div>
 

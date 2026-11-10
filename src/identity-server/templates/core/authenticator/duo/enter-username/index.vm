@@ -39,7 +39,7 @@
     <div class="form-field">
         <label>#message("authenticator.duo.enter-username.view.username")</label>
         <input type="text" name="username" id="username" class="block full-width mb1 field-light" autofocus required
-               value="$!_username" autocapitalize="none">
+               value="$!_tr.encodeHtmlAttribute($!_username)" autocapitalize="none">
         <i class="form-field-icon icon ion-ios-person"></i>
     </div>
     <button type="submit" class="button button-fullwidth button-primary">#message(

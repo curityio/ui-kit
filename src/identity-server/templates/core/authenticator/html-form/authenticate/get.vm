@@ -40,7 +40,7 @@
 #if($_postBack && $_postBack.userName)
     #set($userNameValue = $_postBack.userName)
 #elseif($_username)
-    #set($userNameValue = $_username)
+    #set($userNameValue = $_tr.encodeHtmlAttribute($_username))
 #end
 
 #define ($_body)
