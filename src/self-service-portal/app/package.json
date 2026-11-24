@@ -34,7 +34,7 @@
     "@curity/ui-kit-css": "^1.0.0",
     "@curity/ui-kit-icons": "^1.0.0",
     "graphql": "^16.11.0",
-    "i18next": "^26.2.0",
+    "i18next": "^26.3.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.7",
     "react-error-boundary": "^6.1.2",
