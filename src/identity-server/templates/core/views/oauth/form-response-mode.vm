@@ -39,11 +39,11 @@
     #end
 
     #if ($error)
-        <input type="hidden" name="error" value="$error"/>
+        <input type="hidden" name="error" value="$_tr.encodeHtmlAttribute($error)"/>
     #end
 
     #if ($error_description)
-        <input type="hidden" name="error_description" value="$error_description"/>
+        <input type="hidden" name="error_description" value="$_tr.encodeHtmlAttribute($error_description)"/>
     #end
 
     #if ($id_token)
@@ -51,7 +51,7 @@
     #end
 
     #if ($error_uri)
-        <input type="hidden" name="error_uri" value="$error_uri"/>
+        <input type="hidden" name="error_uri" value="$_tr.encodeHtmlAttribute($error_uri)"/>
     #end
 
     ## Parameters for implicit flow with response_mode=form_post

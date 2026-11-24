@@ -40,11 +40,11 @@
         #end
 
         #if ($_errorCode)
-            <input type="hidden" name="error_code" value="$_errorCode"/>
+            <input type="hidden" name="error_code" value="$_tr.encodeHtmlAttribute($_errorCode)"/>
         #end
 
         #if ($_errorDescription)
-            <input type="hidden" name="error_description" value="$_errorDescription"/>
+            <input type="hidden" name="error_description" value="$_tr.encodeHtmlAttribute($_errorDescription)"/>
         #end
     #end
 

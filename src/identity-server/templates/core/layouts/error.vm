@@ -88,9 +88,9 @@
 
             <div class="area center">
 
-                <h1>$!_errorTitle</h1>
+                <h1>$!_tr.encodeHtml($!_errorTitle)</h1>
 
-                <pre>$!_errorMessage</pre>
+                <pre>$!_tr.encodeHtml($!_errorMessage)</pre>
 
                 #if($_systemErrorDetailedMessage)
                     <p class="detailed-error">$_tr.encodeHtml("#message($_systemErrorDetailedMessage)")</p>
