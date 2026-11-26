@@ -70,4 +70,5 @@ const errorBannerStyle: CSSProperties = {
   padding: '0.75rem 1rem',
   margin: '0 0 1rem',
   color: '#9b1c1c',
+  textAlign: 'left',
 };

@@ -524,6 +524,22 @@ svg {
 
 .is-error {
   @extend .alert, .alert-danger, .w100, .mx-auto;
+
+  --alert-icon-top: calc(var(--alert-padding-y) + (1.5em - var(--alert-icon-size)) / 2);
+
+  padding-left: calc(var(--alert-padding-x) + var(--alert-icon-size) + 0.75rem);
+}
+
+.is-error::before {
+  border: 2px solid var(--alert-color);
+  border-radius: 50%;
+  box-sizing: border-box;
+  content: '';
+  height: var(--alert-icon-size);
+  left: var(--alert-padding-x);
+  position: absolute;
+  top: var(--alert-icon-top);
+  width: var(--alert-icon-size);
 }
 
 .haapi-error-notifier-toast {
