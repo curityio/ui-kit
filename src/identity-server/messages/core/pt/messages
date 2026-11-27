@@ -18,6 +18,7 @@ email.footer=Este e-mail foi enviado por Curity
 page.redirect.please-wait=Aguarde...
 error.identifier=Identificador de erro
 authentication.success=Você autenticou com sucesso
+authentication.alternative-authenticators.title=Usar outro método
 view.title.cancel=Cancelar esta operação
 
 meta.signin=Iniciar sessão

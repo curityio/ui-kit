@@ -18,6 +18,7 @@ email.footer=Detta mail skickades av Curity
 page.redirect.please-wait=Vänligen vänta...
 error.identifier=Felidentifierare:
 authentication.success=Du är inloggad
+authentication.alternative-authenticators.title=Använd en annan metod
 view.title.cancel=Avbryt åtgärden
 
 meta.signin=Logga in

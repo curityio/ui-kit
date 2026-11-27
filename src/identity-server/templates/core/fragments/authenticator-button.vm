@@ -1,0 +1,42 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+#*
+ * Defines the button used to choose an authenticator, shared by the authenticator selector
+ * (fragments/login-chooser and fragments/login-chooser-single-color) and fragments/alternative-authenticators.
+ *
+ * Parse fragments/icon-mappings before calling the macro:
+ *
+ *     #authenticatorButton($authenticator $elementId $extraClasses $showDescription $translateDescription)
+ *
+ *   $authenticator        - an authenticator with the properties id, type, description and url
+ *   $elementId            - the id attribute of the button
+ *   $extraClasses         - extra CSS classes for the button, or an empty string
+ *   $showDescription      - whether to show the description (or the ID, when it has no description) next to the icon
+ *   $translateDescription - whether the description is a message key to translate
+ *#
+
+#macro( authenticatorButton $authenticator $elementId $extraClasses $showDescription $translateDescription )
+<a href="$authenticator.url" id="$elementId"  class="button button-primary button-fullwidth button-social $extraClasses button-$authenticator.type">
+    <i class="icon #iconClassName($authenticator.type)"></i>
+    #if($showDescription)
+        #if($authenticator.description)
+            #if($translateDescription)
+                #message($authenticator.description)
+            #else
+                $authenticator.description
+            #end
+        #else
+            $authenticator.id
+        #end
+    #end
+</a>
+#end
