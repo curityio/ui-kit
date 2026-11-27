@@ -46,11 +46,11 @@ function ErrorBanner({ error }: { error: HaapiStepperError | null }) {
 
   return (
     <div style={errorBannerStyle} role="alert">
-      <strong>⚠ There was a problem</strong>
-      {appError?.title && <p style={{ margin: '0.25rem 0 0' }}>{appError.title}</p>}
-      {inputError?.title && <p style={{ margin: '0.25rem 0 0' }}>{inputError.title}</p>}
+      <strong style={errorTitleStyle}>There was a problem</strong>
+      {appError?.title && <p style={errorTextStyle}>{appError.title}</p>}
+      {inputError?.title && <p style={errorTextStyle}>{inputError.title}</p>}
       {inputError?.type === HAAPI_PROBLEM_STEPS.INVALID_INPUT && (
-        <ul style={{ margin: '0.25rem 0 0' }}>
+        <ul style={errorListStyle}>
           {inputError.invalidFields.map(field => (
             <li key={field.name}>
               <strong>{field.name}</strong>: {field.detail ?? field.reason}
@@ -63,12 +63,29 @@ function ErrorBanner({ error }: { error: HaapiStepperError | null }) {
 }
 
 const errorBannerStyle: CSSProperties = {
-  background: '#fde8e8',
-  border: '2px solid #e02424',
-  borderLeft: '6px solid #e02424',
+  backgroundColor: 'color-mix(in srgb, var(--color-danger) 7%, white)',
+  border: '1px solid color-mix(in srgb, var(--color-danger) 25%, transparent)',
   borderRadius: '8px',
-  padding: '0.75rem 1rem',
+  padding: '0.875rem 1rem',
   margin: '0 0 1rem',
-  color: '#9b1c1c',
+  color: 'var(--color-heading)',
+  fontSize: '0.875rem',
+  lineHeight: 1.5,
   textAlign: 'left',
+};
+
+const errorTitleStyle: CSSProperties = {
+  display: 'block',
+  fontFamily: 'var(--type-sans-medium)',
+};
+
+const errorTextStyle: CSSProperties = {
+  margin: 0,
+  color: 'var(--color-text)',
+};
+
+const errorListStyle: CSSProperties = {
+  margin: '0.25rem 0 0',
+  paddingLeft: '1.25rem',
+  color: 'var(--color-text)',
 };
