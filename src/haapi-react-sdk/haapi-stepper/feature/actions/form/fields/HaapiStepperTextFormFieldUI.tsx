@@ -49,8 +49,7 @@ export function HaapiStepperTextFormFieldUI({
   field: HaapiStepperTextFormField | HaapiStepperUsernameFormField;
 }): ReactElement {
   const { formState, action } = useHaapiStepperForm();
-  const autoComplete = getTextAutoComplete(field);
-  const inputType = getTextInputType(field);
+  const typeSpecificInputProps = getTypeSpecificInputProps(field);
   const inputId = `${action.id}-${field.name}-input`;
 
   return (
@@ -59,13 +58,12 @@ export function HaapiStepperTextFormFieldUI({
       <input
         id={inputId}
         data-testid={`haapi-form-field-${HAAPI_FORM_FIELDS.TEXT}-${field.name}`}
-        type={inputType}
         className="haapi-stepper-form-field-text-input"
         name={field.name}
         value={formState.get(field)}
         placeholder={field.placeholder}
-        autoComplete={autoComplete}
         required={field.required ?? true}
+        {...typeSpecificInputProps}
         onChange={e => formState.set(field, e.target.value)}
       />
     </label>
@@ -76,18 +74,14 @@ export function HaapiStepperTextFormFieldUI({
 // behavior (e.g. password or checkbox).
 const KNOWN_TEXT_FIELD_KINDS = new Set<string>(Object.values(HAAPI_TEXT_FIELD_KINDS));
 
-const getTextInputType = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
-  if (field.type === HAAPI_FORM_FIELDS.TEXT && field.kind && KNOWN_TEXT_FIELD_KINDS.has(field.kind)) {
-    return field.kind;
-  }
-
-  return 'text';
-};
-
-const getTextAutoComplete = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
+const getTypeSpecificInputProps = (field: HaapiStepperTextFormField | HaapiStepperUsernameFormField) => {
   if (field.type === HAAPI_FORM_FIELDS.USERNAME) {
-    return 'username';
+    return { type: 'text', autoComplete: 'username' };
   }
 
-  return undefined;
+  return {
+    type: field.kind && KNOWN_TEXT_FIELD_KINDS.has(field.kind) ? field.kind : 'text',
+    minLength: field.minLength,
+    maxLength: field.maxLength,
+  };
 };
