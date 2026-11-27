@@ -1,0 +1,28 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+#*
+ * Bot protection (IS-12295).
+ *
+ * On pages of an authenticator with bot protection enabled, this loads a script that gets a token from the
+ * provider (Google reCAPTCHA Enterprise or Cloudflare Turnstile) whenever a form is posted to the authenticator, and
+ * sends it in a hidden field. Templates need no changes for this.
+ *
+ * $_botProtection is set by the server; $_botProtection.required is false while an earlier check in the session
+ * still covers the next request, and then nothing is loaded.
+ *#
+#if ($_botProtection && $_botProtection.required && $_botProtection.configJson)
+    #if ($_cacheBustingHash)
+        #set ($_botProtectionCacheBustingQuery = "?v=" + $_cacheBustingHash)
+    #end
+<script type="application/json" id="bot-protection-config">$_botProtection.configJson</script>
+<script src="$_staticResourceRootPath/assets/js/bot-protection.js$!_botProtectionCacheBustingQuery"></script>
+#end

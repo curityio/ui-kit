@@ -34,6 +34,10 @@
 #set($_errorTitle = "#message($_errorTitleKey)")
 
 #set($_errorMessageKey = "${_templatePrefix}.system.status.authentication.error")
+## IS-12295: the request was rejected by the authenticator's bot protection
+#if ($_errorCode == "bot_protection_failed")
+    #set($_errorMessageKey = "${_templatePrefix}.system.status.bot-protection.error")
+#end
 #set($_errorMessage = "#message($_errorMessageKey)")
 
 #set ($page_symbol = $page_symbol_error_403)

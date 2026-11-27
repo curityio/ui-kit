@@ -1,3 +1,4 @@
 meta.title=403 - Ej tillåten
 page.title=Ej tillåten
 system.status.authentication.error=Du har inte rättigheter att utföra denna begäran
+system.status.bot-protection.error=Vi kunde inte bekräfta att begäran gjordes av en person. Gå tillbaka och försök igen.

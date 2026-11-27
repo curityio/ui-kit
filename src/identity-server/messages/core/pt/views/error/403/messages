@@ -12,3 +12,4 @@
 meta.title=403 - Proibido
 page.title=Proibido
 system.status.authentication.error=Você não está autorizado a executar esta solicitação.
+system.status.bot-protection.error=Não foi possível confirmar que esta solicitação foi feita por uma pessoa. Volte e tente novamente.

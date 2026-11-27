@@ -51,6 +51,7 @@
     <title>Redirecting...</title>
 
     #parse("fragments/csp")
+    #parse("fragments/bot-protection")
 
     #if ($debugRedirect)
         <style type="text/css" $!nonceAttr>

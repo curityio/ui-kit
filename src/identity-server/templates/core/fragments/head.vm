@@ -37,6 +37,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 #parse("fragments/csp")
+#parse("fragments/bot-protection")
 
 <title>
     #if ($!title && $title != "")

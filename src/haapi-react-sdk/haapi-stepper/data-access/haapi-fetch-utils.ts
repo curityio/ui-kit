@@ -21,13 +21,18 @@ export interface ApiRequest {
   init: ApiRequestInit;
 }
 
-export function createApiRequest(action: HaapiFetchAction): ApiRequest {
+/**
+ * @param action the link or form action
+ * @param extraParameters parameters added to a form's POST or PUT body regardless of its fields (e.g. a
+ * bot-protection token); ignored for links and other methods
+ */
+export function createApiRequest(action: HaapiFetchAction, extraParameters?: Record<string, string>): ApiRequest {
   const isLink = 'href' in action;
 
   if (isLink) {
     return createRequestForUrl(action.href);
   } else {
-    return createRequestForForm(action);
+    return createRequestForForm(action, extraParameters);
   }
 }
 
@@ -52,10 +57,16 @@ export function createRequestForUrl(url: string): ApiRequest {
  *
  * In any case, only values that are non-null and non-undefined are included in the request.
  *
+ * Extra parameters are added to POST and PUT bodies only, after the form's fields.
+ *
  * @param action the form action
  * @param payload the provided values
+ * @param extraParameters values to send in addition to the form's fields
  */
-export function createRequestForForm({ action, payload }: HaapiFetchFormAction): ApiRequest {
+export function createRequestForForm(
+  { action, payload }: HaapiFetchFormAction,
+  extraParameters?: Record<string, string>
+): ApiRequest {
   let valueGetter: (f: HaapiFormField) => unknown;
   if (payload) {
     valueGetter =
@@ -75,6 +86,10 @@ export function createRequestForForm({ action, payload }: HaapiFetchFormAction):
 
   const url = action.model.href;
   const method = action.model.method;
+
+  if (extraParameters && (method === HTTP_METHODS.POST || method === HTTP_METHODS.PUT)) {
+    parameters.push(...Object.entries(extraParameters));
+  }
   const mediaType = action.model.type ?? MEDIA_TYPES.FORM_URLENCODED;
 
   const request: ApiRequest = {

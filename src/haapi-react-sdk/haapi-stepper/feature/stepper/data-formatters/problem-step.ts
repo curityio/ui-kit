@@ -27,6 +27,7 @@ export function formatErrorStepData(step: HaapiErrorStep): HaapiStepperError {
     case HAAPI_PROBLEM_STEPS.TOO_MANY_ATTEMPTS:
     case HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS:
     case HAAPI_PROBLEM_STEPS.AUTHENTICATION_FAILED:
+    case HAAPI_PROBLEM_STEPS.BOT_PROTECTION_FAILED:
       inputError = {
         ...step,
         dataHelpers,

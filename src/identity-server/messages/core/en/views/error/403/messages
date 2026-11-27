@@ -1,3 +1,4 @@
 meta.title=403 - Forbidden
 page.title=Forbidden
 system.status.authentication.error=You are not authorized to execute this request.
+system.status.bot-protection.error=We could not confirm that this request was made by a person. Go back and try again.
