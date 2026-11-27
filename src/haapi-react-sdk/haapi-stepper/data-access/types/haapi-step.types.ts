@@ -43,6 +43,8 @@ export enum HAAPI_PROBLEM_STEPS {
   GENERIC_USER_ERROR = 'https://curity.se/problems/generic-user-error',
   SESSION_TOKEN_MISMATCH = 'https://curity.se/problems/mismatch-between-session-and-access-token',
   COMPLETED_WITH_ERROR = 'https://curity.se/problems/error-authorization-response',
+  /** The request was rejected by the authenticator's bot protection; resubmitting gets a new token. */
+  BOT_PROTECTION_FAILED = 'https://curity.se/problems/bot-protection-failed',
 }
 
 export type HaapiStep =
@@ -291,7 +293,8 @@ export interface HaapiAuthenticationFailedProblemStep extends HaapiProblemStepBa
   type:
     | HAAPI_PROBLEM_STEPS.INCORRECT_CREDENTIALS
     | HAAPI_PROBLEM_STEPS.AUTHENTICATION_FAILED
-    | HAAPI_PROBLEM_STEPS.TOO_MANY_ATTEMPTS;
+    | HAAPI_PROBLEM_STEPS.TOO_MANY_ATTEMPTS
+    | HAAPI_PROBLEM_STEPS.BOT_PROTECTION_FAILED;
 }
 
 /**
@@ -363,4 +366,23 @@ export interface HaapiMetadata {
   viewName?: string;
   /** View-specific data (e.g. localized accessibility messages) for the view that produced the response */
   viewData?: HaapiViewData;
+  /**
+   * Present when the authenticator has bot protection enabled: every POST form submission in this step must carry
+   * a fresh token from the provider, in the field named by `tokenField`.
+   */
+  botProtection?: HaapiBotProtection;
+}
+
+/**
+ * How to get a bot-protection token for a step.
+ */
+export interface HaapiBotProtection {
+  /** The provider: `recaptcha-enterprise` or `turnstile`. More may be added. */
+  provider: string;
+  /** The provider's site key. */
+  siteKey: string;
+  /** The action name to create the token for. */
+  action: string;
+  /** The name of the form field that carries the token. */
+  tokenField: string;
 }

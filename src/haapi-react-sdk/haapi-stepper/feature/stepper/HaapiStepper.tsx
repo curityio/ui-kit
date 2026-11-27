@@ -42,6 +42,8 @@ import { useThrowErrorToAppErrorBoundary } from '../../util/useThrowErrorToAppEr
 import { useRefCallback } from '../../util/useRefCallBack';
 import { handleAuthenticationOrRegistrationStep } from './step-handlers/authentication-or-registration-step';
 import { isLink } from '../../util/link-predicates';
+import { getBotProtectionParameters } from '../bot-protection/bot-protection-token';
+import { HTTP_METHODS } from '../../data-access/types/haapi-form.types';
 
 interface HaapiStepperProps {
   children: ReactNode;
@@ -473,7 +475,12 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     });
   }
 
-  const request = createApiRequest(isLink(action) ? action : { action, payload });
+  // IS-12295: a step of a bot-protected authenticator needs a fresh token with each POST
+  const botProtectionParameters =
+    !isLink(action) && action.model.method === HTTP_METHODS.POST
+      ? await getBotProtectionParameters(currentStep?.metadata?.botProtection)
+      : undefined;
+  const request = createApiRequest(isLink(action) ? action : { action, payload }, botProtectionParameters);
   const nextStepResponse = await sendHaapiFetchRequest(request);
 
   switch (nextStepResponse.type) {
@@ -528,6 +535,7 @@ async function processHaapiNextStep(params: ProcessHaapiNextStepParams): Promise
     case HAAPI_PROBLEM_STEPS.GENERIC_USER_ERROR:
     case HAAPI_PROBLEM_STEPS.UNEXPECTED:
     case HAAPI_PROBLEM_STEPS.SESSION_TOKEN_MISMATCH:
+    case HAAPI_PROBLEM_STEPS.BOT_PROTECTION_FAILED:
       return nextStepError(formatErrorStepData(nextStepResponse));
   }
 }

@@ -61,9 +61,23 @@
     #set ($connectSrc = "connect-src 'self';")
 #end
 
+## Bot protection (IS-12295): allow the provider's script, iframes and calls on pages that need a token
+#set ($botProtectionScriptSrc = "")
+#if ($_botProtection)
+    #if ($_botProtection.scriptSrc && $_botProtection.scriptSrc != "")
+        #set ($botProtectionScriptSrc = $_botProtection.scriptSrc)
+    #end
+    #if ($_botProtection.frameSrc && $_botProtection.frameSrc != "")
+        #set ($childSrc = $CspUtil.combine($childSrc, "child-src $_botProtection.frameSrc;"))
+    #end
+    #if ($_botProtection.connectSrc && $_botProtection.connectSrc != "")
+        #set ($connectSrc = $CspUtil.combine($connectSrc, "connect-src $_botProtection.connectSrc;"))
+    #end
+#end
+
 <meta http-equiv="Content-Security-Policy" content="$!objSrc media-src 'none';">
 <meta http-equiv="Content-Security-Policy" content="$!connectSrc font-src 'self'; $childSrc">
 <meta http-equiv="Content-Security-Policy" content="$!imgSrc">
 <meta http-equiv="Content-Security-Policy" content="$!styleSrc">
 
-<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' $!nonceScriptSrc;">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' $!nonceScriptSrc $!botProtectionScriptSrc;">

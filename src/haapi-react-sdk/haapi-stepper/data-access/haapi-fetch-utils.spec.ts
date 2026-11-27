@@ -144,6 +144,53 @@ describe(createRequestForForm.name, () => {
   });
 });
 
+describe('extra parameters (IS-12295 bot-protection token)', () => {
+  const token = { _bot_protection_token: 'tok' };
+
+  test('are added to a form-urlencoded POST body, even though no field declares them', () => {
+    const action = formAction(HTTP_METHODS.POST, '/authn/authentication/html1', { username: 'alice' });
+
+    const { init } = createApiRequest({ action }, token);
+
+    expect((init.body as URLSearchParams).toString()).toBe('username=alice&_bot_protection_token=tok');
+  });
+
+  test('are added to a POST body when the form has no fields', () => {
+    const action = formAction(HTTP_METHODS.POST, '/authn/authentication/html1');
+
+    const { init } = createApiRequest({ action }, token);
+
+    expect((init.body as URLSearchParams).toString()).toBe('_bot_protection_token=tok');
+    expect(init.headers).toEqual({ 'Content-Type': MEDIA_TYPES.FORM_URLENCODED });
+  });
+
+  test('are added to a JSON POST body', () => {
+    const action = formAction(
+      HTTP_METHODS.POST,
+      '/authn/authentication/html1',
+      { username: 'alice' },
+      MEDIA_TYPES.JSON
+    );
+
+    const { init } = createApiRequest({ action }, token);
+
+    expect(JSON.parse(init.body as string)).toEqual({ username: 'alice', _bot_protection_token: 'tok' });
+  });
+
+  test('are not added to GET requests or links', () => {
+    const action = formAction(HTTP_METHODS.GET, '/authn/authentication/html1', { a: '1' });
+
+    expect(createApiRequest({ action }, token).url).toBe('/authn/authentication/html1?a=1');
+    expect(createApiRequest({ href: '/x', rel: 'self' }, token)).toEqual(createRequestForUrl('/x'));
+  });
+
+  test('without extra parameters the request is unchanged', () => {
+    const action = formAction(HTTP_METHODS.POST, '/authn/authentication/html1', { username: 'alice' });
+
+    expect(createApiRequest({ action }, undefined)).toEqual(createRequestForForm({ action }));
+  });
+});
+
 function formAction(
   method: HTTP_METHODS,
   href: string,

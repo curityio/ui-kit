@@ -29,6 +29,11 @@ export function createSharedPlugins(): PluginOption[] {
           dest: "webroot/assets/images",
         },
         {
+          // plain browser script, served as is (IS-12295)
+          src: "./scripts/bot-protection.js",
+          dest: "webroot/assets/js",
+        },
+        {
           src: "./messages/overrides/*",
           dest: "messages/overrides",
         },
