@@ -81,11 +81,9 @@ const errorTitleStyle: CSSProperties = {
 
 const errorTextStyle: CSSProperties = {
   margin: 0,
-  color: 'var(--color-text)',
 };
 
 const errorListStyle: CSSProperties = {
   margin: '0.25rem 0 0',
   paddingLeft: '1.25rem',
-  color: 'var(--color-text)',
 };
