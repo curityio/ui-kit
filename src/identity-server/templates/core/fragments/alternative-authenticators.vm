@@ -1,0 +1,46 @@
+#*
+ * Copyright (C) 2026 Curity AB. All rights reserved.
+ *
+ * The contents of this file are the property of Curity AB.
+ * You may not copy or use this file, in either source code
+ * or executable form, except in compliance with terms
+ * set by Curity AB.
+ *
+ * For further information, please contact Curity AB.
+ *#
+
+#*
+ * Renders links to the other authenticators the user may choose, when the current authenticator was selected
+ * automatically because it declared the highest selection priority (see AuthenticatorSelectionPriority in the SDK).
+ * Renders nothing otherwise.
+ *
+ * Include it from any authenticator template:
+ *
+ *     #parse("fragments/alternative-authenticators")
+ *
+ * Variables:
+ *
+ *   $_alternativeAuthenticators - list of authenticators with the properties id, acr, type, description and url,
+ *                                 in selector order. Absent unless the authenticator was selected automatically.
+ *   $_alternativeAuthenticators_hide_title - set to true before parsing this fragment to hide the title.
+ *#
+
+#if ($_alternativeAuthenticators && !$_alternativeAuthenticators.isEmpty())
+    #if (!$_iconMappings)
+        #parse("fragments/icon-mappings")
+    #end
+    #parse("fragments/authenticator-button")
+
+    <div class="alternative-authenticators">
+        #if (!$_alternativeAuthenticators_hide_title)
+            <p class="center">#message("authentication.alternative-authenticators.title")</p>
+        #end
+
+        #foreach ($_alternativeAuthenticator in $_alternativeAuthenticators)
+            #set ($_alternativeAuthenticatorElementId = "alternative-$_alternativeAuthenticator.id")
+            <div class="form-field mb1">
+                #authenticatorButton($_alternativeAuthenticator $_alternativeAuthenticatorElementId "" true true)
+            </div>
+        #end
+    </div>
+#end

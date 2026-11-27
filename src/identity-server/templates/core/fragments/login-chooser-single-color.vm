@@ -33,6 +33,7 @@
  *#
 
 #parse("fragments/icon-mappings")
+#parse("fragments/authenticator-button")
 
 #define($_loginChooser)
 
@@ -43,16 +44,12 @@
     #foreach($_authenticatorMapItem in $_allowedAuthenticators.values())
 
         <div class="form-field #if($icons_only_authenticator_chooser)form-field-social-icon#end mb1">
-            <a href="$_authenticatorMapItem.url" id="$_authenticatorMapItem.authenticatorId"  class="button button-primary button-fullwidth button-social #if($icons_only_authenticator_chooser)button-social-icon#end button-social-single-color button-$_authenticatorMapItem.type">
-                <i class="icon #iconClassName($_authenticatorMapItem.type)"></i>
-                #if(!$icons_only_authenticator_chooser)
-                    #if($_authenticatorMapItem.description)
-                        $_authenticatorMapItem.description
-                    #else
-                        $_authenticatorMapItem.authenticatorId
-                    #end
-                #end
-            </a>
+            #set($_authenticatorButtonClasses = "button-social-single-color")
+            #if($icons_only_authenticator_chooser)
+                #set($_authenticatorButtonClasses = "button-social-icon button-social-single-color")
+            #end
+            #set($_showAuthenticatorDescription = !$icons_only_authenticator_chooser)
+            #authenticatorButton($_authenticatorMapItem $_authenticatorMapItem.authenticatorId $_authenticatorButtonClasses $_showAuthenticatorDescription false)
         </div>
 
     #end
