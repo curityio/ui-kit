@@ -48,7 +48,8 @@ Base fields
   box-shadow: var(--form-field-box-shadow-focus);
 }
 
-.field:disabled {
+.field:disabled,
+.field-light:disabled {
   background-color: var(--form-field-disabled-background-color);
   opacity: var(--form-field-disabled-opacity);
 }
